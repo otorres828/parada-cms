@@ -3,7 +3,7 @@
     --------------------------------------------------------------------------
     Presenta la reserva, el viajero, su documento, asiento y estado de abordaje. Consulta el
     origen y destino comprados a través de la reserva y muestra el precio del boleto, el estado de
-    pago y la tasa de servicio aplicada con su modalidad y valor.
+    pago y la tasa de servicio aplicada con su modalidad, valor y rango histórico.
 
     Componentes reutilizables utilizados:
     - <x-list.heading />: Cabecera del módulo con título y acciones.
@@ -107,6 +107,21 @@
 
                             <dd class="col-sm-8">
                                 {{ $pasaje->valor_servicio !== null ? number_format($pasaje->valor_servicio, 2) . ($pasaje->tipo_servicio === 2 ? ' %' : ' USD') : 'No registrado' }}
+                            </dd>
+
+                            <dt class="col-sm-4">Rango de tasa aplicado</dt>
+
+                            <dd class="col-sm-8">
+                                @if ($pasaje->tasa_monto_minimo === null)
+                                    No registrado
+                                @else
+                                    Desde USD {{ number_format($pasaje->tasa_monto_minimo, 2) }}
+                                    @if ($pasaje->tasa_monto_maximo === null)
+                                        · Sin límite superior
+                                    @else
+                                        hasta USD {{ number_format($pasaje->tasa_monto_maximo, 2) }}
+                                    @endif
+                                @endif
                             </dd>
 
                         </dl>

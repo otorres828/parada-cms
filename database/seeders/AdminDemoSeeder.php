@@ -21,6 +21,7 @@ use App\Models\Reembolso;
 use App\Models\Reserva;
 use App\Models\Retiro;
 use App\Models\Terminal;
+use App\Models\TasaServicio;
 use App\Models\User;
 use App\Models\UsuarioEmpresa;
 use App\Models\Viaje;
@@ -251,6 +252,9 @@ class AdminDemoSeeder extends Seeder
                             $reference = "DEMO-RES-$c-$b-$day-" . ($r + 1);
                             $ptp = $mapPrecios[$cp['orig'] . '-' . $cp['dest']] ?? null;
 
+                            $tasa = TasaServicio::paraPrecio($cp['precio']);
+                            $importeTasa = $tasa->calcular($cp['precio']);
+
                             $reservation = Reserva::firstOrCreate(
                                 ['codigo_referencia' => $reference],
                                 [
@@ -261,8 +265,8 @@ class AdminDemoSeeder extends Seeder
                                     'programacion_tramo_precio_id' => $ptp?->id,
                                     'monto_pasajes' => $cp['precio'],
                                     'descuento_aplicado' => '0.00',
-                                    'tasa_servicio' => '1.50',
-                                    'monto_total' => sprintf('%.2f', (float)$cp['precio'] + 1.50),
+                                    'tasa_servicio' => $importeTasa,
+                                    'monto_total' => bcadd($cp['precio'], $importeTasa, 2),
                                     'estado_pago' => $r === 3 ? ($day < 0 ? Reserva::ESTADO_PAGO_CANCELADO : Reserva::ESTADO_PAGO_PENDIENTE) : Reserva::ESTADO_PAGO_PAGADO,
                                     'metodo_pago' => 'transferencia',
                                     'fecha_compra' => $anchor->copy()->subDays(abs($day))->addHours(10),
@@ -280,8 +284,10 @@ class AdminDemoSeeder extends Seeder
                                     'descuento' => '0.00',
                                     'precio_final' => $cp['precio'],
                                     'tasa_servicio' => $reservation->tasa_servicio,
-                                    'tipo_servicio' => 1,
-                                    'valor_servicio' => $reservation->tasa_servicio,
+                                    'tipo_servicio' => $tasa->tipo_servicio,
+                                    'valor_servicio' => $tasa->cantidad,
+                                    'tasa_monto_minimo' => $tasa->monto_minimo,
+                                    'tasa_monto_maximo' => $tasa->monto_maximo,
                                     'base_tasa_servicio' => $cp['precio'],
                                     'abordado' => $day < 0 && $r < 3,
                                     'fecha_abordaje' => $day < 0 && $r < 3 ? $departure->fecha_salida->copy()->addHours(8) : null,

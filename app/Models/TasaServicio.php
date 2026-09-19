@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Validation\ValidationException;
 
 class TasaServicio extends ModelHelper
@@ -27,11 +26,6 @@ class TasaServicio extends ModelHelper
     protected function casts(): array
     {
         return ['tipo_servicio' => 'integer', 'monto_minimo' => 'decimal:2', 'monto_maximo' => 'decimal:2', 'cantidad' => 'decimal:2', 'estatus' => 'boolean'];
-    }
-
-    public function pasajes(): HasMany
-    {
-        return $this->hasMany(Pasaje::class, 'tasa_servicio_id');
     }
 
     public static function searchAdmin(string $search = '', array $filters = []): Builder

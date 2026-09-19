@@ -18,7 +18,8 @@ class Pasaje extends ModelHelper
         'valor_servicio',
         'base_tasa_servicio',
         'tasa_servicio',
-        'tasa_servicio_id',
+        'tasa_monto_minimo',
+        'tasa_monto_maximo',
         'reserva_id',
         'viajero_id',
         'numero_asiento',
@@ -32,17 +33,12 @@ class Pasaje extends ModelHelper
 
     protected function casts(): array
     {
-        return ['tipo_servicio' => 'integer', 'valor_servicio' => 'decimal:2', 'base_tasa_servicio' => 'decimal:2', 'tasa_servicio' => 'decimal:2', 'numero_asiento' => 'integer', 'precio_base' => 'decimal:2', 'descuento' => 'decimal:2', 'precio_final' => 'decimal:2', 'abordado' => 'boolean', 'fecha_abordaje' => 'datetime'];
+        return ['tipo_servicio' => 'integer', 'valor_servicio' => 'decimal:2', 'base_tasa_servicio' => 'decimal:2', 'tasa_monto_minimo' => 'decimal:2', 'tasa_monto_maximo' => 'decimal:2', 'tasa_servicio' => 'decimal:2', 'numero_asiento' => 'integer', 'precio_base' => 'decimal:2', 'descuento' => 'decimal:2', 'precio_final' => 'decimal:2', 'abordado' => 'boolean', 'fecha_abordaje' => 'datetime'];
     }
 
     public function reserva(): BelongsTo
     {
         return $this->belongsTo(Reserva::class, 'reserva_id');
-    }
-
-    public function tarifaServicio(): BelongsTo
-    {
-        return $this->belongsTo(TasaServicio::class, 'tasa_servicio_id');
     }
 
     public function viajero(): BelongsTo
