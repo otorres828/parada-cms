@@ -18,8 +18,6 @@
 
     </x-list.heading>
 
-
-
     <x-list.actions>
 
         <x-slot:search>
@@ -62,34 +60,49 @@
                 <th>ID
                     <x-list.sortable-button column="id" :$sortColumn :$sortDirection />
                 </th>
+
                 <th>Nombre
                     <x-list.sortable-button column="name" :$sortColumn :$sortDirection />
                 </th>
+
                 <th>Usuario
                     <x-list.sortable-button column="username" :$sortColumn :$sortDirection />
                 </th>
+
                 <th>Correo
                     <x-list.sortable-button column="email" :$sortColumn :$sortDirection />
                 </th>
+
                 <th>Estado
                     <x-list.sortable-button column="status" :$sortColumn :$sortDirection />
                 </th>
+
                 <th class="text-end">Acciones</th>
+
             </tr>
         </thead>
 
         <tbody>
+
             @forelse ($admins as $admin)
 
                 <tr wire:key="listAdmin-{{ $admin->id }}">
 
-                    <td>{{ $admin->id }}</td>
+                    <td>
+                        {{ $admin->id }}
+                    </td>
 
-                    <td>{{ $admin->name ?? '—' }}</td>
+                    <td>
+                        {{ $admin->name ?? '—' }}
+                    </td>
 
-                    <td>{{ $admin->username ?? '—' }}</td>
+                    <td>
+                        {{ $admin->username ?? '—' }}
+                    </td>
 
-                    <td>{{ $admin->email ?? '—' }}</td>
+                    <td>
+                        {{ $admin->email ?? '—' }}
+                    </td>
 
                     <td>
                         <x-list.status-badge :status="$admin->status" />
@@ -100,21 +113,28 @@
                         <x-list.button-group>
 
                             @if ($capabilities['edit'])
+
                                 <x-list.edit-button :route="route('admin.admins.edit', ['admin_id' => $admin->id])" />
+
                             @endif
 
                         </x-list.button-group>
 
                     </td>
+
                 </tr>
+
             @empty
 
                 <tr>
-                    <td colspan="6" class="text-center py-5">No se encontraron registros.</td>
+                    <td colspan="6" class="text-center py-5">
+                        No se encontraron registros.
+                    </td>
+
                 </tr>
 
             @endforelse
-            
+
         </tbody>
 
     </x-list.table>

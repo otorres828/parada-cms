@@ -77,7 +77,9 @@
                             <x-form.dropdown label="Tipo de documento" name="tipo" x-model="$wire.tipo">
 
                                 @foreach ($tipos as $value => $label)
+
                                     <option value="{{ $value }}">{{ $label }}</option>
+
                                 @endforeach
 
                             </x-form.dropdown>
@@ -173,8 +175,11 @@
                     <select id="legal-tipo" class="form-select" wire:model.live="tipo_filtro">
 
                         <option value="">Todos</option>
+
                         @foreach ($tipos as $value => $label)
+
                             <option value="{{ $value }}">{{ $label }}</option>
+
                         @endforeach
 
                     </select>
@@ -193,57 +198,89 @@
 
                     <tr>
                         <th>Documento</th>
+
                         <th>Tipo</th>
+
                         <th>Archivo</th>
+
                         <th>Cargado por</th>
+
                         <th>Fecha</th>
+
                         <th class="text-end">Acciones</th>
+
                     </tr>
                 </thead>
 
                 <tbody>
+
                     @forelse($documentos as $documento)
 
                         <tr wire:key="legal-doc-{{ $documento->id }}">
-                            <td class="text-break"><strong>{{ $documento->titulo }}</strong>
+                            <td class="text-break">
+                                <strong>{{ $documento->titulo }}</strong>
+
                                 @if ($documento->observaciones)
+
                                     <div class="text-body-secondary small">
                                         {{ $documento->observaciones }}
                                     </div>
+
                                 @endif
+
                             </td>
-                            <td>{{ $tipos[$documento->tipo] ?? $documento->tipo }}</td>
-                            <td class="text-break"><i
+
+                            <td>
+                                {{ $tipos[$documento->tipo] ?? $documento->tipo }}
+                            </td>
+
+                            <td class="text-break">
+                                <i
                                     class="bi {{ $documento->mime === 'application/pdf' ? 'bi-file-earmark-pdf' : 'bi-file-earmark-image' }} me-1"></i>{{ $documento->nombre_original }}
 
                                 <div class="small text-body-secondary">
                                     {{ number_format($documento->tamano / 1024, 1) }} KB
                                 </div>
-
                             </td>
-                            <td>{{ $documento->admin?->name ?? 'Administrador no disponible' }}</td>
-                            <td class="text-nowrap">{{ $documento->created_at->format('d/m/Y H:i') }}</td>
+
+                            <td>
+                                {{ $documento->admin?->name ?? 'Administrador no disponible' }}
+                            </td>
+
+                            <td class="text-nowrap">
+                                {{ $documento->created_at->format('d/m/Y H:i') }}
+                            </td>
+
                             <td class="text-end">
 
                                 <x-list.button-group>
 
                                     @if ($canFile)
+
                                         <x-list.view-button :route="route('admin.legales.file', [$empresa_id, $documento->id])" :target="true" />
                                         <a class="btn btn-outline-secondary"
                                             href="{{ route('admin.legales.file', [$empresa_id, $documento->id, 'download' => 1]) }}"
                                             title="Descargar documento" aria-label="Descargar documento"><i class="bi bi-download"></i></a>
+
                                     @endif
 
                                 </x-list.button-group>
 
                             </td>
+
                         </tr>
+
                     @empty
 
                         <tr>
-                            <td colspan="6" class="text-center py-4">No hay documentos para esta búsqueda.</td>
+                            <td colspan="6" class="text-center py-4">
+                                No hay documentos para esta búsqueda.
+                            </td>
+
                         </tr>
+
                     @endforelse
+
                 </tbody>
             </table>
 

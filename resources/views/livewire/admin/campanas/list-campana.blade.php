@@ -11,16 +11,16 @@
         <x-slot:button>
 
             @if (Route::has('admin.campanas.add') && $canAdd)
+
                 <x-list.add-button :route="route('admin.campanas.add')">
                     Nuevo registro
                 </x-list.add-button>
+
             @endif
 
         </x-slot:button>
 
     </x-list.heading>
-
-
 
     <x-list.actions>
 
@@ -80,64 +80,107 @@
                 <th>ID
                     <x-list.sortable-button column="id" :$sortColumn :$sortDirection />
                 </th>
+
                 <th>Campaña
                     <x-list.sortable-button column="nombre_campana" :$sortColumn :$sortDirection />
                 </th>
+
                 <th>Empresa </th>
+
                 <th>Descuento
                     <x-list.sortable-button column="tipo_descuento" :$sortColumn :$sortDirection />
                 </th>
+
                 <th>Valor
                     <x-list.sortable-button column="monto_descuento" :$sortColumn :$sortDirection />
                 </th>
+
                 <th>Vencimiento
                     <x-list.sortable-button column="fecha_fin" :$sortColumn :$sortDirection />
                 </th>
+
                 <th>Estado
                     <x-list.sortable-button column="estatus" :$sortColumn :$sortDirection />
                 </th>
+
                 <th class="text-end">Acciones</th>
+
             </tr>
         </thead>
 
         <tbody>
+
             @forelse ($campanas as $configuracionCupon)
 
                 <tr wire:key="listCampana-{{ $configuracionCupon->id }}">
-                    <td>{{ $configuracionCupon->id }}</td>
-                    <td>{{ $configuracionCupon->nombre_campana ?? '—' }}</td>
-                    <td>{{ $configuracionCupon->empresa?->nombre ?? '—' }}</td>
-                    <td>{{ $configuracionCupon->tipo_descuento ?? '—' }}</td>
-                    <td>{{ number_format($configuracionCupon->monto_descuento ?? 0, 2) }}</td>
-                    <td>{{ $configuracionCupon->fecha_fin?->format('d/m/Y H:i') ?? '—' }}</td>
+                    <td>
+                        {{ $configuracionCupon->id }}
+                    </td>
+
+                    <td>
+                        {{ $configuracionCupon->nombre_campana ?? '—' }}
+                    </td>
+
+                    <td>
+                        {{ $configuracionCupon->empresa?->nombre ?? '—' }}
+                    </td>
+
+                    <td>
+                        {{ $configuracionCupon->tipo_descuento ?? '—' }}
+                    </td>
+
+                    <td>
+                        {{ number_format($configuracionCupon->monto_descuento ?? 0, 2) }}
+                    </td>
+
+                    <td>
+                        {{ $configuracionCupon->fecha_fin?->format('d/m/Y H:i') ?? '—' }}
+                    </td>
+
                     <td>
                         <x-list.status-badge :status="$configuracionCupon->estatus" />
                     </td>
+
                     <td class="text-end">
 
                         <x-list.button-group>
 
                             @if ($capabilities['detail'])
+
                                 <x-list.view-button :route="route('admin.campanas.detail', ['configuracion_cupon_id' => $configuracionCupon->id])" :target="false" />
+
                             @endif
+
                             @if ($capabilities['edit'])
+
                                 <x-list.edit-button :route="route('admin.campanas.edit', ['configuracion_cupon_id' => $configuracionCupon->id])" />
+
                             @endif
+
                             @if ($canEdit)
+
                                 <x-list.status-button wire:click="changeStatus({{ $configuracionCupon->id }})" :status="$configuracionCupon->estatus"
                                     wire:loading.attr="disabled" />
+
                             @endif
 
                         </x-list.button-group>
 
                     </td>
+
                 </tr>
+
             @empty
 
                 <tr>
-                    <td colspan="8" class="text-center py-5">No se encontraron registros.</td>
+                    <td colspan="8" class="text-center py-5">
+                        No se encontraron registros.
+                    </td>
+
                 </tr>
+
             @endforelse
+
         </tbody>
 
     </x-list.table>

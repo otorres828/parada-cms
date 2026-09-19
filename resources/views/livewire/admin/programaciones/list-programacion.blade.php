@@ -10,8 +10,6 @@
 
     </x-list.heading>
 
-
-
     <x-list.actions>
 
         <x-slot:search>
@@ -37,8 +35,11 @@
             <select id="filtro-empresa" class="form-select" wire:model.live="empresa_id">
 
                 <option value="">Todas las empresas</option>
+
                 @foreach ($empresas as $empresa)
+
                     <option value="{{ $empresa->id }}">{{ $empresa->nombre }}</option>
+
                 @endforeach
 
             </select>
@@ -87,6 +88,7 @@
                 <th>ID
                     <x-list.sortable-button column="id" :$sortColumn :$sortDirection />
                 </th>
+
                 <th>Empresa </th>
 
                 <th>Origen </th>
@@ -114,29 +116,47 @@
                 </th>
 
                 <th></th>
+
             </tr>
         </thead>
 
         <tbody>
+
             @forelse ($programaciones as $programacion)
 
                 <tr wire:key="listProgramacion-{{ $programacion->id }}">
 
-                    <td>{{ $programacion->id }}</td>
+                    <td>
+                        {{ $programacion->id }}
+                    </td>
 
-                    <td>{{ $programacion->viaje?->empresa?->nombre ?? '—' }}</td>
+                    <td>
+                        {{ $programacion->viaje?->empresa?->nombre ?? '—' }}
+                    </td>
 
-                    <td>{{ $programacion->viaje?->origenTerminal?->nombre ?? '—' }}</td>
+                    <td>
+                        {{ $programacion->viaje?->origenTerminal?->nombre ?? '—' }}
+                    </td>
 
-                    <td>{{ $programacion->viaje?->destinoTerminal?->nombre ?? '—' }}</td>
+                    <td>
+                        {{ $programacion->viaje?->destinoTerminal?->nombre ?? '—' }}
+                    </td>
 
-                    <td>{{ $programacion->fecha_salida?->format('d/m/Y') ?? '—' }}</td>
+                    <td>
+                        {{ $programacion->fecha_salida?->format('d/m/Y') ?? '—' }}
+                    </td>
 
-                    <td>{{ $programacion->hora_salida ?? '—' }}</td>
+                    <td>
+                        {{ $programacion->hora_salida ?? '—' }}
+                    </td>
 
-                    <td>{{ $programacion->asientos_disponibles ?? '—' }}</td>
+                    <td>
+                        {{ $programacion->asientos_disponibles ?? '—' }}
+                    </td>
 
-                    <td>{{ number_format($programacion->precio_pasaje ?? 0, 2) }}</td>
+                    <td>
+                        {{ number_format($programacion->precio_pasaje ?? 0, 2) }}
+                    </td>
 
                     <td>
                         <x-list.status-badge :status="$programacion->estatus" />
@@ -147,9 +167,11 @@
                         <x-list.button-group>
 
                             @if ($canViewPassengers)
+
                                 <a class="btn btn-outline-secondary"
                                     href="{{ route('admin.programaciones.passengers', ['programacion_id' => $programacion->id]) }}"
                                     wire:navigate title="Pasajeros" aria-label="Pasajeros"><i class="bi bi-people-fill"></i></a>
+
                             @endif
 
                         </x-list.button-group>
@@ -161,10 +183,14 @@
             @empty
 
                 <tr>
-                    <td colspan="10" class="text-center py-5">No se encontraron registros.</td>
+                    <td colspan="10" class="text-center py-5">
+                        No se encontraron registros.
+                    </td>
+
                 </tr>
 
             @endforelse
+
         </tbody>
 
     </x-list.table>

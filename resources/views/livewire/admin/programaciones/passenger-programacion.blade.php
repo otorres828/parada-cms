@@ -7,13 +7,12 @@
         <x-slot:title>
             Programaciones @if ($programacion_id)
                 <small class="text-body-secondary">#{{ $programacion_id }}</small>
+
             @endif
 
         </x-slot:title>
 
     </x-list.heading>
-
-
 
     <div class="container-fluid px-0 mb-4">
 
@@ -32,7 +31,7 @@
                             <dd class="col-sm-8">
                                 {{ $programacion->viaje?->empresa?->nombre ?? '—' }}
                             </dd>
-                            
+
                             <dt class="col-sm-4">Origen</dt>
 
                             <dd class="col-sm-8">
@@ -45,7 +44,7 @@
                                 {{ $programacion->viaje?->destinoTerminal?->nombre ?? '—' }}
                             </dd>
                             <dt class="col-sm-4">Fecha</dt>
-                            
+
                             <dd class="col-sm-8">
                                 {{ $programacion->fecha_salida?->format('d/m/Y') ?? '—' }}
                             </dd>
@@ -55,7 +54,7 @@
                             <dd class="col-sm-8">
                                 {{ $programacion->hora_salida ?? '—' }}
                             </dd>
-                           
+
                             <dt class="col-sm-4">Precio USD</dt>
 
                             <dd class="col-sm-8">
@@ -67,7 +66,7 @@
                             <dd class="col-sm-8">
                                 <x-list.status-badge :status="$programacion->estatus" />
                             </dd>
-                            
+
                             <dt class="col-sm-4">Capacidad</dt>
 
                             <dd class="col-sm-8">{{ $capacidad }} asientos</dd>
@@ -87,7 +86,7 @@
                             <dt class="col-sm-4">Ocupación</dt>
 
                             <dd class="col-sm-8">
-                                {{ number_format($ocupacion, 2) }} % 
+                                {{ number_format($ocupacion, 2) }} %
                                 <small class="text-body-secondary">según disponibilidad registrada</small>
                             </dd>
 
@@ -155,51 +154,86 @@
                 </thead>
 
                 <tbody>
+
                     @forelse ($tickets as $ticket)
 
                         <tr data-search="{{ $ticket->viajero?->nombre }} {{ $ticket->viajero?->apellido }} {{ $ticket->viajero?->documento_identidad }} {{ $ticket->numero_asiento }}"
                             x-show="matches($el.dataset.search)">
 
                             <td>
+
                                 @if ($canReservasDetail)
+
                                     <a href="{{ route('admin.reservas.detail', $ticket->reserva_id) }}" wire:navigate>
                                         #{{ $ticket->reserva_id }}
                                     </a>
+
                                 @else
+
                                     #{{ $ticket->reserva_id }}
+
                                 @endif
+
                             </td>
 
-                            <td>{{ $ticket->viajero->nombre }} {{ $ticket->viajero->apellido }}</td>
+                            <td>
+                                {{ $ticket->viajero->nombre }} {{ $ticket->viajero->apellido }}
+                            </td>
 
-                            <td>{{ $ticket->viajero->documento_identidad }}</td>
+                            <td>
+                                {{ $ticket->viajero->documento_identidad }}
+                            </td>
 
-                            <td>{{ $ticket->viajero?->fecha_nacimiento?->format('d/m/Y') ?? 'Sin registrar' }}</td>
+                            <td>
+                                {{ $ticket->viajero?->fecha_nacimiento?->format('d/m/Y') ?? 'Sin registrar' }}
+                            </td>
 
-                            <td>{{ number_format($ticket->precio_base, 2) }}</td>
+                            <td>
+                                {{ number_format($ticket->precio_base, 2) }}
+                            </td>
 
-                            <td>{{ number_format($ticket->descuento, 2) }}</td>
+                            <td>
+                                {{ number_format($ticket->descuento, 2) }}
+                            </td>
 
-                            <td>{{ number_format($ticket->precio_final, 2) }}</td>
+                            <td>
+                                {{ number_format($ticket->precio_final, 2) }}
+                            </td>
 
-                            <td>{{ number_format($ticket->tasa_servicio, 2) }}</td>
+                            <td>
+                                {{ number_format($ticket->tasa_servicio, 2) }}
+                            </td>
 
-                            <td>{{ $ticket->reserva->getStatusPago() }}</td>
+                            <td>
+                                {{ $ticket->reserva->getStatusPago() }}
+                            </td>
 
-                            <td>{{ $ticket->abordado ? 'Abordado' : 'Pendiente' }}</td>
+                            <td>
+                                {{ $ticket->abordado ? 'Abordado' : 'Pendiente' }}
+                            </td>
 
                         </tr>
+
                     @empty
 
                         <tr>
-                            <td colspan="10">No hay pasajeros.</td>
+                            <td colspan="10">
+                                No hay pasajeros.
+                            </td>
+
                         </tr>
+
                         @endforelse @if ($tickets->isNotEmpty())
 
                             <tr x-cloak x-show="search && !hasMatches()">
-                                <td colspan="10" class="text-center py-4">No hay coincidencias.</td>
+                                <td colspan="10" class="text-center py-4">
+                                    No hay coincidencias.
+                                </td>
+
                             </tr>
+
                         @endif
+
                 </tbody>
             </table>
 

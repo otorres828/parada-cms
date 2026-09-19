@@ -47,26 +47,48 @@
 
             <tr>
                 <th>Fecha</th>
+
                 <th>Reservas pagadas</th>
+
                 <th>Ventas USD</th>
+
                 <th>Tasas USD</th>
+
             </tr>
         </thead>
 
         <tbody>
+
             @forelse($rows as $row)
 
                 <tr>
-                    <td>{{ $row->fecha ?? '—' }}</td>
-                    <td>{{ $row->cantidad ?? '—' }}</td>
-                    <td>{{ number_format($row->total ?? 0, 2) }}</td>
-                    <td>{{ number_format($row->tasas ?? 0, 2) }}</td>
+                    <td>
+                        {{ $row->fecha ?? '—' }}
+                    </td>
+
+                    <td>
+                        {{ $row->cantidad ?? '—' }}
+                    </td>
+
+                    <td>
+                        {{ number_format($row->total ?? 0, 2) }}
+                    </td>
+
+                    <td>
+                        {{ number_format($row->tasas ?? 0, 2) }}
+                    </td>
+
             </tr>@empty
 
                 <tr>
-                    <td colspan="4" class="text-center py-5">No hay datos para el período.</td>
+                    <td colspan="4" class="text-center py-5">
+                        No hay datos para el período.
+                    </td>
+
                 </tr>
+
             @endforelse
+
         </tbody>
 
     </x-list.table>

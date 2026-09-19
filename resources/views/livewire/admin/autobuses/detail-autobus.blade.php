@@ -7,6 +7,7 @@
         <x-slot:title>
             Programaciones del autobus @if ($autobus_id)
                 <small class="text-body-secondary">#{{ $autobus_id }}</small>
+
             @endif
 
         </x-slot:title>
@@ -20,8 +21,6 @@
         </x-slot:button>
 
     </x-list.heading>
-
-
 
     <div class="container-fluid px-0 mb-4">
 
@@ -115,41 +114,69 @@
                 <tbody>
 
                     @forelse($programaciones as $salida)
+
                         <tr>
                             <td>
+
                                 @if ($canViewPassengers)
+
                                     <a href="{{ route('admin.programaciones.passengers', $salida->id) }}"
                                         wire:navigate>#{{ $salida->id }}</a>
+
                                 @else
+
                                     #{{ $salida->id }}
+
                                 @endif
+
                             </td>
 
-                            <td>{{ $salida->fecha_salida->format('d/m/Y') }} {{ substr($salida->hora_salida, 0, 5) }}
+                            <td>
+                                {{ $salida->fecha_salida->format('d/m/Y') }} {{ substr($salida->hora_salida, 0, 5) }}
                             </td>
 
-                            <td>{{ $salida->viaje?->origenTerminal?->nombre }} →
-                                {{ $salida->viaje?->destinoTerminal?->nombre }}</td>
+                            <td>
+                                {{ $salida->viaje?->origenTerminal?->nombre }} →
+                                {{ $salida->viaje?->destinoTerminal?->nombre }}
+                            </td>
 
-                            <td>{{ $salida->estatus ? 'Activa' : 'Inactiva' }}</td>
+                            <td>
+                                {{ $salida->estatus ? 'Activa' : 'Inactiva' }}
+                            </td>
 
-                            <td>{{ number_format($salida->precio_pasaje, 2) }}</td>
+                            <td>
+                                {{ number_format($salida->precio_pasaje, 2) }}
+                            </td>
 
-                            <td><span class="badge text-bg-success">{{ $salida->pasajes_vendidos }}</span></td>
+                            <td>
+                                <span class="badge text-bg-success">{{ $salida->pasajes_vendidos }}</span>
+                            </td>
 
-                            <td><span class="badge text-bg-warning">{{ $salida->pasajes_pendientes }}</span></td>
+                            <td>
+                                <span class="badge text-bg-warning">{{ $salida->pasajes_pendientes }}</span>
+                            </td>
 
-                            <td>{{ number_format($salida->ventas_total ?? 0, 2) }}</td>
+                            <td>
+                                {{ number_format($salida->ventas_total ?? 0, 2) }}
+                            </td>
 
-                            <td>{{ number_format($salida->tasas_servicio_total ?? 0, 2) }}</td>
+                            <td>
+                                {{ number_format($salida->tasas_servicio_total ?? 0, 2) }}
+                            </td>
 
                         </tr>
+
                     @empty
 
                         <tr>
-                            <td colspan="9" class="text-center py-4">No hay programaciones registradas.</td>
+                            <td colspan="9" class="text-center py-4">
+                                No hay programaciones registradas.
+                            </td>
+
                         </tr>
+
                     @endforelse
+
                 </tbody>
             </table>
 

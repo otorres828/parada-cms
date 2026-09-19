@@ -11,16 +11,16 @@
         <x-slot:button>
 
             @if (Route::has('admin.empresas.users.add') && $canAdd)
+
                 <x-list.add-button :route="route('admin.empresas.users.add', ['empresa_id' => $empresa_id])">
                     Nuevo registro
                 </x-list.add-button>
+
             @endif
 
         </x-slot:button>
 
     </x-list.heading>
-
-
 
     <x-list.actions>
 
@@ -80,69 +80,107 @@
                 <th>ID
                     <x-list.sortable-button column="id" :$sortColumn :$sortDirection />
                 </th>
+
                 <th>Nombre
                     <x-list.sortable-button column="nombre" :$sortColumn :$sortDirection />
                 </th>
+
                 <th>Correo
                     <x-list.sortable-button column="email" :$sortColumn :$sortDirection />
                 </th>
+
                 <th>Administrador
                     <x-list.sortable-button column="es_admin" :$sortColumn :$sortDirection />
                 </th>
+
                 <th>Estado
                     <x-list.sortable-button column="estatus" :$sortColumn :$sortDirection />
                 </th>
+
                 <th class="text-end">Acciones</th>
+
             </tr>
         </thead>
 
         <tbody>
+
             @forelse ($usuariosEmpresa as $usuarioEmpresa)
 
                 <tr wire:key="listEmpresaUser-{{ $usuarioEmpresa->id }}">
-                    <td>{{ $usuarioEmpresa->id }}</td>
-                    <td>{{ $usuarioEmpresa->nombre ?? '—' }}</td>
-                    <td>{{ $usuarioEmpresa->email ?? '—' }}</td>
-                    <td>{{ $usuarioEmpresa->es_admin ? 'Sí' : 'No' }}</td>
+                    <td>
+                        {{ $usuarioEmpresa->id }}
+                    </td>
+
+                    <td>
+                        {{ $usuarioEmpresa->nombre ?? '—' }}
+                    </td>
+
+                    <td>
+                        {{ $usuarioEmpresa->email ?? '—' }}
+                    </td>
+
+                    <td>
+                        {{ $usuarioEmpresa->es_admin ? 'Sí' : 'No' }}
+                    </td>
+
                     <td>
                         <x-list.status-badge :status="$usuarioEmpresa->estatus" />
                     </td>
+
                     <td class="text-end">
 
                         <x-list.button-group>
 
                             @if ($capabilities['detail'])
+
                                 <x-list.view-button :route="route('admin.empresas.users.detail', [
                                     'empresa_id' => $empresa_id,
                                     'usuario_empresa_id' => $usuarioEmpresa->id,
                                 ])" :target="false" />
+
                             @endif
+
                             @if ($capabilities['edit'])
+
                                 <x-list.edit-button :route="route('admin.empresas.users.edit', [
                                     'empresa_id' => $empresa_id,
                                     'usuario_empresa_id' => $usuarioEmpresa->id,
                                 ])" />
+
                             @endif
+
                             @if ($capabilities['permissions'])
+
                                 <a class="btn btn-outline-secondary"
                                     href="{{ route('admin.empresas.users.permissions', ['empresa_id' => $empresa_id, 'usuario_empresa_id' => $usuarioEmpresa->id]) }}"
                                     wire:navigate title="Permisos" aria-label="Permisos"><i class="bi bi-shield-lock-fill"></i></a>
+
                             @endif
+
                             @if ($canEdit)
+
                                 <x-list.status-button wire:click="changeStatus({{ $usuarioEmpresa->id }})" :status="$usuarioEmpresa->estatus"
                                     wire:loading.attr="disabled" />
+
                             @endif
 
                         </x-list.button-group>
 
                     </td>
+
                 </tr>
+
             @empty
 
                 <tr>
-                    <td colspan="6" class="text-center py-5">No se encontraron registros.</td>
+                    <td colspan="6" class="text-center py-5">
+                        No se encontraron registros.
+                    </td>
+
                 </tr>
+
             @endforelse
+
         </tbody>
 
     </x-list.table>

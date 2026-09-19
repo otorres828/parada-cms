@@ -7,6 +7,7 @@
         <x-slot:title>
             Auditoría @if ($audit_id)
                 <small class="text-body-secondary">#{{ $audit_id }}</small>
+
             @endif
 
         </x-slot:title>
@@ -14,16 +15,16 @@
         <x-slot:button>
 
             @if (\App\Services\Admin\Access::allows('auditoria', 'list'))
+
                 <x-form.cancel-button :link="route('admin.auditoria.list')">
                     Volver al listado
                 </x-form.cancel-button>
+
             @endif
 
         </x-slot:button>
 
     </x-list.heading>
-
-
 
     <div class="container-fluid px-0 mb-4">
 
@@ -55,7 +56,7 @@
                             <dt class="col-sm-4">Fecha</dt>
 
                             <dd class="col-sm-8">{{ $auditoria->created_at?->format('d/m/Y H:i') ?? '—' }}</dd>
-                            
+
                         </dl>
 
                     </div>

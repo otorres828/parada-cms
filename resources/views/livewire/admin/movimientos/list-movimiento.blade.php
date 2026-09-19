@@ -11,16 +11,16 @@
         <x-slot:button>
 
             @if (Route::has('admin.movimientos.add') && $canAdd)
+
                 <x-list.add-button :route="route('admin.movimientos.add')">
                     Nuevo registro
                 </x-list.add-button>
+
             @endif
 
         </x-slot:button>
 
     </x-list.heading>
-
-
 
     <x-list.actions>
 
@@ -47,8 +47,11 @@
             <select id="filtro-empresa" class="form-select" wire:model.live="empresa_id">
 
                 <option value="">Todas las empresas</option>
+
                 @foreach ($empresas as $empresa)
+
                     <option value="{{ $empresa->id }}">{{ $empresa->nombre }}</option>
+
                 @endforeach
 
             </select>
@@ -81,51 +84,86 @@
                 <th>ID
                     <x-list.sortable-button column="id" :$sortColumn :$sortDirection />
                 </th>
+
                 <th>Empresa </th>
+
                 <th>Concepto
                     <x-list.sortable-button column="tipo" :$sortColumn :$sortDirection />
                 </th>
+
                 <th>Importe USD
                     <x-list.sortable-button column="monto" :$sortColumn :$sortDirection />
                 </th>
+
                 <th>Descripción
                     <x-list.sortable-button column="descripcion" :$sortColumn :$sortDirection />
                 </th>
+
                 <th>Fecha
                     <x-list.sortable-button column="created_at" :$sortColumn :$sortDirection />
                 </th>
+
                 <th class="text-end">Acciones</th>
+
             </tr>
         </thead>
 
         <tbody>
+
             @forelse ($movimientos as $movimiento)
 
                 <tr wire:key="listMovimiento-{{ $movimiento->id }}">
-                    <td>{{ $movimiento->id }}</td>
-                    <td>{{ $movimiento->empresa?->nombre ?? '—' }}</td>
-                    <td>{{ $movimiento->tipo ?? '—' }}</td>
-                    <td>{{ number_format($movimiento->monto ?? 0, 2) }}</td>
-                    <td>{{ $movimiento->descripcion ?? '—' }}</td>
-                    <td>{{ $movimiento->created_at?->format('d/m/Y H:i') ?? '—' }}</td>
+                    <td>
+                        {{ $movimiento->id }}
+                    </td>
+
+                    <td>
+                        {{ $movimiento->empresa?->nombre ?? '—' }}
+                    </td>
+
+                    <td>
+                        {{ $movimiento->tipo ?? '—' }}
+                    </td>
+
+                    <td>
+                        {{ number_format($movimiento->monto ?? 0, 2) }}
+                    </td>
+
+                    <td>
+                        {{ $movimiento->descripcion ?? '—' }}
+                    </td>
+
+                    <td>
+                        {{ $movimiento->created_at?->format('d/m/Y H:i') ?? '—' }}
+                    </td>
+
                     <td class="text-end">
 
                         <x-list.button-group>
 
                             @if ($capabilities['detail'])
+
                                 <x-list.view-button :route="route('admin.movimientos.detail', ['movimiento_id' => $movimiento->id])" :target="false" />
+
                             @endif
 
                         </x-list.button-group>
 
                     </td>
+
                 </tr>
+
             @empty
 
                 <tr>
-                    <td colspan="7" class="text-center py-5">No se encontraron registros.</td>
+                    <td colspan="7" class="text-center py-5">
+                        No se encontraron registros.
+                    </td>
+
                 </tr>
+
             @endforelse
+
         </tbody>
 
     </x-list.table>

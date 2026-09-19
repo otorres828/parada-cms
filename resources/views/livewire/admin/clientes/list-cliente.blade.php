@@ -10,8 +10,6 @@
 
     </x-list.heading>
 
-
-
     <x-list.actions>
 
         <x-slot:search>
@@ -54,37 +52,62 @@
                 <th>ID
                     <x-list.sortable-button column="id" :$sortColumn :$sortDirection />
                 </th>
+
                 <th>Nombre
                     <x-list.sortable-button column="name" :$sortColumn :$sortDirection />
                 </th>
+
                 <th>Apellido
                     <x-list.sortable-button column="lastname" :$sortColumn :$sortDirection />
                 </th>
+
                 <th>Correo
                     <x-list.sortable-button column="email" :$sortColumn :$sortDirection />
                 </th>
+
                 <th>Teléfono
                     <x-list.sortable-button column="telefono" :$sortColumn :$sortDirection />
                 </th>
+
                 <th>Estado
                     <x-list.sortable-button column="status" :$sortColumn :$sortDirection />
                 </th>
+
                 <th class="text-end">Acciones</th>
+
             </tr>
         </thead>
 
         <tbody>
+
             @forelse ($users as $user)
 
                 <tr wire:key="listUser-{{ $user->id }}">
-                    <td>{{ $user->id }}</td>
-                    <td>{{ $user->name ?? '—' }}</td>
-                    <td>{{ $user->lastname ?? '—' }}</td>
-                    <td>{{ $user->email ?? '—' }}</td>
-                    <td>{{ $user->telefono ?? '—' }}</td>
+
+                    <td>
+                        {{ $user->id }}
+                    </td>
+
+                    <td>
+                        {{ $user->name ?? '—' }}
+                    </td>
+
+                    <td>
+                        {{ $user->lastname ?? '—' }}
+                    </td>
+
+                    <td>
+                        {{ $user->email ?? '—' }}
+                    </td>
+
+                    <td>
+                        {{ $user->telefono ?? '—' }}
+                    </td>
+
                     <td>
                         <x-list.status-badge :status="$user->status" />
                     </td>
+
                     <td class="text-end">
 
                         <x-list.button-group>
@@ -99,24 +122,30 @@
 
                                 <x-list.edit-button :route="route('admin.clientes.edit', ['user_id' => $user->id])" :target="false" />
 
-                                <x-list.status-button 
-                                    wire:click="changeStatus({{ $user->id }})" 
+                                <x-list.status-button
+                                    wire:click="changeStatus({{ $user->id }})"
                                     :status="$user->status"
-                                    wire:loading.attr="disabled" 
-                                />
+                                    wire:loading.attr="disabled" />
 
                             @endif
 
                         </x-list.button-group>
 
                     </td>
+
                 </tr>
+
             @empty
 
                 <tr>
-                    <td colspan="7" class="text-center py-5">No se encontraron registros.</td>
+                    <td colspan="7" class="text-center py-5">
+                        No se encontraron registros.
+                    </td>
+
                 </tr>
+
             @endforelse
+
         </tbody>
 
     </x-list.table>
@@ -135,13 +164,18 @@
             },
             init() {
                 this.toastCleanup = [
+
                     Livewire.on('successEventList', data => this.$store.toast.success(data.message)),
                     Livewire.on('errorEventList', data => this.$store.toast.info(data.message)),
+
                 ];
                 const savedMessage = @js(session()->pull('admin_success'));
-                if (savedMessage) this.$nextTick(() => Livewire.dispatch('successEventList', {
-                    message: savedMessage
-                }));
+
+                if (savedMessage)
+                    this.$nextTick(() =>
+                        Livewire.dispatch('successEventList', {
+                            message: savedMessage
+                        }));
             },
 
         }));

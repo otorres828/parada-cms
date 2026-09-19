@@ -11,16 +11,16 @@
         <x-slot:button>
 
             @if (Route::has('admin.terminales.add') && $canAdd)
+
                 <x-list.add-button :route="route('admin.terminales.add')">
                     Nuevo registro
                 </x-list.add-button>
+
             @endif
 
         </x-slot:button>
 
     </x-list.heading>
-
-
 
     <x-list.actions>
 
@@ -64,56 +64,91 @@
                 <th>ID
                     <x-list.sortable-button column="id" :$sortColumn :$sortDirection />
                 </th>
+
                 <th>Terminal
                     <x-list.sortable-button column="nombre" :$sortColumn :$sortDirection />
                 </th>
+
                 <th>Estado </th>
+
                 <th>Dirección
                     <x-list.sortable-button column="direccion" :$sortColumn :$sortDirection />
                 </th>
+
                 <th>Estado
                     <x-list.sortable-button column="estatus" :$sortColumn :$sortDirection />
                 </th>
+
                 <th class="text-end">Acciones</th>
+
             </tr>
         </thead>
 
         <tbody>
+
             @forelse ($terminales as $terminal)
 
                 <tr wire:key="listTerminal-{{ $terminal->id }}">
-                    <td>{{ $terminal->id }}</td>
-                    <td>{{ $terminal->nombre ?? '—' }}</td>
-                    <td>{{ $terminal->estado?->nombre ?? '—' }}</td>
-                    <td>{{ $terminal->direccion ?? '—' }}</td>
+                    <td>
+                        {{ $terminal->id }}
+                    </td>
+
+                    <td>
+                        {{ $terminal->nombre ?? '—' }}
+                    </td>
+
+                    <td>
+                        {{ $terminal->estado?->nombre ?? '—' }}
+                    </td>
+
+                    <td>
+                        {{ $terminal->direccion ?? '—' }}
+                    </td>
+
                     <td>
                         <x-list.status-badge :status="$terminal->estatus" />
                     </td>
+
                     <td class="text-end">
 
                         <x-list.button-group>
 
                             @if ($capabilities['detail'])
+
                                 <x-list.view-button :route="route('admin.terminales.detail', ['terminal_id' => $terminal->id])" :target="false" />
+
                             @endif
+
                             @if ($capabilities['edit'])
+
                                 <x-list.edit-button :route="route('admin.terminales.edit', ['terminal_id' => $terminal->id])" />
+
                             @endif
+
                             @if ($canEdit)
+
                                 <x-list.status-button wire:click="changeStatus({{ $terminal->id }})" :status="$terminal->estatus"
                                     wire:loading.attr="disabled" />
+
                             @endif
 
                         </x-list.button-group>
 
                     </td>
+
                 </tr>
+
             @empty
 
                 <tr>
-                    <td colspan="6" class="text-center py-5">No se encontraron registros.</td>
+                    <td colspan="6" class="text-center py-5">
+                        No se encontraron registros.
+                    </td>
+
                 </tr>
+
             @endforelse
+
         </tbody>
 
     </x-list.table>

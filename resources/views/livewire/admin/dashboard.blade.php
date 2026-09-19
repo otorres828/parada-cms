@@ -67,6 +67,7 @@
     <div class="row g-3 mb-2" wire:loading.class="opacity-50">
 
         @foreach ([['label' => 'Ventas pagadas', 'value' => number_format($metrics['ventas'], 2, ',', '.'), 'note' => $metrics['reservas_pagadas'] . ' reservas pagadas', 'icon' => 'cash-stack', 'color' => 'primary'], ['label' => 'Pasajes vendidos', 'value' => number_format($metrics['pasajes'], 0, ',', '.'), 'note' => 'Pasajes de reservas pagadas', 'icon' => 'ticket-perforated', 'color' => 'success'], ['label' => 'Tasas de servicio', 'value' => number_format($metrics['tasas'], 2, ',', '.'), 'note' => 'Incluidas en las ventas pagadas', 'icon' => 'receipt', 'color' => 'info'], ['label' => 'Reservas pendientes', 'value' => number_format($metrics['pendientes'], 0, ',', '.'), 'note' => 'Con estado de pago pendiente', 'icon' => 'hourglass-split', 'color' => 'warning']] as $card)
+
             <div class="col-sm-6 col-xl-3">
 
                 <div class="card h-100 border-0 shadow-sm">
@@ -93,6 +94,7 @@
                 </div>
 
             </div>
+
         @endforeach
 
     </div>
@@ -123,10 +125,13 @@
                             Aún no hay reservas en este período.
 
                         </div>
+
                     @else
+
                         <div class="row g-3">
 
                             @foreach ($estados as $estado => $datos)
+
                                 <div class="col-sm-6" wire:key="estado-{{ $estado }}">
 
                                     <div class="d-flex justify-content-between small mb-2">
@@ -147,6 +152,7 @@
                                     </div>
 
                                 </div>
+
                             @endforeach
 
                         </div>
@@ -213,15 +219,22 @@
 
                         <tr>
                             <th scope="col" class="ps-4">Referencia / fecha</th>
+
                             <th scope="col">Cliente</th>
+
                             <th scope="col">Empresa</th>
+
                             <th scope="col" class="text-center">Pasajes</th>
+
                             <th scope="col" class="text-end">Importe</th>
+
                             <th scope="col" class="pe-4">Estado de pago</th>
+
                         </tr>
                     </thead>
 
                     <tbody>
+
                         @forelse ($ultimasReservas as $reserva)
 
                             <tr wire:key="reserva-{{ $reserva->id }}">
@@ -232,23 +245,43 @@
                                     <div class="small text-body-secondary">
                                         {{ $reserva->fecha_compra->format('d/m/Y H:i') }}
                                     </div>
-
                                 </td>
-                                <td>{{ $reserva->usuario?->name ?? 'Sin cliente' }}</td>
-                                <td>{{ $reserva->programacion?->viaje?->empresa?->nombre ?? 'Sin empresa' }}</td>
-                                <td class="text-center">{{ $reserva->pasajes_count }}</td>
-                                <td class="text-end text-nowrap">{{ number_format($reserva->monto_total, 2, ',', '.') }}</td>
-                                <td class="pe-4"><span
+
+                                <td>
+                                    {{ $reserva->usuario?->name ?? 'Sin cliente' }}
+                                </td>
+
+                                <td>
+                                    {{ $reserva->programacion?->viaje?->empresa?->nombre ?? 'Sin empresa' }}
+                                </td>
+
+                                <td class="text-center">
+                                    {{ $reserva->pasajes_count }}
+                                </td>
+
+                                <td class="text-end text-nowrap">
+                                    {{ number_format($reserva->monto_total, 2, ',', '.') }}
+                                </td>
+
+                                <td class="pe-4">
+                                    <span
                                         class="badge text-bg-{{ $estados[$reserva->estado_pago]['color'] ?? 'secondary' }}">{{ ucfirst($reserva->estado_pago) }}</span>
                                 </td>
+
                             </tr>
+
                         @empty
 
                             <tr>
-                                <td colspan="6" class="text-center text-body-secondary py-5">No hay reservas para mostrar en este
-                                    período.</td>
+                                <td colspan="6" class="text-center text-body-secondary py-5">
+                                    No hay reservas para mostrar en este
+                                    período.
+                                </td>
+
                             </tr>
+
                         @endforelse
+
                     </tbody>
                 </table>
 
@@ -283,13 +316,18 @@
 
                         <tr>
                             <th scope="col" class="ps-4">Ruta</th>
+
                             <th scope="col">Empresa</th>
+
                             <th scope="col">Salida</th>
+
                             <th scope="col" class="pe-4 text-end">Asientos disponibles</th>
+
                         </tr>
                     </thead>
 
                     <tbody>
+
                         @forelse ($proximasSalidas as $salida)
 
                             <tr wire:key="salida-{{ $salida->id }}">
@@ -300,20 +338,36 @@
                                             aria-label="hacia"></i> {{ $salida->viaje?->destinoTerminal?->nombre }}
                                     </a>
                                 </td>
-                                <td>{{ $salida->viaje?->empresa?->nombre }}</td>
-                                <td class="text-nowrap">{{ $salida->fecha_salida->format('d/m/Y') }} ·
-                                    {{ substr($salida->hora_salida, 0, 5) }}</td>
-                                <td class="pe-4 text-end"><span
+
+                                <td>
+                                    {{ $salida->viaje?->empresa?->nombre }}
+                                </td>
+
+                                <td class="text-nowrap">
+                                    {{ $salida->fecha_salida->format('d/m/Y') }} ·
+                                    {{ substr($salida->hora_salida, 0, 5) }}
+                                </td>
+
+                                <td class="pe-4 text-end">
+                                    <span
                                         class="badge {{ $salida->asientos_disponibles > 0 ? 'text-bg-light' : 'text-bg-warning' }}">{{ $salida->asientos_disponibles }}
-                                        / {{ $salida->asientos_totales }}</span></td>
+                                        / {{ $salida->asientos_totales }}</span>
+                                </td>
+
                             </tr>
+
                         @empty
 
                             <tr>
-                                <td colspan="4" class="text-center text-body-secondary py-5">No hay salidas activas programadas para
-                                    los próximos 7 días.</td>
+                                <td colspan="4" class="text-center text-body-secondary py-5">
+                                    No hay salidas activas programadas para
+                                    los próximos 7 días.
+                                </td>
+
                             </tr>
+
                         @endforelse
+
                     </tbody>
                 </table>
 

@@ -11,16 +11,16 @@
         <x-slot:button>
 
             @if (Route::has('admin.auditoria.add') && $canAdd)
+
                 <x-list.add-button :route="route('admin.auditoria.add')">
                     Nuevo registro
                 </x-list.add-button>
+
             @endif
 
         </x-slot:button>
 
     </x-list.heading>
-
-
 
     <x-list.actions>
 
@@ -64,51 +64,86 @@
                 <th>ID
                     <x-list.sortable-button column="id" :$sortColumn :$sortDirection />
                 </th>
+
                 <th>Administrador </th>
+
                 <th>Acción
                     <x-list.sortable-button column="accion" :$sortColumn :$sortDirection />
                 </th>
+
                 <th>Entidad
                     <x-list.sortable-button column="entidad" :$sortColumn :$sortDirection />
                 </th>
+
                 <th>Registro
                     <x-list.sortable-button column="entidad_id" :$sortColumn :$sortDirection />
                 </th>
+
                 <th>Fecha
                     <x-list.sortable-button column="created_at" :$sortColumn :$sortDirection />
                 </th>
+
                 <th class="text-end">Acciones</th>
+
             </tr>
         </thead>
 
         <tbody>
+
             @forelse ($auditorias as $auditoria)
 
                 <tr wire:key="listAudit-{{ $auditoria->id }}">
-                    <td>{{ $auditoria->id }}</td>
-                    <td>{{ $auditoria->admin?->name ?? '—' }}</td>
-                    <td>{{ $auditoria->accion ?? '—' }}</td>
-                    <td>{{ $auditoria->entidad ?? '—' }}</td>
-                    <td>{{ $auditoria->entidad_id ?? '—' }}</td>
-                    <td>{{ $auditoria->created_at?->format('d/m/Y H:i') ?? '—' }}</td>
+                    <td>
+                        {{ $auditoria->id }}
+                    </td>
+
+                    <td>
+                        {{ $auditoria->admin?->name ?? '—' }}
+                    </td>
+
+                    <td>
+                        {{ $auditoria->accion ?? '—' }}
+                    </td>
+
+                    <td>
+                        {{ $auditoria->entidad ?? '—' }}
+                    </td>
+
+                    <td>
+                        {{ $auditoria->entidad_id ?? '—' }}
+                    </td>
+
+                    <td>
+                        {{ $auditoria->created_at?->format('d/m/Y H:i') ?? '—' }}
+                    </td>
+
                     <td class="text-end">
 
                         <x-list.button-group>
 
                             @if ($capabilities['detail'])
+
                                 <x-list.view-button :route="route('admin.auditoria.detail', ['audit_id' => $auditoria->id])" :target="false" />
+
                             @endif
 
                         </x-list.button-group>
 
                     </td>
+
                 </tr>
+
             @empty
 
                 <tr>
-                    <td colspan="7" class="text-center py-5">No se encontraron registros.</td>
+                    <td colspan="7" class="text-center py-5">
+                        No se encontraron registros.
+                    </td>
+
                 </tr>
+
             @endforelse
+
         </tbody>
 
     </x-list.table>

@@ -7,6 +7,7 @@
         <x-slot:title>
             Reembolsos @if ($reembolso_id)
                 <small class="text-body-secondary">#{{ $reembolso_id }}</small>
+
             @endif
 
         </x-slot:title>
@@ -14,16 +15,16 @@
         <x-slot:button>
 
             @if (\App\Services\Admin\Access::allows('reembolsos', 'list'))
+
                 <x-form.cancel-button :link="route('admin.reembolsos.list')">
                     Volver al listado
                 </x-form.cancel-button>
+
             @endif
 
         </x-slot:button>
 
     </x-list.heading>
-
-
 
     <div class="container-fluid px-0 mb-4">
 
@@ -75,7 +76,9 @@
     </div>
 
     @if ($reembolso->comprobante)
+
         <button class="btn btn-outline-primary mb-3" type="button" wire:click="downloadProof">Descargar comprobante</button>
+
     @endif
 
     <x-layout.loader.fullpage wire:loading.delay.short />

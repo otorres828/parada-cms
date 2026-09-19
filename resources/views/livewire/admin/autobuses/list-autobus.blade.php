@@ -10,8 +10,6 @@
 
     </x-list.heading>
 
-
-
     <x-list.actions>
 
         <x-slot:search>
@@ -37,8 +35,11 @@
             <select id="filtro-empresa" class="form-select" wire:model.live="empresa_id">
 
                 <option value="">Todas las empresas</option>
+
                 @foreach ($empresas as $empresa)
+
                     <option value="{{ $empresa->id }}">{{ $empresa->nombre }}</option>
+
                 @endforeach
 
             </select>
@@ -92,24 +93,36 @@
                 </th>
 
                 <th></th>
+
             </tr>
 
         </thead>
 
         <tbody>
+
             @forelse ($autobuses as $autobus)
 
                 <tr wire:key="listAutobus-{{ $autobus->id }}">
 
-                    <td>{{ $autobus->id }}</td>
+                    <td>
+                        {{ $autobus->id }}
+                    </td>
 
-                    <td>{{ $autobus->empresa?->nombre ?? '—' }}</td>
+                    <td>
+                        {{ $autobus->empresa?->nombre ?? '—' }}
+                    </td>
 
-                    <td>{{ $autobus->placa ?? '—' }}</td>
+                    <td>
+                        {{ $autobus->placa ?? '—' }}
+                    </td>
 
-                    <td>{{ $autobus->modelo ?? '—' }}</td>
+                    <td>
+                        {{ $autobus->modelo ?? '—' }}
+                    </td>
 
-                    <td>{{ $autobus->total_asientos ?? '—' }}</td>
+                    <td>
+                        {{ $autobus->total_asientos ?? '—' }}
+                    </td>
 
                     <td>
                         <x-list.status-badge :status="$autobus->estatus" />
@@ -120,7 +133,9 @@
                         <x-list.button-group>
 
                             @if ($canDetail)
+
                                 <x-list.view-button :route="route('admin.autobuses.detail', ['autobus_id' => $autobus->id])" :target="false" />
+
                             @endif
 
                         </x-list.button-group>
@@ -132,11 +147,14 @@
             @empty
 
                 <tr>
-                    <td colspan="7" class="text-center py-5">No se encontraron registros.</td>
+                    <td colspan="7" class="text-center py-5">
+                        No se encontraron registros.
+                    </td>
+
                 </tr>
 
             @endforelse
-            
+
         </tbody>
 
     </x-list.table>

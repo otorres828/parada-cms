@@ -7,6 +7,7 @@
         <x-slot:title>
             Usuarios de empresa @if ($usuario_empresa_id)
                 <small class="text-body-secondary">#{{ $usuario_empresa_id }}</small>
+
             @endif
 
         </x-slot:title>
@@ -14,9 +15,11 @@
         <x-slot:button>
 
             @if (\App\Services\Admin\Access::allows('empresas.users', 'list'))
+
                 <x-form.cancel-button :link="route('admin.empresas.users.list', ['empresa_id' => $empresa_id])">
                     Volver al listado
                 </x-form.cancel-button>
+
             @endif
 
         </x-slot:button>
@@ -30,6 +33,7 @@
         <div class="row g-3">
 
             @foreach ($permissions as $section => $items)
+
                 <div class="col-md-4">
 
                     <div class="card h-100">
@@ -41,6 +45,7 @@
                         <div class="card-body">
 
                             @foreach ($items as $permission)
+
                                 <div class="form-check">
 
                                     <input id="permission-{{ $permission->id }}" class="form-check-input" type="checkbox"
@@ -51,6 +56,7 @@
                                     </label>
 
                                 </div>
+
                             @endforeach
 
                         </div>
@@ -58,6 +64,7 @@
                     </div>
 
                 </div>
+
             @endforeach
 
         </div>

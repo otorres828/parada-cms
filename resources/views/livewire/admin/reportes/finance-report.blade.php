@@ -47,26 +47,48 @@
 
             <tr>
                 <th>Fecha</th>
+
                 <th>Concepto</th>
+
                 <th>Movimientos</th>
+
                 <th>Importe neto USD</th>
+
             </tr>
         </thead>
 
         <tbody>
+
             @forelse($rows as $row)
 
                 <tr>
-                    <td>{{ $row->fecha ?? '—' }}</td>
-                    <td>{{ $row->tipo ?? '—' }}</td>
-                    <td>{{ $row->cantidad ?? '—' }}</td>
-                    <td>{{ number_format($row->total ?? 0, 2) }}</td>
+                    <td>
+                        {{ $row->fecha ?? '—' }}
+                    </td>
+
+                    <td>
+                        {{ $row->tipo ?? '—' }}
+                    </td>
+
+                    <td>
+                        {{ $row->cantidad ?? '—' }}
+                    </td>
+
+                    <td>
+                        {{ number_format($row->total ?? 0, 2) }}
+                    </td>
+
             </tr>@empty
 
                 <tr>
-                    <td colspan="4" class="text-center py-5">No hay datos para el período.</td>
+                    <td colspan="4" class="text-center py-5">
+                        No hay datos para el período.
+                    </td>
+
                 </tr>
+
             @endforelse
+
         </tbody>
 
     </x-list.table>

@@ -33,6 +33,7 @@
     <div class="row g-3 mb-4">
 
         @forelse($empresas as $empresa)
+
             <div class="col-md-6 col-xl-4" wire:key="legal-empresa-{{ $empresa->id }}">
 
                 <div class="card h-100">
@@ -56,9 +57,11 @@
                         </div>
 
                         @if ($canDetail)
+
                             <a class="btn btn-outline-primary mt-auto align-self-start"
                                 href="{{ route('admin.legales.detail', $empresa->id) }}" wire:navigate><i
                                     class="bi bi-folder2-open me-1"></i>Ver documentos</a>
+
                         @endif
 
                     </div>
@@ -76,6 +79,7 @@
                 </div>
 
             </div>
+
         @endforelse
 
     </div>

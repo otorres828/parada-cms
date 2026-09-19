@@ -7,6 +7,7 @@
         <x-slot:title>
             Retiros @if ($retiro_id)
                 <small class="text-body-secondary">#{{ $retiro_id }}</small>
+
             @endif
 
         </x-slot:title>
@@ -14,9 +15,11 @@
         <x-slot:button>
 
             @if (\App\Services\Admin\Access::allows('retiros', 'list'))
+
                 <x-form.cancel-button :link="route('admin.retiros.list')">
                     Volver al listado
                 </x-form.cancel-button>
+
             @endif
 
         </x-slot:button>
@@ -36,8 +39,11 @@
                 <x-form.dropdown label="Empresa" name="empresa_id" x-model="$wire.empresa_id">
 
                     <option value="">Seleccionar...</option>
+
                     @foreach ($options_empresa_id as $value => $label)
+
                         <option value="{{ $value }}">{{ $label }}</option>
+
                     @endforeach
 
                 </x-form.dropdown>

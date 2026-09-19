@@ -7,6 +7,7 @@
         <x-slot:title>
             Retiros @if ($retiro_id)
                 <small class="text-body-secondary">#{{ $retiro_id }}</small>
+
             @endif
 
         </x-slot:title>
@@ -14,9 +15,11 @@
         <x-slot:button>
 
             @if (\App\Services\Admin\Access::allows('retiros', 'list'))
+
                 <x-form.cancel-button :link="route('admin.retiros.list')">
                     Volver al listado
                 </x-form.cancel-button>
+
             @endif
 
         </x-slot:button>
@@ -71,12 +74,19 @@
             <x-form.dropdown label="Resolución" name="decision" x-model="$wire.decision">
 
                 <option value="">Seleccionar...</option>
+
                 @if ($retiro->estatus === 'pendiente')
+
                     <option value="aprobado">Aprobar solicitud</option>
+
                 @endif
+
                 @if ($retiro->estatus === 'aprobado')
+
                     <option value="pagado">Confirmar transferencia realizada</option>
+
                 @endif
+
                 <option value="rechazado">Rechazar solicitud</option>
 
             </x-form.dropdown>
@@ -103,12 +113,17 @@
         </x-form.container-sm>
 
         @if (in_array($retiro->estatus, ['pendiente', 'aprobado']))
+
             <button class="btn btn-primary" type="submit" :disabled="saving" wire:loading.attr="disabled">Registrar resolución</button>
+
         @else
+
             <div class="alert alert-info">
                 Esta solicitud ya fue resuelta.
             </div>
+
         @endif
+
     </form>
     <x-layout.loader.fullpage wire:loading.delay.short />
 

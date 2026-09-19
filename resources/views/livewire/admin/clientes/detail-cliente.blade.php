@@ -7,6 +7,7 @@
         <x-slot:title>
             Clientes @if ($user_id)
                 <small class="text-body-secondary">#{{ $user_id }}</small>
+
             @endif
 
         </x-slot:title>
@@ -20,8 +21,6 @@
         </x-slot:button>
 
     </x-list.heading>
-
-
 
     <div class="container-fluid px-0 mb-4">
 
@@ -92,43 +91,79 @@
 
                     <tr>
                         <th>Código</th>
+
                         <th>Empresa</th>
+
                         <th>Fecha de compra</th>
+
                         <th>Estado</th>
+
                         <th>Total USD</th>
+
                     </tr>
                 </thead>
 
                 <tbody>
+
                     @forelse($reservas as $reserva)
 
                         <tr data-search="{{ $reserva->codigo_referencia }} {{ $reserva->programacion?->viaje?->empresa?->nombre }} {{ $reserva->estado_pago }}"
                             x-show="matches($el.dataset.search)">
                             <td>
+
                                 @if ($canReservasDetail)
+
                                     <a href="{{ route('admin.reservas.detail', $reserva->id) }}"
                                         wire:navigate>{{ $reserva->codigo_referencia }}</a>
+
                                 @else
+
                                     {{ $reserva->codigo_referencia }}
+
                                 @endif
+
                             </td>
-                            <td>{{ $reserva->programacion?->viaje?->empresa?->nombre }}</td>
-                            <td>{{ $reserva->fecha_compra?->format('d/m/Y H:i') }}</td>
-                            <td>{{ $reserva->estado_pago === 'pagado' ? 'Pagada' : 'Pendiente' }}</td>
-                            <td>{{ number_format($reserva->monto_total, 2) }}</td>
+
+                            <td>
+                                {{ $reserva->programacion?->viaje?->empresa?->nombre }}
+                            </td>
+
+                            <td>
+                                {{ $reserva->fecha_compra?->format('d/m/Y H:i') }}
+                            </td>
+
+                            <td>
+                                {{ $reserva->estado_pago === 'pagado' ? 'Pagada' : 'Pendiente' }}
+                            </td>
+
+                            <td>
+                                {{ number_format($reserva->monto_total, 2) }}
+                            </td>
+
                         </tr>
+
                     @empty
 
                         <tr>
-                            <td colspan="5" class="text-center py-4">No hay reservas pagadas o pendientes.</td>
+                            <td colspan="5" class="text-center py-4">
+                                No hay reservas pagadas o pendientes.
+                            </td>
+
                         </tr>
+
                     @endforelse
+
                     @if ($reservas->isNotEmpty())
 
                         <tr x-cloak x-show="search && !hasMatches()">
-                            <td colspan="5" class="text-center py-4">No hay coincidencias.</td>
+                            <td colspan="5" class="text-center py-4">
+                                No hay coincidencias.
+                            </td>
+
                         </tr>
+
                     @endif
+
                 </tbody>
             </table>
 

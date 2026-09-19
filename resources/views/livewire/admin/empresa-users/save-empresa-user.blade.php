@@ -7,6 +7,7 @@
         <x-slot:title>
             Usuarios de empresa @if ($usuario_empresa_id)
                 <small class="text-body-secondary">#{{ $usuario_empresa_id }}</small>
+
             @endif
 
         </x-slot:title>
@@ -14,9 +15,11 @@
         <x-slot:button>
 
             @if (\App\Services\Admin\Access::allows('empresas.users', 'list'))
+
                 <x-form.cancel-button :link="route('admin.empresas.users.list', ['empresa_id' => $empresa_id])">
                     Volver al listado
                 </x-form.cancel-button>
+
             @endif
 
         </x-slot:button>
@@ -107,7 +110,9 @@
             </div>
 
             @if ($usuario_empresa_id)
+
                 <p class="text-body-secondary">Deja la contraseña vacía para conservar la actual.</p>
+
             @endif
 
         </x-form.container-sm>

@@ -47,24 +47,42 @@
 
             <tr>
                 <th>Empresa</th>
+
                 <th>Reservas pagadas</th>
+
                 <th>Ventas USD</th>
+
             </tr>
         </thead>
 
         <tbody>
+
             @forelse($rows as $row)
 
                 <tr>
-                    <td>{{ $row->nombre ?? '—' }}</td>
-                    <td>{{ $row->cantidad ?? '—' }}</td>
-                    <td>{{ number_format($row->total ?? 0, 2) }}</td>
+                    <td>
+                        {{ $row->nombre ?? '—' }}
+                    </td>
+
+                    <td>
+                        {{ $row->cantidad ?? '—' }}
+                    </td>
+
+                    <td>
+                        {{ number_format($row->total ?? 0, 2) }}
+                    </td>
+
             </tr>@empty
 
                 <tr>
-                    <td colspan="3" class="text-center py-5">No hay datos para el período.</td>
+                    <td colspan="3" class="text-center py-5">
+                        No hay datos para el período.
+                    </td>
+
                 </tr>
+
             @endforelse
+
         </tbody>
 
     </x-list.table>

@@ -7,6 +7,7 @@
         <x-slot:title>
             Empresas @if ($empresa_id)
                 <small class="text-body-secondary">#{{ $empresa_id }}</small>
+
             @endif
 
         </x-slot:title>
@@ -14,9 +15,11 @@
         <x-slot:button>
 
             @if (\App\Services\Admin\Access::allows('empresas', 'list'))
+
                 <x-form.cancel-button :link="route('admin.empresas.list')">
                     Volver al listado
                 </x-form.cancel-button>
+
             @endif
 
         </x-slot:button>

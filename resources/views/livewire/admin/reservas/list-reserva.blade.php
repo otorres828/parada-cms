@@ -11,16 +11,16 @@
         <x-slot:button>
 
             @if (Route::has('admin.reservas.add') && $canAdd)
+
                 <x-list.add-button :route="route('admin.reservas.add')">
                     Nuevo registro
                 </x-list.add-button>
+
             @endif
 
         </x-slot:button>
 
     </x-list.heading>
-
-
 
     <x-list.actions>
 
@@ -47,8 +47,11 @@
             <select id="reserva-empresa" class="form-select" wire:model.live="empresa_id">
 
                 <option value="">Todas las empresas</option>
+
                 @foreach ($empresas as $empresa)
+
                     <option value="{{ $empresa->id }}">{{ $empresa->nombre }}</option>
+
                 @endforeach
 
             </select>
@@ -101,55 +104,92 @@
                 <th>ID
                     <x-list.sortable-button column="id" :$sortColumn :$sortDirection />
                 </th>
+
                 <th>Referencia
                     <x-list.sortable-button column="codigo_referencia" :$sortColumn :$sortDirection />
                 </th>
+
                 <th>Cliente </th>
+
                 <th>Empresa </th>
+
                 <th>Fecha
                     <x-list.sortable-button column="fecha_compra" :$sortColumn :$sortDirection />
                 </th>
+
                 <th>Total USD
                     <x-list.sortable-button column="monto_total" :$sortColumn :$sortDirection />
                 </th>
+
                 <th>Estado
                     <x-list.sortable-button column="estado_pago" :$sortColumn :$sortDirection />
                 </th>
+
                 <th class="text-end">Acciones</th>
+
             </tr>
         </thead>
 
         <tbody>
+
             @forelse ($reservas as $reserva)
 
                 <tr wire:key="listReserva-{{ $reserva->id }}">
-                    <td>{{ $reserva->id }}</td>
-                    <td>{{ $reserva->codigo_referencia ?? '—' }}</td>
-                    <td>{{ $reserva->usuario?->name ?? '—' }}</td>
-                    <td>{{ $reserva->programacion?->viaje?->empresa?->nombre ?? '—' }}</td>
-                    <td>{{ $reserva->fecha_compra?->format('d/m/Y H:i') ?? '—' }}</td>
-                    <td>{{ number_format($reserva->monto_total ?? 0, 2) }}</td>
+                    <td>
+                        {{ $reserva->id }}
+                    </td>
+
+                    <td>
+                        {{ $reserva->codigo_referencia ?? '—' }}
+                    </td>
+
+                    <td>
+                        {{ $reserva->usuario?->name ?? '—' }}
+                    </td>
+
+                    <td>
+                        {{ $reserva->programacion?->viaje?->empresa?->nombre ?? '—' }}
+                    </td>
+
+                    <td>
+                        {{ $reserva->fecha_compra?->format('d/m/Y H:i') ?? '—' }}
+                    </td>
+
+                    <td>
+                        {{ number_format($reserva->monto_total ?? 0, 2) }}
+                    </td>
+
                     <td>
                         <x-list.status-badge :status="$reserva->estado_pago" />
                     </td>
+
                     <td class="text-end">
 
                         <x-list.button-group>
 
                             @if ($capabilities['detail'])
+
                                 <x-list.view-button :route="route('admin.reservas.detail', ['reserva_id' => $reserva->id])" :target="false" />
+
                             @endif
 
                         </x-list.button-group>
 
                     </td>
+
                 </tr>
+
             @empty
 
                 <tr>
-                    <td colspan="8" class="text-center py-5">No se encontraron registros.</td>
+                    <td colspan="8" class="text-center py-5">
+                        No se encontraron registros.
+                    </td>
+
                 </tr>
+
             @endforelse
+
         </tbody>
 
     </x-list.table>

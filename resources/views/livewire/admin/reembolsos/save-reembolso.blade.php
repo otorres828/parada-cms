@@ -7,6 +7,7 @@
         <x-slot:title>
             Reembolsos @if ($reembolso_id)
                 <small class="text-body-secondary">#{{ $reembolso_id }}</small>
+
             @endif
 
         </x-slot:title>
@@ -14,9 +15,11 @@
         <x-slot:button>
 
             @if (\App\Services\Admin\Access::allows('reembolsos', 'list'))
+
                 <x-form.cancel-button :link="route('admin.reembolsos.list')">
                     Volver al listado
                 </x-form.cancel-button>
+
             @endif
 
         </x-slot:button>
@@ -36,8 +39,11 @@
                 <x-form.dropdown label="Pago recibido" name="pago_id" x-model="$wire.pago_id">
 
                     <option value="">Seleccionar...</option>
+
                     @foreach ($options_pago_id as $value => $label)
+
                         <option value="{{ $value }}">{{ $label }}</option>
+
                     @endforeach
 
                 </x-form.dropdown>

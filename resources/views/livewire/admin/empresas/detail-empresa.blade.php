@@ -7,6 +7,7 @@
         <x-slot:title>
             Empresas @if ($empresa_id)
                 <small class="text-body-secondary">#{{ $empresa_id }}</small>
+
             @endif
 
         </x-slot:title>
@@ -20,8 +21,6 @@
         </x-slot:button>
 
     </x-list.heading>
-
-
 
     <div class="container-fluid px-0 mb-4">
 
@@ -55,15 +54,18 @@
                     </div>
 
                 </div>
-            
+
                 <div class="alert alert-light border">
                     Saldo contable: {{ $balance['saldo'] }} USD · Reservado: {{ $balance['retenido'] }} USD ·
                     Disponible: {{ $balance['disponible'] }} USD
                 </div>
-            
+
                 @if ($canListUser)
-                    <a class="btn btn-primary" href="{{ route('admin.empresas.users.list', ['empresa_id' => $empresa->id]) }}" wire:navigate>Gestionar
+
+                    <a class="btn btn-primary" href="{{ route('admin.empresas.users.list', ['empresa_id' => $empresa->id]) }}"
+                        wire:navigate>Gestionar
                         usuarios de la empresa</a>
+
                 @endif
 
             </div>

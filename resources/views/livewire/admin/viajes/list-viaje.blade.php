@@ -8,11 +8,7 @@
             Rutas de viajes
         </x-slot:title>
 
-       
-
     </x-list.heading>
-
-
 
     <x-list.actions>
 
@@ -39,8 +35,11 @@
             <select id="filtro-empresa" class="form-select" wire:model.live="empresa_id">
 
                 <option value="">Todas las empresas</option>
+
                 @foreach ($empresas as $empresa)
+
                     <option value="{{ $empresa->id }}">{{ $empresa->nombre }}</option>
+
                 @endforeach
 
             </select>
@@ -91,36 +90,52 @@
                 <th>Tasas de servicio USD</th>
 
                 <th class="text-end">Acciones</th>
+
             </tr>
         </thead>
 
         <tbody>
+
             @forelse ($viajes as $viaje)
 
                 <tr wire:key="listViaje-{{ $viaje->id }}">
 
-                    <td>{{ $viaje->id }}</td>
+                    <td>
+                        {{ $viaje->id }}
+                    </td>
 
-                    <td>{{ $viaje->empresa?->nombre ?? '—' }}</td>
+                    <td>
+                        {{ $viaje->empresa?->nombre ?? '—' }}
+                    </td>
 
-                    <td>{{ $viaje->origenTerminal?->nombre ?? '—' }}</td>
+                    <td>
+                        {{ $viaje->origenTerminal?->nombre ?? '—' }}
+                    </td>
 
-                    <td>{{ $viaje->destinoTerminal?->nombre ?? '—' }}</td>
+                    <td>
+                        {{ $viaje->destinoTerminal?->nombre ?? '—' }}
+                    </td>
 
-                    <td>{{ $viaje->duracion_estimada ?? '—' }}</td>
+                    <td>
+                        {{ $viaje->duracion_estimada ?? '—' }}
+                    </td>
 
                     <td>
                         <x-list.status-badge :status="$viaje->estatus" />
                     </td>
 
-                    <td>{{ number_format($viaje->tasas_servicio_total ?? 0, 2) }}</td>
-                    
+                    <td>
+                        {{ number_format($viaje->tasas_servicio_total ?? 0, 2) }}
+                    </td>
+
                     <td class="text-end">
 
                         <x-list.button-group>
 
                             @if ($canDetail)
+
                                 <x-list.view-button :route="route('admin.viajes.detail', ['viaje_id' => $viaje->id])" :target="false" />
+
                             @endif
 
                         </x-list.button-group>
@@ -132,7 +147,10 @@
             @empty
 
                 <tr>
-                    <td colspan="8" class="text-center py-5">No se encontraron registros.</td>
+                    <td colspan="8" class="text-center py-5">
+                        No se encontraron registros.
+                    </td>
+
                 </tr>
 
             @endforelse

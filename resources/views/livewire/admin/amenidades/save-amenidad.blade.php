@@ -7,6 +7,7 @@
         <x-slot:title>
             Amenidades @if ($amenidad_id)
                 <small class="text-body-secondary">#{{ $amenidad_id }}</small>
+
             @endif
 
         </x-slot:title>
@@ -14,9 +15,11 @@
         <x-slot:button>
 
             @if (\App\Services\Admin\Access::allows('amenidades', 'list'))
+
                 <x-form.cancel-button :link="route('admin.amenidades.list')">
                     Volver al listado
                 </x-form.cancel-button>
+
             @endif
 
         </x-slot:button>

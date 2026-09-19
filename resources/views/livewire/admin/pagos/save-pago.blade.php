@@ -7,6 +7,7 @@
         <x-slot:title>
             Pagos recibidos @if ($pago_id)
                 <small class="text-body-secondary">#{{ $pago_id }}</small>
+
             @endif
 
         </x-slot:title>
@@ -14,9 +15,11 @@
         <x-slot:button>
 
             @if (\App\Services\Admin\Access::allows('pagos', 'list'))
+
                 <x-form.cancel-button :link="route('admin.pagos.list')">
                     Volver al listado
                 </x-form.cancel-button>
+
             @endif
 
         </x-slot:button>
@@ -36,8 +39,11 @@
                 <x-form.dropdown label="Reserva pagada" name="reserva_id" x-model="$wire.reserva_id">
 
                     <option value="">Seleccionar...</option>
+
                     @foreach ($options_reserva_id as $value => $label)
+
                         <option value="{{ $value }}">{{ $label }}</option>
+
                     @endforeach
 
                 </x-form.dropdown>

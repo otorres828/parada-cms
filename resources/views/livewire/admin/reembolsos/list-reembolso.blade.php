@@ -11,16 +11,16 @@
         <x-slot:button>
 
             @if (Route::has('admin.reembolsos.add') && $canAdd)
+
                 <x-list.add-button :route="route('admin.reembolsos.add')">
                     Nuevo registro
                 </x-list.add-button>
+
             @endif
 
         </x-slot:button>
 
     </x-list.heading>
-
-
 
     <x-list.actions>
 
@@ -47,8 +47,11 @@
             <select id="filtro-empresa" class="form-select" wire:model.live="empresa_id">
 
                 <option value="">Todas las empresas</option>
+
                 @foreach ($empresas as $empresa)
+
                     <option value="{{ $empresa->id }}">{{ $empresa->nombre }}</option>
+
                 @endforeach
 
             </select>
@@ -99,56 +102,92 @@
                 <th>ID
                     <x-list.sortable-button column="id" :$sortColumn :$sortDirection />
                 </th>
+
                 <th>Pago </th>
+
                 <th>Empresa </th>
+
                 <th>Monto USD
                     <x-list.sortable-button column="monto" :$sortColumn :$sortDirection />
                 </th>
+
                 <th>Estado
                     <x-list.sortable-button column="estatus" :$sortColumn :$sortDirection />
                 </th>
+
                 <th>Solicitado
                     <x-list.sortable-button column="created_at" :$sortColumn :$sortDirection />
                 </th>
+
                 <th class="text-end">Acciones</th>
+
             </tr>
         </thead>
 
         <tbody>
+
             @forelse ($reembolsos as $reembolso)
 
                 <tr wire:key="listReembolso-{{ $reembolso->id }}">
-                    <td>{{ $reembolso->id }}</td>
-                    <td>{{ $reembolso->pago?->referencia ?? '—' }}</td>
-                    <td>{{ $reembolso->empresa?->nombre ?? '—' }}</td>
-                    <td>{{ number_format($reembolso->monto ?? 0, 2) }}</td>
+                    <td>
+                        {{ $reembolso->id }}
+                    </td>
+
+                    <td>
+                        {{ $reembolso->pago?->referencia ?? '—' }}
+                    </td>
+
+                    <td>
+                        {{ $reembolso->empresa?->nombre ?? '—' }}
+                    </td>
+
+                    <td>
+                        {{ number_format($reembolso->monto ?? 0, 2) }}
+                    </td>
+
                     <td>
                         <x-list.status-badge :status="$reembolso->estatus" />
                     </td>
-                    <td>{{ $reembolso->created_at?->format('d/m/Y H:i') ?? '—' }}</td>
+
+                    <td>
+                        {{ $reembolso->created_at?->format('d/m/Y H:i') ?? '—' }}
+                    </td>
+
                     <td class="text-end">
 
                         <x-list.button-group>
 
                             @if ($capabilities['detail'])
+
                                 <x-list.view-button :route="route('admin.reembolsos.detail', ['reembolso_id' => $reembolso->id])" :target="false" />
+
                             @endif
+
                             @if ($capabilities['review'])
+
                                 <a class="btn btn-outline-secondary"
                                     href="{{ route('admin.reembolsos.review', ['reembolso_id' => $reembolso->id]) }}" wire:navigate
                                     title="Revisar" aria-label="Revisar"><i class="bi bi-clipboard-check-fill"></i></a>
+
                             @endif
 
                         </x-list.button-group>
 
                     </td>
+
                 </tr>
+
             @empty
 
                 <tr>
-                    <td colspan="7" class="text-center py-5">No se encontraron registros.</td>
+                    <td colspan="7" class="text-center py-5">
+                        No se encontraron registros.
+                    </td>
+
                 </tr>
+
             @endforelse
+
         </tbody>
 
     </x-list.table>

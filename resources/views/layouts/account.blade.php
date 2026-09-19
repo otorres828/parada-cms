@@ -14,9 +14,6 @@
     {{-- Viewport: Configured for mobile-first responsiveness and UI consistency --}}
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0, viewport-fit=cover">
 
-    {{-- SEO & OpenGraph Configuration: Managed via dedicated component --}}
-    <x-meta-tags/>
-
     {{-- Page Title: Defined in child views via @section('title') --}}
     <title>Parada | @yield('title')</title>
 

@@ -11,16 +11,16 @@
         <x-slot:button>
 
             @if (Route::has('admin.amenidades.add') && $canAdd)
+
                 <x-list.add-button :route="route('admin.amenidades.add')">
                     Nuevo registro
                 </x-list.add-button>
+
             @endif
 
         </x-slot:button>
 
     </x-list.heading>
-
-
 
     <x-list.actions>
 
@@ -64,51 +64,79 @@
                 <th>ID
                     <x-list.sortable-button column="id" :$sortColumn :$sortDirection />
                 </th>
+
                 <th>Nombre
                     <x-list.sortable-button column="nombre" :$sortColumn :$sortDirection />
                 </th>
+
                 <th>Ícono
                     <x-list.sortable-button column="icono" :$sortColumn :$sortDirection />
                 </th>
+
                 <th>Estado
                     <x-list.sortable-button column="estatus" :$sortColumn :$sortDirection />
                 </th>
+
                 <th class="text-end">Acciones</th>
+
             </tr>
         </thead>
 
         <tbody>
+
             @forelse ($amenidades as $amenidad)
 
                 <tr wire:key="listAmenidad-{{ $amenidad->id }}">
-                    <td>{{ $amenidad->id }}</td>
-                    <td>{{ $amenidad->nombre ?? '—' }}</td>
-                    <td>{{ $amenidad->icono ?? '—' }}</td>
+                    <td>
+                        {{ $amenidad->id }}
+                    </td>
+
+                    <td>
+                        {{ $amenidad->nombre ?? '—' }}
+                    </td>
+
+                    <td>
+                        {{ $amenidad->icono ?? '—' }}
+                    </td>
+
                     <td>
                         <x-list.status-badge :status="$amenidad->estatus" />
                     </td>
+
                     <td class="text-end">
 
                         <x-list.button-group>
 
                             @if ($capabilities['edit'])
+
                                 <x-list.edit-button :route="route('admin.amenidades.edit', ['amenidad_id' => $amenidad->id])" />
+
                             @endif
+
                             @if ($canEdit)
+
                                 <x-list.status-button wire:click="changeStatus({{ $amenidad->id }})" :status="$amenidad->estatus"
                                     wire:loading.attr="disabled" />
+
                             @endif
 
                         </x-list.button-group>
 
                     </td>
+
                 </tr>
+
             @empty
 
                 <tr>
-                    <td colspan="5" class="text-center py-5">No se encontraron registros.</td>
+                    <td colspan="5" class="text-center py-5">
+                        No se encontraron registros.
+                    </td>
+
                 </tr>
+
             @endforelse
+
         </tbody>
 
     </x-list.table>

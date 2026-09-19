@@ -7,6 +7,7 @@
         <x-slot:title>
             Pasajes @if ($pasaje_id)
                 <small class="text-body-secondary">#{{ $pasaje_id }}</small>
+
             @endif
 
         </x-slot:title>
@@ -14,16 +15,16 @@
         <x-slot:button>
 
             @if (\App\Services\Admin\Access::allows('pasajes', 'list'))
+
                 <x-form.cancel-button :link="route('admin.pasajes.list')">
                     Volver al listado
                 </x-form.cancel-button>
+
             @endif
 
         </x-slot:button>
 
     </x-list.heading>
-
-
 
     <div class="container-fluid px-0 mb-4">
 

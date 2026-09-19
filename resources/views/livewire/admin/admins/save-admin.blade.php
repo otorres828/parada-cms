@@ -37,7 +37,9 @@
             </div>
 
             @if ($admin_id)
+
                 <p class="text-body-secondary mt-2">Deja la contraseña vacía para conservar la actual.</p>
+
             @endif
 
             <x-form.dropdown label="Estado" name="status" x-model="$wire.status">
@@ -56,8 +58,11 @@
         </x-form.subtitle>
 
         @if ($editingRoot)
+
             <p>Esta cuenta es root y conserva el acceso completo.</p>
+
         @else
+
             <x-form.switch x-model="$wire.is_superadmin">
                 Superadmin
             </x-form.switch>
@@ -67,7 +72,9 @@
             <div x-show="!$wire.is_superadmin" class="row g-3">
 
                 @foreach ($groups as $group)
+
                     @if ($group->sections->isNotEmpty())
+
                         <div class="col-12">
 
                             <h3 class="h5 mt-3"><i class="bi {{ $group->icon }} me-2"></i>{{ $group->name }}</h3>
@@ -75,6 +82,7 @@
                         </div>
 
                         @foreach ($group->sections as $section)
+
                             @php($ids = $section->permissions->pluck('id')->map(fn($id) => (string) $id)->all())
 
                             <div class="col-md-6 col-xl-4" wire:key="section-{{ $section->id }}">
@@ -97,6 +105,7 @@
                                     <div class="card-body">
 
                                         @foreach ($section->permissions as $permission)
+
                                             <div class="form-check" wire:key="permission-{{ $permission->id }}">
 
                                                 <input id="permission-{{ $permission->id }}" type="checkbox" class="form-check-input"
@@ -107,6 +116,7 @@
                                                 </label>
 
                                             </div>
+
                                         @endforeach
 
                                     </div>
@@ -114,13 +124,17 @@
                                 </div>
 
                             </div>
+
                         @endforeach
+
                     @endif
+
                 @endforeach
 
             </div>
 
         @endif
+
         <hr>
 
         <x-form.cancel-button :link="route('admin.admins.list')">

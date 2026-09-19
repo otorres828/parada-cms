@@ -11,10 +11,13 @@
         <x-slot:button>
             <button type="button" class="btn btn-outline-success" wire:click="export" wire:loading.attr="disabled"><i
                     class="bi bi-file-earmark-excel me-1"></i>Descargar Excel</button>
+
             @if (Route::has('admin.pagos.add') && $canAdd)
+
                 <x-list.add-button :route="route('admin.pagos.add')">
                     Nuevo registro
                 </x-list.add-button>
+
             @endif
 
         </x-slot:button>
@@ -48,8 +51,11 @@
             <select id="filtro-empresa" class="form-select" wire:model.live="empresa_id">
 
                 <option value="">Todas las empresas</option>
+
                 @foreach ($empresas as $empresa)
+
                     <option value="{{ $empresa->id }}">{{ $empresa->nombre }}</option>
+
                 @endforeach
 
             </select>
@@ -84,53 +90,92 @@
                 <th>ID
                     <x-list.sortable-button column="id" :$sortColumn :$sortDirection />
                 </th>
+
                 <th>Referencia
                     <x-list.sortable-button column="referencia" :$sortColumn :$sortDirection />
                 </th>
+
                 <th>Reserva </th>
+
                 <th>Empresa </th>
+
                 <th>Recibido USD
                     <x-list.sortable-button column="monto" :$sortColumn :$sortDirection />
                 </th>
+
                 <th>Neto empresa USD
                     <x-list.sortable-button column="neto_empresa" :$sortColumn :$sortDirection />
                 </th>
+
                 <th>Fecha
                     <x-list.sortable-button column="fecha_pago" :$sortColumn :$sortDirection />
                 </th>
+
                 <th class="text-end">Acciones</th>
+
             </tr>
         </thead>
 
         <tbody>
+
             @forelse ($pagos as $pago)
 
                 <tr wire:key="listPago-{{ $pago->id }}">
-                    <td>{{ $pago->id }}</td>
-                    <td>{{ $pago->referencia ?? '—' }}</td>
-                    <td>{{ $pago->reserva?->codigo_referencia ?? '—' }}</td>
-                    <td>{{ $pago->empresa?->nombre ?? '—' }}</td>
-                    <td>{{ number_format($pago->monto ?? 0, 2) }}</td>
-                    <td>{{ number_format($pago->neto_empresa ?? 0, 2) }}</td>
-                    <td>{{ $pago->fecha_pago?->format('d/m/Y H:i') ?? '—' }}</td>
+                    <td>
+                        {{ $pago->id }}
+                    </td>
+
+                    <td>
+                        {{ $pago->referencia ?? '—' }}
+                    </td>
+
+                    <td>
+                        {{ $pago->reserva?->codigo_referencia ?? '—' }}
+                    </td>
+
+                    <td>
+                        {{ $pago->empresa?->nombre ?? '—' }}
+                    </td>
+
+                    <td>
+                        {{ number_format($pago->monto ?? 0, 2) }}
+                    </td>
+
+                    <td>
+                        {{ number_format($pago->neto_empresa ?? 0, 2) }}
+                    </td>
+
+                    <td>
+                        {{ $pago->fecha_pago?->format('d/m/Y H:i') ?? '—' }}
+                    </td>
+
                     <td class="text-end">
 
                         <x-list.button-group>
 
                             @if ($capabilities['detail'])
+
                                 <x-list.view-button :route="route('admin.pagos.detail', ['pago_id' => $pago->id])" :target="false" />
+
                             @endif
 
                         </x-list.button-group>
 
                     </td>
+
                 </tr>
+
             @empty
 
                 <tr>
-                    <td colspan="8" class="text-center py-5">No se encontraron registros.</td>
+                    <td colspan="8" class="text-center py-5">
+                        No se encontraron registros.
+                    </td>
+
                 </tr>
+
             @endforelse
+
         </tbody>
 
     </x-list.table>

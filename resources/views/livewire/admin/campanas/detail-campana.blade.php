@@ -7,6 +7,7 @@
         <x-slot:title>
             Campañas @if ($configuracion_cupon_id)
                 <small class="text-body-secondary">#{{ $configuracion_cupon_id }}</small>
+
             @endif
 
         </x-slot:title>
@@ -14,9 +15,11 @@
         <x-slot:button>
 
             @if (\App\Services\Admin\Access::allows('campanas', 'list'))
+
                 <x-form.cancel-button :link="route('admin.campanas.list')">
                     Volver al listado
                 </x-form.cancel-button>
+
             @endif
 
         </x-slot:button>
@@ -77,9 +80,12 @@
         <div class="card-body">
 
             <h4 class="h6">Cupones generados: {{ $configuracionCupon->cupones()->count() }}</h4>
+
             @if (!$configuracionCupon->cupones()->exists() && \App\Services\Admin\Access::allows('campanas', 'edit'))
+
                 <button class="btn btn-primary" type="button" @click="generateCoupons" wire:loading.attr="disabled">Generar
                     cupones</button>
+
             @endif
 
             <x-list.actions>
@@ -112,27 +118,50 @@
                         <th>Código
                             <x-list.sortable-button column="codigo" :$sortColumn :$sortDirection />
                         </th>
+
                         <th>Estado</th>
+
                         <th>Cliente</th>
+
                         <th>Fecha de redención</th>
+
                     </tr>
                 </thead>
 
                 <tbody>
+
                     @forelse ($cupones as $cupon)
 
                         <tr wire:key="cupon-{{ $cupon->id }}">
-                            <td>{{ $cupon->codigo }}</td>
-                            <td>{{ $cupon->redimido ? 'Redimido' : 'Disponible' }}</td>
-                            <td>{{ $cupon->usuario?->name ?? '—' }}</td>
-                            <td>{{ $cupon->fecha_redencion?->format('d/m/Y H:i') ?? '—' }}</td>
+                            <td>
+                                {{ $cupon->codigo }}
+                            </td>
+
+                            <td>
+                                {{ $cupon->redimido ? 'Redimido' : 'Disponible' }}
+                            </td>
+
+                            <td>
+                                {{ $cupon->usuario?->name ?? '—' }}
+                            </td>
+
+                            <td>
+                                {{ $cupon->fecha_redencion?->format('d/m/Y H:i') ?? '—' }}
+                            </td>
+
                         </tr>
+
                     @empty
 
                         <tr>
-                            <td colspan="4" class="text-center py-4">No se encontraron cupones.</td>
+                            <td colspan="4" class="text-center py-4">
+                                No se encontraron cupones.
+                            </td>
+
                         </tr>
+
                     @endforelse
+
                 </tbody>
 
             </x-list.table>

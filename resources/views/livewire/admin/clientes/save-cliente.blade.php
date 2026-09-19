@@ -7,6 +7,7 @@
         <x-slot:title>
             Clientes @if ($user_id)
                 <small class="text-body-secondary">#{{ $user_id }}</small>
+
             @endif
 
         </x-slot:title>
