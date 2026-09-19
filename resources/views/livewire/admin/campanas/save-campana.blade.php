@@ -9,7 +9,7 @@
     - <x-form.cancel-button />: Enlace para regresar o cancelar la edición.
     - <x-layout.error />: Resumen de los errores de validación de Livewire.
     - <x-form.container-sm />: Contenedor de ancho limitado para los campos.
-    - <x-form.dropdown />: Selector con etiqueta para opciones del formulario.
+    - <x-form.dropdown />: Selector con etiqueta para las opciones del formulario.
     - <x-form.text-input />: Campo de entrada con etiqueta.
     - <x-layout.loader.fullpage />: Indicador de carga durante las operaciones de Livewire.
     --------------------------------------------------------------------------
@@ -24,7 +24,6 @@
         <x-slot:title>
             Campañas @if ($configuracion_cupon_id)
                 <small class="text-body-secondary">#{{ $configuracion_cupon_id }}</small>
-
             @endif
 
         </x-slot:title>
@@ -32,11 +31,9 @@
         <x-slot:button>
 
             @if (\App\Services\Admin\Access::allows('campanas', 'list'))
-
                 <x-form.cancel-button :link="route('admin.campanas.list')">
                     Volver al listado
                 </x-form.cancel-button>
-
             @endif
 
         </x-slot:button>
@@ -51,16 +48,16 @@
             <div class="mb-3">
 
                 <input type="search" class="form-control mb-2" placeholder="Buscar opciones..."
-                    aria-label="Buscar Empresa (vacío para campaña general)" wire:model.live.debounce.500ms="search_empresa_id">
+                    aria-label="Buscar Empresa (vacío para campaña general)"
+                    wire:model.live.debounce.500ms="search_empresa_id">
 
-                <x-form.dropdown label="Empresa (vacío para campaña general)" name="empresa_id" x-model="$wire.empresa_id">
+                <x-form.dropdown label="Empresa (vacío para campaña general)" name="empresa_id"
+                    x-model="$wire.empresa_id">
 
                     <option value="">Seleccionar...</option>
 
                     @foreach ($options_empresa_id as $value => $label)
-
                         <option value="{{ $value }}">{{ $label }}</option>
-
                     @endforeach
 
                 </x-form.dropdown>
@@ -249,7 +246,8 @@
         </x-form.container-sm>
 
         <hr>
-        <button class="btn btn-primary" type="submit" :disabled="saving" wire:loading.attr="disabled">Guardar</button>
+        <button class="btn btn-primary" type="submit" :disabled="saving"
+            wire:loading.attr="disabled">Guardar</button>
     </form>
 
     <x-layout.loader.fullpage wire:loading.delay.short />
@@ -304,15 +302,17 @@
                         rule: 'required',
                         errorMessage: 'Este campo es requerido'
                     }]);
-                    this.validator.addField(this.$refs.form.querySelector('[name="cantidad_generar"]'), [{
-                        rule: 'required',
-                        errorMessage: 'Este campo es requerido'
-                    }]);
+                    this.validator.addField(this.$refs.form.querySelector('[name="cantidad_generar"]'),
+                        [{
+                            rule: 'required',
+                            errorMessage: 'Este campo es requerido'
+                        }]);
                     this.validator.addField(this.$refs.form.querySelector('[name="tipo_descuento"]'), [{
                         rule: 'required',
                         errorMessage: 'Este campo es requerido'
                     }]);
-                    this.validator.addField(this.$refs.form.querySelector('[name="monto_descuento"]'), [{
+                    this.validator.addField(this.$refs.form.querySelector('[name="monto_descuento"]'),
+                [{
                         rule: 'required',
                         errorMessage: 'Este campo es requerido'
                     }]);

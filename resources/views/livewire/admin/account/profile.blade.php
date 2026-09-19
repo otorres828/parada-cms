@@ -70,7 +70,8 @@
 
             <div class="mb-3">
 
-                <x-form.text-input type="password" name="current_password" x-model="$wire.current_password" autocomplete="new-password">
+                <x-form.text-input type="password" name="current_password" x-model="$wire.current_password"
+                    autocomplete="new-password">
                     Contraseña actual
                 </x-form.text-input>
 
@@ -84,7 +85,8 @@
 
         </x-form.container-sm>
 
-        <hr><button class="btn btn-primary" type="submit" :disabled="saving" wire:loading.attr="disabled">Guardar cambios</button>
+        <hr><button class="btn btn-primary" type="submit" :disabled="saving" wire:loading.attr="disabled">Guardar
+            cambios</button>
     </form>
 
     <x-layout.loader.fullpage wire:loading.delay.short />
@@ -142,10 +144,11 @@
                         value: 255,
                         errorMessage: 'Máximo 255 caracteres'
                     }]);
-                    this.validator.addField(this.$refs.form.querySelector('[name="current_password"]'), [{
-                        validator: () => true,
-                        errorMessage: 'Revisa este campo'
-                    }]);
+                    this.validator.addField(this.$refs.form.querySelector('[name="current_password"]'),
+                        [{
+                            validator: () => true,
+                            errorMessage: 'Revisa este campo'
+                        }]);
                 });
             },
             async preSave() {

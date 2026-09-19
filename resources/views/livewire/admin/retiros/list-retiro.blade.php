@@ -10,10 +10,10 @@
     - <x-list.add-button />: Enlace para abrir el formulario de alta.
     - <x-list.actions />: Contenedor del buscador y las acciones del listado.
     - <x-list.search-input />: Buscador vinculado al estado del listado.
-    - <x-list.table />: Contenedor reutilizable para la tabla del listado.
+    - <x-list.table />: Contenedor reutilizable de la tabla del listado.
     - <x-list.sortable-button />: Control para ordenar por una columna.
     - <x-list.status-badge />: Etiqueta visual del estado del registro.
-    - <x-list.button-group />: Agrupación de botones de acción de una fila.
+    - <x-list.button-group />: Agrupación de los botones de acción de una fila.
     - <x-list.view-button />: Enlace para consultar el detalle del registro.
     - <x-layout.loader.fullpage />: Indicador de carga durante las operaciones de Livewire.
     --------------------------------------------------------------------------
@@ -32,11 +32,9 @@
         <x-slot:button>
 
             @if (Route::has('admin.retiros.add') && $canAdd)
-
                 <x-list.add-button :route="route('admin.retiros.add')">
                     Nuevo registro
                 </x-list.add-button>
-
             @endif
 
         </x-slot:button>
@@ -70,9 +68,7 @@
                 <option value="">Todas las empresas</option>
 
                 @foreach ($empresas as $empresa)
-
                     <option value="{{ $empresa->id }}">{{ $empresa->nombre }}</option>
-
                 @endforeach
 
             </select>
@@ -150,7 +146,6 @@
         <tbody>
 
             @forelse ($retiros as $retiro)
-
                 <tr wire:key="listRetiro-{{ $retiro->id }}">
                     <td>
                         {{ $retiro->id }}
@@ -181,17 +176,14 @@
                         <x-list.button-group>
 
                             @if ($capabilities['detail'])
-
                                 <x-list.view-button :route="route('admin.retiros.detail', ['retiro_id' => $retiro->id])" :target="false" />
-
                             @endif
 
                             @if ($capabilities['review'])
-
                                 <a class="btn btn-outline-secondary"
-                                    href="{{ route('admin.retiros.review', ['retiro_id' => $retiro->id]) }}" wire:navigate title="Revisar"
+                                    href="{{ route('admin.retiros.review', ['retiro_id' => $retiro->id]) }}"
+                                    wire:navigate title="Revisar"
                                     aria-label="Revisar"><i class="bi bi-clipboard-check-fill"></i></a>
-
                             @endif
 
                         </x-list.button-group>
@@ -208,7 +200,6 @@
                     </td>
 
                 </tr>
-
             @endforelse
 
         </tbody>

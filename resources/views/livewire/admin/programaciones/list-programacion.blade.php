@@ -1,18 +1,18 @@
 {{--
     PROGRAMACIONES — LISTADO
     --------------------------------------------------------------------------
-    Permite consultar las salidas programadas. Incluye búsqueda, ordenación y paginación. Ofrece
-    los filtros disponibles en la pantalla. Presenta las acciones de cada registro según las
-    autorizaciones del administrador.
+    Permite consultar las salidas programadas con búsqueda, filtros por empresa, estado y fechas,
+    ordenación y paginación. Muestra la ruta principal, la disponibilidad registrada y el precio
+    de la primera tarifa asociada, con acceso a pasajeros según permisos.
 
     Componentes reutilizables utilizados:
     - <x-list.heading />: Cabecera del módulo con título y acciones.
     - <x-list.actions />: Contenedor del buscador y las acciones del listado.
     - <x-list.search-input />: Buscador vinculado al estado del listado.
-    - <x-list.table />: Contenedor reutilizable para la tabla del listado.
+    - <x-list.table />: Contenedor reutilizable de la tabla del listado.
     - <x-list.sortable-button />: Control para ordenar por una columna.
     - <x-list.status-badge />: Etiqueta visual del estado del registro.
-    - <x-list.button-group />: Agrupación de botones de acción de una fila.
+    - <x-list.button-group />: Agrupación de los botones de acción de una fila.
     - <x-layout.loader.fullpage />: Indicador de carga durante las operaciones de Livewire.
     --------------------------------------------------------------------------
 --}}
@@ -56,9 +56,7 @@
                 <option value="">Todas las empresas</option>
 
                 @foreach ($empresas as $empresa)
-
                     <option value="{{ $empresa->id }}">{{ $empresa->nombre }}</option>
-
                 @endforeach
 
             </select>
@@ -140,7 +138,6 @@
         <tbody>
 
             @forelse ($programaciones as $programacion)
-
                 <tr wire:key="listProgramacion-{{ $programacion->id }}">
 
                     <td>
@@ -184,11 +181,10 @@
                         <x-list.button-group>
 
                             @if ($canViewPassengers)
-
                                 <a class="btn btn-outline-secondary"
                                     href="{{ route('admin.programaciones.passengers', ['programacion_id' => $programacion->id]) }}"
-                                    wire:navigate title="Pasajeros" aria-label="Pasajeros"><i class="bi bi-people-fill"></i></a>
-
+                                    wire:navigate title="Pasajeros" aria-label="Pasajeros"><i
+                                        class="bi bi-people-fill"></i></a>
                             @endif
 
                         </x-list.button-group>
@@ -205,7 +201,6 @@
                     </td>
 
                 </tr>
-
             @endforelse
 
         </tbody>

@@ -7,7 +7,7 @@
     Componentes reutilizables utilizados:
     - <x-list.heading />: Cabecera del módulo con título y acciones.
     - <x-form.container-sm />: Contenedor de ancho limitado para los campos.
-    - <x-form.dropdown />: Selector con etiqueta para opciones del formulario.
+    - <x-form.dropdown />: Selector con etiqueta para las opciones del formulario.
     - <x-form.text-input />: Campo de entrada con etiqueta.
     - <x-form.cancel-button />: Enlace para regresar o cancelar la edición.
     - <x-layout.loader.fullpage />: Indicador de carga durante las operaciones de Livewire.
@@ -53,7 +53,8 @@
 
             <div class="mb-3">
 
-                <x-form.text-input type="number" name="monto_minimo" x-model="$wire.monto_minimo" min="0" step="0.01">
+                <x-form.text-input type="number" name="monto_minimo" x-model="$wire.monto_minimo" min="0"
+                    step="0.01">
                     Monto mínimo USD
                 </x-form.text-input>
 
@@ -67,7 +68,8 @@
 
             <div class="mb-3">
 
-                <x-form.text-input type="number" name="monto_maximo" x-model="$wire.monto_maximo" min="0" step="0.01">
+                <x-form.text-input type="number" name="monto_maximo" x-model="$wire.monto_maximo" min="0"
+                    step="0.01">
                     Monto máximo USD
                 </x-form.text-input>
                 <small class="text-body-secondary">Déjalo vacío para un rango sin
@@ -82,7 +84,8 @@
 
             <div class="mb-3">
 
-                <x-form.text-input type="number" name="cantidad" x-model="$wire.cantidad" min="0" step="0.01">
+                <x-form.text-input type="number" name="cantidad" x-model="$wire.cantidad" min="0"
+                    step="0.01">
                     <span
                         x-text="Number($wire.tipo_servicio) === 2 ? 'Porcentaje sobre el precio final (%)' : 'Monto fijo por pasaje (USD)'"></span>
                 </x-form.text-input>
@@ -132,7 +135,8 @@
             validator: null,
             saving: false,
             init() {
-                this.toastCleanup = [Livewire.on('successEventList', data => this.$store.toast.success(data.message)), Livewire.on(
+                this.toastCleanup = [Livewire.on('successEventList', data => this.$store.toast.success(data
+                    .message)), Livewire.on(
                     'errorEventList', data => this.$store.toast.info(data.message))];
                 this.$nextTick(() => {
                     this.validator = new JustValidate(this.$refs.form, {
@@ -153,12 +157,14 @@
                         rule: 'number',
                         errorMessage: 'Ingresa un número válido'
                     }, {
-                        validator: value => Number(value) >= 0 && (Number($wire.tipo_servicio) !== 2 || Number(
+                        validator: value => Number(value) >= 0 && (Number($wire
+                            .tipo_servicio) !== 2 || Number(
                             value) <= 100),
                         errorMessage: 'El porcentaje debe estar entre 0 y 100'
                     }]);
                     this.validator.addField('[name="monto_maximo"]', [{
-                        validator: value => value === '' || Number(value) >= Number($wire.monto_minimo),
+                        validator: value => value === '' || Number(value) >= Number($wire
+                            .monto_minimo),
                         errorMessage: 'El máximo debe ser mayor o igual al mínimo'
                     }]);
                 });

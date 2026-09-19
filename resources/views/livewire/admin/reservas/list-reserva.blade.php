@@ -1,19 +1,18 @@
 {{--
     RESERVAS Y VENTAS — LISTADO
     --------------------------------------------------------------------------
-    Permite consultar las reservas y sus estados de pago. Incluye búsqueda, ordenación y
-    paginación. Ofrece los filtros disponibles en la pantalla. Presenta las acciones de cada
-    registro según las autorizaciones del administrador.
+    Permite consultar las compras por cliente, empresa y estado de pago, con búsqueda, filtros por
+    empresa y fechas, ordenación y paginación. Muestra el origen y destino propios de cada
+    reserva, su importe y el acceso al detalle según los permisos.
 
     Componentes reutilizables utilizados:
     - <x-list.heading />: Cabecera del módulo con título y acciones.
-    - <x-list.add-button />: Enlace para abrir el formulario de alta.
     - <x-list.actions />: Contenedor del buscador y las acciones del listado.
     - <x-list.search-input />: Buscador vinculado al estado del listado.
-    - <x-list.table />: Contenedor reutilizable para la tabla del listado.
+    - <x-list.table />: Contenedor reutilizable de la tabla del listado.
     - <x-list.sortable-button />: Control para ordenar por una columna.
-    - <x-list.status-badge />: Etiqueta visual del estado del registro.
-    - <x-list.button-group />: Agrupación de botones de acción de una fila.
+    - <x-list.status-reserva />: Etiqueta del estado de pago según las constantes de Reserva.
+    - <x-list.button-group />: Agrupación de los botones de acción de una fila.
     - <x-list.view-button />: Enlace para consultar el detalle del registro.
     - <x-layout.loader.fullpage />: Indicador de carga durante las operaciones de Livewire.
     --------------------------------------------------------------------------
@@ -58,9 +57,7 @@
                 <option value="">Todas las empresas</option>
 
                 @foreach ($empresas as $empresa)
-
                     <option value="{{ $empresa->id }}">{{ $empresa->nombre }}</option>
-
                 @endforeach
 
             </select>
@@ -146,7 +143,6 @@
         <tbody>
 
             @forelse ($reservas as $reserva)
-
                 <tr wire:key="listReserva-{{ $reserva->id }}">
                     <td>
                         {{ $reserva->id }}
@@ -189,9 +185,7 @@
                         <x-list.button-group>
 
                             @if ($capabilities['detail'])
-
                                 <x-list.view-button :route="route('admin.reservas.detail', ['reserva_id' => $reserva->id])" :target="false" />
-
                             @endif
 
                         </x-list.button-group>
@@ -208,7 +202,6 @@
                     </td>
 
                 </tr>
-
             @endforelse
 
         </tbody>

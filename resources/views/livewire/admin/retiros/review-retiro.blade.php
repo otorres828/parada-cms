@@ -10,7 +10,7 @@
     - <x-layout.error />: Resumen de los errores de validación de Livewire.
     - <x-list.status-badge />: Etiqueta visual del estado del registro.
     - <x-form.container-sm />: Contenedor de ancho limitado para los campos.
-    - <x-form.dropdown />: Selector con etiqueta para opciones del formulario.
+    - <x-form.dropdown />: Selector con etiqueta para las opciones del formulario.
     - <x-form.textarea />: Campo de texto de varias líneas.
     - <x-form.text-input />: Campo de entrada con etiqueta.
     - <x-layout.loader.fullpage />: Indicador de carga durante las operaciones de Livewire.
@@ -26,7 +26,6 @@
         <x-slot:title>
             Retiros @if ($retiro_id)
                 <small class="text-body-secondary">#{{ $retiro_id }}</small>
-
             @endif
 
         </x-slot:title>
@@ -34,11 +33,9 @@
         <x-slot:button>
 
             @if (\App\Services\Admin\Access::allows('retiros', 'list'))
-
                 <x-form.cancel-button :link="route('admin.retiros.list')">
                     Volver al listado
                 </x-form.cancel-button>
-
             @endif
 
         </x-slot:button>
@@ -95,15 +92,11 @@
                 <option value="">Seleccionar...</option>
 
                 @if ($retiro->estatus === 'pendiente')
-
                     <option value="aprobado">Aprobar solicitud</option>
-
                 @endif
 
                 @if ($retiro->estatus === 'aprobado')
-
                     <option value="pagado">Confirmar transferencia realizada</option>
-
                 @endif
 
                 <option value="rechazado">Rechazar solicitud</option>
@@ -124,7 +117,8 @@
                     Comprobante PDF o imagen (máximo 5 MB)
                 </label>
 
-                <input id="review-proof" name="comprobante" type="file" class="form-control mb-3" wire:model="comprobante"
+                <input id="review-proof" name="comprobante" type="file" class="form-control mb-3"
+                    wire:model="comprobante"
                     accept=".pdf,.jpg,.jpeg,.png">
 
             </div>
@@ -132,15 +126,12 @@
         </x-form.container-sm>
 
         @if (in_array($retiro->estatus, ['pendiente', 'aprobado']))
-
-            <button class="btn btn-primary" type="submit" :disabled="saving" wire:loading.attr="disabled">Registrar resolución</button>
-
+            <button class="btn btn-primary" type="submit" :disabled="saving" wire:loading.attr="disabled">Registrar
+                resolución</button>
         @else
-
             <div class="alert alert-info">
                 Esta solicitud ya fue resuelta.
             </div>
-
         @endif
 
     </form>

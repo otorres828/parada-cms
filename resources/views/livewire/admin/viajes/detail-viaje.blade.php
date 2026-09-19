@@ -1,8 +1,17 @@
 {{--
     RUTAS DE VIAJES — DETALLE
     --------------------------------------------------------------------------
-    Muestra el origen, destino, empresa, itinerario físico y la Matriz Comercial de Precios O&D.
-    Incluye su historial de salidas programadas.
+    Presenta la empresa, los terminales principales y la secuencia ordenada de tramos físicos.
+    Permite alternar entre el itinerario simple y su desglose con duraciones. Muestra las tarifas
+    de una programación asociada y el historial de salidas con pasajes vendidos y tasas de
+    servicio.
+
+    Componentes reutilizables utilizados:
+    - <x-list.heading />: Cabecera del módulo con título y acciones.
+    - <x-form.cancel-button />: Enlace para regresar o cancelar la edición.
+    - <x-list.status-badge />: Etiqueta visual del estado del registro.
+    - <x-layout.loader.fullpage />: Indicador de carga durante las operaciones de Livewire.
+    --------------------------------------------------------------------------
 --}}
 
 @section('title', 'Detalle de Ruta')
@@ -14,7 +23,6 @@
         <x-slot:title>
             Detalle de Ruta @if ($viaje_id)
                 <small class="text-body-secondary">#{{ $viaje_id }}</small>
-
             @endif
 
         </x-slot:title>
@@ -67,7 +75,8 @@
                             </dd>
                         </dl>
 
-                        <div x-data="{ modoDetallado: false }" class="bg-body-tertiary rounded border-start border-primary border-3 p-3 mt-3">
+                        <div x-data="{ modoDetallado: false }"
+                            class="bg-body-tertiary rounded border-start border-primary border-3 p-3 mt-3">
 
                             <div class="d-flex align-items-center justify-content-between mb-2 flex-wrap gap-2">
                                 <div class="fw-semibold">
@@ -76,8 +85,11 @@
                                 </div>
                                 @if ($viaje->tramos->isNotEmpty())
                                     <div class="form-check form-switch mb-0 small">
-                                        <input class="form-check-input cursor-pointer" type="checkbox" role="switch" id="toggleModoDetallado" x-model="modoDetallado">
-                                        <label class="form-check-label text-body-secondary cursor-pointer" for="toggleModoDetallado" x-text="modoDetallado ? 'Desglose por tramos' : 'Vista simple'"></label>
+                                        <input class="form-check-input cursor-pointer" type="checkbox" role="switch"
+                                            id="toggleModoDetallado" x-model="modoDetallado">
+                                        <label class="form-check-label text-body-secondary cursor-pointer"
+                                            for="toggleModoDetallado"
+                                            x-text="modoDetallado ? 'Desglose por tramos' : 'Vista simple'"></label>
                                     </div>
                                 @endif
                             </div>
@@ -87,22 +99,26 @@
                                 <div x-show="!modoDetallado">
                                     <ol class="list-group list-group-numbered list-group-flush mb-0">
                                         @foreach ($viaje->tramos as $index => $tramo)
-                                            <li class="list-group-item bg-transparent d-flex justify-content-between align-items-center px-0 py-1">
+                                            <li
+                                                class="list-group-item bg-transparent d-flex justify-content-between align-items-center px-0 py-1">
                                                 <div class="ms-2 me-auto fw-bold text-start">
                                                     {{ $tramo->origenTerminal?->nombre }}
                                                 </div>
                                                 @if ($loop->first)
                                                     <span class="badge text-bg-success rounded-pill small">Origen</span>
                                                 @else
-                                                    <span class="badge text-bg-secondary rounded-pill small">Parada Intermedia</span>
+                                                    <span class="badge text-bg-secondary rounded-pill small">Parada
+                                                        Intermedia</span>
                                                 @endif
                                             </li>
                                             @if ($loop->last)
-                                                <li class="list-group-item bg-transparent d-flex justify-content-between align-items-center px-0 py-1">
+                                                <li
+                                                    class="list-group-item bg-transparent d-flex justify-content-between align-items-center px-0 py-1">
                                                     <div class="ms-2 me-auto fw-bold text-start">
                                                         {{ $tramo->destinoTerminal?->nombre }}
                                                     </div>
-                                                    <span class="badge text-bg-dark rounded-pill small">Destino Final</span>
+                                                    <span class="badge text-bg-dark rounded-pill small">Destino
+                                                        Final</span>
                                                 </li>
                                             @endif
                                         @endforeach
@@ -113,16 +129,20 @@
                                 <div x-show="modoDetallado" x-cloak>
                                     <ol class="list-group list-group-numbered list-group-flush mb-0">
                                         @foreach ($viaje->tramos as $tramo)
-                                            <li class="list-group-item bg-transparent d-flex justify-content-between align-items-start px-0 py-2">
+                                            <li
+                                                class="list-group-item bg-transparent d-flex justify-content-between align-items-start px-0 py-2">
                                                 <div class="ms-2 me-auto">
                                                     <div class="fw-bold">
-                                                        {{ $tramo->origenTerminal?->nombre }} → {{ $tramo->destinoTerminal?->nombre }}
+                                                        {{ $tramo->origenTerminal?->nombre }} →
+                                                        {{ $tramo->destinoTerminal?->nombre }}
                                                     </div>
                                                     @if ($tramo->duracion_estimada)
-                                                        <small class="text-body-secondary">Duración tramo: {{ $tramo->duracion_estimada }}</small>
+                                                        <small class="text-body-secondary">Duración tramo:
+                                                            {{ $tramo->duracion_estimada }}</small>
                                                     @endif
                                                 </div>
-                                                <span class="badge text-bg-primary rounded-pill">Tramo #{{ $tramo->orden }}</span>
+                                                <span class="badge text-bg-primary rounded-pill">Tramo
+                                                    #{{ $tramo->orden }}</span>
                                             </li>
                                         @endforeach
                                     </ol>
@@ -170,14 +190,17 @@
                                                 <td>
                                                     <span class="fw-semibold">{{ $tp->origenTerminal?->nombre }}</span>
                                                     <i class="bi bi-arrow-right text-muted mx-1"></i>
-                                                    <span class="fw-semibold">{{ $tp->destinoTerminal?->nombre }}</span>
+                                                    <span
+                                                        class="fw-semibold">{{ $tp->destinoTerminal?->nombre }}</span>
                                                 </td>
                                                 <td class="text-end text-success fw-bold">
                                                     USD {{ number_format($tp->precio, 2) }}
                                                 </td>
                                                 <td class="text-center">
                                                     @if ($tp->asientos_maximos_permitidos)
-                                                        <span class="badge text-bg-warning">{{ $tp->asientos_maximos_permitidos }} asientos</span>
+                                                        <span
+                                                            class="badge text-bg-warning">{{ $tp->asientos_maximos_permitidos }}
+                                                            asientos</span>
                                                     @else
                                                         <span class="badge text-bg-secondary">Sin tope (Libre)</span>
                                                     @endif
@@ -234,19 +257,14 @@
                 <tbody>
 
                     @forelse($programaciones as $salida)
-
                         <tr>
                             <td>
 
                                 @if ($canViewPassengers)
-
                                     <a href="{{ route('admin.programaciones.passengers', $salida->id) }}"
                                         wire:navigate>#{{ $salida->id }}</a>
-
                                 @else
-
                                     #{{ $salida->id }}
-
                                 @endif
 
                             </td>
@@ -256,7 +274,8 @@
                             </td>
 
                             <td>
-                                {{ $salida->viaje?->origenTerminal?->nombre }} → {{ $salida->viaje?->destinoTerminal?->nombre }}
+                                {{ $salida->viaje?->origenTerminal?->nombre }} →
+                                {{ $salida->viaje?->destinoTerminal?->nombre }}
                             </td>
 
                             <td>
@@ -281,7 +300,6 @@
                             </td>
 
                         </tr>
-
                     @endforelse
 
                 </tbody>

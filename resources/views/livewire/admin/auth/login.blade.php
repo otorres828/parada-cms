@@ -6,14 +6,14 @@
 
     Componentes reutilizables utilizados:
     - <x-layout.spinner />: Indicador general de procesamiento.
-    - <x-auth.card />: Tarjeta contenedora del acceso al panel.
+    - <x-auth.card />: Tarjeta contenedora del formulario de acceso.
     - <x-auth.card-header />: Cabecera e identidad visual del acceso.
-    - <x-auth.card-body />: Cuerpo de la tarjeta de autenticación.
-    - <x-auth.card-title />: Título o indicaciones del formulario de acceso.
+    - <x-auth.card-body />: Cuerpo de la tarjeta de acceso.
+    - <x-auth.card-title />: Título e indicaciones del formulario de acceso.
     - <x-auth.username-input />: Campo del nombre de usuario para iniciar sesión.
-    - <x-auth.password-input />: Campo de contraseña del acceso.
+    - <x-auth.password-input />: Campo de contraseña con control de visibilidad.
     - <x-form.switch />: Interruptor para activar o desactivar una opción.
-    - <x-auth.card-footer />: Pie de la tarjeta de autenticación.
+    - <x-auth.card-footer />: Pie de la tarjeta con las acciones del acceso.
     --------------------------------------------------------------------------
 --}}
 
@@ -58,7 +58,8 @@
                     Type toggles between 'text' and 'password' via Alpine state.
                 --}}
 
-                <x-auth.password-input wire:model="password" :hasError="$errors->has('password')" x-bind:type="(isPasswordVisible) ? 'text' : 'password'"
+                <x-auth.password-input wire:model="password" :hasError="$errors->has('password')"
+                    x-bind:type="(isPasswordVisible) ? 'text' : 'password'"
                     :errorMessage="$errors->first('password')" name="password" />
 
                 <div class="mb-4">

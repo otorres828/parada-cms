@@ -5,7 +5,7 @@
     estados de las compras, últimas reservas y próximas salidas para el período seleccionado.
 
     Componentes reutilizables utilizados:
-
+    No utiliza componentes Blade reutilizables; presenta la interfaz con HTML y Alpine.
     --------------------------------------------------------------------------
 --}}
 
@@ -64,7 +64,8 @@
 
                 </select>
 
-                <button type="button" class="btn btn-outline-secondary btn-sm" wire:click="$refresh" wire:loading.attr="disabled"
+                <button type="button" class="btn btn-outline-secondary btn-sm" wire:click="$refresh"
+                    wire:loading.attr="disabled"
                     aria-label="Actualizar indicadores">
                     <i class="bi bi-arrow-clockwise" aria-hidden="true"></i>
                 </button>
@@ -78,7 +79,6 @@
     <div class="row g-3 mb-2" wire:loading.class="opacity-50">
 
         @foreach ([['label' => 'Ventas pagadas', 'value' => number_format($metrics['ventas'], 2, ',', '.'), 'note' => $metrics['reservas_pagadas'] . ' reservas pagadas', 'icon' => 'cash-stack', 'color' => 'primary'], ['label' => 'Pasajes vendidos', 'value' => number_format($metrics['pasajes'], 0, ',', '.'), 'note' => 'Pasajes de reservas pagadas', 'icon' => 'ticket-perforated', 'color' => 'success'], ['label' => 'Tasas de servicio', 'value' => number_format($metrics['tasas'], 2, ',', '.'), 'note' => 'Incluidas en las ventas pagadas', 'icon' => 'receipt', 'color' => 'info'], ['label' => 'Reservas pendientes', 'value' => number_format($metrics['pendientes'], 0, ',', '.'), 'note' => 'Con estado de pago pendiente', 'icon' => 'hourglass-split', 'color' => 'warning']] as $card)
-
             <div class="col-sm-6 col-xl-3">
 
                 <div class="card h-100 border-0 shadow-sm">
@@ -105,12 +105,12 @@
                 </div>
 
             </div>
-
         @endforeach
 
     </div>
 
-    <p class="small text-body-secondary mb-4">Importes en la moneda de operación. Calculados por fecha de compra y estado actual de la
+    <p class="small text-body-secondary mb-4">Importes en la moneda de operación. Calculados por fecha de compra y
+        estado actual de la
         reserva; excluyen cancelaciones y reembolsos. Las tasas no representan utilidad neta.</p>
 
     <div class="row g-3 mb-4">
@@ -122,7 +122,8 @@
                 <div class="card-header bg-transparent border-0 pt-4 px-4">
 
                     <h2 class="h5 fw-bold mb-1">Estado de las reservas</h2>
-                    <p class="small text-body-secondary mb-0">{{ $totalReservas }} reservas en el período seleccionado</p>
+                    <p class="small text-body-secondary mb-0">{{ $totalReservas }} reservas en el período seleccionado
+                    </p>
 
                 </div>
 
@@ -136,34 +137,34 @@
                             Aún no hay reservas en este período.
 
                         </div>
-
                     @else
-
                         <div class="row g-3">
 
                             @foreach ($estados as $estado => $datos)
-
                                 <div class="col-sm-6" wire:key="estado-{{ $estado }}">
 
                                     <div class="d-flex justify-content-between small mb-2">
 
                                         <span>{{ $datos['label'] }}</span>
-                                        <span class="fw-semibold">{{ $datos['cantidad'] }} <span class="text-body-secondary fw-normal">·
+                                        <span class="fw-semibold">{{ $datos['cantidad'] }} <span
+                                                class="text-body-secondary fw-normal">·
                                                 {{ $datos['porcentaje'] }}%</span></span>
 
                                     </div>
 
-                                    <div class="progress" style="height: 6px" role="progressbar" aria-label="{{ $datos['label'] }}"
-                                        aria-valuenow="{{ $datos['porcentaje'] }}" aria-valuemin="0" aria-valuemax="100">
+                                    <div class="progress" style="height: 6px" role="progressbar"
+                                        aria-label="{{ $datos['label'] }}"
+                                        aria-valuenow="{{ $datos['porcentaje'] }}" aria-valuemin="0"
+                                        aria-valuemax="100">
 
-                                        <div class="progress-bar bg-{{ $datos['color'] }}" style="width: {{ $datos['porcentaje'] }}%">
+                                        <div class="progress-bar bg-{{ $datos['color'] }}"
+                                            style="width: {{ $datos['porcentaje'] }}%">
 
                                         </div>
 
                                     </div>
 
                                 </div>
-
                             @endforeach
 
                         </div>
@@ -188,7 +189,8 @@
                     <div class="d-flex justify-content-between align-items-center mb-3">
 
                         <span>Empresas activas</span>
-                        <span class="fw-bold fs-5">{{ $metrics['empresas_activas'] }} <small class="text-body-secondary fw-normal">/
+                        <span class="fw-bold fs-5">{{ $metrics['empresas_activas'] }} <small
+                                class="text-body-secondary fw-normal">/
                                 {{ $metrics['empresas'] }}</small></span>
 
                     </div>
@@ -200,7 +202,8 @@
 
                     </div>
 
-                    <a href="{{ route('admin.empresas.list') }}" class="btn btn-outline-primary btn-sm" wire:navigate>Gestionar empresas <i
+                    <a href="{{ route('admin.empresas.list') }}" class="btn btn-outline-primary btn-sm"
+                        wire:navigate>Gestionar empresas <i
                             class="bi bi-arrow-right ms-1" aria-hidden="true"></i></a>
 
                 </div>
@@ -213,7 +216,8 @@
 
     <div class="card border-0 shadow-sm mb-4">
 
-        <div class="card-header bg-transparent border-0 px-4 pt-4 d-flex flex-wrap align-items-center justify-content-between gap-2">
+        <div
+            class="card-header bg-transparent border-0 px-4 pt-4 d-flex flex-wrap align-items-center justify-content-between gap-2">
 
             <h2 class="h5 fw-bold mb-0">Reservas recientes del período</h2>
             <a href="{{ route('admin.reservas.list') }}" class="small" wire:navigate>Ver todas las reservas</a>
@@ -247,11 +251,11 @@
                     <tbody>
 
                         @forelse ($ultimasReservas as $reserva)
-
                             <tr wire:key="reserva-{{ $reserva->id }}">
                                 <td class="ps-4">
                                     <a href="{{ route('admin.reservas.detail', ['reserva_id' => $reserva->id]) }}"
-                                        class="fw-semibold text-decoration-none" wire:navigate>{{ $reserva->codigo_referencia }}</a>
+                                        class="fw-semibold text-decoration-none"
+                                        wire:navigate>{{ $reserva->codigo_referencia }}</a>
 
                                     <div class="small text-body-secondary">
                                         {{ $reserva->fecha_compra->format('d/m/Y H:i') }}
@@ -290,7 +294,6 @@
                                 </td>
 
                             </tr>
-
                         @endforelse
 
                     </tbody>
@@ -304,12 +307,14 @@
 
     <div class="card border-0 shadow-sm mb-4">
 
-        <div class="card-header bg-transparent border-0 px-4 pt-4 d-flex flex-wrap align-items-center justify-content-between gap-2">
+        <div
+            class="card-header bg-transparent border-0 px-4 pt-4 d-flex flex-wrap align-items-center justify-content-between gap-2">
 
             <div>
 
                 <h2 class="h5 fw-bold mb-1">Próximas salidas</h2>
-                <p class="small text-body-secondary mb-0">Desde ahora y durante los próximos 7 días. Solo empresas y rutas activas.</p>
+                <p class="small text-body-secondary mb-0">Desde ahora y durante los próximos 7 días. Solo empresas y
+                    rutas activas.</p>
 
             </div>
 
@@ -340,12 +345,12 @@
                     <tbody>
 
                         @forelse ($proximasSalidas as $salida)
-
                             <tr wire:key="salida-{{ $salida->id }}">
                                 <td class="ps-4">
                                     <a href="{{ route('admin.programaciones.passengers', ['programacion_id' => $salida->id]) }}"
                                         class="fw-semibold text-decoration-none" wire:navigate>
-                                        {{ $salida->viaje?->origenTerminal?->nombre }} <i class="bi bi-arrow-right mx-1"
+                                        {{ $salida->viaje?->origenTerminal?->nombre }} <i
+                                            class="bi bi-arrow-right mx-1"
                                             aria-label="hacia"></i> {{ $salida->viaje?->destinoTerminal?->nombre }}
                                     </a>
                                 </td>
@@ -376,7 +381,6 @@
                                 </td>
 
                             </tr>
-
                         @endforelse
 
                     </tbody>

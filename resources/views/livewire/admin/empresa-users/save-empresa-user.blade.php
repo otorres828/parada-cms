@@ -9,7 +9,7 @@
     - <x-layout.error />: Resumen de los errores de validación de Livewire.
     - <x-form.container-sm />: Contenedor de ancho limitado para los campos.
     - <x-form.text-input />: Campo de entrada con etiqueta.
-    - <x-form.dropdown />: Selector con etiqueta para opciones del formulario.
+    - <x-form.dropdown />: Selector con etiqueta para las opciones del formulario.
     - <x-layout.loader.fullpage />: Indicador de carga durante las operaciones de Livewire.
     --------------------------------------------------------------------------
 --}}
@@ -23,7 +23,6 @@
         <x-slot:title>
             Usuarios de empresa @if ($usuario_empresa_id)
                 <small class="text-body-secondary">#{{ $usuario_empresa_id }}</small>
-
             @endif
 
         </x-slot:title>
@@ -31,11 +30,9 @@
         <x-slot:button>
 
             @if (\App\Services\Admin\Access::allows('empresas.users', 'list'))
-
                 <x-form.cancel-button :link="route('admin.empresas.users.list', ['empresa_id' => $empresa_id])">
                     Volver al listado
                 </x-form.cancel-button>
-
             @endif
 
         </x-slot:button>
@@ -126,15 +123,14 @@
             </div>
 
             @if ($usuario_empresa_id)
-
                 <p class="text-body-secondary">Deja la contraseña vacía para conservar la actual.</p>
-
             @endif
 
         </x-form.container-sm>
 
         <hr>
-        <button class="btn btn-primary" type="submit" :disabled="saving" wire:loading.attr="disabled">Guardar</button>
+        <button class="btn btn-primary" type="submit" :disabled="saving"
+            wire:loading.attr="disabled">Guardar</button>
     </form>
 
     <x-layout.loader.fullpage wire:loading.delay.short />
@@ -181,7 +177,8 @@
                         errorMessage: 'Máximo 255 caracteres'
                     }]);
                     this.validator.addField(this.$refs.form.querySelector('[name="password"]'), [{
-                        validator: value => Boolean($wire.usuario_empresa_id) || value.trim().length > 0,
+                        validator: value => Boolean($wire.usuario_empresa_id) || value
+                        .trim().length > 0,
                         errorMessage: 'Ingresa una contraseña'
                     }, {
                         rule: 'maxLength',

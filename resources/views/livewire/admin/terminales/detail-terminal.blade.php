@@ -20,7 +20,6 @@
         <x-slot:title>
             Terminales @if ($terminal_id)
                 <small class="text-body-secondary">#{{ $terminal_id }}</small>
-
             @endif
 
         </x-slot:title>
@@ -28,11 +27,9 @@
         <x-slot:button>
 
             @if (\App\Services\Admin\Access::allows('terminales', 'list'))
-
                 <x-form.cancel-button :link="route('admin.terminales.list')">
                     Volver al listado
                 </x-form.cancel-button>
-
             @endif
 
         </x-slot:button>

@@ -10,10 +10,10 @@
     - <x-list.add-button />: Enlace para abrir el formulario de alta.
     - <x-list.actions />: Contenedor del buscador y las acciones del listado.
     - <x-list.search-input />: Buscador vinculado al estado del listado.
-    - <x-list.table />: Contenedor reutilizable para la tabla del listado.
+    - <x-list.table />: Contenedor reutilizable de la tabla del listado.
     - <x-list.sortable-button />: Control para ordenar por una columna.
     - <x-list.status-badge />: Etiqueta visual del estado del registro.
-    - <x-list.button-group />: Agrupación de botones de acción de una fila.
+    - <x-list.button-group />: Agrupación de los botones de acción de una fila.
     - <x-list.status-button />: Botón para solicitar un cambio de estado.
     - <x-list.edit-button />: Enlace para editar el registro.
     - <x-layout.loader.fullpage />: Indicador de carga durante las operaciones de Livewire.
@@ -33,18 +33,17 @@
         <x-slot:button>
 
             @if ($canAdd)
-
                 <x-list.add-button :route="route('admin.tasas-servicio.add')">
                     Nueva tasa
                 </x-list.add-button>
-
             @endif
 
         </x-slot:button>
 
     </x-list.heading>
 
-    <p class="text-body-secondary">Monto fijo o porcentaje por pasaje, según su precio final después de descuentos. Los límites del rango
+    <p class="text-body-secondary">Monto fijo o porcentaje por pasaje, según su precio final después de descuentos. Los
+        límites del rango
         están incluidos.</p>
 
     <x-list.actions>
@@ -106,7 +105,6 @@
         <tbody>
 
             @forelse($tasas as $tasa)
-
                 <tr wire:key="tasa-{{ $tasa->id }}">
                     <td>
                         {{ number_format($tasa->monto_minimo, 2) }}
@@ -133,11 +131,10 @@
                         <x-list.button-group>
 
                             @if ($canEdit)
-
-                                <x-list.status-button wire:click="changeStatus({{ $tasa->id }})" :status="$tasa->estatus" />
+                                <x-list.status-button wire:click="changeStatus({{ $tasa->id }})"
+                                    :status="$tasa->estatus" />
 
                                 <x-list.edit-button :route="route('admin.tasas-servicio.edit', $tasa->id)" />
-
                             @endif
 
                         </x-list.button-group>
@@ -152,7 +149,6 @@
                     </td>
 
                 </tr>
-
             @endforelse
 
         </tbody>
@@ -169,7 +165,8 @@
     <script>
         Alpine.data('listTasaServicio', () => ({
             init() {
-                this.toastCleanup = [Livewire.on('successEventList', data => this.$store.toast.success(data.message)), Livewire.on(
+                this.toastCleanup = [Livewire.on('successEventList', data => this.$store.toast.success(data
+                    .message)), Livewire.on(
                     'errorEventList', data => this.$store.toast.info(data.message))];
                 const savedMessage = @js(session()->pull('admin_success'));
                 if (savedMessage) this.$nextTick(() => Livewire.dispatch('successEventList', {

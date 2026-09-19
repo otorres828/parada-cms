@@ -21,7 +21,6 @@
         <x-slot:title>
             Pagos recibidos @if ($pago_id)
                 <small class="text-body-secondary">#{{ $pago_id }}</small>
-
             @endif
 
         </x-slot:title>
@@ -29,11 +28,9 @@
         <x-slot:button>
 
             @if (\App\Services\Admin\Access::allows('pagos', 'list'))
-
                 <x-form.cancel-button :link="route('admin.pagos.list')">
                     Volver al listado
                 </x-form.cancel-button>
-
             @endif
 
         </x-slot:button>
@@ -68,10 +65,8 @@
                             <dd class="col-sm-8">{{ number_format($pago->reserva->tasa_servicio, 2) }}</dd>
 
                             @if ($pago->comision > 0)
-
                                 <dt class="col-sm-4">Comisión histórica USD</dt>
                                 <dd class="col-sm-8">{{ number_format($pago->comision, 2) }}</dd>
-
                             @endif
 
                             <dt class="col-sm-4">Observaciones</dt>
@@ -89,9 +84,8 @@
     </div>
 
     @if ($pago->comprobante)
-
-        <button class="btn btn-outline-primary mb-3" type="button" wire:click="downloadProof">Descargar comprobante</button>
-
+        <button class="btn btn-outline-primary mb-3" type="button" wire:click="downloadProof">Descargar
+            comprobante</button>
     @endif
 
     <div class="card mb-4">
@@ -133,7 +127,6 @@
                 <tbody>
 
                     @forelse($pago->reserva->pasajes as $pasaje)
-
                         <tr>
                             <td>
                                 {{ $pasaje->viajero?->nombre }} {{ $pasaje->viajero?->apellido }}
@@ -185,7 +178,6 @@
                             </td>
 
                         </tr>
-
                     @endforelse
 
                 </tbody>

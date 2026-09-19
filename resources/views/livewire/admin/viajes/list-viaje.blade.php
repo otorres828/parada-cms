@@ -9,10 +9,10 @@
     - <x-list.heading />: Cabecera del módulo con título y acciones.
     - <x-list.actions />: Contenedor del buscador y las acciones del listado.
     - <x-list.search-input />: Buscador vinculado al estado del listado.
-    - <x-list.table />: Contenedor reutilizable para la tabla del listado.
+    - <x-list.table />: Contenedor reutilizable de la tabla del listado.
     - <x-list.sortable-button />: Control para ordenar por una columna.
     - <x-list.status-badge />: Etiqueta visual del estado del registro.
-    - <x-list.button-group />: Agrupación de botones de acción de una fila.
+    - <x-list.button-group />: Agrupación de los botones de acción de una fila.
     - <x-list.view-button />: Enlace para consultar el detalle del registro.
     - <x-layout.loader.fullpage />: Indicador de carga durante las operaciones de Livewire.
     --------------------------------------------------------------------------
@@ -57,9 +57,7 @@
                 <option value="">Todas las empresas</option>
 
                 @foreach ($empresas as $empresa)
-
                     <option value="{{ $empresa->id }}">{{ $empresa->nombre }}</option>
-
                 @endforeach
 
             </select>
@@ -115,7 +113,7 @@
         <tbody>
 
             @forelse ($viajes as $viaje)
-
+            
                 <tr wire:key="listViaje-{{ $viaje->id }}">
 
                     <td>
@@ -147,9 +145,7 @@
                         <x-list.button-group>
 
                             @if ($canDetail)
-
                                 <x-list.view-button :route="route('admin.viajes.detail', ['viaje_id' => $viaje->id])" :target="false" />
-
                             @endif
 
                         </x-list.button-group>
@@ -166,7 +162,6 @@
                     </td>
 
                 </tr>
-
             @endforelse
 
         </tbody>

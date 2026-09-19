@@ -7,7 +7,7 @@
     - <x-form.title />: Título principal del formulario.
     - <x-layout.error />: Resumen de los errores de validación de Livewire.
     - <x-form.container-sm />: Contenedor de ancho limitado para los campos.
-    - <x-form.dropdown />: Selector con etiqueta para opciones del formulario.
+    - <x-form.dropdown />: Selector con etiqueta para las opciones del formulario.
     - <x-form.text-input />: Campo de entrada con etiqueta.
     - <x-layout.loader.fullpage />: Indicador de carga durante las operaciones de Livewire.
     --------------------------------------------------------------------------
@@ -28,7 +28,8 @@
 
             <div class="mb-3">
 
-                <x-form.dropdown label="Habilitar nuevas solicitudes de retiro" name="habilitados" x-model="$wire.habilitados">
+                <x-form.dropdown label="Habilitar nuevas solicitudes de retiro" name="habilitados"
+                    x-model="$wire.habilitados">
 
                     <option value="">Seleccionar...</option>
                     <option value="1">Sí</option>

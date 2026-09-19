@@ -8,7 +8,7 @@
     - <x-form.cancel-button />: Enlace para regresar o cancelar la edición.
     - <x-layout.error />: Resumen de los errores de validación de Livewire.
     - <x-form.container-sm />: Contenedor de ancho limitado para los campos.
-    - <x-form.dropdown />: Selector con etiqueta para opciones del formulario.
+    - <x-form.dropdown />: Selector con etiqueta para las opciones del formulario.
     - <x-form.text-input />: Campo de entrada con etiqueta.
     - <x-form.textarea />: Campo de texto de varias líneas.
     - <x-layout.loader.fullpage />: Indicador de carga durante las operaciones de Livewire.
@@ -24,7 +24,6 @@
         <x-slot:title>
             Terminales @if ($terminal_id)
                 <small class="text-body-secondary">#{{ $terminal_id }}</small>
-
             @endif
 
         </x-slot:title>
@@ -32,11 +31,9 @@
         <x-slot:button>
 
             @if (\App\Services\Admin\Access::allows('terminales', 'list'))
-
                 <x-form.cancel-button :link="route('admin.terminales.list')">
                     Volver al listado
                 </x-form.cancel-button>
-
             @endif
 
         </x-slot:button>
@@ -56,9 +53,7 @@
                     <option value="">Seleccionar...</option>
 
                     @foreach ($options_estado_id as $value => $label)
-
                         <option value="{{ $value }}">{{ $label }}</option>
-
                     @endforeach
 
                 </x-form.dropdown>
@@ -148,7 +143,8 @@
         </x-form.container-sm>
 
         <hr>
-        <button class="btn btn-primary" type="submit" :disabled="saving" wire:loading.attr="disabled">Guardar</button>
+        <button class="btn btn-primary" type="submit" :disabled="saving"
+            wire:loading.attr="disabled">Guardar</button>
     </form>
 
     <x-layout.loader.fullpage wire:loading.delay.short />

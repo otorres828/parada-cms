@@ -1,8 +1,8 @@
 {{--
     ADMINISTRADORES — FORMULARIO
     --------------------------------------------------------------------------
-    Permite crear o editar administradores, gestionar sus credenciales y seleccionar el nivel de
-    acceso y los permisos por sección que correspondan.
+    Permite crear o editar administradores, gestionar sus credenciales y estado, habilitar el
+    acceso de superadministrador o asignar permisos por grupos y secciones.
 
     Componentes reutilizables utilizados:
     - <x-form.title />: Título principal del formulario.
@@ -10,7 +10,7 @@
     - <x-form.container-sm />: Contenedor de ancho limitado para los campos.
     - <x-form.text-input />: Campo de entrada con etiqueta.
     - <x-form.switch />: Interruptor para activar o desactivar una opción.
-    - <x-form.dropdown />: Selector con etiqueta para opciones del formulario.
+    - <x-form.dropdown />: Selector con etiqueta para las opciones del formulario.
     - <x-form.subtitle />: Subtítulo para organizar secciones del formulario.
     - <x-form.cancel-button />: Enlace para regresar o cancelar la edición.
     - <x-layout.loader.fullpage />: Indicador de carga durante las operaciones de Livewire.
@@ -44,7 +44,8 @@
 
             <div x-data="{ show: false }">
 
-                <x-form.text-input icon="lock-fill" name="password" x-bind:type="show ? 'text' : 'password'" x-model="$wire.password"
+                <x-form.text-input icon="lock-fill" name="password" x-bind:type="show ? 'text' : 'password'"
+                    x-model="$wire.password"
                     autocomplete="new-password">
                     Contraseña
                 </x-form.text-input>
@@ -56,9 +57,7 @@
             </div>
 
             @if ($admin_id)
-
                 <p class="text-body-secondary mt-2">Deja la contraseña vacía para conservar la actual.</p>
-
             @endif
 
             <x-form.dropdown label="Estado" name="status" x-model="$wire.status">
@@ -79,9 +78,7 @@
         @if ($editingRoot)
 
             <p>Esta cuenta es root y conserva el acceso completo.</p>
-
         @else
-
             <x-form.switch x-model="$wire.is_superadmin">
                 Superadmin
             </x-form.switch>
@@ -91,9 +88,7 @@
             <div x-show="!$wire.is_superadmin" class="row g-3">
 
                 @foreach ($groups as $group)
-
                     @if ($group->sections->isNotEmpty())
-
                         <div class="col-12">
 
                             <h3 class="h5 mt-3"><i class="bi {{ $group->icon }} me-2"></i>{{ $group->name }}</h3>
@@ -101,7 +96,6 @@
                         </div>
 
                         @foreach ($group->sections as $section)
-
                             @php($ids = $section->permissions->pluck('id')->map(fn($id) => (string) $id)->all())
 
                             <div class="col-md-6 col-xl-4" wire:key="section-{{ $section->id }}">
@@ -124,10 +118,10 @@
                                     <div class="card-body">
 
                                         @foreach ($section->permissions as $permission)
-
                                             <div class="form-check" wire:key="permission-{{ $permission->id }}">
 
-                                                <input id="permission-{{ $permission->id }}" type="checkbox" class="form-check-input"
+                                                <input id="permission-{{ $permission->id }}" type="checkbox"
+                                                    class="form-check-input"
                                                     x-model="$wire.selectedPermissions" value="{{ $permission->id }}">
 
                                                 <label for="permission-{{ $permission->id }}" class="form-check-label">
@@ -135,7 +129,6 @@
                                                 </label>
 
                                             </div>
-
                                         @endforeach
 
                                     </div>
@@ -143,11 +136,8 @@
                                 </div>
 
                             </div>
-
                         @endforeach
-
                     @endif
-
                 @endforeach
 
             </div>
@@ -160,7 +150,8 @@
             Cancelar
         </x-form.cancel-button>
 
-        <button class="btn btn-primary" type="submit" :disabled="saving" wire:loading.attr="disabled">Guardar administrador</button>
+        <button class="btn btn-primary" type="submit" :disabled="saving" wire:loading.attr="disabled">Guardar
+            administrador</button>
     </form>
 
     <x-layout.loader.fullpage wire:loading.delay.short />
@@ -208,7 +199,8 @@
                             errorMessage: 'Correo inválido'
                         }])
                         .addField('[name="password"]', [{
-                            validator: value => ($wire.admin_id && !value) || value.length >= 10,
+                            validator: value => ($wire.admin_id && !value) || value.length >=
+                                10,
                             errorMessage: 'La contraseña debe tener al menos 10 caracteres'
                         }]);
                 });
@@ -219,8 +211,9 @@
             },
             toggleSection(ids, checked) {
                 const selected = $wire.selectedPermissions.map(String);
-                $wire.selectedPermissions = checked ? [...new Set([...selected, ...ids.map(String)])] : selected.filter(id => !ids
-                    .map(String).includes(id));
+                $wire.selectedPermissions = checked ? [...new Set([...selected, ...ids.map(String)])] : selected
+                    .filter(id => !ids
+                        .map(String).includes(id));
             },
             async preSave() {
                 if (this.saving || !this.validator || !await this.validator.revalidate()) return;

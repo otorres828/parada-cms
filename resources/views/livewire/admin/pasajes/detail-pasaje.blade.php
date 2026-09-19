@@ -1,13 +1,14 @@
 {{--
     PASAJES — DETALLE
     --------------------------------------------------------------------------
-    Presenta la reserva, viajero, documento, asiento y situación de abordaje del boleto. Muestra
-    su precio y los datos históricos de la tasa de servicio aplicada.
+    Presenta la reserva, el viajero, su documento, asiento y estado de abordaje. Consulta el
+    origen y destino comprados a través de la reserva y muestra el precio del boleto, el estado de
+    pago y la tasa de servicio aplicada con su modalidad y valor.
 
     Componentes reutilizables utilizados:
     - <x-list.heading />: Cabecera del módulo con título y acciones.
     - <x-form.cancel-button />: Enlace para regresar o cancelar la edición.
-    - <x-list.status-badge />: Etiqueta visual del estado del registro.
+    - <x-list.status-reserva />: Etiqueta del estado de pago según las constantes de Reserva.
     - <x-layout.loader.fullpage />: Indicador de carga durante las operaciones de Livewire.
     --------------------------------------------------------------------------
 --}}
@@ -21,7 +22,6 @@
         <x-slot:title>
             Pasajes @if ($pasaje_id)
                 <small class="text-body-secondary">#{{ $pasaje_id }}</small>
-
             @endif
 
         </x-slot:title>

@@ -21,7 +21,6 @@
         <x-slot:title>
             Clientes @if ($user_id)
                 <small class="text-body-secondary">#{{ $user_id }}</small>
-
             @endif
 
         </x-slot:title>
@@ -120,20 +119,15 @@
                 <tbody>
 
                     @forelse($reservas as $reserva)
-
                         <tr data-search="{{ $reserva->codigo_referencia }} {{ $reserva->programacion?->viaje?->empresa?->nombre }} {{ $reserva->getStatusPago() }}"
                             x-show="matches($el.dataset.search)">
                             <td>
 
                                 @if ($canReservasDetail)
-
                                     <a href="{{ route('admin.reservas.detail', $reserva->id) }}"
                                         wire:navigate>{{ $reserva->codigo_referencia }}</a>
-
                                 @else
-
                                     {{ $reserva->codigo_referencia }}
-
                                 @endif
 
                             </td>
@@ -164,18 +158,15 @@
                             </td>
 
                         </tr>
-
                     @endforelse
 
                     @if ($reservas->isNotEmpty())
-
                         <tr x-cloak x-show="search && !hasMatches()">
                             <td colspan="5" class="text-center py-4">
                                 No hay coincidencias.
                             </td>
 
                         </tr>
-
                     @endif
 
                 </tbody>
@@ -200,7 +191,8 @@
                 return this.normalize(value).includes(this.normalize(this.search.trim()));
             },
             hasMatches() {
-                return [...this.$root.querySelectorAll('[data-search]')].some(row => this.matches(row.dataset.search));
+                return [...this.$root.querySelectorAll('[data-search]')].some(row => this.matches(row.dataset
+                    .search));
             },
             destroy() {
                 this.toastCleanup?.forEach(cleanup => cleanup());

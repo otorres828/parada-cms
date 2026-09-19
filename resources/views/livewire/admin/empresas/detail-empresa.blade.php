@@ -20,7 +20,6 @@
         <x-slot:title>
             Empresas @if ($empresa_id)
                 <small class="text-body-secondary">#{{ $empresa_id }}</small>
-
             @endif
 
         </x-slot:title>
@@ -74,11 +73,10 @@
                 </div>
 
                 @if ($canListUser)
-
-                    <a class="btn btn-primary" href="{{ route('admin.empresas.users.list', ['empresa_id' => $empresa->id]) }}"
+                    <a class="btn btn-primary"
+                        href="{{ route('admin.empresas.users.list', ['empresa_id' => $empresa->id]) }}"
                         wire:navigate>Gestionar
                         usuarios de la empresa</a>
-
                 @endif
 
             </div>

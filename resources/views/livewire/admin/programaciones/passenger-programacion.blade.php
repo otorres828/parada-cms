@@ -1,8 +1,16 @@
 {{--
-    PROGRAMACIONES — PASAJEROS Y TRAMOS O&D
+    PROGRAMACIONES — PASAJEROS Y TARIFAS POR TRAMO
     --------------------------------------------------------------------------
-    Muestra la salida programada, su ocupación, los tramos O&D configurados y los pasajeros
-    con pasajes comprados especificando el tramo comercial del boleto.
+    Muestra la salida programada, su capacidad y la ocupación según la disponibilidad registrada.
+    Presenta las tarifas por origen y destino y los pasajeros de reservas pagadas o pendientes.
+    Cada boleto muestra el trayecto de su reserva, asiento, precio final, tasa y abordaje, con
+    búsqueda local mediante Alpine.
+
+    Componentes reutilizables utilizados:
+    - <x-list.heading />: Cabecera del módulo con título y acciones.
+    - <x-list.status-badge />: Etiqueta visual del estado del registro.
+    - <x-layout.loader.fullpage />: Indicador de carga durante las operaciones de Livewire.
+    --------------------------------------------------------------------------
 --}}
 
 @section('title', 'Programaciones')
@@ -14,7 +22,6 @@
         <x-slot:title>
             Programaciones @if ($programacion_id)
                 <small class="text-body-secondary">#{{ $programacion_id }}</small>
-
             @endif
 
         </x-slot:title>
@@ -43,19 +50,23 @@
 
                             <dd class="col-sm-8">
                                 @if ($canViajesDetail && $programacion->viaje_id)
-                                    <a href="{{ route('admin.viajes.detail', $programacion->viaje_id) }}" wire:navigate class="fw-bold text-decoration-none">
-                                        {{ $programacion->viaje?->origenTerminal?->nombre ?? '—' }} → {{ $programacion->viaje?->destinoTerminal?->nombre ?? '—' }}
+                                    <a href="{{ route('admin.viajes.detail', $programacion->viaje_id) }}" wire:navigate
+                                        class="fw-bold text-decoration-none">
+                                        {{ $programacion->viaje?->origenTerminal?->nombre ?? '—' }} →
+                                        {{ $programacion->viaje?->destinoTerminal?->nombre ?? '—' }}
                                         <i class="bi bi-box-arrow-up-right ms-1 text-primary small"></i>
                                     </a>
                                 @else
-                                    {{ $programacion->viaje?->origenTerminal?->nombre ?? '—' }} → {{ $programacion->viaje?->destinoTerminal?->nombre ?? '—' }}
+                                    {{ $programacion->viaje?->origenTerminal?->nombre ?? '—' }} →
+                                    {{ $programacion->viaje?->destinoTerminal?->nombre ?? '—' }}
                                 @endif
                             </dd>
 
                             <dt class="col-sm-4">Fecha & Hora</dt>
 
                             <dd class="col-sm-8">
-                                {{ $programacion->fecha_salida?->format('d/m/Y') ?? '—' }} a las {{ substr($programacion->hora_salida, 0, 5) }}
+                                {{ $programacion->fecha_salida?->format('d/m/Y') ?? '—' }} a las
+                                {{ substr($programacion->hora_salida, 0, 5) }}
                             </dd>
 
                             <dt class="col-sm-4">Estado</dt>
@@ -104,7 +115,8 @@
                 <div class="card h-100">
 
                     <div class="card-header fw-semibold">
-                        <i class="bi bi-tags me-1" aria-hidden="true"></i> Matriz O&D de Precios Configurados (Salida #{{ $programacion_id }})
+                        <i class="bi bi-tags me-1" aria-hidden="true"></i> Matriz O&D de Precios Configurados (Salida
+                        #{{ $programacion_id }})
                     </div>
 
                     <div class="card-body">
@@ -125,14 +137,17 @@
                                                 <td>
                                                     <span class="fw-semibold">{{ $tp->origenTerminal?->nombre }}</span>
                                                     <i class="bi bi-arrow-right text-muted mx-1"></i>
-                                                    <span class="fw-semibold">{{ $tp->destinoTerminal?->nombre }}</span>
+                                                    <span
+                                                        class="fw-semibold">{{ $tp->destinoTerminal?->nombre }}</span>
                                                 </td>
                                                 <td class="text-end text-success fw-bold">
                                                     USD {{ number_format($tp->precio, 2) }}
                                                 </td>
                                                 <td class="text-center">
                                                     @if ($tp->asientos_maximos_permitidos)
-                                                        <span class="badge text-bg-warning">{{ $tp->asientos_maximos_permitidos }} asientos</span>
+                                                        <span
+                                                            class="badge text-bg-warning">{{ $tp->asientos_maximos_permitidos }}
+                                                            asientos</span>
                                                     @else
                                                         <span class="badge text-bg-secondary">Sin tope (Libre)</span>
                                                     @endif
@@ -206,22 +221,17 @@
                 <tbody>
 
                     @forelse ($tickets as $ticket)
-
                         <tr data-search="{{ $ticket->viajero?->nombre }} {{ $ticket->viajero?->apellido }} {{ $ticket->viajero?->documento_identidad }} {{ $ticket->numero_asiento }} {{ $ticket->reserva?->origenTerminal?->nombre }} {{ $ticket->reserva?->destinoTerminal?->nombre }}"
                             x-show="matches($el.dataset.search)">
 
                             <td>
 
                                 @if ($canReservasDetail)
-
                                     <a href="{{ route('admin.reservas.detail', $ticket->reserva_id) }}" wire:navigate>
                                         #{{ $ticket->reserva_id }}
                                     </a>
-
                                 @else
-
                                     #{{ $ticket->reserva_id }}
-
                                 @endif
 
                             </td>
@@ -239,9 +249,11 @@
                             </td>
 
                             <td>
-                                <span class="fw-semibold">{{ $ticket->reserva?->origenTerminal?->nombre ?? 'No registrado' }}</span>
+                                <span
+                                    class="fw-semibold">{{ $ticket->reserva?->origenTerminal?->nombre ?? 'No registrado' }}</span>
                                 <i class="bi bi-arrow-right text-muted mx-1"></i>
-                                <span class="fw-semibold">{{ $ticket->reserva?->destinoTerminal?->nombre ?? 'No registrado' }}</span>
+                                <span
+                                    class="fw-semibold">{{ $ticket->reserva?->destinoTerminal?->nombre ?? 'No registrado' }}</span>
                             </td>
 
                             <td class="fw-bold text-success">
@@ -270,18 +282,15 @@
                             </td>
 
                         </tr>
-
                     @endforelse
 
                     @if ($tickets->isNotEmpty())
-
                         <tr x-cloak x-show="search && !hasMatches()">
                             <td colspan="9" class="text-center py-4">
                                 No hay coincidencias.
                             </td>
 
                         </tr>
-
                     @endif
 
                 </tbody>
@@ -306,7 +315,8 @@
                 return this.normalize(value).includes(this.normalize(this.search.trim()));
             },
             hasMatches() {
-                return [...this.$root.querySelectorAll('[data-search]')].some(row => this.matches(row.dataset.search));
+                return [...this.$root.querySelectorAll('[data-search]')].some(row => this.matches(row.dataset
+                    .search));
             },
             destroy() {
                 this.toastCleanup?.forEach(cleanup => cleanup());

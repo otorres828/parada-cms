@@ -19,7 +19,6 @@
         <x-slot:title>
             Movimientos contables @if ($movimiento_id)
                 <small class="text-body-secondary">#{{ $movimiento_id }}</small>
-
             @endif
 
         </x-slot:title>
@@ -27,11 +26,9 @@
         <x-slot:button>
 
             @if (\App\Services\Admin\Access::allows('movimientos', 'list'))
-
                 <x-form.cancel-button :link="route('admin.movimientos.list')">
                     Volver al listado
                 </x-form.cancel-button>
-
             @endif
 
         </x-slot:button>

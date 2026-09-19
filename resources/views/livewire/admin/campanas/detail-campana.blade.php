@@ -11,7 +11,7 @@
     - <x-list.status-badge />: Etiqueta visual del estado del registro.
     - <x-list.actions />: Contenedor del buscador y las acciones del listado.
     - <x-list.search-input />: Buscador vinculado al estado del listado.
-    - <x-list.table />: Contenedor reutilizable para la tabla del listado.
+    - <x-list.table />: Contenedor reutilizable de la tabla del listado.
     - <x-list.sortable-button />: Control para ordenar por una columna.
     - <x-layout.loader.fullpage />: Indicador de carga durante las operaciones de Livewire.
     --------------------------------------------------------------------------
@@ -26,7 +26,6 @@
         <x-slot:title>
             Campañas @if ($configuracion_cupon_id)
                 <small class="text-body-secondary">#{{ $configuracion_cupon_id }}</small>
-
             @endif
 
         </x-slot:title>
@@ -34,11 +33,9 @@
         <x-slot:button>
 
             @if (\App\Services\Admin\Access::allows('campanas', 'list'))
-
                 <x-form.cancel-button :link="route('admin.campanas.list')">
                     Volver al listado
                 </x-form.cancel-button>
-
             @endif
 
         </x-slot:button>
@@ -101,10 +98,9 @@
             <h4 class="h6">Cupones generados: {{ $configuracionCupon->cupones()->count() }}</h4>
 
             @if (!$configuracionCupon->cupones()->exists() && \App\Services\Admin\Access::allows('campanas', 'edit'))
-
-                <button class="btn btn-primary" type="button" @click="generateCoupons" wire:loading.attr="disabled">Generar
+                <button class="btn btn-primary" type="button" @click="generateCoupons"
+                    wire:loading.attr="disabled">Generar
                     cupones</button>
-
             @endif
 
             <x-list.actions>
@@ -150,7 +146,6 @@
                 <tbody>
 
                     @forelse ($cupones as $cupon)
-
                         <tr wire:key="cupon-{{ $cupon->id }}">
                             <td>
                                 {{ $cupon->codigo }}
@@ -178,7 +173,6 @@
                             </td>
 
                         </tr>
-
                     @endforelse
 
                 </tbody>

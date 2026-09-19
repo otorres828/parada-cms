@@ -10,7 +10,7 @@
     - <x-layout.error />: Resumen de los errores de validación de Livewire.
     - <x-form.container-sm />: Contenedor de ancho limitado para los campos.
     - <x-form.text-input />: Campo de entrada con etiqueta.
-    - <x-form.dropdown />: Selector con etiqueta para opciones del formulario.
+    - <x-form.dropdown />: Selector con etiqueta para las opciones del formulario.
     - <x-layout.loader.fullpage />: Indicador de carga durante las operaciones de Livewire.
     --------------------------------------------------------------------------
 --}}
@@ -24,7 +24,6 @@
         <x-slot:title>
             Empresas @if ($empresa_id)
                 <small class="text-body-secondary">#{{ $empresa_id }}</small>
-
             @endif
 
         </x-slot:title>
@@ -32,11 +31,9 @@
         <x-slot:button>
 
             @if (\App\Services\Admin\Access::allows('empresas', 'list'))
-
                 <x-form.cancel-button :link="route('admin.empresas.list')">
                     Volver al listado
                 </x-form.cancel-button>
-
             @endif
 
         </x-slot:button>
@@ -124,7 +121,8 @@
 
             <div class="mb-3">
 
-                <x-form.dropdown label="Habilitar retiros" name="retiros_habilitados" x-model="$wire.retiros_habilitados">
+                <x-form.dropdown label="Habilitar retiros" name="retiros_habilitados"
+                    x-model="$wire.retiros_habilitados">
                     <option value="0">No</option>
                     <option value="1">Sí</option>
                 </x-form.dropdown>
@@ -140,7 +138,8 @@
             <div class="mb-3">
 
                 <label class="form-label" for="datos_bancarios">Datos bancarios</label>
-                <textarea id="datos_bancarios" name="datos_bancarios" class="form-control" rows="3" maxlength="2000" x-model="$wire.datos_bancarios"></textarea>
+                <textarea id="datos_bancarios" name="datos_bancarios" class="form-control" rows="3" maxlength="2000"
+                    x-model="$wire.datos_bancarios"></textarea>
 
                 @error('datos_bancarios')
                     <div class="text-danger small">
@@ -153,7 +152,8 @@
         </x-form.container-sm>
 
         <hr>
-        <button class="btn btn-primary" type="submit" :disabled="saving" wire:loading.attr="disabled">Guardar</button>
+        <button class="btn btn-primary" type="submit" :disabled="saving"
+            wire:loading.attr="disabled">Guardar</button>
     </form>
 
     <x-layout.loader.fullpage wire:loading.delay.short />
@@ -219,11 +219,13 @@
                         rule: 'required',
                         errorMessage: 'Este campo es requerido'
                     }]);
-                    this.validator.addField(this.$refs.form.querySelector('[name="retiros_habilitados"]'), [{
+                    this.validator.addField(this.$refs.form.querySelector(
+                        '[name="retiros_habilitados"]'), [{
                         rule: 'required',
                         errorMessage: 'Este campo es requerido'
                     }]);
-                    this.validator.addField(this.$refs.form.querySelector('[name="datos_bancarios"]'), [{
+                    this.validator.addField(this.$refs.form.querySelector('[name="datos_bancarios"]'),
+                [{
                         rule: 'maxLength',
                         value: 2000,
                         errorMessage: 'Máximo 2000 caracteres'

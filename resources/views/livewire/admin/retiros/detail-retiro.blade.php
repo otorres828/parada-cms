@@ -20,7 +20,6 @@
         <x-slot:title>
             Retiros @if ($retiro_id)
                 <small class="text-body-secondary">#{{ $retiro_id }}</small>
-
             @endif
 
         </x-slot:title>
@@ -28,11 +27,9 @@
         <x-slot:button>
 
             @if (\App\Services\Admin\Access::allows('retiros', 'list'))
-
                 <x-form.cancel-button :link="route('admin.retiros.list')">
                     Volver al listado
                 </x-form.cancel-button>
-
             @endif
 
         </x-slot:button>
@@ -89,9 +86,8 @@
     </div>
 
     @if ($retiro->comprobante)
-
-        <button class="btn btn-outline-primary mb-3" type="button" wire:click="downloadProof">Descargar comprobante</button>
-
+        <button class="btn btn-outline-primary mb-3" type="button" wire:click="downloadProof">Descargar
+            comprobante</button>
     @endif
 
     <x-layout.loader.fullpage wire:loading.delay.short />

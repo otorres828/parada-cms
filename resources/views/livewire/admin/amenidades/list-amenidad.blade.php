@@ -10,10 +10,10 @@
     - <x-list.add-button />: Enlace para abrir el formulario de alta.
     - <x-list.actions />: Contenedor del buscador y las acciones del listado.
     - <x-list.search-input />: Buscador vinculado al estado del listado.
-    - <x-list.table />: Contenedor reutilizable para la tabla del listado.
+    - <x-list.table />: Contenedor reutilizable de la tabla del listado.
     - <x-list.sortable-button />: Control para ordenar por una columna.
     - <x-list.status-badge />: Etiqueta visual del estado del registro.
-    - <x-list.button-group />: Agrupación de botones de acción de una fila.
+    - <x-list.button-group />: Agrupación de los botones de acción de una fila.
     - <x-list.edit-button />: Enlace para editar el registro.
     - <x-list.status-button />: Botón para solicitar un cambio de estado.
     - <x-layout.loader.fullpage />: Indicador de carga durante las operaciones de Livewire.
@@ -33,11 +33,9 @@
         <x-slot:button>
 
             @if (Route::has('admin.amenidades.add') && $canAdd)
-
                 <x-list.add-button :route="route('admin.amenidades.add')">
                     Nuevo registro
                 </x-list.add-button>
-
             @endif
 
         </x-slot:button>
@@ -107,7 +105,6 @@
         <tbody>
 
             @forelse ($amenidades as $amenidad)
-
                 <tr wire:key="listAmenidad-{{ $amenidad->id }}">
                     <td>
                         {{ $amenidad->id }}
@@ -130,16 +127,12 @@
                         <x-list.button-group>
 
                             @if ($capabilities['edit'])
-
                                 <x-list.edit-button :route="route('admin.amenidades.edit', ['amenidad_id' => $amenidad->id])" />
-
                             @endif
 
                             @if ($canEdit)
-
                                 <x-list.status-button wire:click="changeStatus({{ $amenidad->id }})" :status="$amenidad->estatus"
                                     wire:loading.attr="disabled" />
-
                             @endif
 
                         </x-list.button-group>
@@ -156,7 +149,6 @@
                     </td>
 
                 </tr>
-
             @endforelse
 
         </tbody>

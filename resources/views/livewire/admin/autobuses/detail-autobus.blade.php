@@ -1,8 +1,9 @@
 {{--
     AUTOBUSES — DETALLE
     --------------------------------------------------------------------------
-    Muestra los datos del autobús y su historial de programaciones. Desglosa el precio por pasaje,
-    boletos pagados y pendientes, ventas y tasas cobradas de cada salida.
+    Presenta la empresa, placa, modelo, capacidad y estado del autobús. Incluye la tabla de
+    programaciones consultadas, con el precio de la primera tarifa asociada, boletos pagados y
+    pendientes, ventas y tasas de servicio.
 
     Componentes reutilizables utilizados:
     - <x-list.heading />: Cabecera del módulo con título y acciones.
@@ -21,7 +22,6 @@
         <x-slot:title>
             Programaciones del autobus @if ($autobus_id)
                 <small class="text-body-secondary">#{{ $autobus_id }}</small>
-
             @endif
 
         </x-slot:title>
@@ -128,19 +128,14 @@
                 <tbody>
 
                     @forelse($programaciones as $salida)
-
                         <tr>
                             <td>
 
                                 @if ($canViewPassengers)
-
                                     <a href="{{ route('admin.programaciones.passengers', $salida->id) }}"
                                         wire:navigate>#{{ $salida->id }}</a>
-
                                 @else
-
                                     #{{ $salida->id }}
-
                                 @endif
 
                             </td>
@@ -188,7 +183,6 @@
                             </td>
 
                         </tr>
-
                     @endforelse
 
                 </tbody>

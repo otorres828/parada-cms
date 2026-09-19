@@ -1,13 +1,14 @@
 {{--
     RESERVAS Y VENTAS — DETALLE
     --------------------------------------------------------------------------
-    Presenta los datos de la compra y el acceso a su programación según permisos. Desglosa los
-    viajeros y los importes individuales de los pasajes, incluidos descuentos y tasas de servicio.
+    Presenta el comprador, la empresa, el origen y destino de la reserva y su estado de pago.
+    Incluye el acceso a la programación según permisos y el desglose de viajeros, precios base,
+    descuentos, precios finales, tasas de servicio y total individual de cada boleto.
 
     Componentes reutilizables utilizados:
     - <x-list.heading />: Cabecera del módulo con título y acciones.
     - <x-form.cancel-button />: Enlace para regresar o cancelar la edición.
-    - <x-list.status-badge />: Etiqueta visual del estado del registro.
+    - <x-list.status-reserva />: Etiqueta del estado de pago según las constantes de Reserva.
     - <x-layout.loader.fullpage />: Indicador de carga durante las operaciones de Livewire.
     --------------------------------------------------------------------------
 --}}
@@ -21,7 +22,6 @@
         <x-slot:title>
             Reservas y ventas @if ($reserva_id)
                 <small class="text-body-secondary">#{{ $reserva_id }}</small>
-
             @endif
 
         </x-slot:title>
@@ -29,11 +29,9 @@
         <x-slot:button>
 
             @if (\App\Services\Admin\Access::allows('reservas', 'list'))
-
                 <x-form.cancel-button :link="route('admin.reservas.list')">
                     Volver al listado
                 </x-form.cancel-button>
-
             @endif
 
         </x-slot:button>
@@ -93,15 +91,12 @@
                             <dd class="col-sm-8">
 
                                 @if (\App\Services\Admin\Access::allows('programaciones', 'passengers'))
-
-                                    <a href="{{ route('admin.programaciones.passengers', $reserva->programacion_id) }}" wire:navigate>
+                                    <a href="{{ route('admin.programaciones.passengers', $reserva->programacion_id) }}"
+                                        wire:navigate>
                                         Ver programación #{{ $reserva->programacion_id }}
                                     </a>
-
                                 @else
-
                                     #{{ $reserva->programacion_id }}
-
                                 @endif
 
                             </dd>
@@ -154,7 +149,6 @@
                 <tbody>
 
                     @forelse ($tickets as $ticket)
-
                         <tr>
                             <td>
                                 {{ $ticket->viajero->nombre }} {{ $ticket->viajero->apellido }}
@@ -198,7 +192,6 @@
                             </td>
 
                         </tr>
-
                     @endforelse
 
                 </tbody>

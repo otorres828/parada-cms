@@ -10,7 +10,7 @@
     - <x-layout.error />: Resumen de los errores de validación de Livewire.
     - <x-form.container-sm />: Contenedor de ancho limitado para los campos.
     - <x-form.text-input />: Campo de entrada con etiqueta.
-    - <x-form.dropdown />: Selector con etiqueta para opciones del formulario.
+    - <x-form.dropdown />: Selector con etiqueta para las opciones del formulario.
     - <x-layout.loader.fullpage />: Indicador de carga durante las operaciones de Livewire.
     --------------------------------------------------------------------------
 --}}
@@ -24,7 +24,6 @@
         <x-slot:title>
             Clientes @if ($user_id)
                 <small class="text-body-secondary">#{{ $user_id }}</small>
-
             @endif
 
         </x-slot:title>
@@ -121,7 +120,8 @@
         </x-form.container-sm>
 
         <hr>
-        <button class="btn btn-primary" type="submit" :disabled="saving" wire:loading.attr="disabled">Guardar</button>
+        <button class="btn btn-primary" type="submit" :disabled="saving"
+            wire:loading.attr="disabled">Guardar</button>
     </form>
 
     <x-layout.loader.fullpage wire:loading.delay.short />

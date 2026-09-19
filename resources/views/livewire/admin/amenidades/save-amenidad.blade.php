@@ -10,7 +10,7 @@
     - <x-layout.error />: Resumen de los errores de validación de Livewire.
     - <x-form.container-sm />: Contenedor de ancho limitado para los campos.
     - <x-form.text-input />: Campo de entrada con etiqueta.
-    - <x-form.dropdown />: Selector con etiqueta para opciones del formulario.
+    - <x-form.dropdown />: Selector con etiqueta para las opciones del formulario.
     - <x-layout.loader.fullpage />: Indicador de carga durante las operaciones de Livewire.
     --------------------------------------------------------------------------
 --}}
@@ -24,7 +24,6 @@
         <x-slot:title>
             Amenidades @if ($amenidad_id)
                 <small class="text-body-secondary">#{{ $amenidad_id }}</small>
-
             @endif
 
         </x-slot:title>
@@ -32,11 +31,9 @@
         <x-slot:button>
 
             @if (\App\Services\Admin\Access::allows('amenidades', 'list'))
-
                 <x-form.cancel-button :link="route('admin.amenidades.list')">
                     Volver al listado
                 </x-form.cancel-button>
-
             @endif
 
         </x-slot:button>
@@ -97,7 +94,8 @@
         </x-form.container-sm>
 
         <hr>
-        <button class="btn btn-primary" type="submit" :disabled="saving" wire:loading.attr="disabled">Guardar</button>
+        <button class="btn btn-primary" type="submit" :disabled="saving"
+            wire:loading.attr="disabled">Guardar</button>
     </form>
 
     <x-layout.loader.fullpage wire:loading.delay.short />

@@ -8,7 +8,7 @@
     - <x-list.heading />: Cabecera del módulo con título y acciones.
     - <x-layout.error />: Resumen de los errores de validación de Livewire.
     - <x-form.text-input />: Campo de entrada con etiqueta.
-    - <x-list.table />: Contenedor reutilizable para la tabla del listado.
+    - <x-list.table />: Contenedor reutilizable de la tabla del listado.
     - <x-layout.loader.fullpage />: Indicador de carga durante las operaciones de Livewire.
     --------------------------------------------------------------------------
 --}}
@@ -24,7 +24,8 @@
         </x-slot:title>
 
         <x-slot:button>
-            <button type="button" class="btn btn-outline-primary" @click="preSave" :disabled="saving" wire:loading.attr="disabled">Exportar
+            <button type="button" class="btn btn-outline-primary" @click="preSave" :disabled="saving"
+                wire:loading.attr="disabled">Exportar
                 CSV</button>
         </x-slot:button>
 
@@ -54,7 +55,8 @@
         </div>
 
     </form>
-    <p class="text-body-secondary">Reservas con estado actual pagado, agrupadas por fecha de compra. Importes en USD.</p>
+    <p class="text-body-secondary">Reservas con estado actual pagado, agrupadas por fecha de compra. Importes en USD.
+    </p>
 
     <x-list.table>
 
@@ -73,7 +75,6 @@
         <tbody>
 
             @forelse($rows as $row)
-
                 <tr>
                     <td>
                         {{ $row->nombre ?? '—' }}
@@ -95,7 +96,6 @@
                     </td>
 
                 </tr>
-
             @endforelse
 
         </tbody>

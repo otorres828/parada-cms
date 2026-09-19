@@ -11,9 +11,9 @@
     - <x-layout.error />: Resumen de los errores de validación de Livewire.
     - <x-list.actions />: Contenedor del buscador y las acciones del listado.
     - <x-list.search-input />: Buscador vinculado al estado del listado.
-    - <x-list.table />: Contenedor reutilizable para la tabla del listado.
+    - <x-list.table />: Contenedor reutilizable de la tabla del listado.
     - <x-list.sortable-button />: Control para ordenar por una columna.
-    - <x-list.button-group />: Agrupación de botones de acción de una fila.
+    - <x-list.button-group />: Agrupación de los botones de acción de una fila.
     - <x-list.view-button />: Enlace para consultar el detalle del registro.
     - <x-layout.loader.fullpage />: Indicador de carga durante las operaciones de Livewire.
     --------------------------------------------------------------------------
@@ -34,11 +34,9 @@
                     class="bi bi-file-earmark-excel me-1"></i>Descargar Excel</button>
 
             @if (Route::has('admin.pagos.add') && $canAdd)
-
                 <x-list.add-button :route="route('admin.pagos.add')">
                     Nuevo registro
                 </x-list.add-button>
-
             @endif
 
         </x-slot:button>
@@ -74,9 +72,7 @@
                 <option value="">Todas las empresas</option>
 
                 @foreach ($empresas as $empresa)
-
                     <option value="{{ $empresa->id }}">{{ $empresa->nombre }}</option>
-
                 @endforeach
 
             </select>
@@ -101,7 +97,8 @@
 
     </div>
 
-    <p class="text-body-secondary">Conciliación de pagos recibidos. Registrar el pago acredita el neto de la empresa.</p>
+    <p class="text-body-secondary">Conciliación de pagos recibidos. Registrar el pago acredita el neto de la empresa.
+    </p>
 
     <x-list.table>
 
@@ -140,7 +137,6 @@
         <tbody>
 
             @forelse ($pagos as $pago)
-
                 <tr wire:key="listPago-{{ $pago->id }}">
                     <td>
                         {{ $pago->id }}
@@ -175,9 +171,7 @@
                         <x-list.button-group>
 
                             @if ($capabilities['detail'])
-
                                 <x-list.view-button :route="route('admin.pagos.detail', ['pago_id' => $pago->id])" :target="false" />
-
                             @endif
 
                         </x-list.button-group>
@@ -194,7 +188,6 @@
                     </td>
 
                 </tr>
-
             @endforelse
 
         </tbody>

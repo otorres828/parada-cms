@@ -9,10 +9,10 @@
     - <x-list.heading />: Cabecera del módulo con título y acciones.
     - <x-list.actions />: Contenedor del buscador y las acciones del listado.
     - <x-list.search-input />: Buscador vinculado al estado del listado.
-    - <x-list.table />: Contenedor reutilizable para la tabla del listado.
+    - <x-list.table />: Contenedor reutilizable de la tabla del listado.
     - <x-list.sortable-button />: Control para ordenar por una columna.
     - <x-list.status-badge />: Etiqueta visual del estado del registro.
-    - <x-list.button-group />: Agrupación de botones de acción de una fila.
+    - <x-list.button-group />: Agrupación de los botones de acción de una fila.
     - <x-list.view-button />: Enlace para consultar el detalle del registro.
     - <x-list.edit-button />: Enlace para editar el registro.
     - <x-list.status-button />: Botón para solicitar un cambio de estado.
@@ -103,7 +103,6 @@
         <tbody>
 
             @forelse ($users as $user)
-
                 <tr wire:key="listUser-{{ $user->id }}">
 
                     <td>
@@ -135,20 +134,16 @@
                         <x-list.button-group>
 
                             @if ($canDetail)
-
                                 <x-list.view-button :route="route('admin.clientes.detail', ['user_id' => $user->id])" :target="false" />
-
                             @endif
 
                             @if ($canEdit)
-
                                 <x-list.edit-button :route="route('admin.clientes.edit', ['user_id' => $user->id])" :target="false" />
 
                                 <x-list.status-button
                                     wire:click="changeStatus({{ $user->id }})"
                                     :status="$user->status"
                                     wire:loading.attr="disabled" />
-
                             @endif
 
                         </x-list.button-group>
@@ -165,7 +160,6 @@
                     </td>
 
                 </tr>
-
             @endforelse
 
         </tbody>

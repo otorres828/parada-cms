@@ -8,8 +8,8 @@
     - <x-list.heading />: Cabecera del módulo con título y acciones.
     - <x-form.cancel-button />: Enlace para regresar o cancelar la edición.
     - <x-form.text-input />: Campo de entrada con etiqueta.
-    - <x-form.dropdown />: Selector con etiqueta para opciones del formulario.
-    - <x-list.button-group />: Agrupación de botones de acción de una fila.
+    - <x-form.dropdown />: Selector con etiqueta para las opciones del formulario.
+    - <x-list.button-group />: Agrupación de los botones de acción de una fila.
     - <x-list.view-button />: Enlace para consultar el detalle del registro.
     - <x-layout.loader.fullpage />: Indicador de carga durante las operaciones de Livewire.
     --------------------------------------------------------------------------
@@ -94,9 +94,7 @@
                             <x-form.dropdown label="Tipo de documento" name="tipo" x-model="$wire.tipo">
 
                                 @foreach ($tipos as $value => $label)
-
                                     <option value="{{ $value }}">{{ $label }}</option>
-
                                 @endforeach
 
                             </x-form.dropdown>
@@ -116,7 +114,8 @@
                             </label>
                             <input id="legal-archivo" name="archivo" x-ref="archivo" type="file" class="form-control"
                                 wire:model="archivo" accept="application/pdf,image/jpeg,image/png,image/webp"
-                                x-on:livewire-upload-start="uploading=true" x-on:livewire-upload-finish="uploading=false"
+                                x-on:livewire-upload-start="uploading=true"
+                                x-on:livewire-upload-finish="uploading=false"
                                 x-on:livewire-upload-error="uploading=false; $store.toast.info('No se pudo cargar el archivo. Revisa el formato y el tamaño.')"
                                 x-on:livewire-upload-cancel="uploading=false">
 
@@ -138,7 +137,8 @@
                                 Observaciones
                             </label>
 
-                            <textarea id="legal-observaciones" name="observaciones" class="form-control" rows="3" x-model="$wire.observaciones"></textarea>
+                            <textarea id="legal-observaciones" name="observaciones" class="form-control" rows="3"
+                                x-model="$wire.observaciones"></textarea>
                             @error('observaciones')
                                 <div class="text-danger small">
                                     {{ $message }}
@@ -150,7 +150,8 @@
                     </div>
 
                     <div class="mt-3">
-                        <button type="submit" class="btn btn-primary" :disabled="saving || uploading" wire:loading.attr="disabled"><i
+                        <button type="submit" class="btn btn-primary" :disabled="saving || uploading"
+                            wire:loading.attr="disabled"><i
                                 class="bi bi-upload me-1"></i>Guardar documento</button><span x-show="uploading" x-cloak
                             class="text-body-secondary ms-2">Cargando archivo…</span>
                     </div>
@@ -194,9 +195,7 @@
                         <option value="">Todos</option>
 
                         @foreach ($tipos as $value => $label)
-
                             <option value="{{ $value }}">{{ $label }}</option>
-
                         @endforeach
 
                     </select>
@@ -232,17 +231,14 @@
                 <tbody>
 
                     @forelse($documentos as $documento)
-
                         <tr wire:key="legal-doc-{{ $documento->id }}">
                             <td class="text-break">
                                 <strong>{{ $documento->titulo }}</strong>
 
                                 @if ($documento->observaciones)
-
                                     <div class="text-body-secondary small">
                                         {{ $documento->observaciones }}
                                     </div>
-
                                 @endif
 
                             </td>
@@ -273,12 +269,11 @@
                                 <x-list.button-group>
 
                                     @if ($canFile)
-
                                         <x-list.view-button :route="route('admin.legales.file', [$empresa_id, $documento->id])" :target="true" />
                                         <a class="btn btn-outline-secondary"
                                             href="{{ route('admin.legales.file', [$empresa_id, $documento->id, 'download' => 1]) }}"
-                                            title="Descargar documento" aria-label="Descargar documento"><i class="bi bi-download"></i></a>
-
+                                            title="Descargar documento" aria-label="Descargar documento"><i
+                                                class="bi bi-download"></i></a>
                                     @endif
 
                                 </x-list.button-group>
@@ -295,7 +290,6 @@
                             </td>
 
                         </tr>
-
                     @endforelse
 
                 </tbody>
@@ -320,11 +314,13 @@
             uploading: false,
             validator: null,
             init() {
-                this.cleanups = [Livewire.on('successEventList', data => this.$store.toast.success(data.message)), Livewire.on(
-                    'errorEventList', data => this.$store.toast.info(data.message)), Livewire.on('legalSaved', () => {
-                    if (this.$refs.archivo) this.$refs.archivo.value = '';
-                    this.validator?.refresh();
-                })];
+                this.cleanups = [Livewire.on('successEventList', data => this.$store.toast.success(data
+                    .message)), Livewire.on(
+                    'errorEventList', data => this.$store.toast.info(data.message)), Livewire.on(
+                    'legalSaved', () => {
+                        if (this.$refs.archivo) this.$refs.archivo.value = '';
+                        this.validator?.refresh();
+                    })];
                 this.$nextTick(() => {
                     if (!this.$refs.form) return;
                     this.validator = new JustValidate(this.$refs.form, {
@@ -346,7 +342,8 @@
                 });
             },
             async preSave() {
-                if (this.saving || this.uploading || !this.validator || !await this.validator.revalidate()) return;
+                if (this.saving || this.uploading || !this.validator || !await this.validator.revalidate())
+                    return;
                 this.saving = true;
                 try {
                     await $wire.call('save');

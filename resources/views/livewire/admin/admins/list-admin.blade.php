@@ -10,10 +10,10 @@
     - <x-list.add-button />: Enlace para abrir el formulario de alta.
     - <x-list.actions />: Contenedor del buscador y las acciones del listado.
     - <x-list.search-input />: Buscador vinculado al estado del listado.
-    - <x-list.table />: Contenedor reutilizable para la tabla del listado.
+    - <x-list.table />: Contenedor reutilizable de la tabla del listado.
     - <x-list.sortable-button />: Control para ordenar por una columna.
     - <x-list.status-badge />: Etiqueta visual del estado del registro.
-    - <x-list.button-group />: Agrupación de botones de acción de una fila.
+    - <x-list.button-group />: Agrupación de los botones de acción de una fila.
     - <x-list.edit-button />: Enlace para editar el registro.
     - <x-layout.loader.fullpage />: Indicador de carga durante las operaciones de Livewire.
     --------------------------------------------------------------------------
@@ -106,7 +106,6 @@
         <tbody>
 
             @forelse ($admins as $admin)
-
                 <tr wire:key="listAdmin-{{ $admin->id }}">
 
                     <td>
@@ -134,9 +133,7 @@
                         <x-list.button-group>
 
                             @if ($capabilities['edit'])
-
                                 <x-list.edit-button :route="route('admin.admins.edit', ['admin_id' => $admin->id])" />
-
                             @endif
 
                         </x-list.button-group>
@@ -153,7 +150,6 @@
                     </td>
 
                 </tr>
-
             @endforelse
 
         </tbody>
