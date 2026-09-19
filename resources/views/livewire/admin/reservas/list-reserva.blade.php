@@ -76,12 +76,12 @@
             <select id="listReserva-status" class="form-select" wire:model.live="status">
 
                 <option value="">Todos</option>
-                <option value="1">Nueva</option>
-                <option value="2">Pagado</option>
-                <option value="3">Pendiente</option>
-                <option value="4">Cancelada</option>
-                <option value="5">Fallida</option>
-                <option value="6">Reembolsada</option>
+                <option value="{{ \App\Models\Reserva::ESTADO_PAGO_NUEVO }}">Nueva</option>
+                <option value="{{ \App\Models\Reserva::ESTADO_PAGO_PAGADO }}">Pagada</option>
+                <option value="{{ \App\Models\Reserva::ESTADO_PAGO_PENDIENTE }}">Pendiente</option>
+                <option value="{{ \App\Models\Reserva::ESTADO_PAGO_CANCELADO }}">Cancelada</option>
+                <option value="{{ \App\Models\Reserva::ESTADO_PAGO_REEMBOLSADO }}">Reembolsada</option>
+                <option value="{{ \App\Models\Reserva::ESTADO_PAGO_FALLIDO }}">Fallida</option>
 
             </select>
 
@@ -122,6 +122,10 @@
 
                 <th>Empresa </th>
 
+                <th>Origen</th>
+
+                <th>Destino final</th>
+
                 <th>Fecha
                     <x-list.sortable-button column="fecha_compra" :$sortColumn :$sortDirection />
                 </th>
@@ -161,6 +165,14 @@
                     </td>
 
                     <td>
+                        {{ $reserva->origenTerminal?->nombre ?? 'No registrado' }}
+                    </td>
+
+                    <td>
+                        {{ $reserva->destinoTerminal?->nombre ?? 'No registrado' }}
+                    </td>
+
+                    <td>
                         {{ $reserva->fecha_compra?->format('d/m/Y H:i') ?? '—' }}
                     </td>
 
@@ -191,7 +203,7 @@
             @empty
 
                 <tr>
-                    <td colspan="8" class="text-center py-5">
+                    <td colspan="10" class="text-center py-5">
                         No se encontraron registros.
                     </td>
 

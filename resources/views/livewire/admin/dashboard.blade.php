@@ -276,7 +276,7 @@
 
                                 <td class="pe-4">
                                     <span
-                                        class="badge text-bg-{{ $estados[$reserva->estado_pago]['color'] ?? 'secondary' }}">{{ ucfirst($reserva->estado_pago) }}</span>
+                                        class="badge text-bg-{{ $estados[$reserva->estado_pago]['color'] ?? 'secondary' }}">{{ ucfirst($reserva->getStatusPago()) }}</span>
                                 </td>
 
                             </tr>

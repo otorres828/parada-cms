@@ -1,15 +1,16 @@
 @props(['status'])
 
 @php
-    $value = is_bool($status) ? (string) (int) $status : (string) $status;
-    [$label, $color] = match ($value) {
-        '1' => ['Nueva', 'info'],
-        '2' => ['Pagado', 'success'],
-        '3' => ['Pendiente', 'warning'],
-        '4' => ['Cancelado', 'secondary'],
-        '5' => ['Fallido', 'danger'],
-        '6' => ['Reembolsado', 'secondary'],
-        default => [$value !== '' ? $value : 'Sin estado', 'secondary'],
+    $reservaEstado = new \App\Models\Reserva(['estado_pago' => $status]);
+    $label = ucfirst($reservaEstado->getStatusPago());
+    $color = match ($reservaEstado->estado_pago) {
+        \App\Models\Reserva::ESTADO_PAGO_NUEVO => 'info',
+        \App\Models\Reserva::ESTADO_PAGO_PAGADO => 'success',
+        \App\Models\Reserva::ESTADO_PAGO_PENDIENTE => 'warning',
+        \App\Models\Reserva::ESTADO_PAGO_CANCELADO => 'secondary',
+        \App\Models\Reserva::ESTADO_PAGO_REEMBOLSADO => 'secondary',
+        \App\Models\Reserva::ESTADO_PAGO_FALLIDO => 'danger',
+        default => 'secondary',
     };
 @endphp
 

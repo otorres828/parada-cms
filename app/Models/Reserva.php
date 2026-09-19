@@ -41,7 +41,7 @@ class Reserva extends ModelHelper
 
     protected function casts(): array
     {
-        return ['monto_pasajes' => 'decimal:2', 'descuento_aplicado' => 'decimal:2', 'tasa_servicio' => 'decimal:2', 'monto_total' => 'decimal:2', 'fecha_compra' => 'datetime', 'fecha_expiracion' => 'datetime'];
+        return ['estado_pago' => 'integer', 'monto_pasajes' => 'decimal:2', 'descuento_aplicado' => 'decimal:2', 'tasa_servicio' => 'decimal:2', 'monto_total' => 'decimal:2', 'fecha_compra' => 'datetime', 'fecha_expiracion' => 'datetime'];
     }
 
     public function usuario(): BelongsTo

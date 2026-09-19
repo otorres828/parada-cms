@@ -49,7 +49,7 @@ class Finance
                 ->lockForUpdate()
                 ->firstOrFail();
             $reserva = Reserva::whereKey($snapshot->id)->lockForUpdate()->firstOrFail();
-            if ($reserva->estado_pago !== 'pagado') {
+            if ($reserva->estado_pago !== Reserva::ESTADO_PAGO_PAGADO) {
                 self::fail('Solo se pueden conciliar reservas que ya tienen el pago confirmado.');
             }
             if (Pago::where('reserva_id', $reserva->id)->exists()) {
@@ -121,7 +121,7 @@ class Finance
             $snapshot = Pago::findOrFail($data['pago_id']);
             Empresa::whereKey($snapshot->empresa_id)->lockForUpdate()->firstOrFail();
             $pago = Pago::with('reserva')->whereKey($snapshot->id)->lockForUpdate()->firstOrFail();
-            if ($pago->reserva->estado_pago !== 'pagado') {
+            if ($pago->reserva->estado_pago !== Reserva::ESTADO_PAGO_PAGADO) {
                 self::fail('La reserva no está pagada.');
             }
             if (Reembolso::where('pago_id', $pago->id)->exists()) {
@@ -179,10 +179,10 @@ class Finance
                 ]);
                 if ($module === 'reembolsos') {
                     $reserva = Reserva::whereKey($record->pago->reserva_id)->lockForUpdate()->firstOrFail();
-                    if ($reserva->estado_pago !== 'pagado') {
+                    if ($reserva->estado_pago !== Reserva::ESTADO_PAGO_PAGADO) {
                         self::fail('La reserva ya no admite reembolso.');
                     }
-                    $reserva->update(['estado_pago' => 'reembolsado']);
+                    $reserva->update(['estado_pago' => Reserva::ESTADO_PAGO_REEMBOLSADO]);
                 }
                 $record->referencia = $reference;
                 $record->comprobante = $proof;

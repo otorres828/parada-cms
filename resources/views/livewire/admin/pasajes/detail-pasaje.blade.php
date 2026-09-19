@@ -53,6 +53,18 @@
                                 {{ $pasaje->reserva?->codigo_referencia ?? '—' }}
                             </dd>
 
+                            <dt class="col-sm-4">Origen</dt>
+
+                            <dd class="col-sm-8">
+                                {{ $pasaje->reserva?->origenTerminal?->nombre ?? 'No registrado' }}
+                            </dd>
+
+                            <dt class="col-sm-4">Destino final</dt>
+
+                            <dd class="col-sm-8">
+                                {{ $pasaje->reserva?->destinoTerminal?->nombre ?? 'No registrado' }}
+                            </dd>
+
                             <dt class="col-sm-4">Viajero</dt>
 
                             <dd class="col-sm-8">{{ $pasaje->viajero?->nombre ?? '—' }}</dd>

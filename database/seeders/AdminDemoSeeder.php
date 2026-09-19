@@ -275,9 +275,6 @@ class AdminDemoSeeder extends Seeder
                                 [
                                     'reserva_id' => $reservation->id,
                                     'viajero_id' => $traveler->id,
-                                    'origen_terminal_id' => $terminals[$cp['orig']]->id,
-                                    'destino_terminal_id' => $terminals[$cp['dest']]->id,
-                                    'programacion_tramo_precio_id' => $ptp?->id,
                                     'numero_asiento' => $cp['asiento'],
                                     'precio_base' => $cp['precio'],
                                     'descuento' => '0.00',

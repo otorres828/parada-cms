@@ -207,7 +207,7 @@
 
                     @forelse ($tickets as $ticket)
 
-                        <tr data-search="{{ $ticket->viajero?->nombre }} {{ $ticket->viajero?->apellido }} {{ $ticket->viajero?->documento_identidad }} {{ $ticket->numero_asiento }} {{ $ticket->origenTerminal?->nombre }} {{ $ticket->destinoTerminal?->nombre }}"
+                        <tr data-search="{{ $ticket->viajero?->nombre }} {{ $ticket->viajero?->apellido }} {{ $ticket->viajero?->documento_identidad }} {{ $ticket->numero_asiento }} {{ $ticket->reserva?->origenTerminal?->nombre }} {{ $ticket->reserva?->destinoTerminal?->nombre }}"
                             x-show="matches($el.dataset.search)">
 
                             <td>
@@ -239,9 +239,9 @@
                             </td>
 
                             <td>
-                                <span class="fw-semibold">{{ $ticket->origenTerminal?->nombre ?? 'Origen Global' }}</span>
+                                <span class="fw-semibold">{{ $ticket->reserva?->origenTerminal?->nombre ?? 'No registrado' }}</span>
                                 <i class="bi bi-arrow-right text-muted mx-1"></i>
-                                <span class="fw-semibold">{{ $ticket->destinoTerminal?->nombre ?? 'Destino Global' }}</span>
+                                <span class="fw-semibold">{{ $ticket->reserva?->destinoTerminal?->nombre ?? 'No registrado' }}</span>
                             </td>
 
                             <td class="fw-bold text-success">

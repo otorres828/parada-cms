@@ -55,6 +55,18 @@
                             <dd class="col-sm-8">
                                 {{ $reserva->codigo_referencia ?? '—' }}
                             </dd>
+                            <dt class="col-sm-4">Origen</dt>
+
+                            <dd class="col-sm-8">
+                                {{ $reserva?->origenTerminal?->nombre ?? 'No registrado' }}
+                            </dd>
+
+                            <dt class="col-sm-4">Destino final</dt>
+
+                            <dd class="col-sm-8">
+                                {{ $reserva?->destinoTerminal?->nombre ?? 'No registrado' }}
+                            </dd>
+
                             <dt class="col-sm-4">Cliente</dt>
                             <dd class="col-sm-8">
                                 {{ $reserva->usuario?->name ?? '—' }}

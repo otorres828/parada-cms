@@ -13,7 +13,7 @@ class TasasServicio
         return DB::transaction(function() use($reservaId) {
             GroupAdmin::where('url', 'administracion')->lockForUpdate()->firstOrFail();
             $reserva = Reserva::whereKey($reservaId)->lockForUpdate()->firstOrFail();
-            if (!in_array($reserva->estado_pago, ['nuevo','pendiente']) || $reserva->pagos()->exists()) throw ValidationException::withMessages(['reserva'=>'No se pueden recalcular tasas de una reserva cobrada o cerrada.']);
+            if (!in_array($reserva->estado_pago, [Reserva::ESTADO_PAGO_NUEVO, Reserva::ESTADO_PAGO_PENDIENTE], true) || $reserva->pagos()->exists()) throw ValidationException::withMessages(['reserva'=>'No se pueden recalcular tasas de una reserva cobrada o cerrada.']);
             $pasajes = $reserva->pasajes()->lockForUpdate()->get();
             if ($pasajes->isEmpty()) throw ValidationException::withMessages(['pasajes'=>'La reserva debe tener al menos un pasaje.']);
             $tasas = '0.00'; $base = '0.00'; $descuentos = '0.00';

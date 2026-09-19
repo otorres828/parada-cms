@@ -55,7 +55,7 @@ class SalesReport extends Component
         Access::authorize('reportes', 'sales');
         $filters = ['date_from' => $this->date_from, 'date_to' => $this->date_to];
 
-        return Reserva::searchAdmin('', $filters + ['estado_pago' => 'pagado'])->selectRaw('DATE(fecha_compra) as fecha, COUNT(*) as cantidad, SUM(monto_total) as total, SUM(tasa_servicio) as tasas')->groupByRaw('DATE(fecha_compra)')->orderByDesc('fecha');
+        return Reserva::searchAdmin('', $filters + ['estado_pago' => Reserva::ESTADO_PAGO_PAGADO])->selectRaw('DATE(fecha_compra) as fecha, COUNT(*) as cantidad, SUM(monto_total) as total, SUM(tasa_servicio) as tasas')->groupByRaw('DATE(fecha_compra)')->orderByDesc('fecha');
     }
 
     public function export()

@@ -37,7 +37,7 @@ class Dashboard extends Component
         $resumen = Reserva::searchAdmin('', $pagadas)->selectRaw('COUNT(*) as cantidad, COALESCE(SUM(monto_total), 0) as ventas, COALESCE(SUM(tasa_servicio), 0) as tasas')->first();
         $empresas = Empresa::searchAdmin()->selectRaw('COUNT(*) as total, COALESCE(SUM(CASE WHEN estatus = 1 THEN 1 ELSE 0 END), 0) as activas')->first();
         $salidas = Programacion::searchAdmin('', ['date_from' => $ahora->toDateString(), 'date_to' => $ahora->copy()->addDays(6)->toDateString(), 'activas' => true, 'proximas' => true]);
-        $metrics = ['ventas' => $resumen->ventas, 'tasas' => $resumen->tasas, 'reservas_pagadas' => (int) $resumen->cantidad, 'pasajes' => Pasaje::searchAdmin('', $pagadas)->count(), 'pendientes' => Reserva::searchAdmin('', $filtros + ['estado_pago' => 'pendiente'])->count(), 'empresas' => (int) $empresas->total, 'empresas_activas' => (int) $empresas->activas, 'salidas' => (clone $salidas)->count()];
+        $metrics = ['ventas' => $resumen->ventas, 'tasas' => $resumen->tasas, 'reservas_pagadas' => (int) $resumen->cantidad, 'pasajes' => Pasaje::searchAdmin('', $pagadas)->count(), 'pendientes' => Reserva::searchAdmin('', $filtros + ['estado_pago' => Reserva::ESTADO_PAGO_PENDIENTE])->count(), 'empresas' => (int) $empresas->total, 'empresas_activas' => (int) $empresas->activas, 'salidas' => (clone $salidas)->count()];
         $ultimasReservas = Reserva::searchAdmin('', $filtros)
             ->with(['usuario', 'programacion.viaje.empresa'])
             ->withCount('pasajes')
@@ -52,7 +52,7 @@ class Dashboard extends Component
             ->orderBy('id')
             ->limit(5)
             ->get();
-        $estados = ['pagado' => ['label' => 'Pagadas', 'color' => 'success'], 'pendiente' => ['label' => 'Pendientes', 'color' => 'warning'], 'nuevo' => ['label' => 'Nuevas', 'color' => 'info'], 'fallido' => ['label' => 'Fallidas', 'color' => 'danger'], 'cancelado' => ['label' => 'Canceladas', 'color' => 'secondary'], 'reembolsado' => ['label' => 'Reembolsadas', 'color' => 'primary']];
+        $estados = [Reserva::ESTADO_PAGO_PAGADO => ['label' => 'Pagadas', 'color' => 'success'], Reserva::ESTADO_PAGO_PENDIENTE => ['label' => 'Pendientes', 'color' => 'warning'], Reserva::ESTADO_PAGO_NUEVO => ['label' => 'Nuevas', 'color' => 'info'], Reserva::ESTADO_PAGO_FALLIDO => ['label' => 'Fallidas', 'color' => 'danger'], Reserva::ESTADO_PAGO_CANCELADO => ['label' => 'Canceladas', 'color' => 'secondary'], Reserva::ESTADO_PAGO_REEMBOLSADO => ['label' => 'Reembolsadas', 'color' => 'primary']];
         $conteos = Reserva::searchAdmin('', $filtros)->selectRaw('estado_pago, COUNT(*) as cantidad')->groupBy('estado_pago')->pluck('cantidad', 'estado_pago');
         $totalReservas = (int) $conteos->sum();
         foreach ($estados as $estado => &$datos) {

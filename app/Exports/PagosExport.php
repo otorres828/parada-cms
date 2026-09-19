@@ -19,7 +19,7 @@ class PagosExport extends DefaultValueBinder implements FromQuery, WithHeadings,
     public function headings(): array { return ['ID','Referencia de pago','Reserva','Empresa','Fecha de pago','Método','Recibido USD','Tasa de servicio USD','Neto empresa USD','Comisión histórica USD','Estado de la reserva','Registrado por']; }
     public function map($pago): array
     {
-        return [$pago->id,$pago->referencia,$pago->reserva?->codigo_referencia,$pago->empresa?->nombre,$pago->fecha_pago?->format('Y-m-d H:i'),$pago->metodo,(float)$pago->monto,(float)($pago->reserva?->tasa_servicio??0),(float)$pago->neto_empresa,(float)$pago->comision,$pago->reserva?->estado_pago,$pago->admin?->name];
+        return [$pago->id,$pago->referencia,$pago->reserva?->codigo_referencia,$pago->empresa?->nombre,$pago->fecha_pago?->format('Y-m-d H:i'),$pago->metodo,(float)$pago->monto,(float)($pago->reserva?->tasa_servicio??0),(float)$pago->neto_empresa,(float)$pago->comision,$pago->reserva?->getStatusPago(),$pago->admin?->name];
     }
     public function bindValue(Cell $cell, $value): bool
     {

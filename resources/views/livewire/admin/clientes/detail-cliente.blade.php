@@ -121,7 +121,7 @@
 
                     @forelse($reservas as $reserva)
 
-                        <tr data-search="{{ $reserva->codigo_referencia }} {{ $reserva->programacion?->viaje?->empresa?->nombre }} {{ $reserva->estado_pago }}"
+                        <tr data-search="{{ $reserva->codigo_referencia }} {{ $reserva->programacion?->viaje?->empresa?->nombre }} {{ $reserva->getStatusPago() }}"
                             x-show="matches($el.dataset.search)">
                             <td>
 
@@ -147,7 +147,7 @@
                             </td>
 
                             <td>
-                                {{ $reserva->estado_pago === 'pagado' ? 'Pagada' : 'Pendiente' }}
+                                {{ ucfirst($reserva->getStatusPago()) }}
                             </td>
 
                             <td>
