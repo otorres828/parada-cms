@@ -73,7 +73,7 @@
                             </dd>
                             <dt class="col-sm-4">Estado</dt>
                             <dd class="col-sm-8">
-                                <x-list.status-badge :status="$reserva->estado_pago" />
+                                <x-list.status-reserva :status="$reserva->estado_pago" />
                             </dd>
                             <dt class="col-sm-4">Tasa de servicio USD</dt>
                             <dd class="col-sm-8">{{ number_format($reserva->tasa_servicio, 2) }}</dd>

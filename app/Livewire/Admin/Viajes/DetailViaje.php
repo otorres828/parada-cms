@@ -26,7 +26,15 @@ class DetailViaje extends Component
     {
         $this->viaje_id = $viaje_id;
         Access::authorize('viajes', 'detail');
-        $viaje = Viaje::searchAdmin()->with([0 => 'empresa', 1 => 'origenTerminal', 2 => 'destinoTerminal'])->find($viaje_id);
+        $viaje = Viaje::searchAdmin()->with([
+            'empresa',
+            'origenTerminal',
+            'destinoTerminal',
+            'tramos.origenTerminal',
+            'tramos.destinoTerminal',
+            'programaciones.tramoPrecios.origenTerminal',
+            'programaciones.tramoPrecios.destinoTerminal',
+        ])->find($viaje_id);
         if (!$viaje) {
             abort(404);
         }

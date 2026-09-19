@@ -29,18 +29,6 @@
             Pasajes
         </x-slot:title>
 
-        <x-slot:button>
-
-            @if (Route::has('admin.pasajes.add') && $canAdd)
-
-                <x-list.add-button :route="route('admin.pasajes.add')">
-                    Nuevo registro
-                </x-list.add-button>
-
-            @endif
-
-        </x-slot:button>
-
     </x-list.heading>
 
     <x-list.actions>
@@ -171,7 +159,7 @@
                     </td>
 
                     <td>
-                        <x-list.status-badge :status="$pasaje->reserva->estado_pago" />
+                         <x-list.status-reserva :status="$pasaje->reserva->estado_pago" />
                     </td>
 
                     <td class="text-end">

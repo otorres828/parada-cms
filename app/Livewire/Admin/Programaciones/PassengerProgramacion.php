@@ -22,6 +22,8 @@ class PassengerProgramacion extends Component
 
     public bool $canReservasDetail = false;
 
+    public bool $canViajesDetail = false;
+
     public int $capacidad = 0, $ocupados = 0;
     
     public float $ocupacion = 0;
@@ -40,6 +42,7 @@ class PassengerProgramacion extends Component
 
         $this->tickets = Pasaje::searchDetailProgramacion($programacion_id);
         $this->canReservasDetail = Access::allows('reservas', 'detail');
+        $this->canViajesDetail = Access::allows('viajes', 'detail');
 
         $this->capacidad = max(0, (int) $programacion->asientos_totales);
         $this->ocupados = min($this->capacidad, max(0, $this->capacidad - (int) $programacion->asientos_disponibles));
@@ -54,7 +57,15 @@ class PassengerProgramacion extends Component
     protected function findProgramacion(): Programacion
     {
         return Programacion::searchAdmin()
-            ->with([0 => 'viaje.empresa', 1 => 'viaje.origenTerminal', 2 => 'viaje.destinoTerminal'])
+            ->with([
+                'viaje.empresa',
+                'viaje.origenTerminal',
+                'viaje.destinoTerminal',
+                'viaje.tramos.origenTerminal',
+                'viaje.tramos.destinoTerminal',
+                'tramoPrecios.origenTerminal',
+                'tramoPrecios.destinoTerminal',
+            ])
             ->findOrFail($this->programacion_id);
     }
 }

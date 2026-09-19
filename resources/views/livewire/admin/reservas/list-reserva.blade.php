@@ -29,18 +29,6 @@
             Reservas y ventas
         </x-slot:title>
 
-        <x-slot:button>
-
-            @if (Route::has('admin.reservas.add') && $canAdd)
-
-                <x-list.add-button :route="route('admin.reservas.add')">
-                    Nuevo registro
-                </x-list.add-button>
-
-            @endif
-
-        </x-slot:button>
-
     </x-list.heading>
 
     <x-list.actions>
@@ -88,12 +76,12 @@
             <select id="listReserva-status" class="form-select" wire:model.live="status">
 
                 <option value="">Todos</option>
-                <option value="nuevo">Nueva</option>
-                <option value="pendiente">Pendiente</option>
-                <option value="pagado">Pagada</option>
-                <option value="fallido">Fallida</option>
-                <option value="cancelado">Cancelada</option>
-                <option value="reembolsado">Reembolsada</option>
+                <option value="1">Nueva</option>
+                <option value="2">Pagado</option>
+                <option value="3">Pendiente</option>
+                <option value="4">Cancelada</option>
+                <option value="5">Fallida</option>
+                <option value="6">Reembolsada</option>
 
             </select>
 
@@ -181,7 +169,7 @@
                     </td>
 
                     <td>
-                        <x-list.status-badge :status="$reserva->estado_pago" />
+                        <x-list.status-reserva :status="$reserva->estado_pago" />
                     </td>
 
                     <td class="text-end">

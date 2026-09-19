@@ -126,9 +126,7 @@
                     <x-list.sortable-button column="asientos_disponibles" :$sortColumn :$sortDirection />
                 </th>
 
-                <th>Precio USD
-                    <x-list.sortable-button column="precio_pasaje" :$sortColumn :$sortDirection />
-                </th>
+                <th>Precio USD</th>
 
                 <th>Estado
                     <x-list.sortable-button column="estatus" :$sortColumn :$sortDirection />
@@ -174,7 +172,7 @@
                     </td>
 
                     <td>
-                        {{ number_format($programacion->precio_pasaje ?? 0, 2) }}
+                        {{ number_format($programacion->tramoPrecios->first()?->precio ?? 0, 2) }}
                     </td>
 
                     <td>

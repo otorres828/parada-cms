@@ -43,6 +43,11 @@ class Viaje extends ModelHelper
         return $this->belongsTo(Terminal::class, 'destino_terminal_id');
     }
 
+    public function tramos(): HasMany
+    {
+        return $this->hasMany(ViajeTramo::class, 'viaje_id')->orderBy('orden');
+    }
+
     public function programaciones(): HasMany
     {
         return $this->hasMany(Programacion::class, 'viaje_id');

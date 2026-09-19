@@ -22,13 +22,12 @@ class Programacion extends ModelHelper
         'hora_salida',
         'asientos_totales',
         'asientos_disponibles',
-        'precio_pasaje',
         'estatus',
     ];
 
     protected function casts(): array
     {
-        return ['fecha_salida' => 'date', 'asientos_totales' => 'integer', 'asientos_disponibles' => 'integer', 'precio_pasaje' => 'decimal:2', 'estatus' => 'boolean'];
+        return ['fecha_salida' => 'date', 'asientos_totales' => 'integer', 'asientos_disponibles' => 'integer', 'estatus' => 'boolean'];
     }
 
     public function viaje(): BelongsTo
@@ -39,6 +38,11 @@ class Programacion extends ModelHelper
     public function autobus(): BelongsTo
     {
         return $this->belongsTo(Autobus::class, 'autobus_id');
+    }
+
+    public function tramoPrecios(): HasMany
+    {
+        return $this->hasMany(ProgramacionTramoPrecio::class, 'programacion_id');
     }
 
     public function reservas(): HasMany
@@ -53,7 +57,7 @@ class Programacion extends ModelHelper
 
     public static function searchAdmin(string $search = '', array $filters = []): Builder
     {
-        $query = self::query()->with([0 => 'viaje.empresa', 1 => 'viaje.origenTerminal', 2 => 'viaje.destinoTerminal']);
+        $query = self::query()->with([0 => 'viaje.empresa', 1 => 'viaje.origenTerminal', 2 => 'viaje.destinoTerminal', 3 => 'tramoPrecios']);
 
         if ($search !== '') {
             $query->where(function ($query) use ($search) {

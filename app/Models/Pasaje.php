@@ -21,6 +21,9 @@ class Pasaje extends ModelHelper
         'tasa_servicio_id',
         'reserva_id',
         'viajero_id',
+        'origen_terminal_id',
+        'destino_terminal_id',
+        'programacion_tramo_precio_id',
         'numero_asiento',
         'precio_base',
         'descuento',
@@ -50,9 +53,24 @@ class Pasaje extends ModelHelper
         return $this->belongsTo(Viajero::class, 'viajero_id');
     }
 
+    public function origenTerminal(): BelongsTo
+    {
+        return $this->belongsTo(Terminal::class, 'origen_terminal_id');
+    }
+
+    public function destinoTerminal(): BelongsTo
+    {
+        return $this->belongsTo(Terminal::class, 'destino_terminal_id');
+    }
+
+    public function tramoPrecio(): BelongsTo
+    {
+        return $this->belongsTo(ProgramacionTramoPrecio::class, 'programacion_tramo_precio_id');
+    }
+
     public static function searchAdmin(string $search = '', array $filters = []): Builder
     {
-        $query = self::query()->with([0 => 'reserva', 1 => 'viajero']);
+        $query = self::query()->with(['reserva', 'viajero', 'origenTerminal', 'destinoTerminal']);
 
         if ($search !== '') {
             $query->where(function ($query) use ($search) {

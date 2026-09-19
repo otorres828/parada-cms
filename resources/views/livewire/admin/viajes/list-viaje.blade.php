@@ -107,8 +107,6 @@
                     <x-list.sortable-button column="estatus" :$sortColumn :$sortDirection />
                 </th>
 
-                <th>Tasas de servicio USD</th>
-
                 <th class="text-end">Acciones</th>
 
             </tr>
@@ -142,10 +140,6 @@
 
                     <td>
                         <x-list.status-badge :status="$viaje->estatus" />
-                    </td>
-
-                    <td>
-                        {{ number_format($viaje->tasas_servicio_total ?? 0, 2) }}
                     </td>
 
                     <td class="text-end">

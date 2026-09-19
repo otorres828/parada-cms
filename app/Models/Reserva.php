@@ -17,6 +17,9 @@ class Reserva extends ModelHelper
     protected $fillable = [
         'usuario_id',
         'programacion_id',
+        'origen_terminal_id',
+        'destino_terminal_id',
+        'programacion_tramo_precio_id',
         'cupon_id',
         'codigo_referencia',
         'monto_pasajes',
@@ -51,6 +54,21 @@ class Reserva extends ModelHelper
         return $this->belongsTo(Programacion::class, 'programacion_id');
     }
 
+    public function origenTerminal(): BelongsTo
+    {
+        return $this->belongsTo(Terminal::class, 'origen_terminal_id');
+    }
+
+    public function destinoTerminal(): BelongsTo
+    {
+        return $this->belongsTo(Terminal::class, 'destino_terminal_id');
+    }
+
+    public function tramoPrecio(): BelongsTo
+    {
+        return $this->belongsTo(ProgramacionTramoPrecio::class, 'programacion_tramo_precio_id');
+    }
+
     public function cupon(): BelongsTo
     {
         return $this->belongsTo(Cupon::class, 'cupon_id');
@@ -80,7 +98,7 @@ class Reserva extends ModelHelper
     
     public static function searchAdmin(string $search = '', array $filters = []): Builder
     {
-        $query = self::query()->with([0 => 'usuario', 1 => 'programacion.viaje.empresa', 2 => 'pasajes.viajero']);
+        $query = self::query()->with(['usuario', 'programacion.viaje.empresa', 'pasajes.viajero', 'origenTerminal', 'destinoTerminal']);
 
         if ($search !== '') {
             $query->where(function ($query) use ($search) {

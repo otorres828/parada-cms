@@ -159,7 +159,7 @@
                             </td>
 
                             <td>
-                                {{ number_format($salida->precio_pasaje, 2) }}
+                                {{ number_format($salida->tramoPrecios->first()?->precio ?? 0, 2) }}
                             </td>
 
                             <td>
