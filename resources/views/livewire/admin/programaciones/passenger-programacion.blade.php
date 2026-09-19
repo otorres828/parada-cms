@@ -1,3 +1,17 @@
+{{--
+    PROGRAMACIONES
+    --------------------------------------------------------------------------
+    Muestra la salida programada, su ocupación y los pasajeros con pasajes pagados. Incluye
+    búsqueda local, enlace a la reserva, nacimiento, asiento, precio base, descuento, precio
+    final, tasa de servicio y abordaje.
+
+    Componentes reutilizables utilizados:
+    - <x-list.heading />: Cabecera del módulo con título y acciones.
+    - <x-list.status-badge />: Etiqueta visual del estado del registro.
+    - <x-layout.loader.fullpage />: Indicador de carga durante las operaciones de Livewire.
+    --------------------------------------------------------------------------
+--}}
+
 @section('title', 'Programaciones')
 
 <div x-data="passengerProgramacion" class="py-3">

@@ -1,3 +1,17 @@
+{{--
+    USUARIOS DE EMPRESA
+    --------------------------------------------------------------------------
+    Presenta las secciones y permisos del personal de empresa para consultar y guardar sus
+    autorizaciones.
+
+    Componentes reutilizables utilizados:
+    - <x-list.heading />: Cabecera del módulo con título y acciones.
+    - <x-form.cancel-button />: Enlace para regresar o cancelar la edición.
+    - <x-layout.error />: Resumen de los errores de validación de Livewire.
+    - <x-layout.loader.fullpage />: Indicador de carga durante las operaciones de Livewire.
+    --------------------------------------------------------------------------
+--}}
+
 @section('title', 'Usuarios de empresa')
 
 <div x-data="permissionEmpresaUser" class="py-3">

@@ -1,3 +1,21 @@
+{{--
+    PAGOS RECIBIDOS
+    --------------------------------------------------------------------------
+    Formulario de referencia para registrar información de pagos asociados a reservas, con
+    validación y confirmación del guardado.
+
+    Componentes reutilizables utilizados:
+    - <x-list.heading />: Cabecera del módulo con título y acciones.
+    - <x-form.cancel-button />: Enlace para regresar o cancelar la edición.
+    - <x-layout.error />: Resumen de los errores de validación de Livewire.
+    - <x-form.container-sm />: Contenedor de ancho limitado para los campos.
+    - <x-form.dropdown />: Selector con etiqueta para opciones del formulario.
+    - <x-form.text-input />: Campo de entrada con etiqueta.
+    - <x-form.textarea />: Campo de texto de varias líneas.
+    - <x-layout.loader.fullpage />: Indicador de carga durante las operaciones de Livewire.
+    --------------------------------------------------------------------------
+--}}
+
 @section('title', 'Pagos recibidos')
 
 <div x-data="formDeposit" class="py-3">

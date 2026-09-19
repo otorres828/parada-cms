@@ -1,3 +1,22 @@
+{{--
+    CAMPAÑAS — DETALLE
+    --------------------------------------------------------------------------
+    Muestra las condiciones de la campaña y sus cupones, con búsqueda, ordenación y paginación.
+    Permite generar los códigos cuando la campaña y los permisos lo autorizan.
+
+    Componentes reutilizables utilizados:
+    - <x-list.heading />: Cabecera del módulo con título y acciones.
+    - <x-form.cancel-button />: Enlace para regresar o cancelar la edición.
+    - <x-layout.error />: Resumen de los errores de validación de Livewire.
+    - <x-list.status-badge />: Etiqueta visual del estado del registro.
+    - <x-list.actions />: Contenedor del buscador y las acciones del listado.
+    - <x-list.search-input />: Buscador vinculado al estado del listado.
+    - <x-list.table />: Contenedor reutilizable para la tabla del listado.
+    - <x-list.sortable-button />: Control para ordenar por una columna.
+    - <x-layout.loader.fullpage />: Indicador de carga durante las operaciones de Livewire.
+    --------------------------------------------------------------------------
+--}}
+
 @section('title', 'Campañas')
 
 <div x-data="detailCampana" class="py-3">

@@ -1,3 +1,22 @@
+{{--
+    RETIROS — REVISIÓN
+    --------------------------------------------------------------------------
+    Permite revisar una solicitud de retiro y guardar la decisión, comentario y comprobantes
+    exigidos según el estado elegido.
+
+    Componentes reutilizables utilizados:
+    - <x-list.heading />: Cabecera del módulo con título y acciones.
+    - <x-form.cancel-button />: Enlace para regresar o cancelar la edición.
+    - <x-layout.error />: Resumen de los errores de validación de Livewire.
+    - <x-list.status-badge />: Etiqueta visual del estado del registro.
+    - <x-form.container-sm />: Contenedor de ancho limitado para los campos.
+    - <x-form.dropdown />: Selector con etiqueta para opciones del formulario.
+    - <x-form.textarea />: Campo de texto de varias líneas.
+    - <x-form.text-input />: Campo de entrada con etiqueta.
+    - <x-layout.loader.fullpage />: Indicador de carga durante las operaciones de Livewire.
+    --------------------------------------------------------------------------
+--}}
+
 @section('title', 'Retiros')
 
 <div x-data="reviewRetiro" class="py-3">

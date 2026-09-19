@@ -1,3 +1,16 @@
+{{--
+    RETIROS — DETALLE
+    --------------------------------------------------------------------------
+    Presenta la empresa, importe, datos bancarios, estado y resolución de la solicitud de retiro.
+
+    Componentes reutilizables utilizados:
+    - <x-list.heading />: Cabecera del módulo con título y acciones.
+    - <x-form.cancel-button />: Enlace para regresar o cancelar la edición.
+    - <x-list.status-badge />: Etiqueta visual del estado del registro.
+    - <x-layout.loader.fullpage />: Indicador de carga durante las operaciones de Livewire.
+    --------------------------------------------------------------------------
+--}}
+
 @section('title', 'Retiros')
 
 <div x-data="detailRetiro" class="py-3">

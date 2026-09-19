@@ -1,3 +1,17 @@
+{{--
+    AUTOBUSES — DETALLE
+    --------------------------------------------------------------------------
+    Muestra los datos del autobús y su historial de programaciones. Desglosa el precio por pasaje,
+    boletos pagados y pendientes, ventas y tasas cobradas de cada salida.
+
+    Componentes reutilizables utilizados:
+    - <x-list.heading />: Cabecera del módulo con título y acciones.
+    - <x-form.cancel-button />: Enlace para regresar o cancelar la edición.
+    - <x-list.status-badge />: Etiqueta visual del estado del registro.
+    - <x-layout.loader.fullpage />: Indicador de carga durante las operaciones de Livewire.
+    --------------------------------------------------------------------------
+--}}
+
 @section('title', 'Autobuses')
 
 <div x-data="detailAutobus" class="py-3">

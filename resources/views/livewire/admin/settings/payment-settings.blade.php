@@ -1,3 +1,18 @@
+{{--
+    MÉTODOS DE PAGO
+    --------------------------------------------------------------------------
+    Permite habilitar o deshabilitar los métodos de pago disponibles en la configuración de la
+    plataforma.
+
+    Componentes reutilizables utilizados:
+    - <x-form.title />: Título principal del formulario.
+    - <x-layout.error />: Resumen de los errores de validación de Livewire.
+    - <x-form.container-sm />: Contenedor de ancho limitado para los campos.
+    - <x-form.dropdown />: Selector con etiqueta para opciones del formulario.
+    - <x-layout.loader.fullpage />: Indicador de carga durante las operaciones de Livewire.
+    --------------------------------------------------------------------------
+--}}
+
 @section('title', 'Métodos de pago')
 
 <div x-data="paymentSettings" class="py-3">

@@ -1,3 +1,16 @@
+{{--
+    AUDITORÍA — DETALLE
+    --------------------------------------------------------------------------
+    Presenta la acción administrativa registrada, su autor, entidad afectada, fecha y datos
+    asociados para su revisión.
+
+    Componentes reutilizables utilizados:
+    - <x-list.heading />: Cabecera del módulo con título y acciones.
+    - <x-form.cancel-button />: Enlace para regresar o cancelar la edición.
+    - <x-layout.loader.fullpage />: Indicador de carga durante las operaciones de Livewire.
+    --------------------------------------------------------------------------
+--}}
+
 @section('title', 'Auditoría')
 
 <div x-data="detailAudit" class="py-3">

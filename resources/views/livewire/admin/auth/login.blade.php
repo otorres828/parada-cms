@@ -1,5 +1,20 @@
 {{--
-    Component: Login Box
+    INICIAR SESIÓN
+    --------------------------------------------------------------------------
+    Presenta el formulario de acceso al panel administrativo. Valida las credenciales introducidas
+    y muestra las notificaciones del inicio de sesión.
+
+    Componentes reutilizables utilizados:
+    - <x-layout.spinner />: Indicador general de procesamiento.
+    - <x-auth.card />: Tarjeta contenedora del acceso al panel.
+    - <x-auth.card-header />: Cabecera e identidad visual del acceso.
+    - <x-auth.card-body />: Cuerpo de la tarjeta de autenticación.
+    - <x-auth.card-title />: Título o indicaciones del formulario de acceso.
+    - <x-auth.username-input />: Campo del nombre de usuario para iniciar sesión.
+    - <x-auth.password-input />: Campo de contraseña del acceso.
+    - <x-form.switch />: Interruptor para activar o desactivar una opción.
+    - <x-auth.card-footer />: Pie de la tarjeta de autenticación.
+    --------------------------------------------------------------------------
 --}}
 
 @section('title', 'Iniciar sesión')

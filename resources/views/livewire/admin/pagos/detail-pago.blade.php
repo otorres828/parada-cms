@@ -1,3 +1,17 @@
+{{--
+    PAGOS RECIBIDOS — DETALLE
+    --------------------------------------------------------------------------
+    Presenta el pago, la reserva y la empresa asociadas, junto con el neto empresarial y la tasa
+    cobrada. Incluye el desglose económico de los viajeros y la descarga del comprobante cuando
+    está disponible.
+
+    Componentes reutilizables utilizados:
+    - <x-list.heading />: Cabecera del módulo con título y acciones.
+    - <x-form.cancel-button />: Enlace para regresar o cancelar la edición.
+    - <x-layout.loader.fullpage />: Indicador de carga durante las operaciones de Livewire.
+    --------------------------------------------------------------------------
+--}}
+
 @section('title', 'Pagos recibidos')
 
 <div x-data="detailPago" class="py-3">

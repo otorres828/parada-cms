@@ -1,3 +1,20 @@
+{{--
+    DOCUMENTOS LEGALES
+    --------------------------------------------------------------------------
+    Presenta el expediente legal de una empresa. Permite cargar documentos con título, categoría y
+    observaciones, buscar archivos y consultarlos según los permisos disponibles.
+
+    Componentes reutilizables utilizados:
+    - <x-list.heading />: Cabecera del módulo con título y acciones.
+    - <x-form.cancel-button />: Enlace para regresar o cancelar la edición.
+    - <x-form.text-input />: Campo de entrada con etiqueta.
+    - <x-form.dropdown />: Selector con etiqueta para opciones del formulario.
+    - <x-list.button-group />: Agrupación de botones de acción de una fila.
+    - <x-list.view-button />: Enlace para consultar el detalle del registro.
+    - <x-layout.loader.fullpage />: Indicador de carga durante las operaciones de Livewire.
+    --------------------------------------------------------------------------
+--}}
+
 @section('title', 'Documentos legales')
 
 <div x-data="empresaLegal" class="py-3">

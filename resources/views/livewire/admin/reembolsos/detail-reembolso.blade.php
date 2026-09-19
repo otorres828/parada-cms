@@ -1,3 +1,17 @@
+{{--
+    REEMBOLSOS — DETALLE
+    --------------------------------------------------------------------------
+    Presenta el importe, motivo, estado y datos de resolución de un reembolso, vinculados a la
+    empresa y al pago original.
+
+    Componentes reutilizables utilizados:
+    - <x-list.heading />: Cabecera del módulo con título y acciones.
+    - <x-form.cancel-button />: Enlace para regresar o cancelar la edición.
+    - <x-list.status-badge />: Etiqueta visual del estado del registro.
+    - <x-layout.loader.fullpage />: Indicador de carga durante las operaciones de Livewire.
+    --------------------------------------------------------------------------
+--}}
+
 @section('title', 'Reembolsos')
 
 <div x-data="detailReembolso" class="py-3">

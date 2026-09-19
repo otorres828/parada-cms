@@ -1,3 +1,14 @@
+{{--
+    RESUMEN DE LA PLATAFORMA
+    --------------------------------------------------------------------------
+    Presenta el resumen administrativo de ventas, tasas de servicio, reservas y empresas. Incluye
+    estados de las compras, últimas reservas y próximas salidas para el período seleccionado.
+
+    Componentes reutilizables utilizados:
+
+    --------------------------------------------------------------------------
+--}}
+
 @section('title', 'Resumen de la plataforma')
 
 <div class="container-fluid py-4">

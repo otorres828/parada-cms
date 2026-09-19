@@ -1,3 +1,23 @@
+{{--
+    AUDITORÍA — LISTADO
+    --------------------------------------------------------------------------
+    Permite consultar las acciones administrativas registradas. Incluye búsqueda, ordenación y
+    paginación. Ofrece los filtros disponibles en la pantalla. Presenta las acciones de cada
+    registro según las autorizaciones del administrador.
+
+    Componentes reutilizables utilizados:
+    - <x-list.heading />: Cabecera del módulo con título y acciones.
+    - <x-list.add-button />: Enlace para abrir el formulario de alta.
+    - <x-list.actions />: Contenedor del buscador y las acciones del listado.
+    - <x-list.search-input />: Buscador vinculado al estado del listado.
+    - <x-list.table />: Contenedor reutilizable para la tabla del listado.
+    - <x-list.sortable-button />: Control para ordenar por una columna.
+    - <x-list.button-group />: Agrupación de botones de acción de una fila.
+    - <x-list.view-button />: Enlace para consultar el detalle del registro.
+    - <x-layout.loader.fullpage />: Indicador de carga durante las operaciones de Livewire.
+    --------------------------------------------------------------------------
+--}}
+
 @section('title', 'Auditoría')
 
 <div x-data="listAudit" class="py-3">

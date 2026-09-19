@@ -1,3 +1,17 @@
+{{--
+    PASAJES — DETALLE
+    --------------------------------------------------------------------------
+    Presenta la reserva, viajero, documento, asiento y situación de abordaje del boleto. Muestra
+    su precio y los datos históricos de la tasa de servicio aplicada.
+
+    Componentes reutilizables utilizados:
+    - <x-list.heading />: Cabecera del módulo con título y acciones.
+    - <x-form.cancel-button />: Enlace para regresar o cancelar la edición.
+    - <x-list.status-badge />: Etiqueta visual del estado del registro.
+    - <x-layout.loader.fullpage />: Indicador de carga durante las operaciones de Livewire.
+    --------------------------------------------------------------------------
+--}}
+
 @section('title', 'Pasajes')
 
 <div x-data="detailPasaje" class="py-3">

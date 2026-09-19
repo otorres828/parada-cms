@@ -1,3 +1,18 @@
+{{--
+    REPORTE DE VENTAS
+    --------------------------------------------------------------------------
+    Presenta el resumen de reservas pagadas por fecha, sus ventas y tasas de servicio. Permite
+    seleccionar el período y descargar los resultados.
+
+    Componentes reutilizables utilizados:
+    - <x-list.heading />: Cabecera del módulo con título y acciones.
+    - <x-layout.error />: Resumen de los errores de validación de Livewire.
+    - <x-form.text-input />: Campo de entrada con etiqueta.
+    - <x-list.table />: Contenedor reutilizable para la tabla del listado.
+    - <x-layout.loader.fullpage />: Indicador de carga durante las operaciones de Livewire.
+    --------------------------------------------------------------------------
+--}}
+
 @section('title', 'Reporte de ventas')
 
 <div x-data="salesReport" class="py-3">

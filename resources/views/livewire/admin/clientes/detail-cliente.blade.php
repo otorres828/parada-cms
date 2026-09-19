@@ -1,3 +1,17 @@
+{{--
+    CLIENTES — DETALLE
+    --------------------------------------------------------------------------
+    Muestra los datos del cliente y sus reservas pagadas y pendientes. Incluye búsqueda local en
+    la tabla y enlaces a las reservas autorizadas.
+
+    Componentes reutilizables utilizados:
+    - <x-list.heading />: Cabecera del módulo con título y acciones.
+    - <x-form.cancel-button />: Enlace para regresar o cancelar la edición.
+    - <x-list.status-badge />: Etiqueta visual del estado del registro.
+    - <x-layout.loader.fullpage />: Indicador de carga durante las operaciones de Livewire.
+    --------------------------------------------------------------------------
+--}}
+
 @section('title', 'Clientes')
 
 <div x-data="detailUser" class="py-3">

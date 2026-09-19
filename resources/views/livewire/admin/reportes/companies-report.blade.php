@@ -1,3 +1,18 @@
+{{--
+    VENTAS POR EMPRESA
+    --------------------------------------------------------------------------
+    Compara las reservas pagadas y el importe de ventas por empresa en el período seleccionado.
+    Permite descargar los resultados.
+
+    Componentes reutilizables utilizados:
+    - <x-list.heading />: Cabecera del módulo con título y acciones.
+    - <x-layout.error />: Resumen de los errores de validación de Livewire.
+    - <x-form.text-input />: Campo de entrada con etiqueta.
+    - <x-list.table />: Contenedor reutilizable para la tabla del listado.
+    - <x-layout.loader.fullpage />: Indicador de carga durante las operaciones de Livewire.
+    --------------------------------------------------------------------------
+--}}
+
 @section('title', 'Ventas por empresa')
 
 <div x-data="companiesReport" class="py-3">

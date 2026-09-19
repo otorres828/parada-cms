@@ -1,3 +1,19 @@
+{{--
+    TASA DE SERVICIO — FORMULARIO
+    --------------------------------------------------------------------------
+    Permite definir o editar un rango de precios y su tasa de servicio, mediante monto fijo o
+    porcentaje, con control del estado y validación de importes.
+
+    Componentes reutilizables utilizados:
+    - <x-list.heading />: Cabecera del módulo con título y acciones.
+    - <x-form.container-sm />: Contenedor de ancho limitado para los campos.
+    - <x-form.dropdown />: Selector con etiqueta para opciones del formulario.
+    - <x-form.text-input />: Campo de entrada con etiqueta.
+    - <x-form.cancel-button />: Enlace para regresar o cancelar la edición.
+    - <x-layout.loader.fullpage />: Indicador de carga durante las operaciones de Livewire.
+    --------------------------------------------------------------------------
+--}}
+
 @section('title', 'Tasa de Servicio')
 
 <div x-data="saveTasaServicio" class="py-3">

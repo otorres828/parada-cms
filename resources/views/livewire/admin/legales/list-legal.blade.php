@@ -1,3 +1,17 @@
+{{--
+    LEGALES — LISTADO
+    --------------------------------------------------------------------------
+    Muestra las empresas en tarjetas para localizar y abrir sus expedientes documentales.
+
+    Componentes reutilizables utilizados:
+    - <x-list.heading />: Cabecera del módulo con título y acciones.
+    - <x-list.actions />: Contenedor del buscador y las acciones del listado.
+    - <x-list.search-input />: Buscador vinculado al estado del listado.
+    - <x-list.status-badge />: Etiqueta visual del estado del registro.
+    - <x-layout.loader.fullpage />: Indicador de carga durante las operaciones de Livewire.
+    --------------------------------------------------------------------------
+--}}
+
 @section('title', 'Legales')
 
 <div x-data="listLegal" class="py-3">

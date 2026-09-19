@@ -1,3 +1,15 @@
+{{--
+    MOVIMIENTOS CONTABLES — DETALLE
+    --------------------------------------------------------------------------
+    Muestra la empresa, tipo, importe, descripción y fecha del movimiento financiero seleccionado.
+
+    Componentes reutilizables utilizados:
+    - <x-list.heading />: Cabecera del módulo con título y acciones.
+    - <x-form.cancel-button />: Enlace para regresar o cancelar la edición.
+    - <x-layout.loader.fullpage />: Indicador de carga durante las operaciones de Livewire.
+    --------------------------------------------------------------------------
+--}}
+
 @section('title', 'Movimientos contables')
 
 <div x-data="detailMovimiento" class="py-3">

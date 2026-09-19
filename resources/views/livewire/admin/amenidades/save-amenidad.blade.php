@@ -1,3 +1,20 @@
+{{--
+    AMENIDADES — FORMULARIO
+    --------------------------------------------------------------------------
+    Permite crear o editar una amenidad, definiendo su nombre, icono y estado para el catálogo de
+    comodidades de los autobuses.
+
+    Componentes reutilizables utilizados:
+    - <x-list.heading />: Cabecera del módulo con título y acciones.
+    - <x-form.cancel-button />: Enlace para regresar o cancelar la edición.
+    - <x-layout.error />: Resumen de los errores de validación de Livewire.
+    - <x-form.container-sm />: Contenedor de ancho limitado para los campos.
+    - <x-form.text-input />: Campo de entrada con etiqueta.
+    - <x-form.dropdown />: Selector con etiqueta para opciones del formulario.
+    - <x-layout.loader.fullpage />: Indicador de carga durante las operaciones de Livewire.
+    --------------------------------------------------------------------------
+--}}
+
 @section('title', 'Amenidades')
 
 <div x-data="saveAmenidad" class="py-3">

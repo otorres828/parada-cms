@@ -1,3 +1,18 @@
+{{--
+    CAMBIAR CONTRASEÑA
+    --------------------------------------------------------------------------
+    Permite cambiar la contraseña de la cuenta autenticada y presenta los errores de validación
+    del formulario.
+
+    Componentes reutilizables utilizados:
+    - <x-form.title />: Título principal del formulario.
+    - <x-layout.error />: Resumen de los errores de validación de Livewire.
+    - <x-form.container-sm />: Contenedor de ancho limitado para los campos.
+    - <x-form.text-input />: Campo de entrada con etiqueta.
+    - <x-layout.loader.fullpage />: Indicador de carga durante las operaciones de Livewire.
+    --------------------------------------------------------------------------
+--}}
+
 @section('title', 'Cambiar contraseña')
 
 <div x-data="password" class="py-3">

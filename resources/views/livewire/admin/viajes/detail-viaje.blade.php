@@ -1,3 +1,17 @@
+{{--
+    RUTAS DE VIAJES — DETALLE
+    --------------------------------------------------------------------------
+    Muestra el origen, destino, empresa y duración de la ruta. Incluye su historial de
+    programaciones, pasajes vendidos y tasas de servicio.
+
+    Componentes reutilizables utilizados:
+    - <x-list.heading />: Cabecera del módulo con título y acciones.
+    - <x-form.cancel-button />: Enlace para regresar o cancelar la edición.
+    - <x-list.status-badge />: Etiqueta visual del estado del registro.
+    - <x-layout.loader.fullpage />: Indicador de carga durante las operaciones de Livewire.
+    --------------------------------------------------------------------------
+--}}
+
 @section('title', 'Rutas de viajes')
 
 <div x-data="detailViaje" class="py-3">

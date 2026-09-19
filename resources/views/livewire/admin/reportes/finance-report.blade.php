@@ -1,3 +1,18 @@
+{{--
+    MOVIMIENTOS FINANCIEROS
+    --------------------------------------------------------------------------
+    Agrupa los movimientos financieros por fecha y tipo de operación para revisar cantidades e
+    importes del período. Permite descargar los resultados.
+
+    Componentes reutilizables utilizados:
+    - <x-list.heading />: Cabecera del módulo con título y acciones.
+    - <x-layout.error />: Resumen de los errores de validación de Livewire.
+    - <x-form.text-input />: Campo de entrada con etiqueta.
+    - <x-list.table />: Contenedor reutilizable para la tabla del listado.
+    - <x-layout.loader.fullpage />: Indicador de carga durante las operaciones de Livewire.
+    --------------------------------------------------------------------------
+--}}
+
 @section('title', 'Movimientos financieros')
 
 <div x-data="financeReport" class="py-3">

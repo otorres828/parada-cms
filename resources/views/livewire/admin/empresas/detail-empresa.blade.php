@@ -1,3 +1,16 @@
+{{--
+    EMPRESAS — DETALLE
+    --------------------------------------------------------------------------
+    Presenta la identificación, correo y estado de la empresa seleccionada.
+
+    Componentes reutilizables utilizados:
+    - <x-list.heading />: Cabecera del módulo con título y acciones.
+    - <x-form.cancel-button />: Enlace para regresar o cancelar la edición.
+    - <x-list.status-badge />: Etiqueta visual del estado del registro.
+    - <x-layout.loader.fullpage />: Indicador de carga durante las operaciones de Livewire.
+    --------------------------------------------------------------------------
+--}}
+
 @section('title', 'Empresas')
 
 <div x-data="detailEmpresa" class="py-3">
