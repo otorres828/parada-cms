@@ -3,7 +3,7 @@
     --------------------------------------------------------------------------
     Muestra la salida programada, su ocupación y los pasajeros con pasajes pagados. Incluye
     búsqueda local, enlace a la reserva, nacimiento, asiento, precio base, descuento, precio
-    final, tasa de servicio y abordaje.
+    final, tasa de servicio y abordaje. Presenta las paradas intermedias de la ruta.
 
     Componentes reutilizables utilizados:
     - <x-list.heading />: Cabecera del módulo con título y acciones.
@@ -57,6 +57,10 @@
                             <dd class="col-sm-8">
                                 {{ $programacion->viaje?->destinoTerminal?->nombre ?? '—' }}
                             </dd>
+                            <dt class="col-sm-4">Paradas y comentarios</dt>
+
+                            <dd class="col-sm-8 text-break" style="white-space: pre-line">{{ $programacion->viaje?->comentario ?: 'Sin comentarios registrados' }}</dd>
+
                             <dt class="col-sm-4">Fecha</dt>
 
                             <dd class="col-sm-8">

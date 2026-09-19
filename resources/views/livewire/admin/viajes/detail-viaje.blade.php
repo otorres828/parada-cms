@@ -2,7 +2,7 @@
     RUTAS DE VIAJES — DETALLE
     --------------------------------------------------------------------------
     Muestra el origen, destino, empresa y duración de la ruta. Incluye su historial de
-    programaciones, pasajes vendidos y tasas de servicio.
+    programaciones, pasajes vendidos y tasas de servicio. Las paradas pertenecen a la ruta.
 
     Componentes reutilizables utilizados:
     - <x-list.heading />: Cabecera del módulo con título y acciones.
@@ -12,14 +12,14 @@
     --------------------------------------------------------------------------
 --}}
 
-@section('title', 'Rutas de viajes')
+@section('title', 'Detalle de Ruta')
 
 <div x-data="detailViaje" class="py-3">
 
     <x-list.heading>
 
         <x-slot:title>
-            Rutas de viajes @if ($viaje_id)
+            Detalle de Ruta @if ($viaje_id)
                 <small class="text-body-secondary">#{{ $viaje_id }}</small>
 
             @endif
@@ -68,6 +68,17 @@
                                 <x-list.status-badge :status="$viaje->estatus" />
                             </dd>
                         </dl>
+
+                        <div class="bg-body-tertiary rounded border-start border-primary border-3 p-3 mt-3">
+
+                            <div class="fw-semibold mb-2">
+                                <i class="bi bi-signpost-split me-1" aria-hidden="true"></i>
+                                Paradas de la ruta
+                            </div>
+
+                            <div class="text-body-secondary text-break" style="white-space: pre-line">{{ $viaje->comentario ?: 'Sin paradas registradas' }}</div>
+
+                        </div>
 
                     </div>
 

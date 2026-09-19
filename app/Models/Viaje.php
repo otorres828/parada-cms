@@ -19,6 +19,7 @@ class Viaje extends ModelHelper
         'origen_terminal_id',
         'destino_terminal_id',
         'duracion_estimada',
+        'comentario',
         'estatus',
     ];
 

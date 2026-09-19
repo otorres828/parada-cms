@@ -149,6 +149,18 @@ class AdminDemoSeeder extends Seeder
                     );
                     $bus->amenidades()->syncWithoutDetaching($amenities->pluck('id')->all());
                     $trip = Viaje::firstOrCreate(['empresa_id' => $company->id, 'origen_terminal_id' => $terminals[$b]->id, 'destino_terminal_id' => $terminals[$b + 1]->id], ['duracion_estimada' => '03:30:00', 'estatus' => true]);
+                    $comentarioParadas = implode("\n", [
+                        'DEMO · Parada 1: Terminal Norte — 10 minutos.',
+                        'DEMO · Parada 2: Terminal Central — 15 minutos.',
+                        'DEMO · Parada 3: Terminal del Valle — 10 minutos.',
+                        'DEMO · Parada 4: Terminal Las Palmas — 20 minutos.',
+                        'DEMO · Parada 5: Terminal Sur — 10 minutos.',
+                    ]);
+
+                    if (blank($trip->comentario)) {
+                        $trip->update(['comentario' => $comentarioParadas]);
+                    }
+
                     foreach ([-2, 1, 4] as $day) {
                         $departure = Programacion::firstOrCreate(
                             [
@@ -157,8 +169,14 @@ class AdminDemoSeeder extends Seeder
                                 'fecha_salida' => $anchor->copy()->addDays($day),
                                 'hora_salida' => '08:00:00',
                             ],
-                            ['asientos_totales' => 40, 'asientos_disponibles' => 36, 'precio_pasaje' => '40.00', 'estatus' => true],
+                            [
+                                'asientos_totales' => 40,
+                                'asientos_disponibles' => 36,
+                                'precio_pasaje' => '40.00',
+                                'estatus' => true,
+                            ],
                         );
+
                         foreach (range(1, 4) as $r) {
                             $traveler = $travelers[($c * 4 + $r - 1) % count($travelers)];
                             $reference = "DEMO-RES-$c-$b-$day-$r";

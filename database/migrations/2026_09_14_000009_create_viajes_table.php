@@ -14,6 +14,7 @@ return new class extends Migration
             $table->unsignedBigInteger('origen_terminal_id');
             $table->unsignedBigInteger('destino_terminal_id');
             $table->time('duracion_estimada');
+            $table->text('comentario')->nullable();
             $table->boolean('estatus')->default(true);
             $table->timestamps();
             $table->foreign('empresa_id')->references('id')->on('empresas')->onUpdate('cascade')->onDelete('cascade');
