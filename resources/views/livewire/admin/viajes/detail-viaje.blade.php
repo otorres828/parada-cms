@@ -21,19 +21,7 @@
 
     </x-list.heading>
 
-    @if ($errors->any())
 
-        <div class="alert alert-danger" role="alert">
-
-            <ul class="mb-0">
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-
-        </div>
-
-    @endif
 
     <div class="container-fluid px-0 mb-4">
 
@@ -151,16 +139,7 @@
                     message: savedMessage
                 }));
             },
-            async generateCoupons() {
-                const result = await Swal.fire({
-                    title: '¿Generar los cupones de esta campaña?',
-                    icon: 'question',
-                    showCancelButton: true,
-                    confirmButtonText: 'Generar',
-                    cancelButtonText: 'Cancelar',
-                });
-                if (result.isConfirmed) await $wire.call('generateCoupons');
-            },
+
         }));
     </script>
 @endscript

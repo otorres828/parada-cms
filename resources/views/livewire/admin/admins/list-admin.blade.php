@@ -10,29 +10,15 @@
 
         <x-slot:button>
 
-            @if (Route::has('admin.admins.add') && $canAdd)
-                <x-list.add-button :route="route('admin.admins.add')">
-                    Nuevo registro
-                </x-list.add-button>
-            @endif
+            <x-list.add-button :route="route('admin.admins.add')">
+                Nuevo registro
+            </x-list.add-button>
 
         </x-slot:button>
 
     </x-list.heading>
 
-    @if ($errors->any())
 
-        <div class="alert alert-danger" role="alert">
-
-            <ul class="mb-0">
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-
-        </div>
-
-    @endif
 
     <x-list.actions>
 
@@ -96,13 +82,19 @@
             @forelse ($admins as $admin)
 
                 <tr wire:key="listAdmin-{{ $admin->id }}">
+
                     <td>{{ $admin->id }}</td>
+
                     <td>{{ $admin->name ?? '—' }}</td>
+
                     <td>{{ $admin->username ?? '—' }}</td>
+
                     <td>{{ $admin->email ?? '—' }}</td>
+
                     <td>
                         <x-list.status-badge :status="$admin->status" />
                     </td>
+
                     <td class="text-end">
 
                         <x-list.button-group>
@@ -120,7 +112,9 @@
                 <tr>
                     <td colspan="6" class="text-center py-5">No se encontraron registros.</td>
                 </tr>
+
             @endforelse
+            
         </tbody>
 
     </x-list.table>
@@ -147,16 +141,7 @@
                     message: savedMessage
                 }));
             },
-            async generateCoupons() {
-                const result = await Swal.fire({
-                    title: '¿Generar los cupones de esta campaña?',
-                    icon: 'question',
-                    showCancelButton: true,
-                    confirmButtonText: 'Generar',
-                    cancelButtonText: 'Cancelar',
-                });
-                if (result.isConfirmed) await $wire.call('generateCoupons');
-            },
+
         }));
     </script>
 @endscript

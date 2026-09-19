@@ -21,19 +21,7 @@
 
     </x-list.heading>
 
-    @if ($errors->any())
-
-        <div class="alert alert-danger" role="alert">
-
-            <ul class="mb-0">
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-
-        </div>
-
-    @endif
+    <x-layout.error />
     <form id="saveUserForm" x-ref="form" @submit.prevent="preSave" novalidate>
 
         <x-form.container-sm>
