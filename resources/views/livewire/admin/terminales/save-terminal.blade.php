@@ -44,14 +44,12 @@
     </x-list.heading>
 
     <x-layout.error />
+
     <form id="saveTerminalForm" x-ref="form" @submit.prevent="preSave" novalidate>
 
         <x-form.container-sm>
 
             <div class="mb-3">
-
-                <input type="search" class="form-control mb-2" placeholder="Buscar opciones..." aria-label="Buscar Estado"
-                    wire:model.live.debounce.500ms="search_estado_id">
 
                 <x-form.dropdown label="Estado" name="estado_id" x-model="$wire.estado_id">
 
