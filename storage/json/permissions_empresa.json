@@ -1,0 +1,266 @@
+[
+    {
+        "attributes": {
+            "id": 1
+        },
+        "values": {
+            "section_id": 1,
+            "name": "Consultar Rutas de viajes",
+            "url": "list",
+            "status": 1
+        }
+    },
+    {
+        "attributes": {
+            "id": 2
+        },
+        "values": {
+            "section_id": 1,
+            "name": "Crear Rutas de viajes",
+            "url": "add",
+            "status": 1
+        }
+    },
+    {
+        "attributes": {
+            "id": 3
+        },
+        "values": {
+            "section_id": 1,
+            "name": "Editar Rutas de viajes",
+            "url": "edit",
+            "status": 1
+        }
+    },
+    {
+        "attributes": {
+            "id": 4
+        },
+        "values": {
+            "section_id": 1,
+            "name": "Ver detalle Rutas de viajes",
+            "url": "detail",
+            "status": 1
+        }
+    },
+    {
+        "attributes": {
+            "id": 5
+        },
+        "values": {
+            "section_id": 2,
+            "name": "Consultar Programaciones",
+            "url": "list",
+            "status": 1
+        }
+    },
+    {
+        "attributes": {
+            "id": 6
+        },
+        "values": {
+            "section_id": 2,
+            "name": "Crear Programaciones",
+            "url": "add",
+            "status": 1
+        }
+    },
+    {
+        "attributes": {
+            "id": 7
+        },
+        "values": {
+            "section_id": 2,
+            "name": "Editar Programaciones",
+            "url": "edit",
+            "status": 1
+        }
+    },
+    {
+        "attributes": {
+            "id": 8
+        },
+        "values": {
+            "section_id": 2,
+            "name": "Ver detalle Programaciones",
+            "url": "detail",
+            "status": 1
+        }
+    },
+    {
+        "attributes": {
+            "id": 9
+        },
+        "values": {
+            "section_id": 3,
+            "name": "Consultar Autobuses",
+            "url": "list",
+            "status": 1
+        }
+    },
+    {
+        "attributes": {
+            "id": 10
+        },
+        "values": {
+            "section_id": 3,
+            "name": "Crear Autobuses",
+            "url": "add",
+            "status": 1
+        }
+    },
+    {
+        "attributes": {
+            "id": 11
+        },
+        "values": {
+            "section_id": 3,
+            "name": "Editar Autobuses",
+            "url": "edit",
+            "status": 1
+        }
+    },
+    {
+        "attributes": {
+            "id": 12
+        },
+        "values": {
+            "section_id": 3,
+            "name": "Ver detalle Autobuses",
+            "url": "detail",
+            "status": 1
+        }
+    },
+    {
+        "attributes": {
+            "id": 13
+        },
+        "values": {
+            "section_id": 4,
+            "name": "Consultar Reservas",
+            "url": "list",
+            "status": 1
+        }
+    },
+    {
+        "attributes": {
+            "id": 14
+        },
+        "values": {
+            "section_id": 4,
+            "name": "Crear Reservas",
+            "url": "add",
+            "status": 1
+        }
+    },
+    {
+        "attributes": {
+            "id": 15
+        },
+        "values": {
+            "section_id": 4,
+            "name": "Editar Reservas",
+            "url": "edit",
+            "status": 1
+        }
+    },
+    {
+        "attributes": {
+            "id": 16
+        },
+        "values": {
+            "section_id": 4,
+            "name": "Ver detalle Reservas",
+            "url": "detail",
+            "status": 1
+        }
+    },
+    {
+        "attributes": {
+            "id": 17
+        },
+        "values": {
+            "section_id": 5,
+            "name": "Consultar Retiros",
+            "url": "list",
+            "status": 1
+        }
+    },
+    {
+        "attributes": {
+            "id": 18
+        },
+        "values": {
+            "section_id": 5,
+            "name": "Crear Retiros",
+            "url": "add",
+            "status": 1
+        }
+    },
+    {
+        "attributes": {
+            "id": 19
+        },
+        "values": {
+            "section_id": 5,
+            "name": "Editar Retiros",
+            "url": "edit",
+            "status": 1
+        }
+    },
+    {
+        "attributes": {
+            "id": 20
+        },
+        "values": {
+            "section_id": 5,
+            "name": "Ver detalle Retiros",
+            "url": "detail",
+            "status": 1
+        }
+    },
+    {
+        "attributes": {
+            "id": 21
+        },
+        "values": {
+            "section_id": 6,
+            "name": "Consultar Colaboradores",
+            "url": "list",
+            "status": 1
+        }
+    },
+    {
+        "attributes": {
+            "id": 22
+        },
+        "values": {
+            "section_id": 6,
+            "name": "Crear Colaboradores",
+            "url": "add",
+            "status": 1
+        }
+    },
+    {
+        "attributes": {
+            "id": 23
+        },
+        "values": {
+            "section_id": 6,
+            "name": "Editar Colaboradores",
+            "url": "edit",
+            "status": 1
+        }
+    },
+    {
+        "attributes": {
+            "id": 24
+        },
+        "values": {
+            "section_id": 6,
+            "name": "Ver detalle Colaboradores",
+            "url": "detail",
+            "status": 1
+        }
+    }
+]

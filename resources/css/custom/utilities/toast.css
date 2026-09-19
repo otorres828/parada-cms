@@ -1,0 +1,5 @@
+/* --- Toast Variants (Globales) --- */
+.toastify.toast-success { @include toast-variant(#E9F7E6, 'success'); }
+.toastify.toast-warning { @include toast-variant(#d4e633, 'warning'); }
+.toastify.toast-error   { @include toast-variant(#ec352b, 'error'); }
+.toastify.toast-info    { @include toast-variant(#146aa0, 'info'); }

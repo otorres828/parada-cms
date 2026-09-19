@@ -1,0 +1,9 @@
+/* Directivas base de Tailwind v3 */
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+/* Estilos para el sitio */
+@import './site/dashboard.css';
+@import './custom/components/loaders.css';
+@import './custom/utilities/swal.css';

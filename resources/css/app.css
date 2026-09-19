@@ -1,0 +1,30 @@
+/* @import 'tailwindcss/base'; */
+
+
+@import './custom/layout/layout.css';
+@import './custom/utilities/text.css';
+@import './custom/utilities/width.css';
+@import './custom/utilities/icons.css';
+@import './custom/utilities/helpers.css';
+@import './custom/utilities/images.css';
+@import './custom/components/loaders.css';
+@import './custom/components/modal.css';
+@import './custom/components/buttons.css';
+@import './custom/components/nav-pills.css';
+@import './custom/components/pagination.css';
+@import './custom/utilities/swal.css';
+@import './custom/utilities/toast.css';
+
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+@source '../**/*.blade.php';
+@source '../**/*.js';
+
+@theme {
+    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+        'Segoe UI Symbol', 'Noto Color Emoji';
+}
+
+
+@variant dark (&:where(.dark, .dark *));
+

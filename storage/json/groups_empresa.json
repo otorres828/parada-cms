@@ -1,0 +1,24 @@
+[
+    {
+        "attributes": {
+            "id": 1
+        },
+        "values": {
+            "name": "Operación",
+            "url": "operacion",
+            "icon": "bi-bus-front",
+            "status": 1
+        }
+    },
+    {
+        "attributes": {
+            "id": 2
+        },
+        "values": {
+            "name": "Gestión",
+            "url": "gestion",
+            "icon": "bi-building",
+            "status": 1
+        }
+    }
+]

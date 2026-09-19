@@ -1,0 +1,23 @@
+.text-bg-light {
+    background-color: #ececec !important;
+}
+
+h3 {
+
+    .badge {
+        white-space: wrap;
+        text-align: left;
+    }
+}
+
+::selection {
+    background: #6594c4;
+    color: #ffffff;
+}
+
+.text-truncate-custom {
+    max-width: 600px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}

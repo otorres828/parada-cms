@@ -1,0 +1,10 @@
+.v-divider {
+    display: inline-block;
+    width: 1px;
+    height: 20px;
+    background-color: var(--bs-secondary-bg-subtle);
+}
+
+[x-cloak] {
+    display: none !important;
+}

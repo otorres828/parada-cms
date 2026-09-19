@@ -1,0 +1,41 @@
+.bg-auth {
+    background-color: #010409;
+
+    background-image:
+        /* Naranja vibrante en la esquina superior izquierda */
+        radial-gradient(at 10% 10%, rgba(22, 128, 249, 0.25) 0px, transparent 50%),
+        /* Rojo intenso en la esquina superior derecha */
+        radial-gradient(at 90% 10%, rgba(68, 128, 239, 0.445) 0px, transparent 50%),
+        /* Verde esmeralda abajo al centro-izquierda */
+        radial-gradient(at 40% 90%, rgba(197, 159, 34, 0.2) 0px, transparent 50%),
+        /* Un toque de amarillo/naranja suave abajo a la derecha para mezclar */
+        radial-gradient(at 85% 85%, rgba(234, 179, 8, 0.15) 0px, transparent 50%);
+
+    background-size: 100% 100%;
+    background-attachment: fixed;
+}
+
+.app-sidebar {
+    max-height: 100% !important;
+    background: #241801;
+    background: linear-gradient(to right, #258dd3 0%, #1e1f1f 100%);
+}
+
+.app-header {
+    z-index: 50;
+}
+
+.sidebar-brand {
+    height: auto;
+    border-bottom-color: #4b5052 !important ;
+    border-bottom: 0;
+    padding-bottom: 0;
+}
+
+@media (max-width: 991.98px) {
+
+  .app-sidebar {
+    z-index: 100;
+  }
+
+}

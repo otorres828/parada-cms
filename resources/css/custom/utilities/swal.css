@@ -1,0 +1,43 @@
+/* The Main Title */
+.swal2-title {
+  font-size: 18px !important;
+  
+}
+
+/* The Body Text (Content) */
+.swal2-html-container {
+  padding: 5px 0!important;
+  font-size: 15px !important;
+}
+
+/* Adjust the container for all buttons */
+.swal2-actions {
+  margin-top: 8px !important;
+}
+
+
+/* The Confirm Button */
+.swal2-confirm {
+ background: linear-gradient(to bottom, #F7672A 0%, #e56028 100%) !important;
+ outline: none !important;
+ box-shadow: none !important;
+}
+
+/* The Cancel Button */
+.swal2-cancel {
+  background: linear-gradient(to bottom, #d7d7d7 0%, #cbcaca 100%) !important;
+  color: rgb(59, 58, 58) !important;
+}
+
+/* Hover States */
+.swal2-confirm:hover {
+  background: linear-gradient(to bottom, #F7672A 0%, #e56028 100%) !important;
+}
+
+.swal2-cancel:hover {
+  background: linear-gradient(to bottom, #d7d7d7 0%, #cbcaca 100%) !important;
+}
+
+.swal2-timer-progress-bar {
+    background: #28a745 !important;
+}

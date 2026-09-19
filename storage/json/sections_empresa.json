@@ -1,0 +1,68 @@
+[
+    {
+        "attributes": {
+            "id": 1
+        },
+        "values": {
+            "name": "Rutas de viajes",
+            "url": "viajes",
+            "group_id": 1,
+            "status": 1
+        }
+    },
+    {
+        "attributes": {
+            "id": 2
+        },
+        "values": {
+            "name": "Programaciones",
+            "url": "programaciones",
+            "group_id": 1,
+            "status": 1
+        }
+    },
+    {
+        "attributes": {
+            "id": 3
+        },
+        "values": {
+            "name": "Autobuses",
+            "url": "autobuses",
+            "group_id": 1,
+            "status": 1
+        }
+    },
+    {
+        "attributes": {
+            "id": 4
+        },
+        "values": {
+            "name": "Reservas",
+            "url": "reservas",
+            "group_id": 2,
+            "status": 1
+        }
+    },
+    {
+        "attributes": {
+            "id": 5
+        },
+        "values": {
+            "name": "Retiros",
+            "url": "retiros",
+            "group_id": 2,
+            "status": 1
+        }
+    },
+    {
+        "attributes": {
+            "id": 6
+        },
+        "values": {
+            "name": "Colaboradores",
+            "url": "usuarios",
+            "group_id": 2,
+            "status": 1
+        }
+    }
+]

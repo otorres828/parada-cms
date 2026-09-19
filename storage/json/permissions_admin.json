@@ -1,0 +1,49 @@
+[
+  {"attributes": {"id": 1}, "values": {"name": "Listar", "url": "list", "section_id": 1, "status": 1}},
+  {"attributes": {"id": 2}, "values": {"name": "Agregar", "url": "add", "section_id": 1, "status": 1}},
+  {"attributes": {"id": 3}, "values": {"name": "Editar", "url": "edit", "section_id": 1, "status": 1}},
+  {"attributes": {"id": 4}, "values": {"name": "Eliminar", "url": "delete", "section_id": 1, "status": 1}},
+
+  {"attributes": {"id": 5}, "values": {"name": "Listar", "url": "list", "section_id": 2, "status": 1}},
+  {"attributes": {"id": 6}, "values": {"name": "Agregar", "url": "add", "section_id": 2, "status": 1}},
+  {"attributes": {"id": 7}, "values": {"name": "Editar", "url": "edit", "section_id": 2, "status": 1}},
+  {"attributes": {"id": 8}, "values": {"name": "Eliminar", "url": "delete", "section_id": 2, "status": 1}},
+
+  {"attributes": {"id": 9}, "values": {"name": "Listar", "url": "list", "section_id": 3, "status": 1}},
+  {"attributes": {"id": 10}, "values": {"name": "Ver detalle", "url": "detail", "section_id": 3, "status": 1}},
+  
+  {"attributes": {"id": 11}, "values": {"name": "Listar", "url": "list", "section_id": 4, "status": 1}},
+  {"attributes": {"id": 12}, "values": {"name": "Agregar", "url": "add", "section_id": 4, "status": 1}},
+  {"attributes": {"id": 13}, "values": {"name": "Editar", "url": "edit", "section_id": 4, "status": 1}},
+  {"attributes": {"id": 14}, "values": {"name": "Eliminar", "url": "delete", "section_id": 4, "status": 1}},
+  {"attributes": {"id": 15}, "values": {"name": "Ver detalle", "url": "detail", "section_id": 4, "status": 1}},
+
+  {"attributes": {"id": 16}, "values": {"name": "Listar", "url": "list", "section_id": 5, "status": 1}},
+  {"attributes": {"id": 17}, "values": {"name": "Editar", "url": "edit", "section_id": 5, "status": 1}},
+  {"attributes": {"id": 18}, "values": {"name": "Ver detalle", "url": "detail", "section_id": 5, "status": 1}},
+  {"attributes": {"id": 19}, "values": {"name": "Eliminar", "url": "delete", "section_id": 5, "status": 1}},
+
+  {"attributes": {"id": 20}, "values": {"name": "Listar", "url": "list", "section_id": 6, "status": 1}},
+  {"attributes": {"id": 21}, "values": {"name": "Agregar", "url": "add", "section_id": 6, "status": 1}},
+  {"attributes": {"id": 22}, "values": {"name": "Editar", "url": "edit", "section_id": 6, "status": 1}},
+  {"attributes": {"id": 23}, "values": {"name": "Ver detalle", "url": "detail", "section_id": 6, "status": 1}},
+  {"attributes": {"id": 24}, "values": {"name": "Asignar permisos", "url": "permissions", "section_id": 6, "status": 1}},
+
+  {"attributes": {"id": 25}, "values": {"name": "Listar empresas", "url": "list", "section_id": 7, "status": 1}},
+  {"attributes": {"id": 26}, "values": {"name": "Consultar documentos", "url": "detail", "section_id": 7, "status": 1}},
+  {"attributes": {"id": 27}, "values": {"name": "Subir documentos", "url": "add", "section_id": 7, "status": 1}},
+  {"attributes": {"id": 28}, "values": {"name": "Ver y descargar archivos", "url": "file", "section_id": 7, "status": 1}},
+
+  {"attributes": {"id": 29}, "values": {"name": "Listar", "url": "list", "section_id": 8, "status": 1}},
+  {"attributes": {"id": 30}, "values": {"name": "Ver detalle", "url": "detail", "section_id": 8, "status": 1}},
+
+  {"attributes": {"id": 31}, "values": {"name": "Listar", "url": "list", "section_id": 9, "status": 1}},
+  {"attributes": {"id": 32}, "values": {"name": "Ver pasajeros", "url": "passengers", "section_id": 9, "status": 1}},
+
+  {"attributes": {"id": 33}, "values": {"name": "Listar", "url": "list", "section_id": 10, "status": 1}},
+  {"attributes": {"id": 34}, "values": {"name": "Ver detalle", "url": "detail", "section_id": 10, "status": 1}}
+
+
+
+
+]

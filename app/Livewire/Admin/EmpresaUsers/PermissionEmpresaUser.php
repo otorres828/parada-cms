@@ -1,0 +1,65 @@
+<?php
+
+namespace App\Livewire\Admin\EmpresaUsers;
+
+use App\Models\Empresa;
+use App\Models\PermissionEmpresa;
+use App\Models\UsuarioEmpresa;
+use App\Services\Admin\Access;
+use App\Services\Admin\Audit;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\ValidationException;
+use Livewire\Attributes\Layout;
+use Livewire\Attributes\Locked;
+use Livewire\Component;
+
+#[Layout('layouts.cms')]
+class PermissionEmpresaUser extends Component
+{
+    #[Locked]
+    public ?int $usuario_empresa_id = null;
+
+    #[Locked]
+    public ?int $empresa_id = null;
+
+    public array $selectedPermissions = [];
+
+    public function mount(?int $empresa_id = null, ?int $usuario_empresa_id = null): void
+    {
+        $this->empresa_id = $empresa_id;
+        Empresa::findOrFail($empresa_id);
+        $this->usuario_empresa_id = $usuario_empresa_id;
+        Access::authorize('empresas.users', 'permissions');
+        $usuarioEmpresa = $this->findUsuarioEmpresa();
+        $this->selectedPermissions = $usuarioEmpresa->permisos()->pluck('permissions_empresa.id')->map(fn ($id) => (string) $id)->all();
+    }
+
+    public function render()
+    {
+        Access::authorize('empresas.users', 'permissions');
+
+        return view('livewire.admin.empresa-users.permission-empresa-user', ['usuarioEmpresa' => $this->usuario_empresa_id ? $this->findUsuarioEmpresa() : null, 'capabilities' => Access::capabilities('empresas.users'), 'permissions' => PermissionEmpresa::searchAdmin('', ['status' => 1])->with('section')->whereHas('section', fn ($q) => $q->where('status', 1)->whereHas('group', fn ($g) => $g->where('status', 1)))->get()->groupBy('section.name')]);
+    }
+
+    public function savePermissions(): void
+    {
+        Access::authorize('empresas.users', 'permissions');
+        $this->validate(['selectedPermissions' => 'array', 'selectedPermissions.*' => 'integer|distinct|exists:permissions_empresa,id']);
+        DB::transaction(function () {
+            $usuarioEmpresa = $this->findUsuarioEmpresa();
+            $ids = PermissionEmpresa::whereIn('id', $this->selectedPermissions)->where('status', 1)->whereHas('section', fn ($q) => $q->where('status', 1)->whereHas('group', fn ($g) => $g->where('status', 1)))->pluck('id')->all();
+            if (count($ids) !== count($this->selectedPermissions)) {
+                throw ValidationException::withMessages(['selectedPermissions' => 'Hay permisos inactivos. Actualiza la selección.']);
+            }
+            $sync = $ids;
+            $usuarioEmpresa->permisos()->sync($sync);
+            Audit::record('permisos.actualizados', $usuarioEmpresa, ['permission_ids' => $ids]);
+        });
+        $this->dispatch('successEventList', message: 'Permisos actualizados.');
+    }
+
+    protected function findUsuarioEmpresa(): UsuarioEmpresa
+    {
+        return UsuarioEmpresa::searchAdmin()->where('empresa_id', $this->empresa_id)->with([])->findOrFail($this->usuario_empresa_id);
+    }
+}
