@@ -11,7 +11,7 @@ return new class extends Migration
         Schema::create('pasajes', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('reserva_id');
-            $table->unsignedBigInteger('viajero_id');
+            $table->unsignedBigInteger('viajero_id')->nullable();
             $table->unsignedInteger('numero_asiento')->nullable();
             $table->decimal('precio_base', 12, 2);
             $table->decimal('descuento', 12, 2);
@@ -26,6 +26,7 @@ return new class extends Migration
             $table->boolean('abordado')->default(false);
             $table->dateTime('fecha_abordaje')->nullable();
             $table->timestamps();
+            $table->unique(['reserva_id', 'numero_asiento']);
             $table->foreign('reserva_id')->references('id')->on('reservas')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('viajero_id')->references('id')->on('viajeros')->onUpdate('cascade')->onDelete('cascade');
         });

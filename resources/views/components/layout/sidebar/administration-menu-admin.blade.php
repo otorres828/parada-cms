@@ -128,12 +128,12 @@
                 'name' => 'Reembolsos',
                 'active' => request()->routeIs('admin.reembolsos.*') ? 'active' : '',
             ],
-            [
-                'existe' => $listMovimientos ?? false,
-                'route' => route('admin.movimientos.list'),
-                'name' => 'Movimientos',
-                'active' => request()->routeIs('admin.movimientos.*') ? 'active' : '',
-            ],
+            // [
+            //     'existe' => $listMovimientos ?? false,
+            //     'route' => route('admin.movimientos.list'),
+            //     'name' => 'Movimientos',
+            //     'active' => request()->routeIs('admin.movimientos.*') ? 'active' : '',
+            // ],
         ],
     ])
 @endif
@@ -198,12 +198,12 @@
                 'name' => 'Empresas',
                 'active' => request()->routeIs('admin.reportes.companies') ? 'active' : '',
             ],
-            [
-                'existe' => $financeReportes ?? false,
-                'route' => route('admin.reportes.finance'),
-                'name' => 'Finanzas',
-                'active' => request()->routeIs('admin.reportes.finance') ? 'active' : '',
-            ],
+            // [
+            //     'existe' => $financeReportes ?? false,
+            //     'route' => route('admin.reportes.finance'),
+            //     'name' => 'Finanzas',
+            //     'active' => request()->routeIs('admin.reportes.finance') ? 'active' : '',
+            // ],
         ],
     ])
 @endif
@@ -219,18 +219,18 @@
                 'name' => 'General',
                 'active' => request()->routeIs('admin.settings.general') ? 'active' : '',
             ],
-            [
-                'existe' => $paymentsSettings ?? false,
-                'route' => route('admin.settings.payments'),
-                'name' => 'Pagos',
-                'active' => request()->routeIs('admin.settings.payments') ? 'active' : '',
-            ],
-            [
-                'existe' => $withdrawalsSettings ?? false,
-                'route' => route('admin.settings.withdrawals'),
-                'name' => 'Retiros',
-                'active' => request()->routeIs('admin.settings.withdrawals') ? 'active' : '',
-            ],
+            // [
+            //     'existe' => $paymentsSettings ?? false,
+            //     'route' => route('admin.settings.payments'),
+            //     'name' => 'Pagos',
+            //     'active' => request()->routeIs('admin.settings.payments') ? 'active' : '',
+            // ],
+            // [
+            //     'existe' => $withdrawalsSettings ?? false,
+            //     'route' => route('admin.settings.withdrawals'),
+            //     'name' => 'Retiros',
+            //     'active' => request()->routeIs('admin.settings.withdrawals') ? 'active' : '',
+            // ],
         ],
     ])
 @endif

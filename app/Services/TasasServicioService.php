@@ -1,22 +1,25 @@
 <?php
+
 namespace App\Services;
+
+use App\Models\GroupAdmin;
 use App\Models\Reserva;
 use App\Models\TasaServicio;
-use App\Models\GroupAdmin;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
+
 class TasasServicioService
 {
-    // El checkout debe invocarlo dentro de la transacción que crea la reserva y sus pasajes, antes del pago.
-    public static function aplicarReserva(int $reservaId): Reserva
+    // Calcula y conserva las tasas históricas; no crea la reserva ni confirma su pago.
+    public static function calcularTasasReserva(int $reservaId): Reserva
     {
         return DB::transaction(function () use ($reservaId) {
 
-            GroupAdmin::where('url', 'administracion')->lockForUpdate()->firstOrFail();
-
             $reserva = Reserva::whereKey($reservaId)->lockForUpdate()->firstOrFail();
 
-            if (!in_array($reserva->estado_pago, [Reserva::ESTADO_PAGO_NUEVO, Reserva::ESTADO_PAGO_PENDIENTE], true) || $reserva->pagos()->exists()) {
+            GroupAdmin::where('url', 'administracion')->lockForUpdate()->firstOrFail();
+
+            if (! in_array($reserva->estado_pago, [Reserva::ESTADO_PAGO_NUEVO, Reserva::ESTADO_PAGO_PENDIENTE], true) || $reserva->pagos()->exists()) {
                 throw ValidationException::withMessages(['reserva' => 'No se pueden recalcular tasas de una reserva cobrada o cerrada.']);
             }
 
@@ -24,7 +27,7 @@ class TasasServicioService
             if ($pasajes->isEmpty()) {
                 throw ValidationException::withMessages(['pasajes' => 'La reserva debe tener al menos un pasaje.']);
             }
-            
+
             $tasas = '0.00';
             $base = '0.00';
             $descuentos = '0.00';
@@ -60,10 +63,10 @@ class TasasServicioService
                 $descuentos = bcadd($descuentos, $pasaje->descuento, 2);
             }
             $reserva->update([
-                'monto_pasajes' => $base, 
-                'descuento_aplicado' => $descuentos, 
-                'tasa_servicio' => $tasas, 
-                'monto_total' => bcadd(bcsub($base, $descuentos, 2), $tasas, 2)
+                'monto_pasajes' => $base,
+                'descuento_aplicado' => $descuentos,
+                'tasa_servicio' => $tasas,
+                'monto_total' => bcadd(bcsub($base, $descuentos, 2), $tasas, 2),
             ]);
 
             return $reserva;

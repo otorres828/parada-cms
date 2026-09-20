@@ -151,11 +151,11 @@
                     @forelse ($tickets as $ticket)
                         <tr>
                             <td>
-                                {{ $ticket->viajero->nombre }} {{ $ticket->viajero->apellido }}
+                                {{ $ticket->viajero?->nombre ?? 'Pasajero por completar' }} {{ $ticket->viajero?->apellido }}
                             </td>
 
                             <td>
-                                {{ $ticket->viajero->documento_identidad }}
+                                {{ $ticket->viajero?->documento_identidad }}
                             </td>
 
                             <td class="text-end">
