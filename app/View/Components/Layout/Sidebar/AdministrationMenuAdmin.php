@@ -37,8 +37,6 @@ public bool $listViajes = false;
 
     public bool $listReembolsos = false;
 
-    public bool $listMovimientos = false;
-
     public bool $listCampanas = false;
 
 public bool $listTerminales = false;
@@ -49,15 +47,8 @@ public bool $listTerminales = false;
 
     public bool $companiesReportes = false;
 
-    public bool $financeReportes = false;
-
 
     public bool $generalSettings = false;
-
-
-    public bool $paymentsSettings = false;
-
-    public bool $withdrawalsSettings = false;
 
     public bool $listLegales = false;
     public bool $listTasasServicio = false;
@@ -88,16 +79,12 @@ public bool $listTerminales = false;
             'listPagos' => ['pagos', 'list'],
             'listRetiros' => ['retiros', 'list'],
             'listReembolsos' => ['reembolsos', 'list'],
-            'listMovimientos' => ['movimientos', 'list'],
             'listCampanas' => ['campanas', 'list'],
             'listTerminales' => ['terminales', 'list'],
             'listAmenidades' => ['amenidades', 'list'],
             'salesReportes' => ['reportes', 'sales'],
             'companiesReportes' => ['reportes', 'companies'],
-            'financeReportes' => ['reportes', 'finance'],
             'generalSettings' => ['settings', 'general'],
-            'paymentsSettings' => ['settings', 'payments'],
-            'withdrawalsSettings' => ['settings', 'withdrawals'],
             'listLegales' => ['legales', 'list'],
             'listTasasServicio' => ['tasas-servicio', 'list'],
             'listAuditoria' => ['auditoria', 'list'],

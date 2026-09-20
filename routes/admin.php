@@ -61,8 +61,6 @@ use App\Livewire\Admin\Retiros\ReviewRetiro;
 use App\Livewire\Admin\Reembolsos\ListReembolso;
 use App\Livewire\Admin\Reembolsos\DetailReembolso;
 use App\Livewire\Admin\Reembolsos\ReviewReembolso;
-use App\Livewire\Admin\Movimientos\ListMovimiento;
-use App\Livewire\Admin\Movimientos\DetailMovimiento;
 use App\Livewire\Admin\Campanas\ListCampana;
 use App\Livewire\Admin\Campanas\SaveCampana;
 use App\Livewire\Admin\Campanas\DetailCampana;
@@ -73,10 +71,7 @@ use App\Livewire\Admin\Amenidades\ListAmenidad;
 use App\Livewire\Admin\Amenidades\SaveAmenidad;
 use App\Livewire\Admin\Reportes\SalesReport;
 use App\Livewire\Admin\Reportes\CompaniesReport;
-use App\Livewire\Admin\Reportes\FinanceReport;
 use App\Livewire\Admin\Settings\GeneralSettings;
-use App\Livewire\Admin\Settings\PaymentSettings;
-use App\Livewire\Admin\Settings\WithdrawalSettings;
 
 
 
@@ -263,14 +258,6 @@ Route::group(['middleware' => ['auth:admin', 'check.permisos']], function () {
 
     });
 
-    /*----------------------------------------Movimientos financieros--------------------------------------*/
-
-    Route::prefix('movimientos')->name('movimientos.')->group(function () {
-
-        Route::livewire('/', ListMovimiento::class)->name('list');
-        Route::livewire('detalle/{movimiento_id}', DetailMovimiento::class)->whereNumber('movimiento_id')->name('detail');
-
-    });
 
     /*----------------------------------------Campanas de cupones--------------------------------------*/
 
@@ -312,7 +299,6 @@ Route::group(['middleware' => ['auth:admin', 'check.permisos']], function () {
 
         Route::livewire('ventas', SalesReport::class)->name('sales');
         Route::livewire('empresas', CompaniesReport::class)->name('companies');
-        Route::livewire('finanzas', FinanceReport::class)->name('finance');
 
     });
 
@@ -321,8 +307,6 @@ Route::group(['middleware' => ['auth:admin', 'check.permisos']], function () {
     Route::prefix('configuracion')->name('settings.')->group(function () {
 
         Route::livewire('/', GeneralSettings::class)->name('general');
-        Route::livewire('pagos', PaymentSettings::class)->name('payments');
-        Route::livewire('retiros', WithdrawalSettings::class)->name('withdrawals');
 
     });
 

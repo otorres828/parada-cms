@@ -99,7 +99,7 @@
     ])
 @endif
 
-@if ($listReservas or $listPasajes or $listRetiros or $listReembolsos or $listMovimientos)
+@if ($listReservas or $listPasajes or $listRetiros or $listReembolsos)
     @include('components.layout.sidebar-li', [
         'menu' => 'Ventas y finanzas',
         'icon' => 'nav-icon bi bi-wallet2',
@@ -128,12 +128,6 @@
                 'name' => 'Reembolsos',
                 'active' => request()->routeIs('admin.reembolsos.*') ? 'active' : '',
             ],
-            // [
-            //     'existe' => $listMovimientos ?? false,
-            //     'route' => route('admin.movimientos.list'),
-            //     'name' => 'Movimientos',
-            //     'active' => request()->routeIs('admin.movimientos.*') ? 'active' : '',
-            // ],
         ],
     ])
 @endif
@@ -174,7 +168,7 @@
     ])
 @endif
 
-@if ($salesReportes or $companiesReportes or $financeReportes or $listPagos)
+@if ($salesReportes or $companiesReportes or $listPagos)
     @include('components.layout.sidebar-li', [
         'menu' => 'Reportes',
         'icon' => 'nav-icon bi bi-bar-chart',
@@ -198,17 +192,11 @@
                 'name' => 'Empresas',
                 'active' => request()->routeIs('admin.reportes.companies') ? 'active' : '',
             ],
-            // [
-            //     'existe' => $financeReportes ?? false,
-            //     'route' => route('admin.reportes.finance'),
-            //     'name' => 'Finanzas',
-            //     'active' => request()->routeIs('admin.reportes.finance') ? 'active' : '',
-            // ],
         ],
     ])
 @endif
 
-@if ($generalSettings or $paymentsSettings or $withdrawalsSettings)
+@if ($generalSettings)
     @include('components.layout.sidebar-li', [
         'menu' => 'Configuración',
         'icon' => 'nav-icon bi bi-gear',
@@ -219,18 +207,6 @@
                 'name' => 'General',
                 'active' => request()->routeIs('admin.settings.general') ? 'active' : '',
             ],
-            // [
-            //     'existe' => $paymentsSettings ?? false,
-            //     'route' => route('admin.settings.payments'),
-            //     'name' => 'Pagos',
-            //     'active' => request()->routeIs('admin.settings.payments') ? 'active' : '',
-            // ],
-            // [
-            //     'existe' => $withdrawalsSettings ?? false,
-            //     'route' => route('admin.settings.withdrawals'),
-            //     'name' => 'Retiros',
-            //     'active' => request()->routeIs('admin.settings.withdrawals') ? 'active' : '',
-            // ],
         ],
     ])
 @endif
