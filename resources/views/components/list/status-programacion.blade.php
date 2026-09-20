@@ -5,7 +5,7 @@
     [$label, $color] = match ($value) {
         '1' => ['Activo', 'success'],
         '2' => ['Inactivo', 'warning'],
-        
+        '3' => ['Finalizado', 'secondary'],
         default => [$value !== '' ? $value : 'Sin estado', 'secondary'],
     };
 @endphp

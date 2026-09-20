@@ -73,12 +73,10 @@
             <select id="listReserva-status" class="form-select" wire:model.live="status">
 
                 <option value="">Todos</option>
-                <option value="{{ \App\Models\Reserva::ESTADO_PAGO_NUEVO }}">Nueva</option>
                 <option value="{{ \App\Models\Reserva::ESTADO_PAGO_PAGADO }}">Pagada</option>
                 <option value="{{ \App\Models\Reserva::ESTADO_PAGO_PENDIENTE }}">Pendiente</option>
                 <option value="{{ \App\Models\Reserva::ESTADO_PAGO_CANCELADO }}">Cancelada</option>
                 <option value="{{ \App\Models\Reserva::ESTADO_PAGO_REEMBOLSADO }}">Reembolsada</option>
-                <option value="{{ \App\Models\Reserva::ESTADO_PAGO_FALLIDO }}">Fallida</option>
 
             </select>
 

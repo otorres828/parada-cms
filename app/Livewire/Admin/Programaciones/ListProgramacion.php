@@ -62,6 +62,7 @@ class ListProgramacion extends Component
 
         $programaciones = $query->paginate($this->per_page);
 
+        info($programaciones->toArray());
         return view('livewire.admin.programaciones.list-programacion', [
             'programaciones' => $programaciones, 
         ]);

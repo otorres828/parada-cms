@@ -20,12 +20,6 @@ class User extends ModelHelper implements Authenticatable, Authorizable, CanRese
 
     protected $guarded = ['id'];
 
-    const ACTIVE = 1;
-
-    const INACTIVE = 2;
-
-    const DELETE = 0;
-
     protected $hidden = ['password', 'remember_token'];
 
     protected function casts(): array
@@ -45,7 +39,7 @@ class User extends ModelHelper implements Authenticatable, Authorizable, CanRese
 
     public function getStatus(): string
     {
-        return $this->status == self::ACTIVE ? 'Activo' : 'Inactivo';
+        return $this->status == self::ESTADO_ACTIVE ? 'Activo' : 'Inactivo';
     }
 
     public function getDateBirth(): string
@@ -55,7 +49,7 @@ class User extends ModelHelper implements Authenticatable, Authorizable, CanRese
 
     public static function searchID(int $id)
     {
-        return self::where('status', '!=', self::DELETE)->findOrFail($id);
+        return self::where('status', '!=', self::ESTADO_DELETE)->findOrFail($id);
     }
 
     public static function searchEmail(string $email)
@@ -97,7 +91,7 @@ class User extends ModelHelper implements Authenticatable, Authorizable, CanRese
         if ($status !== null && $status !== '') {
             $query->where('users.status', $status);
         } else {
-            $query->where('users.status', '!=', 0);
+            $query->where('users.status', '!=', self::ESTADO_DELETE);
         }
 
         if (!empty($filters['date_from'])) {

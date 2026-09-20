@@ -243,8 +243,6 @@
 
                         <th>Salida</th>
 
-                        <th>Ruta</th>
-
                         <th>Estado</th>
 
                         <th>Pasajes vendidos</th>
@@ -271,11 +269,6 @@
 
                             <td>
                                 {{ $salida->fecha_salida->format('d/m/Y') }} {{ substr($salida->hora_salida, 0, 5) }}
-                            </td>
-
-                            <td>
-                                {{ $salida->viaje?->origenTerminal?->nombre }} →
-                                {{ $salida->viaje?->destinoTerminal?->nombre }}
                             </td>
 
                             <td>

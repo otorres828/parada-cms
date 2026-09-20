@@ -9,30 +9,30 @@ use Illuminate\Support\Facades\Storage;
 class ModelHelper extends Model
 {
     // currency
-    const MXN = 1;
-
     const USD = 2;
 
-    const DELETE = 0;
+    const ESTADO_DELETE = 0;
 
-    const ACTIVE = 1;
+    const ESTADO_ACTIVE = 1;
 
-    const INACTIVE = 2;
+    const ESTADO_INACTIVE = 2;
+
+    const ESTADO_FINALIZADO = 3;
 
     // Queries
 
     public static function searchActive()
     {
-        return self::where('status', ModelHelper::ACTIVE)->get();
+        return self::where('status', ModelHelper::ESTADO_ACTIVE)->get();
     }
 
     public static function searchNoDelete($code_id = null)
     {
         if (is_null($code_id)) {
-            return self::where('status', '=', ModelHelper::ACTIVE)->get();
+            return self::where('status', '=', ModelHelper::ESTADO_ACTIVE)->get();
         }
 
-        return self::where('status', '!=', ModelHelper::DELETE)->get();
+        return self::where('status', '!=', ModelHelper::ESTADO_DELETE)->get();
     }
 
     public function deleteImageFromStorage(string $disk, string $image)

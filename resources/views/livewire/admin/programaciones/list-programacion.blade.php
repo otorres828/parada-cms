@@ -73,7 +73,8 @@
 
                 <option value="">Todos</option>
                 <option value="1">Activo</option>
-                <option value="0">Inactivo</option>
+                <option value="2">Inactivo</option>
+                <option value="3">Finalizados</option>
 
             </select>
 
@@ -173,7 +174,7 @@
                     </td>
 
                     <td>
-                        <x-list.status-badge :status="$programacion->estatus" />
+                        <x-list.status-programacion :status="$programacion->estatus" />
                     </td>
 
                     <td class="text-end">
