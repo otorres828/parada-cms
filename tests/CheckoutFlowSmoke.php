@@ -2,6 +2,7 @@
 
 use App\Models\ConfiguracionCupon;
 use App\Models\Cupon;
+use App\Models\Programacion;
 use App\Models\ProgramacionTramoPrecio;
 use App\Models\Reserva;
 use App\Models\TasaServicio;
@@ -78,7 +79,7 @@ try {
         DB::table('viaje_tramos')->insert(['viaje_id' => 1, 'origen_terminal_id' => $orden, 'destino_terminal_id' => $orden + 1, 'orden' => $orden, 'duracion_estimada' => '01:00:00']);
     }
     DB::table('autobuses')->insert(['id' => 1, 'empresa_id' => 1, 'modelo' => 'Prueba', 'tipo_asiento' => 'Prueba', 'total_asientos' => 40]);
-    DB::table('programaciones')->insert(['id' => 1, 'viaje_id' => 1, 'autobus_id' => 1, 'fecha_salida' => '2026-10-02', 'hora_salida' => '08:00:00', 'asientos_totales' => 40, 'asientos_disponibles' => 40]);
+    DB::table('programaciones')->insert(['id' => 1, 'viaje_id' => 1, 'autobus_id' => 1, 'fecha_salida' => '2026-10-02', 'hora_salida' => '08:00:00', 'asientos_totales' => 40]);
     foreach ([[1, 1, 2, '15.00'], [2, 2, 3, '15.00'], [3, 1, 3, '25.00']] as [$id, $origen, $destino, $precio]) {
         ProgramacionTramoPrecio::create(['id' => $id, 'programacion_id' => 1, 'origen_terminal_id' => $origen, 'destino_terminal_id' => $destino, 'precio' => $precio]);
     }
@@ -97,6 +98,9 @@ try {
     rechaza(fn () => ReservaService::pasarAPendiente($cliente, $ab->id, 'transferencia'));
     $ab = ReservaService::registrarPasajeros($cliente, $ab->id, datosPasajeros([12]));
     $bc = crearConPasajeros($otro, 2, [12]);
+    $tramos = ReservaService::consultarDisponibilidadPorTramos(Programacion::whereKey(1)->get())[1];
+    comprobar($tramos[1]['disponibles'] === 39 && $tramos[2]['disponibles'] === 39, 'Disponibilidad por tramo adyacente');
+    comprobar($tramos[3]['ocupados'] === 1 && $tramos[3]['disponibles'] === 39, 'Un mismo asiento en tramos adyacentes no se resta dos veces');
     comprobar($ab->fecha_expiracion->equalTo(now()->addMinutes(20)), 'Plazo de bloqueo');
     rechaza(fn () => crearConPasajeros($otro, 3, [12]));
     rechaza(fn () => crearConPasajeros($otro, 1, [12]));
@@ -159,6 +163,13 @@ try {
     ReservaService::pasarAPendiente($cliente, $ab->id, 'transferencia');
     $nuevaVencida = crearConPasajeros($cliente, 3, [13]);
     Carbon::setTestNow(now()->addMinutes(20));
+    $tramos = ReservaService::consultarDisponibilidadPorTramos(Programacion::whereKey(1)->get())[1];
+    comprobar($tramos[1]['ocupados'] === 3 && $tramos[2]['ocupados'] === 2, 'Solo pagadas y pendientes conservan el bloqueo al vencer las nuevas');
+    ProgramacionTramoPrecio::findOrFail(2)->update(['asientos_maximos_permitidos' => 10]);
+    $limitado = ReservaService::consultarDisponibilidadPorTramos(Programacion::whereKey(1)->get())[1][2];
+    comprobar($limitado['capacidad'] === 10 && $limitado['ocupados'] === 2 && $limitado['disponibles'] === 8, 'Tope 10 menos 2 ocupados deja 8 disponibles');
+    comprobar(ReservaService::consultarDisponibilidad(2)['cupo_tramo'] === 8, 'La compra usa la misma disponibilidad que el panel');
+    ProgramacionTramoPrecio::findOrFail(2)->update(['asientos_maximos_permitidos' => null]);
     rechaza(fn () => ReservaService::pasarAPendiente($cliente, $nuevaVencida->id, 'transferencia'));
     rechaza(fn () => crearConPasajeros($otro, 1, [12])); // Pendiente conserva su asiento.
     ReservaService::pasarAPendiente($cliente, $ab->id, 'transferencia'); // Reintento después del plazo original.
@@ -172,9 +183,11 @@ try {
     ReservaService::marcarPagoFallido($otra->id);
     crearConPasajeros($cliente, 3, [13]);
 
-    ProgramacionTramoPrecio::findOrFail(1)->update(['asientos_maximos_permitidos' => 2]);
+    ProgramacionTramoPrecio::findOrFail(1)->update(['asientos_maximos_permitidos' => 5]);
     crearConPasajeros($cliente, 1, [10]);
     rechaza(fn () => crearConPasajeros($otro, 1, [11]));
+    $tramos = ReservaService::consultarDisponibilidadPorTramos(Programacion::whereKey(1)->get())[1];
+    comprobar($tramos[1]['cupo_tramo'] === 0 && $tramos[1]['disponibles'] === 0, 'El tope descuenta todos los asientos que atraviesan el tramo');
     ProgramacionTramoPrecio::findOrFail(1)->update(['asientos_maximos_permitidos' => null]);
     $tasa->update(['tipo_servicio' => 1, 'cantidad' => '0.00']);
     $cero = crearConPasajeros($cliente, 1, [11]);

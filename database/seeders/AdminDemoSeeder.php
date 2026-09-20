@@ -194,7 +194,6 @@ class AdminDemoSeeder extends Seeder
                         ],
                         [
                             'asientos_totales' => 40,
-                            'asientos_disponibles' => 32,
                             'estatus' => true,
                         ],
                     );

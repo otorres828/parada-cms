@@ -18,7 +18,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('programaciones', function (Blueprint $table) {
-            $table->decimal('precio_pasaje', 12, 2)->nullable()->after('asientos_disponibles');
+            $table->decimal('precio_pasaje', 12, 2)->nullable()->after('asientos_totales');
         });
     }
 };

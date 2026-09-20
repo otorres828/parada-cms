@@ -2,8 +2,7 @@
     PROGRAMACIONES — LISTADO
     --------------------------------------------------------------------------
     Permite consultar las salidas programadas con búsqueda, filtros por empresa, estado y fechas,
-    ordenación y paginación. Muestra la ruta principal, la disponibilidad registrada y el precio
-    de la primera tarifa asociada, con acceso a pasajeros según permisos.
+    ordenación y paginación. Muestra la ruta principal, fecha, hora y estado, con acceso a pasajeros según permisos.
 
     Componentes reutilizables utilizados:
     - <x-list.heading />: Cabecera del módulo con título y acciones.
@@ -121,10 +120,6 @@
                     <x-list.sortable-button column="hora_salida" :$sortColumn :$sortDirection />
                 </th>
 
-                <th>Disponibles
-                    <x-list.sortable-button column="asientos_disponibles" :$sortColumn :$sortDirection />
-                </th>
-
                 <th>Estado
                     <x-list.sortable-button column="estatus" :$sortColumn :$sortDirection />
                 </th>
@@ -164,10 +159,6 @@
                     </td>
 
                     <td>
-                        {{ $programacion->asientos_disponibles ?? '—' }}
-                    </td>
-
-                    <td>
                         <x-list.status-programacion :status="$programacion->estatus" />
                     </td>
 
@@ -191,7 +182,7 @@
             @empty
 
                 <tr>
-                    <td colspan="10" class="text-center py-5">
+                    <td colspan="8" class="text-center py-5">
                         No se encontraron registros.
                     </td>
 

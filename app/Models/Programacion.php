@@ -21,13 +21,12 @@ class Programacion extends ModelHelper
         'fecha_salida',
         'hora_salida',
         'asientos_totales',
-        'asientos_disponibles',
         'estatus',
     ];
 
     protected function casts(): array
     {
-        return ['fecha_salida' => 'date', 'asientos_totales' => 'integer', 'asientos_disponibles' => 'integer', 'estatus' => 'integer'];
+        return ['fecha_salida' => 'date', 'asientos_totales' => 'integer', 'estatus' => 'integer'];
     }
 
     public function viaje(): BelongsTo

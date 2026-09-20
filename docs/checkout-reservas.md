@@ -9,7 +9,7 @@ El cliente debe estar autenticado al crear la reserva. Obtén `$cliente` de la s
 ```php
 use App\Services\ReservaService;
 
-// 1. Consulta orientativa. Devuelve asientos libres y cupo comercial del trayecto.
+// 1. Consulta orientativa. Devuelve los asientos elegibles y la cantidad disponible respetando el tope del trayecto.
 $disponibilidad = ReservaService::consultarDisponibilidad($tarifaId);
 
 // 2. Al continuar desde el itinerario, crea solo la reserva NUEVA, que vence en 20 minutos.
@@ -71,7 +71,9 @@ El rechazo definitivo del administrador o del proveedor permite `marcarPagoFalli
 - La reserva recién creada no ocupa asientos ni consume cupo: su monto es una cotización provisional de un boleto, con descuento cero y la tasa web estimada vigente. No crea registros ficticios de pasajeros o pasajes.
 - `registrarPasajeros` recibe la lista completa actual, comprueba la disponibilidad excluyendo los propios pasajes y sincroniza altas y bajas en una transacción. Al retirar un pasajero libera su asiento; conserva los datos históricos del viajero. Los asientos se indican en este paso, no al crear la reserva.
 - Al cambiar la lista se actualizan los importes, se reparte nuevamente el cupón si existe y se calculan las tasas por pasaje. Si queda vacía, se retira el cupón y vuelve la cotización unitaria; no se puede enviar el pago sin al menos un pasajero registrado. Ninguna de estas operaciones reinicia la expiración.
-- El cupo de la tarifa limita la cantidad de boletos vigentes del mismo origen/destino. No se usa `programaciones.asientos_disponibles` como inventario global de venta.
+- Disponibles = máximo entre cero y (tope del tramo − asientos ocupados que se solapan con ese trayecto). Sin tope se usa la capacidad del autobús y la programación; nunca se supera esa capacidad. Por ejemplo: tope 10, ocupados 2, disponibles 8. No se guarda un contador global en la programación.
+- La disponibilidad se calcula por origen y destino: tope efectivo menos asientos distintos ocupados en cualquier segmento del trayecto consultado. Un asiento vendido A→B y B→C se resta una sola vez al consultar A→C. Las reservas sin pasajes no ocupan asientos.
+- `consultarDisponibilidadPorTramos($programaciones)` permite al panel consultar todas las tarifas de varias programaciones con una carga conjunta de reservas, incluyendo salidas históricas. Devuelve el tope efectivo, ocupados y disponibles por tarifa. La clave interna `cupo_tramo` conserva el mismo valor que `disponibles` para validar la compra. `asientos` contiene los números elegibles y la cantidad seleccionada no puede superar `disponibles`. El dashboard y el detalle usan este cálculo; la compra vuelve a comprobar los asientos bajo bloqueo transaccional.
 - El precio sale de la tarifa persistida: al crear se envía su ID; al registrar pasajeros se envían sus datos y asientos. La cotización inicial es provisional: cada pasaje nuevo toma el precio vigente del servidor y los existentes conservan su precio base.
 - La hora de embarque intermedia se estima sumando las duraciones de los tramos anteriores. Si faltan duraciones, se rechaza esa venta. No hay seguimiento en tiempo real de la ubicación del autobús.
 - El cupón fijo se aplica una vez al total de la reserva; el porcentual se calcula sobre ese total. El descuento se reparte proporcionalmente entre boletos sin perder centavos y nunca supera su precio base.

@@ -14,6 +14,7 @@ use App\Services\Admin\Settings;
 use Carbon\Carbon;
 use Closure;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
@@ -301,6 +302,36 @@ class ReservaService
         return self::disponibilidad($programacion, $tarifa, $terminales);
     }
 
+    // Consulta administrativa por origen/destino, también para salidas históricas o inactivas.
+    // Carga las reservas una sola vez para todas las programaciones del listado.
+    public static function consultarDisponibilidadPorTramos(Collection $programaciones): array
+    {
+        if ($programaciones->isEmpty()) {
+            return [];
+        }
+
+        $programaciones->loadMissing(['viaje.tramos', 'autobus', 'tramoPrecios.origenTerminal', 'tramoPrecios.destinoTerminal']);
+        $reservas = self::reservasQueBloquean()->whereIn('programacion_id', $programaciones->modelKeys())
+            ->with('pasajes')->get()->groupBy('programacion_id');
+        $resultado = [];
+
+        foreach ($programaciones as $programacion) {
+            $terminales = self::terminales($programacion);
+            $resultado[$programacion->id] = [];
+
+            foreach ($programacion->tramoPrecios as $tarifa) {
+                $resultado[$programacion->id][$tarifa->id] = self::disponibilidad(
+                    $programacion, $tarifa, $terminales, null, $reservas->get($programacion->id, new Collection)
+                ) + [
+                    'origen' => $tarifa->origenTerminal?->nombre ?? '—',
+                    'destino' => $tarifa->destinoTerminal?->nombre ?? '—',
+                ];
+            }
+        }
+
+        return $resultado;
+    }
+
     private static function conReserva(?User $cliente, int $reservaId, Closure $accion): Reserva
     {
         if ($cliente) {
@@ -422,18 +453,14 @@ class ReservaService
         self::exigir($salida->isFuture(), 'programacion', 'La hora estimada de salida desde este terminal ya pasó.');
     }
 
-    private static function disponibilidad(Programacion $programacion, ProgramacionTramoPrecio $tarifa, array $terminales, ?int $excluirReservaId = null): array
+    private static function disponibilidad(Programacion $programacion, ProgramacionTramoPrecio $tarifa, array $terminales, ?int $excluirReservaId = null, ?Collection $reservas = null): array
     {
         [$inicio, $fin] = self::intervalo($terminales, (int) $tarifa->origen_terminal_id, (int) $tarifa->destino_terminal_id);
-        $reservas = self::reservasQueBloquean()->where('programacion_id', $programacion->id)
+        $reservas ??= self::reservasQueBloquean()->where('programacion_id', $programacion->id)
             ->when($excluirReservaId !== null, fn ($q) => $q->whereKeyNot($excluirReservaId))
             ->with(['pasajes' => fn ($q) => $q->lockForUpdate()])->lockForUpdate()->get();
         $ocupados = [];
-        $vendidosTramo = 0;
         foreach ($reservas as $reserva) {
-            if ((int) $reserva->origen_terminal_id === (int) $tarifa->origen_terminal_id && (int) $reserva->destino_terminal_id === (int) $tarifa->destino_terminal_id) {
-                $vendidosTramo += $reserva->pasajes->count();
-            }
             if ($reserva->origen_terminal_id === null || $reserva->destino_terminal_id === null) {
                 // Los boletos históricos sin trayecto bloquean todo el recorrido por precaución.
                 $solapa = true;
@@ -445,11 +472,19 @@ class ReservaService
                 $ocupados = array_merge($ocupados, $reserva->pasajes->pluck('numero_asiento')->filter()->all());
             }
         }
-        $capacidad = min((int) $programacion->asientos_totales, (int) $programacion->autobus->total_asientos);
+        $capacidad = max(0, min((int) $programacion->asientos_totales, (int) $programacion->autobus?->total_asientos));
         $libres = $capacidad > 0 ? array_values(array_diff(range(1, $capacidad), $ocupados)) : [];
-        $cupo = $tarifa->asientos_maximos_permitidos === null ? count($libres) : min(count($libres), max(0, $tarifa->asientos_maximos_permitidos - $vendidosTramo));
+        $cantidadOcupados = $capacidad - count($libres);
+        $limite = $tarifa->asientos_maximos_permitidos === null ? $capacidad : min($capacidad, max(0, $tarifa->asientos_maximos_permitidos));
+        $cupo = max(0, $limite - $cantidadOcupados);
 
-        return ['asientos' => $cupo > 0 ? $libres : [], 'cupo_tramo' => $cupo];
+        return [
+            'asientos' => $cupo > 0 ? $libres : [],
+            'cupo_tramo' => $cupo,
+            'capacidad' => $limite,
+            'ocupados' => $cantidadOcupados,
+            'disponibles' => $cupo,
+        ];
     }
 
     private static function sumar($pasajes, string $campo): string

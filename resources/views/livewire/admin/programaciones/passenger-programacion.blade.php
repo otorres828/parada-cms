@@ -1,7 +1,7 @@
 {{--
     PROGRAMACIONES — PASAJEROS Y TARIFAS POR TRAMO
     --------------------------------------------------------------------------
-    Muestra la salida programada, su capacidad y la ocupación según la disponibilidad registrada.
+    Muestra la salida programada, su capacidad y la ocupación calculada por origen y destino.
     Presenta las tarifas por origen y destino y los pasajeros de reservas pagadas o pendientes.
     Cada boleto muestra el trayecto de su reserva, asiento, precio final, tasa y abordaje, con
     búsqueda local mediante Alpine.
@@ -79,24 +79,9 @@
 
                             <dd class="col-sm-8">{{ $capacidad }} asientos</dd>
 
-                            <dt class="col-sm-4">Disponibles</dt>
-
-                            <dd class="col-sm-8">{{ $programacion->asientos_disponibles ?? '—' }}</dd>
-
-                            <dt class="col-sm-4">Asientos ocupados</dt>
-
-                            <dd class="col-sm-8">{{ $ocupados }}</dd>
-
                             <dt class="col-sm-4">Pasajes vendidos</dt>
 
                             <dd class="col-sm-8">{{ $tickets->count() }}</dd>
-
-                            <dt class="col-sm-4">Ocupación</dt>
-
-                            <dd class="col-sm-8">
-                                {{ number_format($ocupacion, 2) }} %
-                                <small class="text-body-secondary">según disponibilidad registrada</small>
-                            </dd>
 
                             <dt class="col-sm-4">Tasas servicio USD</dt>
 
@@ -129,6 +114,8 @@
                                             <th>Tramo Comercial</th>
                                             <th class="text-end">Precio USD</th>
                                             <th class="text-center">Tope Asientos</th>
+                                            <th class="text-center">Ocupados</th>
+                                            <th class="text-center">Disponibles</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -141,10 +128,10 @@
                                                         class="fw-semibold">{{ $tp->destinoTerminal?->nombre }}</span>
                                                 </td>
                                                 <td class="text-end text-success fw-bold">
-                                                    USD {{ number_format($tp->precio, 2) }}
+                                                    ${{ number_format($tp->precio, 2) }}
                                                 </td>
                                                 <td class="text-center">
-                                                    @if ($tp->asientos_maximos_permitidos)
+                                                    @if ($tp->asientos_maximos_permitidos !== null)
                                                         <span
                                                             class="badge text-bg-warning">{{ $tp->asientos_maximos_permitidos }}
                                                             asientos</span>
@@ -152,11 +139,17 @@
                                                         <span class="badge text-bg-secondary">Sin tope (Libre)</span>
                                                     @endif
                                                 </td>
+                                                <td class="text-center">{{ $disponibilidadTramos[$tp->id]['ocupados'] }}</td>
+                                                <td class="text-center">{{ $disponibilidadTramos[$tp->id]['disponibles'] }}</td>
                                             </tr>
                                         @endforeach
                                     </tbody>
                                 </table>
                             </div>
+                            <p class="small text-body-secondary mt-3 mb-0">
+                                Ocupados: asientos de reservas pagadas, pendientes y nuevas sin vencer que coinciden
+                                con este tramo. Disponibles = tope de asientos menos ocupados; sin tope se usa la capacidad del autobús.
+                            </p>
                         @else
                             <div class="text-body-secondary py-3 text-center">
                                 No hay matriz de tarifas O&D configurada para esta salida.
@@ -257,11 +250,11 @@
                             </td>
 
                             <td class="fw-bold text-success">
-                                USD {{ number_format($ticket->precio_final, 2) }}
+                                ${{ number_format($ticket->precio_final, 2) }}
                             </td>
 
                             <td>
-                                USD {{ number_format($ticket->tasa_servicio, 2) }}
+                                ${{ number_format($ticket->tasa_servicio, 2) }}
                             </td>
 
                             <td>

@@ -15,7 +15,6 @@ return new class extends Migration
             $table->date('fecha_salida');
             $table->time('hora_salida');
             $table->unsignedInteger('asientos_totales');
-            $table->unsignedInteger('asientos_disponibles');
             $table->decimal('precio_pasaje', 12, 2);
             $table->unsignedTinyInteger('estatus')->default(1);
             $table->timestamps();

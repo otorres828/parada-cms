@@ -7,6 +7,7 @@ use App\Models\Pasaje;
 use App\Models\Programacion;
 use App\Models\Reserva;
 use App\Services\Admin\Access;
+use App\Services\ReservaService;
 use Carbon\Carbon;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
@@ -61,7 +62,7 @@ class Dashboard extends Component
         }
         unset($datos);
 
-        return view('livewire.admin.dashboard', ['metrics' => $metrics, 'ultimasReservas' => $ultimasReservas, 'proximasSalidas' => $proximasSalidas, 'estados' => $estados, 'totalReservas' => $totalReservas, 'desde' => $desde, 'hasta' => $ahora]);
+        return view('livewire.admin.dashboard', ['metrics' => $metrics, 'ultimasReservas' => $ultimasReservas, 'proximasSalidas' => $proximasSalidas, 'estados' => $estados, 'totalReservas' => $totalReservas, 'desde' => $desde, 'hasta' => $ahora, 'disponibilidadTramos' => ReservaService::consultarDisponibilidadPorTramos($proximasSalidas)]);
     }
 
     public function boot(): void

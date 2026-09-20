@@ -5,7 +5,7 @@
     estados de las compras, últimas reservas y próximas salidas para el período seleccionado.
 
     Componentes reutilizables utilizados:
-    No utiliza componentes Blade reutilizables; presenta la interfaz con HTML y Alpine.
+    - <x-list.disponibilidad-tramos />: Asientos disponibles por origen y destino según el tope configurado.
     --------------------------------------------------------------------------
 --}}
 
@@ -337,7 +337,7 @@
 
                             <th scope="col">Salida</th>
 
-                            <th scope="col" class="pe-4 text-end">Asientos disponibles</th>
+                            <th scope="col" class="pe-4 text-end">Disponibilidad por tramo</th>
 
                         </tr>
                     </thead>
@@ -365,9 +365,7 @@
                                 </td>
 
                                 <td class="pe-4 text-end">
-                                    <span
-                                        class="badge {{ $salida->asientos_disponibles > 0 ? 'text-bg-light' : 'text-bg-warning' }}">{{ $salida->asientos_disponibles }}
-                                        / {{ $salida->asientos_totales }}</span>
+                                    <x-list.disponibilidad-tramos :tramos="$disponibilidadTramos[$salida->id] ?? []" />
                                 </td>
 
                             </tr>

@@ -5,6 +5,7 @@ namespace App\Livewire\Admin\Programaciones;
 use App\Models\Pasaje;
 use App\Models\Programacion;
 use App\Services\Admin\Access;
+use App\Services\ReservaService;
 use Illuminate\Database\Eloquent\Collection;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Locked;
@@ -24,10 +25,6 @@ class PassengerProgramacion extends Component
 
     public bool $canViajesDetail = false;
 
-    public int $capacidad = 0, $ocupados = 0;
-    
-    public float $ocupacion = 0;
-
     public function mount(?int $programacion_id = null): void
     {
         $this->programacion_id = $programacion_id;
@@ -44,14 +41,18 @@ class PassengerProgramacion extends Component
         $this->canReservasDetail = Access::allows('reservas', 'detail');
         $this->canViajesDetail = Access::allows('viajes', 'detail');
 
-        $this->capacidad = max(0, (int) $programacion->asientos_totales);
-        $this->ocupados = min($this->capacidad, max(0, $this->capacidad - (int) $programacion->asientos_disponibles));
-        $this->ocupacion = $this->capacidad > 0 ? round(($this->ocupados * 100) / $this->capacidad, 2) : 0;
     }
 
     public function render()
     {
-        return view('livewire.admin.programaciones.passenger-programacion');
+        $this->programacion = $this->findProgramacion();
+        $this->tickets = Pasaje::getTickets($this->programacion_id);
+        $disponibilidad = ReservaService::consultarDisponibilidadPorTramos(new Collection([$this->programacion]));
+
+        return view('livewire.admin.programaciones.passenger-programacion', [
+            'disponibilidadTramos' => $disponibilidad[$this->programacion_id],
+            'capacidad' => max(0, min((int) $this->programacion->asientos_totales, (int) $this->programacion->autobus?->total_asientos)),
+        ]);
     }
 
     protected function findProgramacion(): Programacion
