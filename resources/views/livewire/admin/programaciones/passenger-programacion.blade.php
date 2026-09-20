@@ -168,19 +168,23 @@
 
     <div class="card">
 
-        <div class="card-header d-flex align-items-center justify-content-between flex-wrap gap-3">
-            <span>Pasajeros & Tramos Comercializados</span>
+        <div class="card-header">
 
-            <div style="width: 320px; max-width: 100%;">
-
-                <label class="visually-hidden" for="buscar-pasajeros">
-                    Buscar pasajero
-                </label>
-                <input id="buscar-pasajeros" type="search" class="form-control" x-model.debounce.200ms="search"
-                    placeholder="Buscar pasajero u origen/destino">
-
+            <div class="d-flex align-items-center justify-content-between flex-wrap gap-3">
+                <span>Pasajeros & Tramos Comercializados</span>
+    
+                <div style="width: 320px; max-width: 100%;">
+    
+                    <label class="visually-hidden" for="buscar-pasajeros">
+                        Buscar pasajero
+                    </label>
+                    <input id="buscar-pasajeros" type="search" class="form-control" x-model.debounce.200ms="search"
+                        placeholder="Buscar pasajero u origen/destino">
+    
+                </div>
+    
             </div>
-
+            
         </div>
 
         <div class="table-responsive">

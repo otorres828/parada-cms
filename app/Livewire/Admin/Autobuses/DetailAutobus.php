@@ -8,16 +8,21 @@ use App\Services\Admin\Access;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Locked;
 use Livewire\Component;
+use Livewire\WithPagination;
 
 #[Layout('layouts.cms')]
 class DetailAutobus extends Component
 {
+
+    use WithPagination;
+    
     #[Locked]
     public ?int $autobus_id = null;
 
     public  Autobus $autobus;
 
     public bool $canViewPassengers = false;
+    
 
     public function mount(?int $autobus_id = null): void
     {

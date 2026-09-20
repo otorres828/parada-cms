@@ -188,6 +188,8 @@
                 </tbody>
             </table>
 
+            {{ $programaciones->links() }}
+
         </div>
 
     </div>
