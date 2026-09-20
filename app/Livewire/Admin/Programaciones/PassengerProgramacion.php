@@ -40,7 +40,7 @@ class PassengerProgramacion extends Component
         
         $this->programacion = $programacion;
 
-        $this->tickets = Pasaje::searchDetailProgramacion($programacion_id);
+        $this->tickets = Pasaje::getTickets($programacion_id);
         $this->canReservasDetail = Access::allows('reservas', 'detail');
         $this->canViajesDetail = Access::allows('viajes', 'detail');
 

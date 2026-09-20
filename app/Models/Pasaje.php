@@ -69,12 +69,12 @@ class Pasaje extends ModelHelper
         return $query;
     }
 
-    public static function searchDetailProgramacion(int $programacion_id): Collection
+    public static function getTickets(int $programacion_id): Collection
     {
         return self::searchAdmin()
             ->whereHas('reserva', fn ($q) => 
                 $q->where('programacion_id', $programacion_id)
-                ->whereIn('estado_pago', [Reserva::ESTADO_PAGO_PAGADO, Reserva::ESTADO_PAGO_PENDIENTE])
+                ->whereIn('estado_pago', [Reserva::ESTADO_PAGO_NUEVO,Reserva::ESTADO_PAGO_PAGADO, Reserva::ESTADO_PAGO_PENDIENTE])
             )->get();
     }
 }
