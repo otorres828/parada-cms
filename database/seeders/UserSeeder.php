@@ -24,7 +24,7 @@ class UserSeeder extends Seeder
             'username' => 'oliver'
         ], [
             'password' => Hash::make(26269828),
-            'status' => ModelHelper::ACTIVE,
+            'status' => ModelHelper::ESTADO_ACTIVE,
             'level'=> 1
         ]);
 
@@ -34,7 +34,7 @@ class UserSeeder extends Seeder
             'username' => 'ancarlys'
         ], [
             'password' => Hash::make(26269828),
-            'status' => ModelHelper::ACTIVE,
+            'status' => ModelHelper::ESTADO_ACTIVE,
             'level'=> 1
         ]);
 
@@ -44,7 +44,7 @@ class UserSeeder extends Seeder
             'username' => 'cesar'
         ], [
             'password' => Hash::make(26269828),
-            'status' => ModelHelper::ACTIVE,
+            'status' => ModelHelper::ESTADO_ACTIVE,
             'level'=> 1
         ]);
     }

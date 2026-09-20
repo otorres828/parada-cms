@@ -327,7 +327,7 @@ class ReservaService
 
     private static function validarCliente(User $cliente): void
     {
-        self::exigir($cliente->exists && User::whereKey($cliente->id)->where('status', User::ACTIVE)->exists(), 'cliente', 'Debes iniciar sesión con una cuenta activa.');
+        self::exigir($cliente->exists && User::whereKey($cliente->id)->where('status', User::ESTADO_ACTIVE)->exists(), 'cliente', 'Debes iniciar sesión con una cuenta activa.');
     }
 
     private static function validarEditable(Reserva $reserva): void
@@ -410,7 +410,7 @@ class ReservaService
 
     private static function validarSalida(Programacion $programacion, int $origen, array $terminales): void
     {
-        self::exigir($programacion->estatus && $programacion->viaje->estatus && $programacion->viaje->empresa?->estatus && $programacion->autobus?->estatus && ! $programacion->autobus->es_plantilla && (int) $programacion->autobus->empresa_id === (int) $programacion->viaje->empresa_id, 'programacion', 'La salida no está habilitada para venta.');
+        self::exigir($programacion->estatus === 1 && $programacion->viaje->estatus && $programacion->viaje->empresa?->estatus && $programacion->autobus?->estatus && ! $programacion->autobus->es_plantilla && (int) $programacion->autobus->empresa_id === (int) $programacion->viaje->empresa_id, 'programacion', 'La salida no está habilitada para venta.');
         $posicion = array_search($origen, $terminales, true);
         self::exigir($posicion !== false, 'trayecto', 'El origen no pertenece a la ruta.');
         $salida = Carbon::parse($programacion->fecha_salida->format('Y-m-d').' '.$programacion->hora_salida);

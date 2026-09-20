@@ -125,8 +125,6 @@
                     <x-list.sortable-button column="asientos_disponibles" :$sortColumn :$sortDirection />
                 </th>
 
-                <th>Precio USD</th>
-
                 <th>Estado
                     <x-list.sortable-button column="estatus" :$sortColumn :$sortDirection />
                 </th>
@@ -167,10 +165,6 @@
 
                     <td>
                         {{ $programacion->asientos_disponibles ?? '—' }}
-                    </td>
-
-                    <td>
-                        {{ number_format($programacion->tramoPrecios->first()?->precio ?? 0, 2) }}
                     </td>
 
                     <td>

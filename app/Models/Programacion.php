@@ -27,7 +27,7 @@ class Programacion extends ModelHelper
 
     protected function casts(): array
     {
-        return ['fecha_salida' => 'date', 'asientos_totales' => 'integer', 'asientos_disponibles' => 'integer', 'estatus' => 'boolean'];
+        return ['fecha_salida' => 'date', 'asientos_totales' => 'integer', 'asientos_disponibles' => 'integer', 'estatus' => 'integer'];
     }
 
     public function viaje(): BelongsTo

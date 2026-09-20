@@ -17,7 +17,7 @@ return new class extends Migration
             $table->unsignedInteger('asientos_totales');
             $table->unsignedInteger('asientos_disponibles');
             $table->decimal('precio_pasaje', 12, 2);
-            $table->boolean('estatus')->default(true);
+            $table->unsignedTinyInteger('estatus')->default(1);
             $table->timestamps();
             $table->foreign('viaje_id')->references('id')->on('viajes')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('autobus_id')->references('id')->on('autobuses')->onUpdate('cascade')->onDelete('cascade');
