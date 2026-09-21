@@ -33,7 +33,7 @@
 
         <x-slot:button>
 
-            @if (Route::has('admin.empresas.add') && $canAdd)
+            @if ($canAdd)
                 <x-list.add-button :route="route('admin.empresas.add')">
                     Nuevo registro
                 </x-list.add-button>

@@ -52,14 +52,23 @@ class ListAmenidad extends Component
     public function changeStatus(int $id): void
     {
         Access::authorize('amenidades', 'edit');
+
         DB::transaction(function () use ($id) {
+
             $query = Amenidad::searchAdmin();
+
             $amenidad = $query->whereKey($id)->lockForUpdate()->firstOrFail();
+
             $inactive = 0;
+
             $amenidad->estatus = (int) $amenidad->estatus === 1 ? $inactive : 1;
+
             $amenidad->save();
+
             Audit::record('registro.estado', $amenidad, ['estatus' => $amenidad->estatus]);
+
         });
+        
         $this->dispatch('successEventList', message: 'Estado actualizado.');
     }
 }

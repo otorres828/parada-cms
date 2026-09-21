@@ -58,14 +58,23 @@ class ListCampana extends Component
     public function changeStatus(int $id): void
     {
         Access::authorize('campanas', 'edit');
+
         DB::transaction(function () use ($id) {
+
             $query = ConfiguracionCupon::searchAdmin();
+
             $configuracionCupon = $query->whereKey($id)->lockForUpdate()->firstOrFail();
-            $inactive = 0;
+
+            $inactive = 2;
+
             $configuracionCupon->estatus = (int) $configuracionCupon->estatus === 1 ? $inactive : 1;
+
             $configuracionCupon->save();
+
             Audit::record('registro.estado', $configuracionCupon, ['estatus' => $configuracionCupon->estatus]);
+
         });
+        
         $this->dispatch('successEventList', message: 'Estado actualizado.');
     }
 }

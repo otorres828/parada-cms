@@ -52,13 +52,21 @@ class ListTerminal extends Component
     public function changeStatus(int $id): void
     {
         Access::authorize('terminales', 'edit');
+
         DB::transaction(function () use ($id) {
+
             $query = Terminal::searchAdmin();
+
             $terminal = $query->whereKey($id)->lockForUpdate()->firstOrFail();
-            $inactive = 0;
-            $terminal->estatus = (int) $terminal->estatus === 1 ? $inactive : 1;
+
+            $inactive = Terminal::ESTADO_INACTIVE;
+
+            $terminal->estatus = (int) $terminal->estatus === Terminal::ESTADO_ACTIVE ? $inactive : Terminal::ESTADO_INACTIVE;
+
             $terminal->save();
+
             Audit::record('registro.estado', $terminal, ['estatus' => $terminal->estatus]);
+
         });
         $this->dispatch('successEventList', message: 'Estado actualizado.');
     }

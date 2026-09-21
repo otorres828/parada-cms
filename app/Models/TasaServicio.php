@@ -93,7 +93,7 @@ class TasaServicio extends ModelHelper
         $query->where(fn ($q) => $q->whereNull('monto_maximo')->orWhere('monto_maximo', '>=', $this->monto_minimo));
 
         if ($query->exists()) {
-            // throw ValidationException::withMessages(['monto_minimo' => 'El rango se cruza con otra tasa activa. Revisa los límites.']);
+            throw ValidationException::withMessages(['monto_minimo' => 'El rango se cruza con otra tasa activa. Revisa los límites.']);
         }
     }
 }

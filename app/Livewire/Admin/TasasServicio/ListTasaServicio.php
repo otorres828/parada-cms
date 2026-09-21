@@ -62,9 +62,11 @@ class ListTasaServicio extends Component
 
                 $tasa = TasaServicio::findOrFail($id);
                 
-                $tasa->estatus = ! $tasa->estatus;
+                $inactive = 2;
 
-                $tasa->validarRango();
+                $tasa->estatus = (int) $tasa->estatus === 1 ? $inactive : 1;
+
+                // $tasa->validarRango();
 
                 $tasa->save();
 

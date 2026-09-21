@@ -21,7 +21,7 @@ class ListCliente extends Component
     use WithPagination;
 
     public string $status = '';
-        
+
     protected array $queryString = [
         'search' => ['except' => ''], 
         'per_page' => ['except' => 10], 
@@ -58,12 +58,19 @@ class ListCliente extends Component
     public function changeStatus(int $id): void
     {
         Access::authorize('clientes', 'edit');
+
         DB::transaction(function () use ($id) {
+
             $user = User::findOrFail($id);
+            
             $inactive = 2;
+            
             $user->status = (int) $user->status === 1 ? $inactive : 1;
+            
             $user->save();
+            
             Audit::record('registro.estado', $user, ['status' => $user->status]);
+            
         });
         $this->dispatch('successEventList', message: 'Estado actualizado.');
     }

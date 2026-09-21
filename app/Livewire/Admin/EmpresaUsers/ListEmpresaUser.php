@@ -65,14 +65,23 @@ class ListEmpresaUser extends Component
     public function changeStatus(int $id): void
     {
         Access::authorize('empresas.users', 'edit');
+        
         DB::transaction(function () use ($id) {
+            
             $query = UsuarioEmpresa::searchAdmin();
+            
             $query->where('empresa_id', $this->empresa_id);
+            
             $usuarioEmpresa = $query->whereKey($id)->lockForUpdate()->firstOrFail();
-            $inactive = 0;
+            
+            $inactive = 2;
+            
             $usuarioEmpresa->estatus = (int) $usuarioEmpresa->estatus === 1 ? $inactive : 1;
+            
             $usuarioEmpresa->save();
+            
             Audit::record('registro.estado', $usuarioEmpresa, ['estatus' => $usuarioEmpresa->estatus]);
+            
         });
         $this->dispatch('successEventList', message: 'Estado actualizado.');
     }

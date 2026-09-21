@@ -24,7 +24,7 @@ class Empresa extends ModelHelper
 
     protected function casts(): array
     {
-        return ['estatus' => 'boolean', 'retiros_habilitados' => 'boolean'];
+        return ['estatus' => 'integer', 'retiros_habilitados' => 'boolean'];
     }
 
     public function usuariosEmpresa(): HasMany
@@ -64,6 +64,8 @@ class Empresa extends ModelHelper
 
         if ($status !== null && $status !== '') {
             $query->where('empresas.estatus', $status);
+        }else{
+            $query->where('empresas.estatus', '!=',self::ESTADO_DELETE);
         }
 
         if (!empty($filters['date_from'])) {
