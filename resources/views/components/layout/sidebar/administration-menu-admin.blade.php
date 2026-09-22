@@ -126,16 +126,16 @@
     ])
 @endif
 
-@if ($listCampanas)
+@if ($listcupones)
     @include('components.layout.sidebar-li', [
         'menu' => 'Promociones',
         'icon' => 'nav-icon bi bi-tags',
         'list' => [
             [
-                'existe' => $listCampanas ?? false,
-                'route' => route('admin.campanas.list'),
+                'existe' => $listcupones ?? false,
+                'route' => route('admin.cupones.list'),
                 'name' => 'Campañas',
-                'active' => request()->routeIs('admin.campanas.*') ? 'active' : '',
+                'active' => request()->routeIs('admin.cupones.*') ? 'active' : '',
             ],
         ],
     ])

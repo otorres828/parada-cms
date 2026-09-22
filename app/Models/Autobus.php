@@ -58,7 +58,9 @@ class Autobus extends ModelHelper
                 $query->where('autobuses.id', ctype_digit($search) ? $search : -1);
                 $query->orWhere('autobuses.placa', 'like', '%' . $search . '%');
                 $query->orWhere('autobuses.modelo', 'like', '%' . $search . '%');
-                $query->orWhereHas('empresa', fn ($q) => $q->where('nombre', 'like', '%' . $search . '%'));
+                $query->orWhereHas('empresa', function ($query) use ($search) {
+                    return $query->where('nombre', 'like', '%' . $search . '%');
+                });
             });
         }
 

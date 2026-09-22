@@ -33,8 +33,8 @@
 
         <x-slot:button>
 
-            @if (Route::has('admin.campanas.add') && $canAdd)
-                <x-list.add-button :route="route('admin.campanas.add')">
+            @if (Route::has('admin.cupones.add') && $canAdd)
+                <x-list.add-button :route="route('admin.cupones.add')">
                     Nuevo registro
                 </x-list.add-button>
             @endif
@@ -124,14 +124,14 @@
                     <x-list.sortable-button column="estatus" :$sortColumn :$sortDirection />
                 </th>
 
-                <th class="text-end">Acciones</th>
+                <th></th>
 
             </tr>
         </thead>
 
         <tbody>
 
-            @forelse ($campanas as $configuracionCupon)
+            @forelse ($cupones as $configuracionCupon)
                 <tr wire:key="listCampana-{{ $configuracionCupon->id }}">
                     <td>
                         {{ $configuracionCupon->id }}
@@ -166,13 +166,13 @@
                         <x-list.button-group>
 
                             @if ($capabilities['detail'])
-                                <x-list.view-button :route="route('admin.campanas.detail', [
+                                <x-list.view-button :route="route('admin.cupones.detail', [
                                     'configuracion_cupon_id' => $configuracionCupon->id
                                 ])" :target="false" />
                             @endif
 
                             @if ($capabilities['edit'])
-                                <x-list.edit-button :route="route('admin.campanas.edit', [
+                                <x-list.edit-button :route="route('admin.cupones.edit', [
                                     'configuracion_cupon_id' => $configuracionCupon->id
                                 ])" />
                             @endif
@@ -203,7 +203,7 @@
 
     </x-list.table>
 
-    {{ $campanas->links() }}
+    {{ $cupones->links() }}
 
     <x-layout.loader.fullpage wire:loading.delay.short />
 

@@ -118,10 +118,9 @@ class Admin extends ModelHelper implements Authenticatable, Authorizable, CanRes
 
         if ($search !== '') {
             $query->where(
-                fn ($q) => $q
-                    ->where('name', 'like', '%' . $search . '%')
-                    ->orWhere('username', 'like', '%' . $search . '%')
-                    ->orWhere('email', 'like', '%' . $search . '%'),
+                function ($query) use ($search) {
+                    return $query->where('name', 'like', '%' . $search . '%')->orWhere('username', 'like', '%' . $search . '%')->orWhere('email', 'like', '%' . $search . '%');
+                },
             );
         }
 

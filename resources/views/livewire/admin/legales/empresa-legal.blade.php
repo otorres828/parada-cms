@@ -223,7 +223,7 @@
 
                         <th>Fecha</th>
 
-                        <th class="text-end">Acciones</th>
+                        <th></th>
 
                     </tr>
                 </thead>

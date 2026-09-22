@@ -133,7 +133,7 @@
                     <x-list.sortable-button column="estado_pago" :$sortColumn :$sortDirection />
                 </th>
 
-                <th class="text-end">Acciones</th>
+                <th></th>
 
             </tr>
         </thead>

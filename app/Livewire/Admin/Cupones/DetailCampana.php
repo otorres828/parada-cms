@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\Admin\Campanas;
+namespace App\Livewire\Admin\Cupones;
 
 use App\Models\ConfiguracionCupon;
 use App\Models\Cupon;
@@ -35,16 +35,16 @@ class DetailCampana extends Component
         $this->configuracion_cupon_id = $configuracion_cupon_id;
         $this->sortColumn = 'id';
         $this->sortDirection = 'desc';
-        Access::authorize('campanas', 'detail');
+        Access::authorize('cupones', 'detail');
     }
 
     public function render()
     {
-        Access::authorize('campanas', 'detail');
+        Access::authorize('cupones', 'detail');
         $query = Cupon::searchAdmin($this->search, ['configuracion_cupon_id' => $this->configuracion_cupon_id, 'status' => $this->status]);
         $cupones = $this->applySort($query)->paginate($this->per_page);
 
-        return view('livewire.admin.campanas.detail-campana', ['cupones' => $cupones, 'configuracionCupon' => $this->configuracion_cupon_id ? $this->findConfiguracionCupon() : null, 'capabilities' => Access::capabilities('campanas')]);
+        return view('livewire.admin.cupones.detail-campana', ['cupones' => $cupones, 'configuracionCupon' => $this->configuracion_cupon_id ? $this->findConfiguracionCupon() : null, 'capabilities' => Access::capabilities('cupones')]);
     }
 
     public function updated($property): void
@@ -57,7 +57,7 @@ class DetailCampana extends Component
     public function generateCoupons(): void
     {
         abort_unless($this->configuracion_cupon_id, 403);
-        Access::authorize('campanas', 'edit');
+        Access::authorize('cupones', 'edit');
         DB::transaction(function () {
             $campaign = ConfiguracionCupon::whereKey($this->configuracion_cupon_id)->lockForUpdate()->firstOrFail();
             if ($campaign->cupones()->exists()) {

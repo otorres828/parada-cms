@@ -1,9 +1,10 @@
 {{--
     PASAJES — DETALLE
     --------------------------------------------------------------------------
-    Presenta la reserva, el viajero, su documento, asiento y estado de abordaje. Consulta el
+    Presenta la fecha de reserva, la fecha y hora de salida de la programación, el viajero, su documento, asiento y estado de abordaje. Consulta el
     origen y destino comprados a través de la reserva y muestra el precio del boleto, el estado de
     pago y la tasa de servicio aplicada con su modalidad, valor y rango histórico.
+    Muestra el QR generado localmente con el codigo_qr_token únicamente si la reserva está pagada.
 
     Componentes reutilizables utilizados:
     - <x-list.heading />: Cabecera del módulo con título y acciones.
@@ -38,7 +39,7 @@
 
     <div class="container-fluid px-0 mb-4">
 
-        <div class="row">
+        <div class="row g-3">
 
             <div class="col-md-6">
 
@@ -47,22 +48,30 @@
                     <div class="card-body">
 
                         <dl class="row mb-0">
+
+                            <dt class="col-sm-4">Ruta</dt>
+
+                            <dd class="col-sm-8">
+                                {{ $pasaje->reserva?->origenTerminal?->nombre ?? 'No registrado' }} -                                 {{ $pasaje->reserva?->destinoTerminal?->nombre ?? 'No registrado' }}
+                            </dd>
+
                             <dt class="col-sm-4">Reserva</dt>
 
                             <dd class="col-sm-8">
                                 {{ $pasaje->reserva?->codigo_referencia ?? '—' }}
                             </dd>
 
-                            <dt class="col-sm-4">Origen</dt>
+                            <dt class="col-sm-4">Fecha de reserva</dt>
 
                             <dd class="col-sm-8">
-                                {{ $pasaje->reserva?->origenTerminal?->nombre ?? 'No registrado' }}
+                                {{ $pasaje->reserva?->fecha_compra?->format('d/m/Y H:i') ?? '—' }}
                             </dd>
 
-                            <dt class="col-sm-4">Destino final</dt>
+                            <dt class="col-sm-4">Horario de salida</dt>
 
                             <dd class="col-sm-8">
-                                {{ $pasaje->reserva?->destinoTerminal?->nombre ?? 'No registrado' }}
+                                {{ $pasaje->reserva?->programacion?->fecha_salida?->format('d/m/Y') ?? '—' }}                                 {{ $pasaje->reserva?->programacion?->hora_salida ? substr($pasaje->reserva->programacion->hora_salida, 0, 5) : '—' }}
+
                             </dd>
 
                             <dt class="col-sm-4">Viajero</dt>
@@ -109,21 +118,6 @@
                                 {{ $pasaje->valor_servicio !== null ? number_format($pasaje->valor_servicio, 2) . ($pasaje->tipo_servicio === 2 ? ' %' : ' USD') : 'No registrado' }}
                             </dd>
 
-                            <dt class="col-sm-4">Rango de tasa aplicado</dt>
-
-                            <dd class="col-sm-8">
-                                @if ($pasaje->tasa_monto_minimo === null)
-                                    No registrado
-                                @else
-                                    Desde USD {{ number_format($pasaje->tasa_monto_minimo, 2) }}
-                                    @if ($pasaje->tasa_monto_maximo === null)
-                                        · Sin límite superior
-                                    @else
-                                        hasta USD {{ number_format($pasaje->tasa_monto_maximo, 2) }}
-                                    @endif
-                                @endif
-                            </dd>
-
                         </dl>
 
                     </div>
@@ -131,6 +125,30 @@
                 </div>
 
             </div>
+
+            @if ($qr)
+            <div class="col-md-6">
+
+                <div class="card">
+
+                    <div class="card-header">Código QR del pasaje</div>
+
+                    <div class="card-body text-center">
+
+                            <img src="{{ $qr }}" alt="Código QR del pasaje #{{ $pasaje->id }}"
+                                width="256" height="256" class="img-fluid bg-white">
+
+                            <p class="small text-body-secondary text-break mt-3 mb-0">
+                                {{ $pasaje->codigo_qr_token }}
+                            </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            @endif
 
         </div>
 

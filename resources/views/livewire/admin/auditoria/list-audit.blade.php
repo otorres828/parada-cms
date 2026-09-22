@@ -92,7 +92,7 @@
                     <x-list.sortable-button column="created_at" :$sortColumn :$sortDirection />
                 </th>
 
-                <th class="text-end">Acciones</th>
+                <th></th>
 
             </tr>
         </thead>

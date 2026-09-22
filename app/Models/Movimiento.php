@@ -64,7 +64,9 @@ class Movimiento extends ModelHelper
                 $query->where('movimientos.id', ctype_digit($search) ? $search : -1);
                 $query->orWhere('movimientos.clave', 'like', '%' . $search . '%');
                 $query->orWhere('movimientos.descripcion', 'like', '%' . $search . '%');
-                $query->orWhereHas('empresa', fn ($q) => $q->where('nombre', 'like', '%' . $search . '%'));
+                $query->orWhereHas('empresa', function ($query) use ($search) {
+                    return $query->where('nombre', 'like', '%' . $search . '%');
+                });
             });
         }
 

@@ -51,7 +51,9 @@ class DocumentoLegal extends ModelHelper
         }
 
         if ($search !== '') {
-            $query->where(fn ($q) => $q->where('titulo', 'like', '%' . $search . '%')->orWhere('nombre_original', 'like', '%' . $search . '%')->orWhere('observaciones', 'like', '%' . $search . '%'));
+            $query->where(function ($query) use ($search) {
+                return $query->where('titulo', 'like', '%' . $search . '%')->orWhere('nombre_original', 'like', '%' . $search . '%')->orWhere('observaciones', 'like', '%' . $search . '%');
+            });
         }
 
         return $query;

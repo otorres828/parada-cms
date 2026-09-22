@@ -35,7 +35,9 @@ class GroupEmpresa extends ModelHelper
         ]);
 
         if ($search !== '') {
-            $query->where(fn ($q) => $q->where('name', 'like', '%' . $search . '%')->orWhere('url', 'like', '%' . $search . '%'));
+            $query->where(function ($query) use ($search) {
+                return $query->where('name', 'like', '%' . $search . '%')->orWhere('url', 'like', '%' . $search . '%');
+            });
         }
 
         if (isset($filters['status'])) {

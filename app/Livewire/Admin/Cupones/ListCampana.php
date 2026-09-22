@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\Admin\Campanas;
+namespace App\Livewire\Admin\Cupones;
 
 use App\Models\ConfiguracionCupon;
 use App\Services\Admin\Access;
@@ -37,15 +37,15 @@ class ListCampana extends Component
     {
         $this->sortColumn = 'id';
         $this->sortDirection = 'desc';
-        $this->checkPermissions('campanas');
+        $this->checkPermissions('cupones');
     }
 
     public function render()
     {
         $query = ConfiguracionCupon::searchAdmin($this->search, ['status' => $this->status, 'date_from' => $this->date_from, 'date_to' => $this->date_to]);
         $query = $this->applySort($query);
-        $campanas = $query->paginate($this->per_page);
-        return view('livewire.admin.campanas.list-campana', ['campanas' => $campanas, 'capabilities' => Access::capabilities('campanas')]);
+        $cupones = $query->paginate($this->per_page);
+        return view('livewire.admin.cupones.list-campana', ['cupones' => $cupones, 'capabilities' => Access::capabilities('cupones')]);
     }
 
     public function updated($property): void
@@ -57,7 +57,7 @@ class ListCampana extends Component
 
     public function changeStatus(int $id): void
     {
-        Access::authorize('campanas', 'edit');
+        Access::authorize('cupones', 'edit');
 
         DB::transaction(function () use ($id) {
 

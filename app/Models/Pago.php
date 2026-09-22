@@ -57,7 +57,9 @@ class Pago extends ModelHelper
                 $query->where('pagos.id', ctype_digit($search) ? $search : -1);
                 $query->orWhere('pagos.referencia', 'like', '%' . $search . '%');
                 $query->orWhere('pagos.metodo', 'like', '%' . $search . '%');
-                $query->orWhereHas('empresa', fn ($q) => $q->where('nombre', 'like', '%' . $search . '%'));
+                $query->orWhereHas('empresa', function ($query) use ($search) {
+                    return $query->where('nombre', 'like', '%' . $search . '%');
+                });
             });
         }
 

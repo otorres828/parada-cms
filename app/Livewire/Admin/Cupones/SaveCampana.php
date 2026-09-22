@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\Admin\Campanas;
+namespace App\Livewire\Admin\Cupones;
 
 use App\Models\ConfiguracionCupon;
 use App\Models\Empresa;
@@ -48,7 +48,7 @@ class SaveCampana extends Component
     public function mount(?int $configuracion_cupon_id = null): void
     {
         $this->configuracion_cupon_id = $configuracion_cupon_id;
-        Access::authorize('campanas', $this->configuracion_cupon_id ? 'edit' : 'add');
+        Access::authorize('cupones', $this->configuracion_cupon_id ? 'edit' : 'add');
         if ($this->configuracion_cupon_id) {
             $this->editar($this->findConfiguracionCupon());
         }
@@ -56,7 +56,7 @@ class SaveCampana extends Component
 
     public function render()
     {
-        Access::authorize('campanas', $this->configuracion_cupon_id ? 'edit' : 'add');
+        Access::authorize('cupones', $this->configuracion_cupon_id ? 'edit' : 'add');
         $query = Empresa::searchAdmin($this->search_empresa_id);
         $options_empresa_id = (clone $query)->orderBy('nombre')->limit(100)->pluck('nombre', 'id')->all();
         if ($this->empresa_id && ! isset($options_empresa_id[$this->empresa_id])) {
@@ -66,15 +66,15 @@ class SaveCampana extends Component
             }
         }
 
-        return view('livewire.admin.campanas.save-campana', ['configuracionCupon' => $this->configuracion_cupon_id ? $this->findConfiguracionCupon() : null, 'capabilities' => Access::capabilities('campanas'), 'options_empresa_id' => $options_empresa_id]);
+        return view('livewire.admin.cupones.save-campana', ['configuracionCupon' => $this->configuracion_cupon_id ? $this->findConfiguracionCupon() : null, 'capabilities' => Access::capabilities('cupones'), 'options_empresa_id' => $options_empresa_id]);
     }
 
     public function save()
     {
-        Access::authorize('campanas', $this->configuracion_cupon_id ? 'edit' : 'add');
+        Access::authorize('cupones', $this->configuracion_cupon_id ? 'edit' : 'add');
         $data = $this->validateForm();
         $configuracionCupon = DB::transaction(function () use ($data) {
-            Access::authorize('campanas', $this->configuracion_cupon_id ? 'edit' : 'add');
+            Access::authorize('cupones', $this->configuracion_cupon_id ? 'edit' : 'add');
             $configuracionCupon = $this->configuracion_cupon_id ? $this->findConfiguracionCupon() : new ConfiguracionCupon;
             if ($this->configuracion_cupon_id && $configuracionCupon->cupones()->exists()) {
                 foreach (['empresa_id', 'codigo_base', 'cantidad_generar', 'tipo_descuento', 'monto_descuento', 'fecha_inicio'] as $immutable) {
@@ -123,8 +123,8 @@ class SaveCampana extends Component
             return $configuracionCupon;
         });
         session()->flash('admin_success', 'Registro guardado correctamente.');
-        $target = Route::has('admin.campanas.detail') && Access::allows('campanas', 'detail') ? 'detail' : 'list';
-        $url = Access::allows('campanas', $target) ? route('admin.campanas.'.$target, in_array($target, ['list', 'add']) ? [] : ['configuracion_cupon_id' => $configuracionCupon->id]) : route('admin.account.profile');
+        $target = Route::has('admin.cupones.detail') && Access::allows('cupones', 'detail') ? 'detail' : 'list';
+        $url = Access::allows('cupones', $target) ? route('admin.cupones.'.$target, in_array($target, ['list', 'add']) ? [] : ['configuracion_cupon_id' => $configuracionCupon->id]) : route('admin.account.profile');
 
         return $this->redirect($url, navigate: true);
     }

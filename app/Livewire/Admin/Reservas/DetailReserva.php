@@ -30,6 +30,6 @@ class DetailReserva extends Component
 
     protected function findReserva(): Reserva
     {
-        return Reserva::searchAdmin()->with([0 => 'usuario', 1 => 'programacion.viaje.empresa', 2 => 'pasajes.viajero'])->findOrFail($this->reserva_id);
+        return Reserva::searchAdmin()->with([0 => 'usuario', 1 => 'programacion.viaje.empresa', 2 => 'pasajes.viajero', 3 => 'pasajes.reserva'])->findOrFail($this->reserva_id);
     }
 }

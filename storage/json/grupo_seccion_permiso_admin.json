@@ -111,7 +111,7 @@
   },
   {"id": 6, "name": "Promociones", "url": "promociones", "icon": "bi-tags", "status": 1,
     "sections": [
-      {"name": "Campañas", "url": "campanas", "status": 1,
+      {"name": "Cupones", "url": "cupones", "status": 1,
         "permissions": [
         ]
       }

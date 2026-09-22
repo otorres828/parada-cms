@@ -106,7 +106,7 @@
                     <x-list.sortable-button column="fecha_pago" :$sortColumn :$sortDirection />
                 </th>
 
-                <th class="text-end">Acciones</th>
+                <th></th>
 
             </tr>
         </thead>

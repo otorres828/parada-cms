@@ -1,7 +1,7 @@
 {{--
     PASAJES — LISTADO
     --------------------------------------------------------------------------
-    Permite consultar los boletos y sus viajeros. Incluye búsqueda, ordenación y paginación.
+    Permite consultar los boletos, sus viajeros y la fecha de reserva. Incluye búsqueda, ordenación y paginación.
     Ofrece los filtros disponibles en la pantalla. Presenta las acciones de cada registro según
     las autorizaciones del administrador.
 
@@ -93,6 +93,8 @@
 
                 <th>Reserva </th>
 
+                <th>Fecha de reserva</th>
+
                 <th>Viajero </th>
 
                 <th>Documento </th>
@@ -113,7 +115,7 @@
 
                 <th>Pago </th>
 
-                <th class="text-end">Acciones</th>
+                <th></th>
 
             </tr>
         </thead>
@@ -130,6 +132,9 @@
                         {{ $pasaje->reserva?->codigo_referencia ?? '—' }}
                     </td>
 
+                    <td class="text-nowrap">
+                        {{ $pasaje->reserva?->fecha_compra?->format('d/m/Y H:i') ?? '—' }}
+                    </td>
                     <td>
                         {{ $pasaje->viajero?->nombre ?? '—' }}
                     </td>
@@ -175,7 +180,7 @@
             @empty
 
                 <tr>
-                    <td colspan="10" class="text-center py-5">
+                    <td colspan="11" class="text-center py-5">
                         No se encontraron registros.
                     </td>
 

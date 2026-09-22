@@ -65,7 +65,9 @@ class Viaje extends ModelHelper
         if ($search !== '') {
             $query->where(function ($query) use ($search) {
                 $query->where('viajes.id', ctype_digit($search) ? $search : -1);
-                $query->orWhereHas('empresa', fn ($q) => $q->where('nombre', 'like', '%' . $search . '%'));
+                $query->orWhereHas('empresa', function ($query) use ($search) {
+                    return $query->where('nombre', 'like', '%' . $search . '%');
+                });
             });
         }
 
@@ -88,7 +90,9 @@ class Viaje extends ModelHelper
         }
 
         if (!empty($filters['con_tasas'])) {
-            $query->withSum(['reservas as tasas_servicio_total' => fn ($q) => $q->where('estado_pago', Reserva::ESTADO_PAGO_PAGADO)], 'tasa_servicio');
+            $query->withSum(['reservas as tasas_servicio_total' => function ($query) {
+                return $query->where('estado_pago', Reserva::ESTADO_PAGO_PAGADO);
+            }], 'tasa_servicio');
         }
 
         return $query;

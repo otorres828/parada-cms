@@ -34,10 +34,9 @@ class TasaServicio extends ModelHelper
 
         if ($search !== '') {
             $query->where(
-                fn ($q) => $q
-                    ->where('monto_minimo', 'like', '%' . $search . '%')
-                    ->orWhere('monto_maximo', 'like', '%' . $search . '%')
-                    ->orWhere('cantidad', 'like', '%' . $search . '%'),
+                function ($query) use ($search) {
+                    return $query->where('monto_minimo', 'like', '%' . $search . '%')->orWhere('monto_maximo', 'like', '%' . $search . '%')->orWhere('cantidad', 'like', '%' . $search . '%');
+                },
             );
         }
 

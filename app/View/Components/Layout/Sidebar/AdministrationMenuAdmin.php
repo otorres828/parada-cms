@@ -35,7 +35,7 @@ public bool $listViajes = false;
 
     public bool $listReembolsos = false;
 
-    public bool $listCampanas = false;
+    public bool $listcupones = false;
 
 public bool $listTerminales = false;
 
@@ -75,7 +75,7 @@ public bool $listTerminales = false;
             'listReservas' => ['reservas', 'list'],
             'listPasajes' => ['pasajes', 'list'],
             'listReembolsos' => ['reembolsos', 'list'],
-            'listCampanas' => ['campanas', 'list'],
+            'listcupones' => ['cupones', 'list'],
             'listTerminales' => ['terminales', 'list'],
             'listAmenidades' => ['amenidades', 'list'],
             'salesReportes' => ['reportes', 'sales'],

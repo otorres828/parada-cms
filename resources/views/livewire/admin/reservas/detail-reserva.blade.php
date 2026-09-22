@@ -6,6 +6,7 @@
     descuentos, precios finales, tasas de servicio y total individual de cada boleto.
 
     Componentes reutilizables utilizados:
+    - <x-list.pasaje-qr />: Botón y modal QR para pasajes pagados.
     - <x-list.heading />: Cabecera del módulo con título y acciones.
     - <x-form.cancel-button />: Enlace para regresar o cancelar la edición.
     - <x-list.status-reserva />: Etiqueta del estado de pago según las constantes de Reserva.
@@ -143,6 +144,8 @@
 
                         <th>Abordaje</th>
 
+                        <th class="text-center">QR</th>
+
                     </tr>
                 </thead>
 
@@ -180,6 +183,10 @@
 
                             <td>
                                 {{ $ticket->abordado ? 'Abordado' : 'Pendiente' }}
+                            </td>
+
+                            <td class="text-center">
+                                <x-list.pasaje-qr :pasaje="$ticket" />
                             </td>
 
                         </tr>

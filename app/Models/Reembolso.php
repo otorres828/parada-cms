@@ -62,7 +62,9 @@ class Reembolso extends ModelHelper
                 $query->where('reembolsos.id', ctype_digit($search) ? $search : -1);
                 $query->orWhere('reembolsos.referencia', 'like', '%' . $search . '%');
                 $query->orWhere('reembolsos.motivo', 'like', '%' . $search . '%');
-                $query->orWhereHas('empresa', fn ($q) => $q->where('nombre', 'like', '%' . $search . '%'));
+                $query->orWhereHas('empresa', function ($query) use ($search) {
+                    return $query->where('nombre', 'like', '%' . $search . '%');
+                });
             });
         }
 

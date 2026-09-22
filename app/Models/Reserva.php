@@ -122,7 +122,9 @@ class Reserva extends ModelHelper
         }
 
         if (!empty($filters['empresa_id'])) {
-            $query->whereHas('programacion.viaje', fn ($q) => $q->where('empresa_id', $filters['empresa_id']));
+            $query->whereHas('programacion.viaje', function ($query) use ($filters) {
+                return $query->where('empresa_id', $filters['empresa_id']);
+            });
         }
 
         return $query;

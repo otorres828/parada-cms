@@ -55,7 +55,9 @@ class Retiro extends ModelHelper
             $query->where(function ($query) use ($search) {
                 $query->where('retiros.id', ctype_digit($search) ? $search : -1);
                 $query->orWhere('retiros.referencia', 'like', '%' . $search . '%');
-                $query->orWhereHas('empresa', fn ($q) => $q->where('nombre', 'like', '%' . $search . '%'));
+                $query->orWhereHas('empresa', function ($query) use ($search) {
+                    return $query->where('nombre', 'like', '%' . $search . '%');
+                });
             });
         }
 

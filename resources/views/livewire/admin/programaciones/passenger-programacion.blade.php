@@ -7,6 +7,7 @@
     búsqueda local mediante Alpine.
 
     Componentes reutilizables utilizados:
+    - <x-list.pasaje-qr />: Botón y modal QR para pasajes pagados.
     - <x-list.heading />: Cabecera del módulo con título y acciones.
     - <x-list.status-badge />: Etiqueta visual del estado del registro.
     - <x-layout.loader.fullpage />: Indicador de carga durante las operaciones de Livewire.
@@ -212,6 +213,8 @@
 
                         <th>Abordaje</th>
 
+                        <th class="text-center">QR</th>
+
                     </tr>
                 </thead>
 
@@ -269,12 +272,16 @@
                                 {{ $ticket->abordado ? 'Abordado' : 'Pendiente' }}
                             </td>
 
+                            <td class="text-center">
+                                <x-list.pasaje-qr :pasaje="$ticket" />
+                            </td>
+
                         </tr>
 
                     @empty
 
                         <tr>
-                            <td colspan="9" class="text-center py-4">
+                            <td colspan="10" class="text-center py-4">
                                 No hay pasajeros registrados en esta salida.
                             </td>
 
@@ -283,7 +290,7 @@
 
                     @if ($tickets->isNotEmpty())
                         <tr x-cloak x-show="search && !hasMatches()">
-                            <td colspan="9" class="text-center py-4">
+                            <td colspan="10" class="text-center py-4">
                                 No hay coincidencias.
                             </td>
 

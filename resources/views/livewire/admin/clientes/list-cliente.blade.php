@@ -95,7 +95,7 @@
                     <x-list.sortable-button column="status" :$sortColumn :$sortDirection />
                 </th>
 
-                <th class="text-end">Acciones</th>
+                <th></th>
 
             </tr>
         </thead>

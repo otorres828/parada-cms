@@ -58,9 +58,9 @@ use App\Livewire\Admin\Pasajes\DetailPasaje;
 use App\Livewire\Admin\Reembolsos\ListReembolso;
 use App\Livewire\Admin\Reembolsos\DetailReembolso;
 use App\Livewire\Admin\Reembolsos\ReviewReembolso;
-use App\Livewire\Admin\Campanas\ListCampana;
-use App\Livewire\Admin\Campanas\SaveCampana;
-use App\Livewire\Admin\Campanas\DetailCampana;
+use App\Livewire\Admin\Cupones\ListCampana;
+use App\Livewire\Admin\Cupones\SaveCampana;
+use App\Livewire\Admin\Cupones\DetailCampana;
 use App\Livewire\Admin\Terminales\ListTerminal;
 use App\Livewire\Admin\Terminales\SaveTerminal;
 use App\Livewire\Admin\Terminales\DetailTerminal;
@@ -236,9 +236,9 @@ Route::group(['middleware' => ['auth:admin', 'check.permisos']], function () {
     });
 
 
-    /*----------------------------------------Campanas de cupones--------------------------------------*/
+    /*----------------------------------------cupones de cupones--------------------------------------*/
 
-    Route::prefix('campanas')->name('campanas.')->group(function () {
+    Route::prefix('cupones')->name('cupones.')->group(function () {
 
         Route::livewire('/', ListCampana::class)->name('list');
         Route::livewire('nuevo', SaveCampana::class)->name('add');

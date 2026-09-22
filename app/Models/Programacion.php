@@ -61,7 +61,9 @@ class Programacion extends ModelHelper
         if ($search !== '') {
             $query->where(function ($query) use ($search) {
                 $query->where('programaciones.id', ctype_digit($search) ? $search : -1);
-                $query->orWhereHas('viaje.empresa', fn ($q) => $q->where('nombre', 'like', '%' . $search . '%'));
+                $query->orWhereHas('viaje.empresa', function ($query) use ($search) {
+                    return $query->where('nombre', 'like', '%' . $search . '%');
+                });
             });
         }
 
@@ -81,24 +83,44 @@ class Programacion extends ModelHelper
 
         if (!empty($filters['proximas'])) {
             $from = now();
-            $query->where(fn ($q) => $q->where('fecha_salida', '>', $from->toDateString())->orWhere(fn ($q) => $q->where('fecha_salida', $from->toDateString())->where('hora_salida', '>=', $from->format('H:i:s'))));
+            $query->where(function ($query) use ($from) {
+                return $query->where('fecha_salida', '>', $from->toDateString())->orWhere(function ($query) use ($from) {
+                    return $query->where('fecha_salida', $from->toDateString())->where('hora_salida', '>=', $from->format('H:i:s'));
+                });
+            });
         }
 
         if (isset($filters['empresa_id']) && $filters['empresa_id'] !== '') {
-            $query->whereHas('viaje', fn ($q) => $q->where('empresa_id', $filters['empresa_id']));
+            $query->whereHas('viaje', function ($query) use ($filters) {
+                return $query->where('empresa_id', $filters['empresa_id']);
+            });
         }
 
         if (!empty($filters['historial_ventas'])) {
             $query->withCount([
-                'pasajes as pasajes_vendidos' => fn ($q) => $q->where('reservas.estado_pago', Reserva::ESTADO_PAGO_PAGADO),
-                'pasajes as pasajes_pendientes' => fn ($q) => $q->where('reservas.estado_pago', Reserva::ESTADO_PAGO_PENDIENTE),
-                'pasajes as pasajes_cancelados' => fn ($q) => $q->where('reservas.estado_pago', Reserva::ESTADO_PAGO_CANCELADO),
-                'pasajes as pasajes_reembolsados' => fn ($q) => $q->where('reservas.estado_pago', Reserva::ESTADO_PAGO_REEMBOLSADO),
-                'pasajes as pasajes_fallidos' => fn ($q) => $q->where('reservas.estado_pago', Reserva::ESTADO_PAGO_FALLIDO),
+                'pasajes as pasajes_vendidos' => function ($query) {
+                    return $query->where('reservas.estado_pago', Reserva::ESTADO_PAGO_PAGADO);
+                },
+                'pasajes as pasajes_pendientes' => function ($query) {
+                    return $query->where('reservas.estado_pago', Reserva::ESTADO_PAGO_PENDIENTE);
+                },
+                'pasajes as pasajes_cancelados' => function ($query) {
+                    return $query->where('reservas.estado_pago', Reserva::ESTADO_PAGO_CANCELADO);
+                },
+                'pasajes as pasajes_reembolsados' => function ($query) {
+                    return $query->where('reservas.estado_pago', Reserva::ESTADO_PAGO_REEMBOLSADO);
+                },
+                'pasajes as pasajes_fallidos' => function ($query) {
+                    return $query->where('reservas.estado_pago', Reserva::ESTADO_PAGO_FALLIDO);
+                },
             ])->withSum([
-                'pasajes as ventas_total' => fn ($q) => $q->where('reservas.estado_pago', Reserva::ESTADO_PAGO_PAGADO),
+                'pasajes as ventas_total' => function ($query) {
+                    return $query->where('reservas.estado_pago', Reserva::ESTADO_PAGO_PAGADO);
+                },
             ], 'precio_final')->withSum([
-                'pasajes as tasas_servicio_total' => fn ($q) => $q->where('reservas.estado_pago', Reserva::ESTADO_PAGO_PAGADO),
+                'pasajes as tasas_servicio_total' => function ($query) {
+                    return $query->where('reservas.estado_pago', Reserva::ESTADO_PAGO_PAGADO);
+                },
             ], 'tasa_servicio');
         }
 

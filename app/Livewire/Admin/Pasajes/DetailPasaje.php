@@ -25,7 +25,9 @@ class DetailPasaje extends Component
 
     public function render()
     {
-        return view('livewire.admin.pasajes.detail-pasaje');
+        $this->pasaje = $this->findPasaje();
+
+        return view('livewire.admin.pasajes.detail-pasaje', ['qr' => $this->pasaje->getQr()]);
     }
 
     protected function findPasaje(): Pasaje
