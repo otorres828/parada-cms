@@ -134,7 +134,9 @@
 
                         <th>Fecha de nacimiento</th>
 
-                        <th class="text-end">Precio base USD</th>
+                        <th>Abordaje</th>
+
+                        <th class="text-end">Precio USD</th>
 
                         <th class="text-end">Descuento USD</th>
 
@@ -143,8 +145,6 @@
                         <th class="text-end">Tasa de servicio USD</th>
 
                         <th class="text-end">Total USD</th>
-
-                        <th>Abordaje</th>
 
                         <th class="text-center">QR</th>
 
@@ -167,6 +167,10 @@
                                 {{ $ticket->viajero?->fecha_nacimiento?->format('d/m/Y') ?? '—' }}
                             </td>
 
+                            <td>
+                                {{ $ticket->abordado ? 'Abordado' : 'Pendiente' }}
+                            </td>
+
                             <td class="text-end">
                                 {{ number_format($ticket->precio_base, 2) }}
                             </td>
@@ -185,10 +189,6 @@
 
                             <td class="text-end">
                                 {{ number_format($ticket->total, 2) }}
-                            </td>
-
-                            <td>
-                                {{ $ticket->abordado ? 'Abordado' : 'Pendiente' }}
                             </td>
 
                             <td class="text-center">

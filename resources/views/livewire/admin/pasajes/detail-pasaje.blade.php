@@ -94,10 +94,6 @@
 
                             <dd class="col-sm-8">{{ $pasaje->numero_asiento ?? '—' }}</dd>
 
-                            <dt class="col-sm-4">Subtotal USD</dt>
-
-                            <dd class="col-sm-8">{{ number_format($pasaje->subtotal ?? 0, 2) }}</dd>
-
                             <dt class="col-sm-4">Abordado</dt>
 
                             <dd class="col-sm-8">
@@ -107,11 +103,17 @@
                                 @endif
                             </dd>
 
-                            <dt class="col-sm-4">Pago</dt>
+                            <dt class="col-sm-4">Precio USD</dt>
 
-                            <dd class="col-sm-8">
-                                <x-list.status-reserva :status="$pasaje->reserva->estado_pago" />
-                            </dd>
+                            <dd class="col-sm-8">{{ number_format($pasaje->precio_base, 2) }}</dd>
+
+                            <dt class="col-sm-4">Descuento USD</dt>
+
+                            <dd class="col-sm-8">{{ number_format($pasaje->descuento, 2) }}</dd>
+
+                            <dt class="col-sm-4">Subtotal USD</dt>
+
+                            <dd class="col-sm-8">{{ number_format($pasaje->subtotal, 2) }}</dd>
 
                             <dt class="col-sm-4">Tasa de servicio USD</dt>
 
@@ -120,6 +122,12 @@
                             <dt class="col-sm-4">Total USD</dt>
 
                             <dd class="col-sm-8">{{ number_format($pasaje->total, 2) }}</dd>
+
+                            <dt class="col-sm-4">Pago</dt>
+
+                            <dd class="col-sm-8">
+                                <x-list.status-reserva :status="$pasaje->reserva->estado_pago" />
+                            </dd>
 
                             <dt class="col-sm-4">Tipo de tasa aplicada</dt>
 

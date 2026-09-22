@@ -18,8 +18,6 @@
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
-    @stack('styles')
-
 </head>
 
 <body class="layout-fixed sidebar-expand-lg sidebar-open bg-body-tertiary">
@@ -41,8 +39,6 @@
     </div>
 
     @include('components.layout.admin-lte.footer-scripts')
-
-    @stack('scripts')
 
 </body>
 

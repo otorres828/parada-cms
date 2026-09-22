@@ -123,15 +123,27 @@
                     <x-list.sortable-button column="numero_asiento" :$sortColumn :$sortDirection />
                 </th>
 
-                <th>Subtotal USD
-                    <x-list.sortable-button column="subtotal" :$sortColumn :$sortDirection />
-                </th>
-
                 <th>Abordado
                     <x-list.sortable-button column="abordado" :$sortColumn :$sortDirection />
                 </th>
 
+                <th>Precio USD
+                    <x-list.sortable-button column="precio_base" :$sortColumn :$sortDirection />
+                </th>
+
+                <th>Descuento USD
+                    <x-list.sortable-button column="descuento" :$sortColumn :$sortDirection />
+                </th>
+
+                <th>Subtotal USD
+                    <x-list.sortable-button column="subtotal" :$sortColumn :$sortDirection />
+                </th>
+
                 <th>Tasa de servicio USD</th>
+
+                <th>Total USD
+                    <x-list.sortable-button column="total" :$sortColumn :$sortDirection />
+                </th>
 
                 <th>Pago </th>
 
@@ -168,15 +180,27 @@
                     </td>
 
                     <td>
-                        {{ number_format($pasaje->subtotal ?? 0, 2) }}
-                    </td>
-
-                    <td>
                         {{ $pasaje->abordado ? 'Sí' : 'No' }}
                     </td>
 
                     <td>
+                        {{ number_format($pasaje->precio_base, 2) }}
+                    </td>
+
+                    <td>
+                        {{ number_format($pasaje->descuento, 2) }}
+                    </td>
+
+                    <td>
+                        {{ number_format($pasaje->subtotal, 2) }}
+                    </td>
+
+                    <td>
                         {{ number_format($pasaje->tasa_servicio, 2) }}
+                    </td>
+
+                    <td>
+                        {{ number_format($pasaje->total, 2) }}
                     </td>
 
                     <td>
@@ -200,7 +224,7 @@
             @empty
 
                 <tr>
-                    <td colspan="11" class="text-center py-5">
+                    <td colspan="14" class="text-center py-5">
                         No se encontraron registros.
                     </td>
 
