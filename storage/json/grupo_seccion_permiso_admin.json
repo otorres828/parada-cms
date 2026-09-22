@@ -1,0 +1,152 @@
+[
+  {"name": "Administración", "url": "administracion", "icon": "bi-shield-lock", "status": 1,
+    "sections": [
+      {"name": "Administradores", "url": "admins", "status": 1,
+        "permissions": [
+          {"name": "Listar", "url": "list", "status": 1},
+          {"name": "Agregar", "url": "add", "status": 1},
+          {"name": "Editar", "url": "edit", "status": 1},
+          {"name": "Eliminar", "url": "delete", "status": 1}
+        ]
+      },
+      {"name": "Tasa de Servicio", "url": "tasas-servicio", "status": 1,
+        "permissions": [
+          {"name": "Listar", "url": "list", "status": 1},
+          {"name": "Agregar", "url": "add", "status": 1},
+          {"name": "Editar", "url": "edit", "status": 1},
+          {"name": "Eliminar", "url": "delete", "status": 1}
+        ]
+      },
+      {"name": "Auditoría", "url": "auditoria", "status": 1,
+        "permissions": [
+          {"name": "Listar", "url": "list", "status": 1},
+          {"name": "Ver detalle", "url": "detail", "status": 1}
+        ]
+      }
+    ]
+  },
+  {"name": "Empresas y clientes", "url": "empresas-clientes", "icon": "bi-buildings", "status": 1,
+    "sections": [
+      {"name": "Empresas", "url": "empresas", "status": 1,
+        "permissions": [
+          {"name": "Listar", "url": "list", "status": 1},
+          {"name": "Agregar", "url": "add", "status": 1},
+          {"name": "Editar", "url": "edit", "status": 1},
+          {"name": "Eliminar", "url": "delete", "status": 1},
+          {"name": "Ver detalle", "url": "detail", "status": 1}
+        ]
+      },
+      {"name": "Clientes", "url": "clientes", "status": 1,
+        "permissions": [
+          {"name": "Listar", "url": "list", "status": 1},
+          {"name": "Editar", "url": "edit", "status": 1},
+          {"name": "Ver detalle", "url": "detail", "status": 1},
+          {"name": "Eliminar", "url": "delete", "status": 1}
+        ]
+      },
+      {"name": "Usuarios de empresa", "url": "empresas.users", "status": 1,
+        "permissions": [
+          {"name": "Listar", "url": "list", "status": 1},
+          {"name": "Agregar", "url": "add", "status": 1},
+          {"name": "Editar", "url": "edit", "status": 1},
+          {"name": "Ver detalle", "url": "detail", "status": 1},
+          {"name": "Asignar permisos", "url": "permissions", "status": 1}
+        ]
+      }
+    ]
+  },
+  {"name": "Legales", "url": "legales", "icon": "bi-file-earmark-text", "status": 1,
+    "sections": [
+      {"name": "Legales", "url": "legales", "status": 1,
+        "permissions": [
+          {"name": "Listar empresas", "url": "list", "status": 1},
+          {"name": "Consultar documentos", "url": "detail", "status": 1},
+          {"name": "Subir documentos", "url": "add", "status": 1},
+          {"name": "Ver y descargar archivos", "url": "file", "status": 1}
+        ]
+      }
+    ]
+  },
+  {"name": "Operación de viajes", "url": "operacion", "icon": "bi-bus-front", "status": 1,
+    "sections": [
+      {"name": "Rutas de viaje", "url": "viajes", "status": 1,
+        "permissions": [
+          {"name": "Listar", "url": "list", "status": 1},
+          {"name": "Ver detalle", "url": "detail", "status": 1}
+        ]
+      },
+      {"name": "Programaciones", "url": "programaciones", "status": 1,
+        "permissions": [
+          {"name": "Listar", "url": "list", "status": 1},
+          {"name": "Ver pasajeros", "url": "passengers", "status": 1}
+        ]
+      },
+      {"name": "Autobuses", "url": "autobuses", "status": 1,
+        "permissions": [
+          {"name": "Listar", "url": "list", "status": 1},
+          {"name": "Ver detalle", "url": "detail", "status": 1}
+        ]
+      }
+    ]
+  },
+  {"name": "Ventas y finanzas", "url": "finanzas", "icon": "bi-wallet2", "status": 1,
+    "sections": [
+      {"name": "Reservas y ventas", "url": "reservas", "status": 1,
+        "permissions": [
+        ]
+      },
+      {"name": "Pasajes", "url": "pasajes", "status": 1,
+        "permissions": [
+        ]
+      },
+      {"name": "Pagos", "url": "pagos", "status": 1,
+        "permissions": [
+        ]
+      },
+      {"name": "Retiros", "url": "retiros", "status": 1,
+        "permissions": [
+        ]
+      },
+      {"name": "Reembolsos", "url": "reembolsos", "status": 1,
+        "permissions": [
+        ]
+      }
+    ]
+  },
+  {"name": "Promociones", "url": "promociones", "icon": "bi-tags", "status": 1,
+    "sections": [
+      {"name": "Campañas", "url": "campanas", "status": 1,
+        "permissions": [
+        ]
+      }
+    ]
+  },
+  {"name": "Catálogos", "url": "catalogos", "icon": "bi-collection", "status": 1,
+    "sections": [
+      {"name": "Terminales", "url": "terminales", "status": 1,
+        "permissions": [
+        ]
+      },
+      {"name": "Amenidades", "url": "amenidades", "status": 1,
+        "permissions": [
+        ]
+      }
+    ]
+  },
+  {"name": "Reportes", "url": "reportes", "icon": "bi-bar-chart", "status": 1,
+    "sections": [
+    ]
+  },
+  {"name": "Configuración", "url": "configuracion", "icon": "bi-gear", "status": 1,
+    "sections": [
+    ]
+  },
+  {"name": "Mi cuenta", "url": "cuenta", "icon": "bi-person-circle", "status": 1,
+    "sections": [
+    ]
+  },
+  {"name": "Inicio", "url": "inicio", "icon": "bi-speedometer2", "status": 1,
+    "sections": [
+    ]
+  }
+]

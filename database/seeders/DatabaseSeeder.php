@@ -17,11 +17,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             UserSeeder::class,
 
-            GroupAdminSeeder::class,
-
-            SectionAdminSeeder::class,
-
-            PermissionAdminSeeder::class,
+            GroupSectionPermissionAdminSeeder::class,
 
             GroupEmpresaSeeder::class,
 
