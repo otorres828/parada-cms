@@ -105,7 +105,7 @@ class ReservaService
                         'precio_base' => $tarifa->precio,
                         'descuento' => '0.00',
                         'precio_final' => $tarifa->precio,
-                        'localizador' => (string) Str::uuid(),
+                        'localizador' => (string) Str::random(20),
                     ]);
                 }
                 unset($persona['numero_asiento']);

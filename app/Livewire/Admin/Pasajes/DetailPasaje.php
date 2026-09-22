@@ -16,18 +16,20 @@ class DetailPasaje extends Component
 
     public Pasaje $pasaje;
 
+    public string $qr;
+    
     public function mount(?int $pasaje_id = null): void
     {
         $this->pasaje_id = $pasaje_id;
         Access::authorize('pasajes', 'detail');
         $this->pasaje = $this->findPasaje();
+        $this->qr = $this->pasaje->getQr() ?? '';
     }
 
     public function render()
     {
-        $this->pasaje = $this->findPasaje();
 
-        return view('livewire.admin.pasajes.detail-pasaje', ['qr' => $this->pasaje->getQr()]);
+        return view('livewire.admin.pasajes.detail-pasaje');
     }
 
     protected function findPasaje(): Pasaje
