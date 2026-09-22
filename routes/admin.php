@@ -55,11 +55,6 @@ use App\Livewire\Admin\Reservas\DetailReserva;
 use App\Livewire\Admin\Pasajes\ListPasaje;
 use App\Livewire\Admin\Pasajes\DetailPasaje;
 
-use App\Livewire\Admin\Pagos\ListPago;
-use App\Livewire\Admin\Pagos\DetailPago;
-use App\Livewire\Admin\Retiros\ListRetiro;
-use App\Livewire\Admin\Retiros\DetailRetiro;
-use App\Livewire\Admin\Retiros\ReviewRetiro;
 use App\Livewire\Admin\Reembolsos\ListReembolso;
 use App\Livewire\Admin\Reembolsos\DetailReembolso;
 use App\Livewire\Admin\Reembolsos\ReviewReembolso;
@@ -226,27 +221,7 @@ Route::group(['middleware' => ['auth:admin', 'check.permisos']], function () {
 
     });
 
-    /*----------------------------------------Pagos--------------------------------------*/
 
-    Route::prefix('reportes/pagos')->name('pagos.')->group(function () {
-
-        Route::livewire('/', ListPago::class)->name('list');
-        Route::livewire('nuevo', \App\Livewire\Admin\Pagos\SavePago::class)->name('add');
-        Route::livewire('detalle/{pago_id}', DetailPago::class)->whereNumber('pago_id')->name('detail');
-
-    });
-
-    /*----------------------------------------Retiros de empresas--------------------------------------*/
-
-    Route::prefix('retiros')->name('retiros.')->group(function () {
-
-        Route::livewire('nuevo', \App\Livewire\Admin\Retiros\SaveRetiro::class)->name('add');
-
-        Route::livewire('/', ListRetiro::class)->name('list');
-        Route::livewire('detalle/{retiro_id}', DetailRetiro::class)->whereNumber('retiro_id')->name('detail');
-        Route::livewire('revision/{retiro_id}', ReviewRetiro::class)->whereNumber('retiro_id')->name('review');
-
-    });
 
     /*----------------------------------------Reembolsos--------------------------------------*/
 

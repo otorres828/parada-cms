@@ -78,7 +78,7 @@ class FormDeposit extends Component
         }
         session()->flash('admin_success', 'Registro guardado correctamente.');
         $target = Route::has('admin.pagos.detail') && Access::allows('pagos', 'detail') ? 'detail' : 'list';
-        $url = Access::allows('pagos', $target) ? route('admin.pagos.'.$target, in_array($target, ['list', 'add']) ? [] : ['pago_id' => $pago->id]) : route('admin.account.profile');
+        $url = Route::has('admin.pagos.'.$target) && Access::allows('pagos', $target) ? route('admin.pagos.'.$target, in_array($target, ['list', 'add']) ? [] : ['pago_id' => $pago->id]) : route('admin.account.profile');
 
         return $this->redirect($url, navigate: true);
     }

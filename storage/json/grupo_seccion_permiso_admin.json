@@ -103,14 +103,6 @@
           {"name": "Ver detalle", "url": "detail", "status": 1}
         ]
       },
-      {"name": "Pagos", "url": "pagos", "status": 1,
-        "permissions": [
-        ]
-      },
-      {"name": "Retiros", "url": "retiros", "status": 1,
-        "permissions": [
-        ]
-      },
       {"name": "Reembolsos", "url": "reembolsos", "status": 1,
         "permissions": [
         ]

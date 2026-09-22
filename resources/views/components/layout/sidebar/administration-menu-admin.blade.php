@@ -99,7 +99,7 @@
     ])
 @endif
 
-@if ($listReservas or $listPasajes or $listRetiros or $listReembolsos)
+@if ($listReservas or $listPasajes or $listReembolsos)
     @include('components.layout.sidebar-li', [
         'menu' => 'Ventas y finanzas',
         'icon' => 'nav-icon bi bi-wallet2',
@@ -115,12 +115,6 @@
                 'route' => route('admin.pasajes.list'),
                 'name' => 'Pasajes',
                 'active' => request()->routeIs('admin.pasajes.*') ? 'active' : '',
-            ],
-            [
-                'existe' => $listRetiros ?? false,
-                'route' => route('admin.retiros.list'),
-                'name' => 'Retiros',
-                'active' => request()->routeIs('admin.retiros.*') ? 'active' : '',
             ],
             [
                 'existe' => $listReembolsos ?? false,
@@ -168,18 +162,11 @@
     ])
 @endif
 
-@if ($salesReportes or $companiesReportes or $listPagos)
+@if ($salesReportes or $companiesReportes)
     @include('components.layout.sidebar-li', [
         'menu' => 'Reportes',
         'icon' => 'nav-icon bi bi-bar-chart',
         'list' => [
-            [
-                'existe' => $listPagos ?? false,
-                'route' => route('admin.pagos.list'),
-                'name' => 'Pagos',
-                'active' => request()->routeIs('admin.pagos.*') ? 'active' : '',
-            ],
-    
             [
                 'existe' => $salesReportes ?? false,
                 'route' => route('admin.reportes.sales'),

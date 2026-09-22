@@ -31,9 +31,7 @@ public bool $listViajes = false;
 
     public bool $listPasajes = false;
 
-    public bool $listPagos = false;
 
-    public bool $listRetiros = false;
 
     public bool $listReembolsos = false;
 
@@ -76,8 +74,6 @@ public bool $listTerminales = false;
             'listAutobuses' => ['autobuses', 'list'],
             'listReservas' => ['reservas', 'list'],
             'listPasajes' => ['pasajes', 'list'],
-            'listPagos' => ['pagos', 'list'],
-            'listRetiros' => ['retiros', 'list'],
             'listReembolsos' => ['reembolsos', 'list'],
             'listCampanas' => ['campanas', 'list'],
             'listTerminales' => ['terminales', 'list'],

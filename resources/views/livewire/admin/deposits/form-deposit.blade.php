@@ -32,7 +32,7 @@
         <x-slot:button>
 
             @if (\App\Services\Admin\Access::allows('pagos', 'list'))
-                <x-form.cancel-button :link="route('admin.pagos.list')">
+                <x-form.cancel-button :link="route('admin.account.profile')">
                     Volver al listado
                 </x-form.cancel-button>
             @endif
