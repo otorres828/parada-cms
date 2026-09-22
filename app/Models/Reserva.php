@@ -130,13 +130,12 @@ class Reserva extends ModelHelper
         return $query;
     }
 
-    public static function searchDetailClient(int $user_id): Collection
+    public static function searchDetailClient(int $user_id): Builder
     {
         return self::query()->with([0 => 'programacion.viaje.empresa', 1 => 'pasajes.viajero'])
             ->where('usuario_id', $user_id)
             ->whereIn('estado_pago', [self::ESTADO_PAGO_PAGADO, self::ESTADO_PAGO_PENDIENTE])
-            ->orderByDesc('fecha_compra')
-            ->get();
+            ->orderByDesc('fecha_compra');
     }
 
     public function pagos(): HasMany

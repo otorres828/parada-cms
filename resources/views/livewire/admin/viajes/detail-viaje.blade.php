@@ -302,6 +302,8 @@
 
     </div>
 
+    {{ $programaciones->links() }}
+
     <x-layout.loader.fullpage wire:loading.delay.short />
 
 </div>

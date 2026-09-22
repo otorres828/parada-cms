@@ -3,6 +3,8 @@
 namespace App\Livewire\Admin\Pasajes;
 
 use App\Models\Empresa;
+use App\Exports\PasajesExport;
+use Maatwebsite\Excel\Facades\Excel;
 use App\Models\Pasaje;
 use App\Services\Admin\Access;
 use App\Traits\Listing;
@@ -50,7 +52,7 @@ class ListPasaje extends Component
     {
         $query = Pasaje::searchAdmin($this->search, [
             'empresa_id' => $this->empresa_id, 
-            'status' => $this->status, 
+            'estado_pago' => $this->status, 
             'date_from' => $this->date_from, 
             'date_to' => $this->date_to
         ]);
@@ -63,6 +65,20 @@ class ListPasaje extends Component
             'pasajes' => $pasajes
         ]);
         
+    }
+
+    public function exportExcel()
+    {
+        Access::authorize('pasajes', 'list');
+        Access::authorize('pasajes', 'detail');
+        $query = Pasaje::searchAdmin($this->search, [
+            'empresa_id' => $this->empresa_id,
+            'estado_pago' => $this->status,
+            'date_from' => $this->date_from,
+            'date_to' => $this->date_to,
+        ]);
+
+        return Excel::download(new PasajesExport($this->applySort($query)), 'pasajes-'.now()->format('Y-m-d-His').'.xlsx');
     }
 
     public function updated($property): void

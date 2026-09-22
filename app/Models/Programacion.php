@@ -131,7 +131,7 @@ class Programacion extends ModelHelper
         return $query;
     }
 
-    public static function searchDetailViajes(int $viaje_id): Collection
+    public static function searchDetailViajes(int $viaje_id): Builder
     {
 
         return self::searchAdmin()->where('viaje_id', $viaje_id)
@@ -148,8 +148,7 @@ class Programacion extends ModelHelper
             ->withSum(['pasajes as tasas_servicio_total' => fn ($q) => 
                 $q->where('reservas.estado_pago', Reserva::ESTADO_PAGO_PAGADO)], 'tasa_servicio')
             ->orderByDesc('fecha_salida')
-            ->orderByDesc('hora_salida')
-            ->get();
+            ->orderByDesc('hora_salida');
 
     }
 }

@@ -90,7 +90,7 @@
                     Buscar reserva
                 </label>
                 <input id="buscar-reservas" type="search" class="form-control" x-model.debounce.200ms="search"
-                    placeholder="Buscar reserva">
+                    placeholder="Buscar en esta página: reserva">
 
             </div>
 
@@ -175,6 +175,8 @@
         </div>
 
     </div>
+
+    {{ $reservas->links() }}
 
     <x-layout.loader.fullpage wire:loading.delay.short />
 

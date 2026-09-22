@@ -40,6 +40,13 @@
 
         <x-slot:group>
 
+            @if ($canDetail)
+                <button type="button" class="btn btn-success" wire:click="exportExcel"
+                    wire:loading.attr="disabled" wire:target="exportExcel">
+                    <i class="bi bi-file-earmark-excel" aria-hidden="true"></i> Descargar Excel
+                </button>
+            @endif
+
         </x-slot:group>
 
     </x-list.actions>

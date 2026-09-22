@@ -5,7 +5,7 @@ namespace App\Livewire\Admin\Viajes;
 use App\Models\Programacion;
 use App\Models\Viaje;
 use App\Services\Admin\Access;
-use Illuminate\Database\Eloquent\Collection;
+use Livewire\WithPagination;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Locked;
 use Livewire\Component;
@@ -20,7 +20,11 @@ class DetailViaje extends Component
 
     public Viaje $viaje;
 
-    public Collection $programaciones;
+    use WithPagination;
+
+    public int $per_page = 10;
+
+    protected string $paginationTheme = 'bootstrap';
 
     public function mount(?int $viaje_id = null): void
     {
@@ -39,14 +43,17 @@ class DetailViaje extends Component
             abort(404);
         }
         $this->viaje = $viaje;
-        $this->programaciones = Programacion::searchDetailViajes($viaje_id);
         $this->canViewPassengers = Access::allows('programaciones', 'passengers');
     }
 
     public function render()
     {
-        return view('livewire.admin.viajes.detail-viaje');
+        return view('livewire.admin.viajes.detail-viaje', ['programaciones' => Programacion::searchDetailViajes($this->viaje_id)->paginate(max(1, min(100, $this->per_page)))]);
     }
 
 
+    public function updatedPerPage(): void
+    {
+        $this->resetPage();
+    }
 }

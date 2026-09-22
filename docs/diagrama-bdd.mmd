@@ -1,0 +1,446 @@
+erDiagram
+    %% Esquema actual de las migraciones. Sin created_at, updated_at ni deleted_at.
+
+    ADMINS {
+        int id PK
+        string name
+        string username UK
+        string password
+        string remember_token
+        string email UK
+        int level
+        int status
+    }
+
+    AMENIDAD_AUTOBUS {
+        int id PK
+        int autobus_id FK
+        int amenidad_id FK
+    }
+    %% UNIQUE AMENIDAD_AUTOBUS (autobus_id, amenidad_id)
+
+    AMENIDADES {
+        int id PK
+        string nombre
+        string icono
+        boolean estatus
+    }
+
+    AUDITORIAS {
+        int id PK
+        int admin_id FK
+        string accion
+        string entidad
+        int entidad_id
+        text datos
+        string ip
+    }
+
+    AUTOBUSES {
+        int id PK
+        int empresa_id FK
+        string placa
+        string modelo
+        string tipo_asiento
+        int total_asientos
+        boolean es_plantilla
+        boolean estatus
+    }
+
+    CACHE {
+        string key PK
+        text value
+        int expiration
+    }
+
+    CACHE_LOCKS {
+        string key PK
+        string owner
+        int expiration
+    }
+
+    CONFIGURACION_CUPONES {
+        int id PK
+        int empresa_id FK
+        string nombre_campana
+        string tipo_cupon
+        string modalidad
+        string codigo_base
+        int cantidad_generar
+        string tipo_descuento
+        decimal monto_descuento
+        string aplica_a
+        datetime fecha_inicio
+        datetime fecha_fin
+        boolean estatus
+    }
+
+    CONFIGURACIONES {
+        int id PK
+        string grupo UK
+        text valores
+    }
+
+    CUPONES {
+        int id PK
+        int configuracion_cupon_id FK
+        int usuario_id FK
+        string codigo UK
+        boolean redimido
+        datetime fecha_redencion
+    }
+
+    DOCUMENTOS_LEGALES {
+        int id PK
+        int empresa_id FK
+        int admin_id FK
+        string titulo
+        string tipo
+        text observaciones
+        string archivo
+        string nombre_original
+        string mime
+        int tamano
+    }
+
+    EMPRESAS {
+        int id PK
+        string nombre
+        string rif
+        string telefono
+        string email
+        boolean estatus
+        boolean retiros_habilitados
+        text datos_bancarios
+    }
+
+    ESTADOS {
+        int id PK
+        string nombre
+    }
+
+    GROUPS_ADMIN {
+        int id PK
+        string name
+        string url UK
+        string icon
+        boolean status
+    }
+
+    GROUPS_EMPRESA {
+        int id PK
+        string name
+        string url UK
+        string icon
+        boolean status
+    }
+
+    MOVIMIENTOS {
+        int id PK
+        int empresa_id FK
+        int admin_id FK
+        int pago_id FK
+        int retiro_id FK,UK
+        int reembolso_id FK,UK
+        string clave UK
+        string tipo
+        decimal monto
+        string moneda
+        text descripcion
+    }
+
+    PAGOS {
+        int id PK
+        int reserva_id FK,UK
+        int empresa_id FK
+        int admin_id FK
+        decimal monto
+        decimal neto_empresa
+        decimal comision
+        string moneda
+        string referencia UK
+        string metodo
+        string comprobante
+        text comentario
+        datetime fecha_pago
+    }
+
+    PASAJES {
+        int id PK
+        int reserva_id FK
+        int viajero_id FK
+        int numero_asiento
+        decimal precio_base
+        decimal descuento
+        decimal precio_final
+        decimal tasa_servicio
+        int tipo_servicio
+        decimal valor_servicio
+        decimal base_tasa_servicio
+        decimal tasa_monto_minimo
+        decimal tasa_monto_maximo
+        string codigo_qr_token UK
+        boolean abordado
+        datetime fecha_abordaje
+    }
+    %% UNIQUE PASAJES (reserva_id, numero_asiento)
+
+    PERMISOS_USUARIOS_EMPRESA {
+        int id PK
+        int usuario_empresa_id FK
+        int permiso_id FK
+    }
+    %% UNIQUE PERMISOS_USUARIOS_EMPRESA (usuario_empresa_id, permiso_id)
+
+    PERMISSION_ADMIN_ADMIN {
+        int id PK
+        int permission_id FK
+        int admin_id FK
+        boolean status
+    }
+    %% UNIQUE PERMISSION_ADMIN_ADMIN (permission_id, admin_id)
+
+    PERMISSIONS_ADMIN {
+        int id PK
+        int section_id FK
+        string name
+        string url
+        boolean status
+    }
+    %% UNIQUE PERMISSIONS_ADMIN (section_id, url)
+
+    PERMISSIONS_EMPRESA {
+        int id PK
+        int section_id FK
+        string name
+        string url
+        boolean status
+    }
+    %% UNIQUE PERMISSIONS_EMPRESA (section_id, url)
+
+    PROGRAMACION_TRAMO_PRECIOS {
+        int id PK
+        int programacion_id FK
+        int origen_terminal_id FK
+        int destino_terminal_id FK
+        decimal precio
+        int asientos_maximos_permitidos
+    }
+
+    PROGRAMACIONES {
+        int id PK
+        int viaje_id FK
+        int autobus_id FK
+        date fecha_salida
+        time hora_salida
+        int asientos_totales
+        int estatus
+    }
+
+    REEMBOLSOS {
+        int id PK
+        int pago_id FK,UK
+        int empresa_id FK
+        int admin_id FK
+        int revisado_por FK
+        decimal monto
+        string moneda
+        string estatus
+        text motivo
+        text comentario
+        string referencia UK
+        string comprobante
+        datetime fecha_resolucion
+    }
+
+    RESERVAS {
+        int id PK
+        int usuario_id FK
+        int programacion_id FK
+        int cupon_id FK
+        string codigo_referencia UK
+        decimal monto_pasajes
+        decimal descuento_aplicado
+        decimal tasa_servicio
+        decimal monto_total
+        string estado_pago
+        string metodo_pago
+        datetime fecha_compra
+        datetime fecha_expiracion
+        int origen_terminal_id FK
+        int destino_terminal_id FK
+        int programacion_tramo_precio_id FK
+    }
+
+    RETIROS {
+        int id PK
+        int empresa_id FK
+        int admin_id FK
+        int revisado_por FK
+        decimal monto
+        string moneda
+        string estatus
+        text datos_bancarios
+        text comentario
+        string referencia UK
+        string comprobante
+        datetime fecha_resolucion
+    }
+
+    SECTIONS_ADMIN {
+        int id PK
+        int group_id FK
+        string name
+        string url UK
+        boolean status
+    }
+
+    SECTIONS_EMPRESA {
+        int id PK
+        int group_id FK
+        string name
+        string url UK
+        boolean status
+    }
+
+    SESSIONS {
+        string id PK
+        int user_id
+        int authenticatable_id
+        string authenticatable_type
+        string ip_address
+        text user_agent
+        text payload
+        int last_activity
+    }
+
+    TASAS_SERVICIO {
+        int id PK
+        decimal monto_minimo
+        decimal monto_maximo
+        decimal cantidad
+        boolean estatus
+        int tipo_servicio
+    }
+
+    TERMINALES {
+        int id PK
+        int estado_id FK
+        string nombre
+        text direccion
+        decimal latitud
+        decimal longitud
+        boolean estatus
+    }
+
+    USERS {
+        int id PK
+        string name
+        string lastname
+        string email UK
+        string telefono
+        date date_birth
+        string sex
+        string password
+        string remember_token
+        int status
+    }
+
+    USUARIOS_EMPRESA {
+        int id PK
+        int empresa_id FK
+        string nombre
+        string email UK
+        string password
+        boolean es_admin
+        boolean estatus
+        string remember_token
+    }
+
+    VIAJE_TRAMOS {
+        int id PK
+        int viaje_id FK
+        int origen_terminal_id FK
+        int destino_terminal_id FK
+        int orden
+        time duracion_estimada
+    }
+
+    VIAJEROS {
+        int id PK
+        int usuario_id FK
+        string nombre
+        string apellido
+        string documento_identidad
+        date fecha_nacimiento
+        string tipo_pasajero
+    }
+
+    VIAJES {
+        int id PK
+        int empresa_id FK
+        int origen_terminal_id FK
+        int destino_terminal_id FK
+        time duracion_estimada
+        text comentario
+        boolean estatus
+    }
+
+    AMENIDADES ||--o{ AMENIDAD_AUTOBUS : "amenidad_id"
+    AUTOBUSES ||--o{ AMENIDAD_AUTOBUS : "autobus_id"
+    ADMINS |o--o{ AUDITORIAS : "admin_id"
+    EMPRESAS ||--o{ AUTOBUSES : "empresa_id"
+    EMPRESAS |o--o{ CONFIGURACION_CUPONES : "empresa_id"
+    USERS |o--o{ CUPONES : "usuario_id"
+    CONFIGURACION_CUPONES ||--o{ CUPONES : "configuracion_cupon_id"
+    ADMINS |o--o{ DOCUMENTOS_LEGALES : "admin_id"
+    EMPRESAS ||--o{ DOCUMENTOS_LEGALES : "empresa_id"
+    REEMBOLSOS |o--o{ MOVIMIENTOS : "reembolso_id"
+    RETIROS |o--o{ MOVIMIENTOS : "retiro_id"
+    PAGOS |o--o{ MOVIMIENTOS : "pago_id"
+    ADMINS ||--o{ MOVIMIENTOS : "admin_id"
+    EMPRESAS ||--o{ MOVIMIENTOS : "empresa_id"
+    ADMINS ||--o{ PAGOS : "admin_id"
+    EMPRESAS ||--o{ PAGOS : "empresa_id"
+    RESERVAS ||--o{ PAGOS : "reserva_id"
+    VIAJEROS |o--o{ PASAJES : "viajero_id"
+    RESERVAS ||--o{ PASAJES : "reserva_id"
+    PERMISSIONS_EMPRESA ||--o{ PERMISOS_USUARIOS_EMPRESA : "permiso_id"
+    USUARIOS_EMPRESA ||--o{ PERMISOS_USUARIOS_EMPRESA : "usuario_empresa_id"
+    ADMINS ||--o{ PERMISSION_ADMIN_ADMIN : "admin_id"
+    PERMISSIONS_ADMIN ||--o{ PERMISSION_ADMIN_ADMIN : "permission_id"
+    SECTIONS_ADMIN ||--o{ PERMISSIONS_ADMIN : "section_id"
+    SECTIONS_EMPRESA ||--o{ PERMISSIONS_EMPRESA : "section_id"
+    TERMINALES ||--o{ PROGRAMACION_TRAMO_PRECIOS : "destino_terminal_id"
+    TERMINALES ||--o{ PROGRAMACION_TRAMO_PRECIOS : "origen_terminal_id"
+    PROGRAMACIONES ||--o{ PROGRAMACION_TRAMO_PRECIOS : "programacion_id"
+    AUTOBUSES ||--o{ PROGRAMACIONES : "autobus_id"
+    VIAJES ||--o{ PROGRAMACIONES : "viaje_id"
+    ADMINS |o--o{ REEMBOLSOS : "revisado_por"
+    ADMINS ||--o{ REEMBOLSOS : "admin_id"
+    EMPRESAS ||--o{ REEMBOLSOS : "empresa_id"
+    PAGOS ||--o{ REEMBOLSOS : "pago_id"
+    PROGRAMACION_TRAMO_PRECIOS |o--o{ RESERVAS : "programacion_tramo_precio_id"
+    TERMINALES |o--o{ RESERVAS : "destino_terminal_id"
+    TERMINALES |o--o{ RESERVAS : "origen_terminal_id"
+    USERS ||--o{ RESERVAS : "usuario_id"
+    PROGRAMACIONES ||--o{ RESERVAS : "programacion_id"
+    CUPONES |o--o{ RESERVAS : "cupon_id"
+    ADMINS |o--o{ RETIROS : "revisado_por"
+    ADMINS ||--o{ RETIROS : "admin_id"
+    EMPRESAS ||--o{ RETIROS : "empresa_id"
+    GROUPS_ADMIN ||--o{ SECTIONS_ADMIN : "group_id"
+    GROUPS_EMPRESA ||--o{ SECTIONS_EMPRESA : "group_id"
+    ESTADOS ||--o{ TERMINALES : "estado_id"
+    EMPRESAS ||--o{ USUARIOS_EMPRESA : "empresa_id"
+    TERMINALES ||--o{ VIAJE_TRAMOS : "destino_terminal_id"
+    TERMINALES ||--o{ VIAJE_TRAMOS : "origen_terminal_id"
+    VIAJES ||--o{ VIAJE_TRAMOS : "viaje_id"
+    USERS ||--o{ VIAJEROS : "usuario_id"
+    TERMINALES ||--o{ VIAJES : "destino_terminal_id"
+    TERMINALES ||--o{ VIAJES : "origen_terminal_id"
+    EMPRESAS ||--o{ VIAJES : "empresa_id"
+
+    %% sessions.authenticatable_id/authenticatable_type: relación polimórfica, sin FK física.
+    %% Tasas de servicio: los pasajes conservan una copia histórica de la tasa aplicada, sin FK a tasas_servicio.
+    %% Pagos, retiros y movimientos permanecen en la base aunque sus módulos administrativos se retiraron.
