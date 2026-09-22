@@ -31,7 +31,7 @@ class Pasaje extends ModelHelper
         'precio_base',
         'descuento',
         'precio_final',
-        'codigo_qr_token',
+        'localizador',
         'abordado',
         'fecha_abordaje',
     ];
@@ -44,21 +44,21 @@ class Pasaje extends ModelHelper
     protected static function booted(): void
     {
         static::creating(function (Pasaje $pasaje) {
-            if (empty($pasaje->codigo_qr_token)) {
-                $pasaje->codigo_qr_token = (string) Str::uuid();
+            if (empty($pasaje->localizador)) {
+                $pasaje->localizador = (string) Str::uuid();
             }
         });
     }
 
     public function getQr(): ?string
     {
-        if ($this->reserva?->estado_pago !== Reserva::ESTADO_PAGO_PAGADO || empty($this->codigo_qr_token)) {
+        if ($this->reserva?->estado_pago !== Reserva::ESTADO_PAGO_PAGADO || empty($this->localizador)) {
             return null;
         }
 
         $writer = new Writer(new ImageRenderer(new RendererStyle(256, 4), new SvgImageBackEnd));
 
-        return 'data:image/svg+xml;base64,'.base64_encode($writer->writeString($this->codigo_qr_token));
+        return 'data:image/svg+xml;base64,'.base64_encode($writer->writeString($this->localizador));
     }
 
     public function reserva(): BelongsTo

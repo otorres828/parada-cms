@@ -22,7 +22,7 @@ return new class extends Migration
             $table->decimal('base_tasa_servicio', 12, 2)->nullable();
             $table->decimal('tasa_monto_minimo', 12, 2)->nullable();
             $table->decimal('tasa_monto_maximo', 12, 2)->nullable();
-            $table->string('codigo_qr_token')->unique();
+            $table->string('localizador')->unique();
             $table->boolean('abordado')->default(false);
             $table->dateTime('fecha_abordaje')->nullable();
             $table->timestamps();

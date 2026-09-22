@@ -105,7 +105,7 @@ class ReservaService
                         'precio_base' => $tarifa->precio,
                         'descuento' => '0.00',
                         'precio_final' => $tarifa->precio,
-                        'codigo_qr_token' => (string) Str::uuid(),
+                        'localizador' => (string) Str::uuid(),
                     ]);
                 }
                 unset($persona['numero_asiento']);

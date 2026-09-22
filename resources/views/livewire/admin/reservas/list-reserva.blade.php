@@ -183,7 +183,10 @@
                         <x-list.button-group>
 
                             @if ($canDetail)
-                                <x-list.view-button :route="route('admin.reservas.detail', ['reserva_id' => $reserva->id])" :target="false" />
+                                <a class="btn btn-outline-secondary"
+                                    href="{{ route('admin.reservas.detail', ['reserva_id' => $reserva->id]) }}"
+                                    wire:navigate title="Detalle" aria-label="Detalle"><i
+                                        class="bi bi-people-fill"></i></a>
                             @endif
 
                         </x-list.button-group>

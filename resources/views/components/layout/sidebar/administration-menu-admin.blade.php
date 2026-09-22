@@ -134,7 +134,7 @@
             [
                 'existe' => $listcupones ?? false,
                 'route' => route('admin.cupones.list'),
-                'name' => 'Campañas',
+                'name' => 'Cupones',
                 'active' => request()->routeIs('admin.cupones.*') ? 'active' : '',
             ],
         ],

@@ -4,7 +4,7 @@
     Presenta la fecha de reserva, la fecha y hora de salida de la programación, el viajero, su documento, asiento y estado de abordaje. Consulta el
     origen y destino comprados a través de la reserva y muestra el precio del boleto, el estado de
     pago y la tasa de servicio aplicada con su modalidad, valor y rango histórico.
-    Muestra el QR generado localmente con el codigo_qr_token únicamente si la reserva está pagada.
+    Muestra el QR generado localmente con el localizador únicamente si la reserva está pagada.
 
     Componentes reutilizables utilizados:
     - <x-list.heading />: Cabecera del módulo con título y acciones.
@@ -139,7 +139,7 @@
                                 width="256" height="256" class="img-fluid bg-white">
 
                             <p class="small text-body-secondary text-break mt-3 mb-0">
-                                {{ $pasaje->codigo_qr_token }}
+                                {{ $pasaje->localizador }}
                             </p>
 
                     </div>
