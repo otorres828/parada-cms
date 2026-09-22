@@ -7,7 +7,6 @@ use App\Models\Terminal;
 use App\Services\Admin\Access;
 use App\Services\Admin\Audit;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Route;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Locked;
 use Livewire\Component;
@@ -74,8 +73,7 @@ class SaveTerminal extends Component
             return $terminal;
         });
         session()->flash('admin_success', 'Registro guardado correctamente.');
-        $target = Route::has('admin.terminales.detail') && Access::allows('terminales', 'detail') ? 'detail' : 'list';
-        $url = Access::allows('terminales', $target) ? route('admin.terminales.'.$target, in_array($target, ['list', 'add']) ? [] : ['terminal_id' => $terminal->id]) : route('admin.account.profile');
+        $url = Access::allows('terminales', 'list') ? route('admin.terminales.list') : route('admin.account.profile');
 
         return $this->redirect($url, navigate: true);
     }

@@ -14,7 +14,6 @@
     - <x-list.sortable-button />: Control para ordenar por una columna.
     - <x-list.status-badge />: Etiqueta visual del estado del registro.
     - <x-list.button-group />: Agrupación de los botones de acción de una fila.
-    - <x-list.view-button />: Enlace para consultar el detalle del registro.
     - <x-list.edit-button />: Enlace para editar el registro.
     - <x-list.status-button />: Botón para solicitar un cambio de estado.
     - <x-layout.loader.fullpage />: Indicador de carga durante las operaciones de Livewire.
@@ -132,10 +131,6 @@
                     <td class="text-end">
 
                         <x-list.button-group>
-
-                            @if ($capabilities['detail'])
-                                <x-list.view-button :route="route('admin.terminales.detail', ['terminal_id' => $terminal->id])" :target="false" />
-                            @endif
 
                             @if ($capabilities['edit'])
                                 <x-list.edit-button :route="route('admin.terminales.edit', ['terminal_id' => $terminal->id])" />

@@ -57,7 +57,6 @@ class CheckPermission
         'admin.tasas-servicio.edit' => ['tasas-servicio', 'edit'],
         'admin.tasas-servicio.add' => ['tasas-servicio', 'add'],
         'admin.terminales.list' => ['terminales', 'list'],
-        'admin.terminales.detail' => ['terminales', 'detail'],
         'admin.terminales.edit' => ['terminales', 'edit'],
         'admin.terminales.add' => ['terminales', 'add'],
         'admin.clientes.list' => ['clientes', 'list'],

@@ -63,7 +63,6 @@ use App\Livewire\Admin\Cupones\SaveCampana;
 use App\Livewire\Admin\Cupones\DetailCampana;
 use App\Livewire\Admin\Terminales\ListTerminal;
 use App\Livewire\Admin\Terminales\SaveTerminal;
-use App\Livewire\Admin\Terminales\DetailTerminal;
 use App\Livewire\Admin\Amenidades\ListAmenidad;
 use App\Livewire\Admin\Amenidades\SaveAmenidad;
 use App\Livewire\Admin\Reportes\SalesReport;
@@ -256,8 +255,6 @@ Route::group(['middleware' => ['auth:admin', 'check.permisos']], function () {
         Route::livewire('/', ListTerminal::class)->name('list');
         Route::livewire('nuevo', SaveTerminal::class)->name('add');
         Route::livewire('editar/{terminal_id}', SaveTerminal::class)->whereNumber('terminal_id')->name('edit');
-        Route::livewire('detalle/{terminal_id}', DetailTerminal::class)->whereNumber('terminal_id')->name('detail');
-
     });
 
     /*----------------------------------------Amenidades--------------------------------------*/

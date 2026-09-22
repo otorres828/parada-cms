@@ -73,31 +73,27 @@
             searchController: null,
             resizeObserver: null,
             async init() {
+                this.search = this.address || '';
                 await this.$nextTick();
                 await this.initializeMap();
             },
             async loadStyles() {
-                const currentStylesheet = document.querySelector('link[data-leaflet-styles]');
-                if (currentStylesheet?.sheet) return;
+                if (document.querySelector('link[data-leaflet-styles]')) return;
 
-                if (!window.leafletStylesLoader) {
-                    window.leafletStylesLoader = new Promise((resolve, reject) => {
-                        const stylesheet = currentStylesheet ?? document.createElement('link');
-                        stylesheet.addEventListener('load', resolve, { once: true });
-                        stylesheet.addEventListener('error', reject, { once: true });
-
-                        if (!currentStylesheet) {
-                            stylesheet.rel = 'stylesheet';
-                            stylesheet.href = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
-                            stylesheet.integrity = 'sha256-p4NxAoJBhIINfQ3ynhtpV3qLSjMZQ7QLUP6M24CclFo=';
-                            stylesheet.crossOrigin = '';
-                            stylesheet.dataset.leafletStyles = 'true';
-                            document.head.appendChild(stylesheet);
-                        }
-                    });
-                }
-
-                await window.leafletStylesLoader;
+                return new Promise((resolve) => {
+                    const stylesheet = document.createElement('link');
+                    stylesheet.rel = 'stylesheet';
+                    stylesheet.href = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
+                    stylesheet.dataset.leafletStyles = 'true';
+                    stylesheet.onload = resolve;
+                    stylesheet.onerror = () => {
+                        console.warn('Fallo la carga del CSS desde unpkg, intentando cdnjs...');
+                        stylesheet.href = 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css';
+                        stylesheet.onload = resolve;
+                        stylesheet.onerror = resolve; // Continuar aunque falle el CSS
+                    };
+                    document.head.appendChild(stylesheet);
+                });
             },
             async loadScript() {
                 if (window.L) return;
@@ -106,10 +102,18 @@
                     window.leafletLoader = new Promise((resolve, reject) => {
                         const script = document.createElement('script');
                         script.src = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
-                        script.integrity = 'sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=';
-                        script.crossOrigin = '';
-                        script.onload = resolve;
-                        script.onerror = reject;
+                        script.onload = () => resolve();
+                        script.onerror = () => {
+                            console.warn('Fallo la carga del JS desde unpkg, intentando cdnjs...');
+                            const fallbackScript = document.createElement('script');
+                            fallbackScript.src = 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js';
+                            fallbackScript.onload = () => resolve();
+                            fallbackScript.onerror = (err) => {
+                                window.leafletLoader = null; // Liberar para reintentar si es necesario
+                                reject(err);
+                            };
+                            document.head.appendChild(fallbackScript);
+                        };
                         document.head.appendChild(script);
                     });
                 }
@@ -118,7 +122,12 @@
             },
             async initializeMap() {
                 try {
-                    await Promise.all([this.loadStyles(), this.loadScript()]);
+                    await this.loadStyles();
+                    await this.loadScript();
+
+                    if (!window.L) {
+                        throw new Error('Leaflet no está disponible en window.L');
+                    }
 
                     const latitude = this.coordinate(this.latitude, 6.4238);
                     const longitude = this.coordinate(this.longitude, -66.5897);
@@ -138,17 +147,27 @@
                         draggable: true,
                     }).addTo(this.map);
 
-                    this.marker.on('dragend', event => this.updateCoordinates(event.target.getLatLng()));
-                    this.map.on('click', event => this.updateCoordinates(event.latlng));
+                    this.marker.on('dragend', event => {
+                        if (event?.target?.getLatLng) {
+                            this.updateCoordinates(event.target.getLatLng());
+                        }
+                    });
+
+                    this.map.on('click', event => {
+                        if (event?.latlng) {
+                            this.updateCoordinates(event.latlng);
+                        }
+                    });
+
                     this.$watch('latitude', () => this.syncMarker());
                     this.$watch('longitude', () => this.syncMarker());
 
                     this.resizeObserver = new ResizeObserver(() => this.map?.invalidateSize());
                     this.resizeObserver.observe(this.$refs.map);
-                    requestAnimationFrame(() => this.map.invalidateSize());
+                    requestAnimationFrame(() => this.map?.invalidateSize());
                 } catch (error) {
-                    console.log(error);
-                    this.$store.toast.info('No fue posible cargar el mapa. Puedes ingresar las coordenadas manualmente.');
+                    console.error('Error al inicializar el mapa (causa exacta):', error);
+                    this.$store.toast?.info('No fue posible cargar el mapa. Puedes ingresar las coordenadas manualmente.');
                 }
             },
             coordinate(value, fallback) {
@@ -169,6 +188,8 @@
                 this.map.panTo(position);
             },
             updateCoordinates(position) {
+                if (!position || typeof position.lat === 'undefined' || typeof position.lng === 'undefined') return;
+
                 this.latitude = Number(position.lat).toFixed(7);
                 this.longitude = Number(position.lng).toFixed(7);
                 this.marker?.setLatLng(position);
@@ -214,7 +235,8 @@
                         }));
                 } catch (error) {
                     if (error.name !== 'AbortError') {
-                        this.$store.toast.info('No fue posible consultar direcciones en este momento.');
+                        console.error('Error al buscar dirección:', error);
+                        this.$store.toast?.info('No fue posible consultar direcciones en este momento.');
                     }
                 } finally {
                     if (this.searchController === controller) this.searching = false;
