@@ -6,6 +6,7 @@ use App\Models\Estado;
 use App\Models\Terminal;
 use App\Services\Admin\Access;
 use App\Services\Admin\Audit;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Locked;
@@ -33,10 +34,13 @@ class SaveTerminal extends Component
 
     public Terminal $terminal;
 
+    public Collection $estados;
+
     public function mount(?int $terminal_id = null): void
     {
         $this->terminal_id = $terminal_id;
         Access::authorize('terminales', $this->terminal_id ? 'edit' : 'add');
+        $this->estados = Estado::searchAdmin()->orderBy('nombre')->get();
         if ($this->terminal_id) {
             $this->editar($this->findTerminal());
         }
@@ -44,18 +48,7 @@ class SaveTerminal extends Component
 
     public function render()
     {
-        $query = Estado::searchAdmin($this->search_estado_id);
-        $options_estado_id = (clone $query)->orderBy('nombre')->limit(100)->pluck('nombre', 'id')->all();
-        if ($this->estado_id && ! isset($options_estado_id[$this->estado_id])) {
-            $selected = Estado::searchAdmin()->find($this->estado_id);
-            if ($selected) {
-                $options_estado_id[$selected->id] = $selected->nombre;
-            }
-        }
-
-        return view('livewire.admin.terminales.save-terminal', [
-            'options_estado_id' => $options_estado_id
-        ]);
+        return view('livewire.admin.terminales.save-terminal');
     }
 
     public function save()

@@ -23,6 +23,8 @@ class SaveAmenidad extends Component
 
     public $estatus = 1;
 
+    public Amenidad $amenidad;
+
     public function mount(?int $amenidad_id = null): void
     {
         $this->amenidad_id = $amenidad_id;
@@ -34,9 +36,7 @@ class SaveAmenidad extends Component
 
     public function render()
     {
-        Access::authorize('amenidades', $this->amenidad_id ? 'edit' : 'add');
-
-        return view('livewire.admin.amenidades.save-amenidad', ['amenidad' => $this->amenidad_id ? $this->findAmenidad() : null, 'capabilities' => Access::capabilities('amenidades')]);
+        return view('livewire.admin.amenidades.save-amenidad');
     }
 
     public function save()
@@ -63,6 +63,7 @@ class SaveAmenidad extends Component
 
     protected function editar(Amenidad $amenidad): void
     {
+        $this->amenidad = $amenidad;
         $this->nombre = $amenidad->nombre ?? '';
         $this->icono = $amenidad->icono ?? '';
         $this->estatus = (string) (is_bool($amenidad->estatus) ? (int) $amenidad->estatus : $amenidad->estatus);

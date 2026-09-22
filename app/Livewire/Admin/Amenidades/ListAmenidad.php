@@ -37,9 +37,14 @@ class ListAmenidad extends Component
     public function render()
     {
         $query = Amenidad::searchAdmin($this->search, ['status' => $this->status]);
+
         $query = $this->applySort($query);
+
         $amenidades = $query->paginate($this->per_page);
-        return view('livewire.admin.amenidades.list-amenidad', ['amenidades' => $amenidades, 'capabilities' => Access::capabilities('amenidades')]);
+
+        return view('livewire.admin.amenidades.list-amenidad', [
+            'amenidades' => $amenidades, 
+        ]);
     }
 
     public function updated($property): void
@@ -59,9 +64,9 @@ class ListAmenidad extends Component
 
             $amenidad = $query->whereKey($id)->lockForUpdate()->firstOrFail();
 
-            $inactive = 0;
+            $inactive = Amenidad::ESTADO_DELETE;
 
-            $amenidad->estatus = (int) $amenidad->estatus === 1 ? $inactive : 1;
+            $amenidad->estatus = (int) $amenidad->estatus === Amenidad::ESTADO_ACTIVE ? $inactive : Amenidad::ESTADO_ACTIVE;
 
             $amenidad->save();
 

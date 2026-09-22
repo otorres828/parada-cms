@@ -125,12 +125,9 @@
                     <td class="text-end">
 
                         <x-list.button-group>
-
-                            @if ($capabilities['edit'])
-                                <x-list.edit-button :route="route('admin.amenidades.edit', ['amenidad_id' => $amenidad->id])" />
-                            @endif
-
+                            
                             @if ($canEdit)
+                                <x-list.edit-button :route="route('admin.amenidades.edit', ['amenidad_id' => $amenidad->id])" />
                                 <x-list.status-button wire:click="changeStatus({{ $amenidad->id }})" :status="$amenidad->estatus"
                                     wire:loading.attr="disabled" />
                             @endif

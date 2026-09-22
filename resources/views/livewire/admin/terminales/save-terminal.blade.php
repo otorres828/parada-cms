@@ -56,8 +56,8 @@
 
                             <option value="">Seleccionar...</option>
 
-                            @foreach ($options_estado_id as $value => $label)
-                                <option value="{{ $value }}">{{ $label }}</option>
+                            @foreach ($estados as $estado)
+                                <option value="{{ $estado->id }}">{{ $estado->nombre }}</option>
                             @endforeach
 
                         </x-form.dropdown>
