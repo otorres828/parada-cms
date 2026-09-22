@@ -182,7 +182,7 @@
 
                         <x-list.button-group>
 
-                            @if ($capabilities['detail'])
+                            @if ($canDetail)
                                 <x-list.view-button :route="route('admin.reservas.detail', ['reserva_id' => $reserva->id])" :target="false" />
                             @endif
 

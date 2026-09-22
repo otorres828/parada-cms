@@ -7,6 +7,7 @@ use App\Models\Reserva;
 use App\Services\Admin\Access;
 use App\Traits\Listing;
 use App\Traits\Permissions;
+use Illuminate\Database\Eloquent\Collection;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -26,6 +27,8 @@ class ListReserva extends Component
 
     public string $date_to = '';
 
+    public Collection $empresas;
+
     protected array $queryString = [
         'empresa_id' => ['except' => ''], 
         'search' => ['except' => ''], 
@@ -39,15 +42,26 @@ class ListReserva extends Component
     {
         $this->sortColumn = 'id';
         $this->sortDirection = 'desc';
-        $this->checkPermissions('reservas');
+        $this->checkPermissions('reservas',['detail']);
+        $this->empresas = Empresa::searchAdmin()->orderBy('nombre')->get();
     }
 
     public function render()
     {
-        $query = Reserva::searchAdmin($this->search, ['empresa_id' => $this->empresa_id, 'status' => $this->status, 'date_from' => $this->date_from, 'date_to' => $this->date_to]);
+        $query = Reserva::searchAdmin($this->search, [
+            'empresa_id' => $this->empresa_id, 
+            'status' => $this->status, 
+            'date_from' => $this->date_from, 
+            'date_to' => $this->date_to
+        ]);
+
         $query = $this->applySort($query);
+
         $reservas = $query->paginate($this->per_page);
-        return view('livewire.admin.reservas.list-reserva', ['empresas' => Empresa::searchAdmin()->orderBy('nombre')->get(), 'reservas' => $reservas, 'capabilities' => Access::capabilities('reservas')]);
+
+        return view('livewire.admin.reservas.list-reserva', [
+            'reservas' => $reservas, 
+        ]);
     }
 
     public function updated($property): void

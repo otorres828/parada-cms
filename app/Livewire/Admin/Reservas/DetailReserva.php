@@ -14,18 +14,18 @@ class DetailReserva extends Component
     #[Locked]
     public ?int $reserva_id = null;
 
+    public Reserva $reserva;
+
     public function mount(?int $reserva_id = null): void
     {
         $this->reserva_id = $reserva_id;
         Access::authorize('reservas', 'detail');
-        $reserva = $this->findReserva();
+        $this->reserva = $this->findReserva();
     }
 
     public function render()
     {
-        Access::authorize('reservas', 'detail');
-
-        return view('livewire.admin.reservas.detail-reserva', ['reserva' => $this->reserva_id ? $this->findReserva() : null, 'capabilities' => Access::capabilities('reservas')]);
+        return view('livewire.admin.reservas.detail-reserva');
     }
 
     protected function findReserva(): Reserva
