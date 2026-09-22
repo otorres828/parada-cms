@@ -94,9 +94,9 @@
 
                             <dd class="col-sm-8">{{ $pasaje->numero_asiento ?? '—' }}</dd>
 
-                            <dt class="col-sm-4">Precio USD</dt>
+                            <dt class="col-sm-4">Subtotal USD</dt>
 
-                            <dd class="col-sm-8">{{ number_format($pasaje->precio_final ?? 0, 2) }}</dd>
+                            <dd class="col-sm-8">{{ number_format($pasaje->subtotal ?? 0, 2) }}</dd>
 
                             <dt class="col-sm-4">Abordado</dt>
 
@@ -117,9 +117,9 @@
 
                             <dd class="col-sm-8">{{ number_format($pasaje->tasa_servicio, 2) }}</dd>
 
-                            <dt class="col-sm-4">Precio + tasa USD</dt>
+                            <dt class="col-sm-4">Total USD</dt>
 
-                            <dd class="col-sm-8">{{ number_format($pasaje->precio_final_ts, 2) }}</dd>
+                            <dd class="col-sm-8">{{ number_format($pasaje->total, 2) }}</dd>
 
                             <dt class="col-sm-4">Tipo de tasa aplicada</dt>
 
@@ -130,7 +130,18 @@
                             <dt class="col-sm-4">Valor aplicado</dt>
 
                             <dd class="col-sm-8">
-                                {{ $pasaje->valor_servicio !== null ? number_format($pasaje->valor_servicio, 2) . ($pasaje->tipo_servicio === 2 ? ' %' : ' USD') : 'No registrado' }}
+                                {{ $pasaje->valor !== null ? number_format($pasaje->valor, 2) . ($pasaje->tipo_servicio === 2 ? ' %' : ' USD') : 'No registrado' }}
+                            </dd>
+
+                            <dt class="col-sm-4">Rango aplicado USD</dt>
+
+                            <dd class="col-sm-8">
+                                @if ($pasaje->monto_minimo !== null)
+                                    {{ number_format($pasaje->monto_minimo, 2) }} —
+                                    {{ $pasaje->monto_maximo !== null ? number_format($pasaje->monto_maximo, 2) : 'Sin límite' }}
+                                @else
+                                    No registrado
+                                @endif
                             </dd>
 
                         </dl>

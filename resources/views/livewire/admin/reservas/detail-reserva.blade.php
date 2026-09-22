@@ -138,11 +138,11 @@
 
                         <th class="text-end">Descuento USD</th>
 
-                        <th class="text-end">Precio final USD</th>
+                        <th class="text-end">Subtotal USD</th>
 
                         <th class="text-end">Tasa de servicio USD</th>
 
-                        <th class="text-end">Precio + tasa USD</th>
+                        <th class="text-end">Total USD</th>
 
                         <th>Abordaje</th>
 
@@ -176,7 +176,7 @@
                             </td>
 
                             <td class="text-end">
-                                {{ number_format($ticket->precio_final, 2) }}
+                                {{ number_format($ticket->subtotal, 2) }}
                             </td>
 
                             <td class="text-end">
@@ -184,7 +184,7 @@
                             </td>
 
                             <td class="text-end">
-                                {{ number_format($ticket->precio_final_ts, 2) }}
+                                {{ number_format($ticket->total, 2) }}
                             </td>
 
                             <td>

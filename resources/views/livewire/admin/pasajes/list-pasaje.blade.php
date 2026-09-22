@@ -123,8 +123,8 @@
                     <x-list.sortable-button column="numero_asiento" :$sortColumn :$sortDirection />
                 </th>
 
-                <th>Precio USD
-                    <x-list.sortable-button column="precio_final" :$sortColumn :$sortDirection />
+                <th>Subtotal USD
+                    <x-list.sortable-button column="subtotal" :$sortColumn :$sortDirection />
                 </th>
 
                 <th>Abordado
@@ -168,7 +168,7 @@
                     </td>
 
                     <td>
-                        {{ number_format($pasaje->precio_final ?? 0, 2) }}
+                        {{ number_format($pasaje->subtotal ?? 0, 2) }}
                     </td>
 
                     <td>

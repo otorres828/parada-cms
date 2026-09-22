@@ -121,11 +121,11 @@ class Programacion extends ModelHelper
                 'pasajes as ventas_total' => function ($query) {
                     return $query->where('reservas.estado_pago', Reserva::ESTADO_PAGO_PAGADO);
                 },
-            ], 'precio_final')->withSum([
-                'pasajes as ventas_con_tasa_total' => function ($query) {
+            ], 'subtotal')->withSum([
+                'pasajes as tasas_servicio_total' => function ($query) {
                     return $query->where('reservas.estado_pago', Reserva::ESTADO_PAGO_PAGADO);
                 },
-            ], 'precio_final_ts');
+            ], 'tasa_servicio');
         }
 
         return $query;
@@ -147,17 +147,13 @@ class Programacion extends ModelHelper
                 $q->where('reservas.estado_pago', Reserva::ESTADO_PAGO_FALLIDO)])
             ->withSum(['pasajes as ventas_total' => function ($query) {
                 return $query->where('reservas.estado_pago', Reserva::ESTADO_PAGO_PAGADO);
-            }], 'precio_final')
-            ->withSum(['pasajes as ventas_con_tasa_total' => function ($query) {
+            }], 'subtotal')
+            ->withSum(['pasajes as tasas_servicio_total' => function ($query) {
                 return $query->where('reservas.estado_pago', Reserva::ESTADO_PAGO_PAGADO);
-            }], 'precio_final_ts')
+            }], 'tasa_servicio')
             ->orderByDesc('fecha_salida')
             ->orderByDesc('hora_salida');
 
     }
 
-    public function getTasasServicioTotalAttribute(): string
-    {
-        return bcsub((string) ($this->ventas_con_tasa_total ?? 0), (string) ($this->ventas_total ?? 0), 2);
-    }
 }

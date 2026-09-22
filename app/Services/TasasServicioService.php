@@ -38,29 +38,26 @@ class TasasServicioService
                     throw ValidationException::withMessages(['pasajes' => 'Importes del pasaje inválidos.']);
                 }
 
-                $pasaje->precio_final = bcsub($pasaje->precio_base, $pasaje->descuento, 2);
+                $pasaje->subtotal = bcsub($pasaje->precio_base, $pasaje->descuento, 2);
 
                 if ($pasaje->servicio_json !== null) {
 
-                    if ($pasaje->base_tasa_servicio === null || bccomp($pasaje->base_tasa_servicio, $pasaje->precio_final, 2) !== 0) {
-                        throw ValidationException::withMessages(['pasajes' => 'El precio cambió después de calcular la tasa. Genera una nueva cotización antes de cobrar.']);
-                    }
+                    $tasaCalculada = $pasaje->tasa_servicio;
 
                 } else {
 
-                    $tasa = TasaServicio::paraPrecio($pasaje->precio_final);
-                    $tasaCalculada = $tasa->calcular($pasaje->precio_final);
+                    $tasa = TasaServicio::paraPrecio($pasaje->subtotal);
+                    $tasaCalculada = $tasa->calcular($pasaje->subtotal);
                     $pasaje->servicio_json = [
+                        'monto_minimo' => $tasa->monto_minimo,
+                        'monto_maximo' => $tasa->monto_maximo,
+                        'valor' => $tasa->cantidad,
                         'tipo_servicio' => $tasa->tipo_servicio,
-                        'valor_servicio' => $tasa->cantidad,
-                        'base_tasa_servicio' => $pasaje->precio_final,
-                        'tasa_monto_minimo' => $tasa->monto_minimo,
-                        'tasa_monto_maximo' => $tasa->monto_maximo,
-                        'tasa_servicio' => $tasaCalculada,
                     ];
 
                 }
-                $pasaje->precio_final_ts = bcadd($pasaje->precio_final, $pasaje->tasa_servicio, 2);
+                $pasaje->tasa_servicio = $tasaCalculada;
+                $pasaje->total = bcadd($pasaje->subtotal, $pasaje->tasa_servicio, 2);
                 $pasaje->save();
                 $tasas = bcadd($tasas, $pasaje->tasa_servicio, 2);
                 $base = bcadd($base, $pasaje->precio_base, 2);

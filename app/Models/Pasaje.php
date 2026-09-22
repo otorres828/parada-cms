@@ -24,8 +24,9 @@ class Pasaje extends ModelHelper
         'numero_asiento',
         'precio_base',
         'descuento',
-        'precio_final',
-        'precio_final_ts',
+        'subtotal',
+        'tasa_servicio',
+        'total',
         'servicio_json',
         'localizador',
         'abordado',
@@ -34,7 +35,7 @@ class Pasaje extends ModelHelper
 
     protected function casts(): array
     {
-        return ['numero_asiento' => 'integer', 'precio_base' => 'decimal:2', 'descuento' => 'decimal:2', 'precio_final' => 'decimal:2', 'precio_final_ts' => 'decimal:2', 'servicio_json' => 'array', 'abordado' => 'boolean'];
+        return ['numero_asiento' => 'integer', 'precio_base' => 'decimal:2', 'descuento' => 'decimal:2', 'subtotal' => 'decimal:2', 'tasa_servicio' => 'decimal:2', 'total' => 'decimal:2', 'servicio_json' => 'array', 'abordado' => 'boolean'];
     }
 
     public function getTipoServicioAttribute(): ?int
@@ -44,29 +45,19 @@ class Pasaje extends ModelHelper
         return $value === null ? null : (int) $value;
     }
 
-    public function getValorServicioAttribute(): ?string
+    public function getValorAttribute(): ?string
     {
-        return $this->servicio('valor_servicio');
+        return $this->servicio('valor');
     }
 
-    public function getBaseTasaServicioAttribute(): ?string
+    public function getMontoMinimoAttribute(): ?string
     {
-        return $this->servicio('base_tasa_servicio');
+        return $this->servicio('monto_minimo');
     }
 
-    public function getTasaMontoMinimoAttribute(): ?string
+    public function getMontoMaximoAttribute(): ?string
     {
-        return $this->servicio('tasa_monto_minimo');
-    }
-
-    public function getTasaMontoMaximoAttribute(): ?string
-    {
-        return $this->servicio('tasa_monto_maximo');
-    }
-
-    public function getTasaServicioAttribute(): string
-    {
-        return $this->servicio('tasa_servicio') ?? '0.00';
+        return $this->servicio('monto_maximo');
     }
 
     protected function servicio(string $campo): mixed

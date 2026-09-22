@@ -104,8 +104,9 @@ class ReservaService
                         'numero_asiento' => $asiento,
                         'precio_base' => $tarifa->precio,
                         'descuento' => '0.00',
-                        'precio_final' => $tarifa->precio,
-                        'precio_final_ts' => $tarifa->precio,
+                        'subtotal' => $tarifa->precio,
+                        'tasa_servicio' => '0.00',
+                        'total' => $tarifa->precio,
                         'localizador' => (string) Str::random(20),
                     ]);
                 }
@@ -185,8 +186,9 @@ class ReservaService
                     : '0.00';
                 $pasaje->fill([
                     'descuento' => $parte,
-                    'precio_final' => bcsub($pasaje->precio_base, $parte, 2),
-                    'precio_final_ts' => bcsub($pasaje->precio_base, $parte, 2),
+                    'subtotal' => bcsub($pasaje->precio_base, $parte, 2),
+                    'tasa_servicio' => '0.00',
+                    'total' => bcsub($pasaje->precio_base, $parte, 2),
                     'servicio_json' => null,
                 ])->save();
                 $restante = bcsub($restante, $parte, 2);

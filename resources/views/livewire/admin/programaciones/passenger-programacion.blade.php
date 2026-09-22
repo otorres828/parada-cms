@@ -207,7 +207,7 @@
 
                         <th>Tramo Comprado (Origen ➔ Destino)</th>
 
-                        <th>Precio Final</th>
+                        <th>Subtotal</th>
 
                         <th>Tasa Servicio</th>
 
@@ -263,7 +263,7 @@
                             </td>
 
                             <td class="fw-bold text-success">
-                                ${{ number_format($ticket->precio_final, 2) }}
+                                ${{ number_format($ticket->subtotal, 2) }}
                             </td>
 
                             <td>

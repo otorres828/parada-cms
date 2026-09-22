@@ -15,8 +15,9 @@ return new class extends Migration
             $table->unsignedInteger('numero_asiento')->nullable();
             $table->decimal('precio_base', 12, 2);
             $table->decimal('descuento', 12, 2);
-            $table->decimal('precio_final', 12, 2);
-            $table->decimal('precio_final_ts', 12, 2);
+            $table->decimal('subtotal', 12, 2);
+            $table->decimal('tasa_servicio', 12, 2)->default(0);
+            $table->decimal('total', 12, 2);
             $table->json('servicio_json')->nullable();
             $table->string('localizador')->unique();
             $table->boolean('abordado')->default(false);
