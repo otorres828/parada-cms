@@ -121,6 +121,8 @@
     "sections": [
       {"name": "Terminales", "url": "terminales", "status": 1,
         "permissions": [
+          {"name": "Listar", "url": "list", "status": 1},
+          {"name": "Editar", "url": "edit", "status": 1}
         ]
       },
       {"name": "Amenidades", "url": "amenidades", "status": 1,

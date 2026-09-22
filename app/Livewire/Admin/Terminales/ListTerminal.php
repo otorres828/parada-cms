@@ -2,11 +2,13 @@
 
 namespace App\Livewire\Admin\Terminales;
 
+use App\Models\Estado;
 use App\Models\Terminal;
 use App\Services\Admin\Access;
 use App\Services\Admin\Audit;
 use App\Traits\Listing;
 use App\Traits\Permissions;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
@@ -21,7 +23,12 @@ class ListTerminal extends Component
 
     public string $status = '';
 
+    public string $estado_id = '';
+
+    public Collection $estados;
+
     protected array $queryString = [
+        'estado_id' => ['except' => ''],
         'search' => ['except' => ''], 
         'per_page' => ['except' => 10], 
         'status' => ['except' => '']
@@ -32,19 +39,28 @@ class ListTerminal extends Component
         $this->sortColumn = 'id';
         $this->sortDirection = 'desc';
         $this->checkPermissions('terminales');
+        $this->estados = Estado::searchAdmin()->orderBy('nombre')->get();
     }
 
     public function render()
     {
-        $query = Terminal::searchAdmin($this->search, ['status' => $this->status]);
+        $query = Terminal::searchAdmin($this->search, [
+            'estado_id' => $this->estado_id,
+            'status' => $this->status,
+        ]);
+        
         $query = $this->applySort($query);
+
         $terminales = $query->paginate($this->per_page);
-        return view('livewire.admin.terminales.list-terminal', ['terminales' => $terminales, 'capabilities' => Access::capabilities('terminales')]);
+
+        return view('livewire.admin.terminales.list-terminal', [
+            'terminales' => $terminales, 
+        ]);
     }
 
     public function updated($property): void
     {
-        if (in_array($property, ['search', 'status', 'per_page'])) {
+        if (in_array($property, ['estado_id', 'search', 'status', 'per_page'])) {
             $this->resetPage();
         }
     }
@@ -61,7 +77,7 @@ class ListTerminal extends Component
 
             $inactive = Terminal::ESTADO_INACTIVE;
 
-            $terminal->estatus = (int) $terminal->estatus === Terminal::ESTADO_ACTIVE ? $inactive : Terminal::ESTADO_INACTIVE;
+            $terminal->estatus = (int) $terminal->estatus === Terminal::ESTADO_ACTIVE ? $inactive : Terminal::ESTADO_ACTIVE;
 
             $terminal->save();
 

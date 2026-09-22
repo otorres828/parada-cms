@@ -31,6 +31,8 @@ class SaveTerminal extends Component
 
     public $estatus = 1;
 
+    public Terminal $terminal;
+
     public function mount(?int $terminal_id = null): void
     {
         $this->terminal_id = $terminal_id;
@@ -51,14 +53,19 @@ class SaveTerminal extends Component
             }
         }
 
-        return view('livewire.admin.terminales.save-terminal', ['terminal' => $this->terminal_id ? $this->findTerminal() : null, 'capabilities' => Access::capabilities('terminales'), 'options_estado_id' => $options_estado_id]);
+        return view('livewire.admin.terminales.save-terminal', [
+            'options_estado_id' => $options_estado_id
+        ]);
     }
 
     public function save()
     {
+
         Access::authorize('terminales', $this->terminal_id ? 'edit' : 'add');
         $data = $this->validateForm();
-        $terminal = DB::transaction(function () use ($data) {
+
+        DB::transaction(function () use ($data) {
+
             Access::authorize('terminales', $this->terminal_id ? 'edit' : 'add');
             $terminal = $this->terminal_id ? $this->findTerminal() : new Terminal;
             $terminal->estado_id = $data['estado_id'];
@@ -72,7 +79,9 @@ class SaveTerminal extends Component
 
             return $terminal;
         });
+
         session()->flash('admin_success', 'Registro guardado correctamente.');
+
         $url = Access::allows('terminales', 'list') ? route('admin.terminales.list') : route('admin.account.profile');
 
         return $this->redirect($url, navigate: true);
@@ -80,6 +89,7 @@ class SaveTerminal extends Component
 
     protected function editar(Terminal $terminal): void
     {
+        $this->terminal = $terminal;
         $this->estado_id = $terminal->estado_id ?? '';
         $this->nombre = $terminal->nombre ?? '';
         $this->direccion = $terminal->direccion ?? '';

@@ -60,6 +60,10 @@ class Terminal extends ModelHelper
             $query->where('terminales.estatus', $status);
         }
 
+        if (isset($filters['estado_id']) && $filters['estado_id'] !== '') {
+            $query->where('terminales.estado_id', $filters['estado_id']);
+        }
+
         if (!empty($filters['date_from'])) {
             $query->whereDate('terminales.created_at', '>=', self::date($filters['date_from']));
         }

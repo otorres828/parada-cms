@@ -32,7 +32,7 @@
 
         <x-slot:button>
 
-            @if (Route::has('admin.terminales.add') && $canAdd)
+            @if ($canAdd)
                 <x-list.add-button :route="route('admin.terminales.add')">
                     Nuevo registro
                 </x-list.add-button>
@@ -60,8 +60,26 @@
 
         <div class="col-md-3">
 
-            <label class="form-label" for="listTerminal-status">
+            <label class="form-label" for="listTerminal-estado">
                 Estado
+            </label>
+
+            <select id="listTerminal-estado" class="form-select" wire:model.live="estado_id">
+
+                <option value="">Todos los estados</option>
+
+                @foreach ($estados as $estado)
+                    <option value="{{ $estado->id }}">{{ $estado->nombre }}</option>
+                @endforeach
+
+            </select>
+
+        </div>
+
+        <div class="col-md-3">
+
+            <label class="form-label" for="listTerminal-status">
+                Estatus
             </label>
 
             <select id="listTerminal-status" class="form-select" wire:model.live="status">
@@ -95,7 +113,7 @@
                     <x-list.sortable-button column="direccion" :$sortColumn :$sortDirection />
                 </th>
 
-                <th>Estado
+                <th>Estatus
                     <x-list.sortable-button column="estatus" :$sortColumn :$sortDirection />
                 </th>
 
@@ -132,11 +150,8 @@
 
                         <x-list.button-group>
 
-                            @if ($capabilities['edit'])
-                                <x-list.edit-button :route="route('admin.terminales.edit', ['terminal_id' => $terminal->id])" />
-                            @endif
-
                             @if ($canEdit)
+                                <x-list.edit-button :route="route('admin.terminales.edit', ['terminal_id' => $terminal->id])" />
                                 <x-list.status-button wire:click="changeStatus({{ $terminal->id }})" :status="$terminal->estatus"
                                     wire:loading.attr="disabled" />
                             @endif
