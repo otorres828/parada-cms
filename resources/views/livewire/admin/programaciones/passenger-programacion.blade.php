@@ -3,7 +3,7 @@
     --------------------------------------------------------------------------
     Muestra la salida programada, su capacidad y la ocupación calculada por origen y destino.
     Presenta las tarifas por origen y destino y los pasajeros de reservas pagadas o pendientes.
-    Cada boleto muestra el trayecto de su reserva, asiento, precio final, tasa y abordaje, con
+    Cada boleto muestra el trayecto de su reserva, asiento, subtotal, tasa y abordaje, con
     búsqueda local mediante Alpine.
 
     Componentes reutilizables utilizados:
