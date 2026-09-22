@@ -15,6 +15,10 @@ class DetailAutobus extends Component
 {
 
     use WithPagination;
+
+    public int $per_page = 10;
+
+    protected string $paginationTheme = 'bootstrap';
     
     #[Locked]
     public ?int $autobus_id = null;
@@ -41,11 +45,17 @@ class DetailAutobus extends Component
         ])
         ->orderByDesc('fecha_salida')
         ->orderByDesc('hora_salida')
-        ->get();
+        ->orderByDesc('id')
+        ->paginate(max(1, min(100, $this->per_page)));
 
         return view('livewire.admin.autobuses.detail-autobus', [
             'programaciones' => $programaciones
         ]);
+    }
+
+    public function updatedPerPage(): void
+    {
+        $this->resetPage();
     }
 
     protected function findAutobus(): Autobus

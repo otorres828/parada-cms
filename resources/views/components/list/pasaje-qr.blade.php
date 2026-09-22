@@ -24,7 +24,7 @@
         <template x-ref="contenidoQr">
 
             <div class="d-flex justify-content-center p-3">
-                <div class="bg-white p-3 border rounded shadow-sm">
+                <div class="bg-white border rounded shadow-sm">
                     <img src="{{ $qr }}" alt="Código QR del pasaje #{{ $pasaje->id }}"
                         style="width: 200px; height: 200px;" class="img-fluid">
                 </div>

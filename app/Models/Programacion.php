@@ -90,6 +90,10 @@ class Programacion extends ModelHelper
             });
         }
 
+        if (isset($filters['autobus_id']) && $filters['autobus_id'] !== '') {
+            $query->where('programaciones.autobus_id', $filters['autobus_id']);
+        }
+
         if (isset($filters['empresa_id']) && $filters['empresa_id'] !== '') {
             $query->whereHas('viaje', function ($query) use ($filters) {
                 return $query->where('empresa_id', $filters['empresa_id']);
