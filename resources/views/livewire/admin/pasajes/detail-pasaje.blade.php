@@ -84,6 +84,12 @@
                                 {{ $pasaje->viajero?->documento_identidad ?? '—' }}
                             </dd>
 
+                            <dt class="col-sm-4">Fecha de nacimiento</dt>
+
+                            <dd class="col-sm-8">
+                                {{ $pasaje->viajero?->fecha_nacimiento?->format('d/m/Y') ?? '—' }}
+                            </dd>
+
                             <dt class="col-sm-4">Asiento</dt>
 
                             <dd class="col-sm-8">{{ $pasaje->numero_asiento ?? '—' }}</dd>
@@ -94,7 +100,12 @@
 
                             <dt class="col-sm-4">Abordado</dt>
 
-                            <dd class="col-sm-8">{{ $pasaje->abordado ? 'Sí' : 'No' }}</dd>
+                            <dd class="col-sm-8">
+                                {{ $pasaje->abordado ? 'Sí' : 'No' }}
+                                @if ($pasaje->abordado && $pasaje->hora_abordaje)
+                                    a las {{ substr($pasaje->hora_abordaje, 0, 5) }}
+                                @endif
+                            </dd>
 
                             <dt class="col-sm-4">Pago</dt>
 
@@ -105,6 +116,10 @@
                             <dt class="col-sm-4">Tasa de servicio USD</dt>
 
                             <dd class="col-sm-8">{{ number_format($pasaje->tasa_servicio, 2) }}</dd>
+
+                            <dt class="col-sm-4">Precio + tasa USD</dt>
+
+                            <dd class="col-sm-8">{{ number_format($pasaje->precio_final_ts, 2) }}</dd>
 
                             <dt class="col-sm-4">Tipo de tasa aplicada</dt>
 

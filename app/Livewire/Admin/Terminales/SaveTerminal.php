@@ -43,7 +43,6 @@ class SaveTerminal extends Component
 
     public function render()
     {
-        Access::authorize('terminales', $this->terminal_id ? 'edit' : 'add');
         $query = Estado::searchAdmin($this->search_estado_id);
         $options_estado_id = (clone $query)->orderBy('nombre')->limit(100)->pluck('nombre', 'id')->all();
         if ($this->estado_id && ! isset($options_estado_id[$this->estado_id])) {

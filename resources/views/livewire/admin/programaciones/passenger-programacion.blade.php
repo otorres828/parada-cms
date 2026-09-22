@@ -173,19 +173,19 @@
 
             <div class="d-flex align-items-center justify-content-between flex-wrap gap-3">
                 <span>Pasajeros & Tramos Comercializados</span>
-    
+
                 <div style="width: 320px; max-width: 100%;">
-    
+
                     <label class="visually-hidden" for="buscar-pasajeros">
                         Buscar pasajero
                     </label>
                     <input id="buscar-pasajeros" type="search" class="form-control" x-model.debounce.200ms="search"
                         placeholder="Buscar pasajero u origen/destino">
-    
+
                 </div>
-    
+
             </div>
-            
+
         </div>
 
         <div class="table-responsive">
@@ -200,6 +200,8 @@
                         <th>Pasajero</th>
 
                         <th>Documento</th>
+
+                        <th>Fecha de nacimiento</th>
 
                         <th>Asiento</th>
 
@@ -245,6 +247,10 @@
                             </td>
 
                             <td>
+                                {{ $ticket->viajero?->fecha_nacimiento?->format('d/m/Y') ?? '—' }}
+                            </td>
+
+                            <td>
                                 <span class="badge text-bg-info">Asiento {{ $ticket->numero_asiento ?? 'S/A' }}</span>
                             </td>
 
@@ -281,7 +287,7 @@
                     @empty
 
                         <tr>
-                            <td colspan="10" class="text-center py-4">
+                            <td colspan="11" class="text-center py-4">
                                 No hay pasajeros registrados en esta salida.
                             </td>
 
@@ -290,7 +296,7 @@
 
                     @if ($tickets->isNotEmpty())
                         <tr x-cloak x-show="search && !hasMatches()">
-                            <td colspan="10" class="text-center py-4">
+                            <td colspan="11" class="text-center py-4">
                                 No hay coincidencias.
                             </td>
 

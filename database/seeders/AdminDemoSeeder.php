@@ -303,7 +303,7 @@ class AdminDemoSeeder extends Seeder
                             if ($day < 0 && $r < 3) {
                                 $reservation->pasajes()->update([
                                     'abordado' => true,
-                                    'fecha_abordaje' => $salida,
+                                    'hora_abordaje' => $salida->format('H:i:s'),
                                 ]);
                             }
                         }

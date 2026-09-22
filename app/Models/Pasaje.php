@@ -19,26 +19,59 @@ class Pasaje extends ModelHelper
     protected $table = 'pasajes';
 
     protected $fillable = [
-        'tipo_servicio',
-        'valor_servicio',
-        'base_tasa_servicio',
-        'tasa_servicio',
-        'tasa_monto_minimo',
-        'tasa_monto_maximo',
         'reserva_id',
         'viajero_id',
         'numero_asiento',
         'precio_base',
         'descuento',
         'precio_final',
+        'precio_final_ts',
+        'servicio_json',
         'localizador',
         'abordado',
-        'fecha_abordaje',
+        'hora_abordaje',
     ];
 
     protected function casts(): array
     {
-        return ['tipo_servicio' => 'integer', 'valor_servicio' => 'decimal:2', 'base_tasa_servicio' => 'decimal:2', 'tasa_monto_minimo' => 'decimal:2', 'tasa_monto_maximo' => 'decimal:2', 'tasa_servicio' => 'decimal:2', 'numero_asiento' => 'integer', 'precio_base' => 'decimal:2', 'descuento' => 'decimal:2', 'precio_final' => 'decimal:2', 'abordado' => 'boolean', 'fecha_abordaje' => 'datetime'];
+        return ['numero_asiento' => 'integer', 'precio_base' => 'decimal:2', 'descuento' => 'decimal:2', 'precio_final' => 'decimal:2', 'precio_final_ts' => 'decimal:2', 'servicio_json' => 'array', 'abordado' => 'boolean'];
+    }
+
+    public function getTipoServicioAttribute(): ?int
+    {
+        $value = $this->servicio('tipo_servicio');
+
+        return $value === null ? null : (int) $value;
+    }
+
+    public function getValorServicioAttribute(): ?string
+    {
+        return $this->servicio('valor_servicio');
+    }
+
+    public function getBaseTasaServicioAttribute(): ?string
+    {
+        return $this->servicio('base_tasa_servicio');
+    }
+
+    public function getTasaMontoMinimoAttribute(): ?string
+    {
+        return $this->servicio('tasa_monto_minimo');
+    }
+
+    public function getTasaMontoMaximoAttribute(): ?string
+    {
+        return $this->servicio('tasa_monto_maximo');
+    }
+
+    public function getTasaServicioAttribute(): string
+    {
+        return $this->servicio('tasa_servicio') ?? '0.00';
+    }
+
+    protected function servicio(string $campo): mixed
+    {
+        return $this->servicio_json[$campo] ?? null;
     }
 
     protected static function booted(): void

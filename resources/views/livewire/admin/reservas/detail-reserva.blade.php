@@ -132,6 +132,8 @@
 
                         <th>Documento</th>
 
+                        <th>Fecha de nacimiento</th>
+
                         <th class="text-end">Precio base USD</th>
 
                         <th class="text-end">Descuento USD</th>
@@ -161,6 +163,10 @@
                                 {{ $ticket->viajero?->documento_identidad }}
                             </td>
 
+                            <td>
+                                {{ $ticket->viajero?->fecha_nacimiento?->format('d/m/Y') ?? '—' }}
+                            </td>
+
                             <td class="text-end">
                                 {{ number_format($ticket->precio_base, 2) }}
                             </td>
@@ -178,7 +184,7 @@
                             </td>
 
                             <td class="text-end">
-                                {{ number_format(bcadd($ticket->precio_final, $ticket->tasa_servicio, 2), 2) }}
+                                {{ number_format($ticket->precio_final_ts, 2) }}
                             </td>
 
                             <td>
@@ -194,7 +200,7 @@
                     @empty
 
                         <tr>
-                            <td colspan="9">
+                            <td colspan="10">
                                 No hay pasajeros.
                             </td>
 

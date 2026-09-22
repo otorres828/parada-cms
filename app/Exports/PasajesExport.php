@@ -22,9 +22,9 @@ class PasajesExport extends DefaultValueBinder implements FromQuery, WithHeading
 
     public function headings(): array
     {
-        return ['ID pasaje', 'Reserva', 'Fecha de reserva', 'Viajero', 'Documento', 'Asiento',
+        return ['ID pasaje', 'Reserva', 'Fecha de reserva', 'Viajero', 'Documento', 'Fecha de nacimiento', 'Asiento',
             'Precio base USD', 'Descuento USD', 'Precio final USD', 'Tasa de servicio USD', 'Precio + tasa USD',
-            'Abordado', 'Fecha de abordaje', 'Estado de pago', 'Origen', 'Destino final',
+            'Abordado', 'Estado de pago', 'Origen', 'Destino final',
             'Fecha de salida', 'Hora de salida'];
     }
 
@@ -35,10 +35,11 @@ class PasajesExport extends DefaultValueBinder implements FromQuery, WithHeading
 
         return [$pasaje->id, $reserva?->codigo_referencia, $reserva?->fecha_compra?->format('d/m/Y H:i'),
             trim(($pasaje->viajero?->nombre ?? '').' '.($pasaje->viajero?->apellido ?? '')),
-            $pasaje->viajero?->documento_identidad, $pasaje->numero_asiento,
+            $pasaje->viajero?->documento_identidad, $pasaje->viajero?->fecha_nacimiento?->format('d/m/Y'),
+            $pasaje->numero_asiento,
             (float) $pasaje->precio_base, (float) $pasaje->descuento, (float) $pasaje->precio_final,
-            (float) $pasaje->tasa_servicio, (float) bcadd($pasaje->precio_final, $pasaje->tasa_servicio, 2),
-            $pasaje->abordado ? 'Sí' : 'No', $pasaje->fecha_abordaje?->format('d/m/Y H:i'),
+            (float) $pasaje->tasa_servicio, (float) $pasaje->precio_final_ts,
+            $pasaje->abordado ? 'Sí' : 'No',
             $reserva?->getStatusPago(), $reserva?->origenTerminal?->nombre, $reserva?->destinoTerminal?->nombre,
             $programacion?->fecha_salida?->format('d/m/Y'), $programacion?->hora_salida];
     }

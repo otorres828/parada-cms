@@ -62,7 +62,9 @@ class Finance
             if (bccomp(bcadd($base, $reserva->tasa_servicio, 2), $reserva->monto_total, 2) !== 0) {
                 self::fail('Revisa los importes y las tasas de servicio antes de conciliar.');
             }
-            $tasaPasajes = (string) $reserva->pasajes()->sum('tasa_servicio');
+            $tasaPasajes = $reserva->pasajes()->get()->reduce(function (string $total, $pasaje) {
+                return bcadd($total, $pasaje->tasa_servicio, 2);
+            }, '0.00');
             if (bccomp($tasaPasajes, $reserva->tasa_servicio, 2) !== 0) self::fail('La tasa de la reserva no coincide con la suma de sus pasajes.');
             $net = $base;
             $pago = Pago::create([
