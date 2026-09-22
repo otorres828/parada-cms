@@ -7,6 +7,7 @@ use App\Models\Pasaje;
 use App\Services\Admin\Access;
 use App\Traits\Listing;
 use App\Traits\Permissions;
+use Illuminate\Database\Eloquent\Collection;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -26,6 +27,8 @@ class ListPasaje extends Component
 
     public string $date_to = '';
 
+    public Collection $empresas;
+
     protected array $queryString = [
         'empresa_id' => ['except' => ''], 
         'search' => ['except' => ''], 
@@ -39,15 +42,27 @@ class ListPasaje extends Component
     {
         $this->sortColumn = 'id';
         $this->sortDirection = 'desc';
-        $this->checkPermissions('pasajes');
+        $this->checkPermissions('pasajes',['detail']);
+        $this->empresas = Empresa::searchAdmin()->orderBy('nombre')->get();
     }
 
     public function render()
     {
-        $query = Pasaje::searchAdmin($this->search, ['empresa_id' => $this->empresa_id, 'status' => $this->status, 'date_from' => $this->date_from, 'date_to' => $this->date_to]);
+        $query = Pasaje::searchAdmin($this->search, [
+            'empresa_id' => $this->empresa_id, 
+            'status' => $this->status, 
+            'date_from' => $this->date_from, 
+            'date_to' => $this->date_to
+        ]);
+
         $query = $this->applySort($query);
+
         $pasajes = $query->paginate($this->per_page);
-        return view('livewire.admin.pasajes.list-pasaje', ['pasajes' => $pasajes, 'empresas' => Empresa::searchAdmin()->orderBy('nombre')->get(), 'capabilities' => Access::capabilities('pasajes')]);
+
+        return view('livewire.admin.pasajes.list-pasaje', [
+            'pasajes' => $pasajes
+        ]);
+        
     }
 
     public function updated($property): void

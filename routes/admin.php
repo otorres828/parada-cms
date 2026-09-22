@@ -45,14 +45,16 @@ use App\Livewire\Admin\Viajes\DetailViaje;
 /*------------------------------Programaciones------------------------------------*/
 use App\Livewire\Admin\Programaciones\ListProgramacion;
 use App\Livewire\Admin\Programaciones\PassengerProgramacion;
-/*------------------------------Autobuses------------------------------------*/
+/*------------------------------Autobuses-----------------------------------------*/
 use App\Livewire\Admin\Autobuses\ListAutobus;
 use App\Livewire\Admin\Autobuses\DetailAutobus;
-
+/*------------------------------Reservas------------------------------------------*/
 use App\Livewire\Admin\Reservas\ListReserva;
 use App\Livewire\Admin\Reservas\DetailReserva;
+/*------------------------------Pasajes-------------------------------------------*/
 use App\Livewire\Admin\Pasajes\ListPasaje;
 use App\Livewire\Admin\Pasajes\DetailPasaje;
+
 use App\Livewire\Admin\Pagos\ListPago;
 use App\Livewire\Admin\Pagos\DetailPago;
 use App\Livewire\Admin\Retiros\ListRetiro;

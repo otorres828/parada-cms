@@ -14,18 +14,18 @@ class DetailPasaje extends Component
     #[Locked]
     public ?int $pasaje_id = null;
 
+    public Pasaje $pasaje;
+
     public function mount(?int $pasaje_id = null): void
     {
         $this->pasaje_id = $pasaje_id;
         Access::authorize('pasajes', 'detail');
-        $pasaje = $this->findPasaje();
+        $this->pasaje = $this->findPasaje();
     }
 
     public function render()
     {
-        Access::authorize('pasajes', 'detail');
-
-        return view('livewire.admin.pasajes.detail-pasaje', ['pasaje' => $this->pasaje_id ? $this->findPasaje() : null, 'capabilities' => Access::capabilities('pasajes')]);
+        return view('livewire.admin.pasajes.detail-pasaje');
     }
 
     protected function findPasaje(): Pasaje
