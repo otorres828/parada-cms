@@ -1,5 +1,5 @@
 [
-  {"name": "Administración", "url": "administracion", "icon": "bi-shield-lock", "status": 1,
+  {"id": 1, "name": "Administración", "url": "administracion", "icon": "bi-shield-lock", "status": 1,
     "sections": [
       {"name": "Administradores", "url": "admins", "status": 1,
         "permissions": [
@@ -25,7 +25,7 @@
       }
     ]
   },
-  {"name": "Empresas y clientes", "url": "empresas-clientes", "icon": "bi-buildings", "status": 1,
+  {"id": 2, "name": "Empresas y clientes", "url": "empresas-clientes", "icon": "bi-buildings", "status": 1,
     "sections": [
       {"name": "Empresas", "url": "empresas", "status": 1,
         "permissions": [
@@ -55,7 +55,7 @@
       }
     ]
   },
-  {"name": "Legales", "url": "legales", "icon": "bi-file-earmark-text", "status": 1,
+  {"id": 3, "name": "Legales", "url": "legales", "icon": "bi-file-earmark-text", "status": 1,
     "sections": [
       {"name": "Legales", "url": "legales", "status": 1,
         "permissions": [
@@ -67,7 +67,7 @@
       }
     ]
   },
-  {"name": "Operación de viajes", "url": "operacion", "icon": "bi-bus-front", "status": 1,
+  {"id": 4, "name": "Operación de viajes", "url": "operacion", "icon": "bi-bus-front", "status": 1,
     "sections": [
       {"name": "Rutas de viaje", "url": "viajes", "status": 1,
         "permissions": [
@@ -89,7 +89,7 @@
       }
     ]
   },
-  {"name": "Ventas y finanzas", "url": "finanzas", "icon": "bi-wallet2", "status": 1,
+  {"id": 5, "name": "Ventas y finanzas", "url": "finanzas", "icon": "bi-wallet2", "status": 1,
     "sections": [
       {"name": "Reservas y ventas", "url": "reservas", "status": 1,
         "permissions": [
@@ -113,7 +113,7 @@
       }
     ]
   },
-  {"name": "Promociones", "url": "promociones", "icon": "bi-tags", "status": 1,
+  {"id": 6, "name": "Promociones", "url": "promociones", "icon": "bi-tags", "status": 1,
     "sections": [
       {"name": "Campañas", "url": "campanas", "status": 1,
         "permissions": [
@@ -121,7 +121,7 @@
       }
     ]
   },
-  {"name": "Catálogos", "url": "catalogos", "icon": "bi-collection", "status": 1,
+  {"id": 7, "name": "Catálogos", "url": "catalogos", "icon": "bi-collection", "status": 1,
     "sections": [
       {"name": "Terminales", "url": "terminales", "status": 1,
         "permissions": [
@@ -133,19 +133,19 @@
       }
     ]
   },
-  {"name": "Reportes", "url": "reportes", "icon": "bi-bar-chart", "status": 1,
+  {"id": 8, "name": "Reportes", "url": "reportes", "icon": "bi-bar-chart", "status": 1,
     "sections": [
     ]
   },
-  {"name": "Configuración", "url": "configuracion", "icon": "bi-gear", "status": 1,
+  {"id": 9, "name": "Configuración", "url": "configuracion", "icon": "bi-gear", "status": 1,
     "sections": [
     ]
   },
-  {"name": "Mi cuenta", "url": "cuenta", "icon": "bi-person-circle", "status": 1,
+  {"id": 10, "name": "Mi cuenta", "url": "cuenta", "icon": "bi-person-circle", "status": 1,
     "sections": [
     ]
   },
-  {"name": "Inicio", "url": "inicio", "icon": "bi-speedometer2", "status": 1,
+  {"id": 11, "name": "Dashboard", "url": "dashboard", "icon": "bi-speedometer2", "status": 1,
     "sections": [
     ]
   }

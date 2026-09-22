@@ -18,6 +18,7 @@ class GroupSectionPermissionAdminSeeder extends Seeder
 
         Validator::make(['groups' => $groups], [
             'groups' => 'present|array',
+            'groups.*.id' => 'required|integer|min:1|distinct',
             'groups.*.name' => 'required|string|max:100',
             'groups.*.url' => 'required|string|max:100|distinct',
             'groups.*.icon' => 'required|string|max:100',
@@ -34,11 +35,15 @@ class GroupSectionPermissionAdminSeeder extends Seeder
 
         DB::transaction(function () use ($groups) {
             foreach ($groups as $group) {
-                $groupRecord = GroupAdmin::updateOrCreate(['url' => $group['url']], [
+                // El ID es estable aunque cambien el nombre o la URL del grupo.
+                $groupRecord = GroupAdmin::find($group['id']) ?? new GroupAdmin;
+                $groupRecord->id = $group['id'];
+                $groupRecord->fill([
                     'name' => $group['name'],
+                    'url' => $group['url'],
                     'icon' => $group['icon'],
                     'status' => $group['status'],
-                ]);
+                ])->save();
 
                 foreach ($group['sections'] as $section) {
                     Validator::make(['permissions' => $section['permissions']], [
