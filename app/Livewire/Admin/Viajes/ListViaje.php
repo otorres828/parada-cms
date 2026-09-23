@@ -43,8 +43,8 @@ class ListViaje extends Component
     public function render()
     {
         $query = Viaje::searchAdmin($this->search, [
-            'con_tasas' => true, 
-            'empresa_id' => $this->empresa_id, 
+            'con_tasas' => true,
+            'empresa_id' => $this->empresa_id,
             'status' => $this->status
         ]);
 
@@ -53,7 +53,7 @@ class ListViaje extends Component
         $viajes = $query->paginate($this->per_page);
 
         return view('livewire.admin.viajes.list-viaje', [
-            'viajes' => $viajes, 
+            'viajes' => $viajes
         ]);
     }
 

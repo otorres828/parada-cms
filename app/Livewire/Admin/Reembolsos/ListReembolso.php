@@ -47,9 +47,10 @@ class ListReembolso extends Component
 
     public function render()
     {
-        $query = Reembolso::searchAdmin($this->search, ['empresa_id' => $this->empresa_id, 
-            'status' => $this->status, 
-            'date_from' => $this->date_from, 
+        $query = Reembolso::searchAdmin($this->search, [
+            'empresa_id' => $this->empresa_id,
+            'status' => $this->status,
+            'date_from' => $this->date_from,
             'date_to' => $this->date_to
         ]);
 

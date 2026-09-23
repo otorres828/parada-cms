@@ -49,9 +49,9 @@ class ListReserva extends Component
     public function render()
     {
         $query = Reserva::searchAdmin($this->search, [
-            'empresa_id' => $this->empresa_id, 
-            'status' => $this->status, 
-            'date_from' => $this->date_from, 
+            'empresa_id' => $this->empresa_id,
+            'status' => $this->status,
+            'date_from' => $this->date_from,
             'date_to' => $this->date_to
         ]);
 
@@ -60,7 +60,7 @@ class ListReserva extends Component
         $reservas = $query->paginate($this->per_page);
 
         return view('livewire.admin.reservas.list-reserva', [
-            'reservas' => $reservas, 
+            'reservas' => $reservas
         ]);
     }
 

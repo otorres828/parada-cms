@@ -33,7 +33,9 @@ class ListAdmin extends Component
 
     public function render()
     {
-        $query = Admin::searchAdmin($this->search, ['status' => $this->status]);
+        $query = Admin::searchAdmin($this->search, [
+            'status' => $this->status
+        ]);
 
         $query = $this->applySort($query);
 

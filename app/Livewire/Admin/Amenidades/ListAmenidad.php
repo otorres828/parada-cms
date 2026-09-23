@@ -36,14 +36,16 @@ class ListAmenidad extends Component
 
     public function render()
     {
-        $query = Amenidad::searchAdmin($this->search, ['status' => $this->status]);
+        $query = Amenidad::searchAdmin($this->search, [
+            'status' => $this->status
+        ]);
 
         $query = $this->applySort($query);
 
         $amenidades = $query->paginate($this->per_page);
 
         return view('livewire.admin.amenidades.list-amenidad', [
-            'amenidades' => $amenidades, 
+            'amenidades' => $amenidades
         ]);
     }
 

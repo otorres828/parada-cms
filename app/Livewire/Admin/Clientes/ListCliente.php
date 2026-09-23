@@ -37,14 +37,16 @@ class ListCliente extends Component
 
     public function render()
     {
-        $query = User::searchAdmin($this->search, ['status' => $this->status]);
+        $query = User::searchAdmin($this->search, [
+            'status' => $this->status
+        ]);
 
         $query = $this->applySort($query);
 
         $users = $query->paginate($this->per_page);
 
         return view('livewire.admin.clientes.list-cliente', [
-            'users' => $users, 
+            'users' => $users
         ]);
     }
 

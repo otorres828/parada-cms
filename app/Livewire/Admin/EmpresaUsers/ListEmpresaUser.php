@@ -49,10 +49,20 @@ class ListEmpresaUser extends Component
 
     public function render()
     {
-        $query = UsuarioEmpresa::searchAdmin($this->search, ['status' => $this->status, 'date_from' => $this->date_from, 'date_to' => $this->date_to, 'empresa_id' => $this->empresa_id]);
+        $query = UsuarioEmpresa::searchAdmin($this->search, [
+            'status' => $this->status,
+            'date_from' => $this->date_from,
+            'date_to' => $this->date_to,
+            'empresa_id' => $this->empresa_id
+        ]);
+
         $query = $this->applySort($query);
+
         $usuariosEmpresa = $query->paginate($this->per_page);
-        return view('livewire.admin.empresa-users.list-empresa-user', ['usuariosEmpresa' => $usuariosEmpresa]);
+
+        return view('livewire.admin.empresa-users.list-empresa-user', [
+            'usuariosEmpresa' => $usuariosEmpresa
+        ]);
     }
 
     public function updated($property): void

@@ -36,11 +36,17 @@ class ListTasaServicio extends Component
 
     public function render()
     {
-        $query = TasaServicio::searchAdmin($this->search, ['status' => $this->status]);
+        $query = TasaServicio::searchAdmin($this->search, [
+            'status' => $this->status
+        ]);
 
-        $tasas = $this->applySort($query)->paginate($this->per_page);
+        $query = $this->applySort($query);
 
-        return view('livewire.admin.tasas-servicio.list-tasa-servicio', compact('tasas'));
+        $tasas = $query->paginate($this->per_page);
+
+        return view('livewire.admin.tasas-servicio.list-tasa-servicio', [
+            'tasas' => $tasas
+        ]);
     }
 
     public function updated($property): void

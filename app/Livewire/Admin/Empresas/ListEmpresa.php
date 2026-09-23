@@ -36,14 +36,16 @@ class ListEmpresa extends Component
 
     public function render()
     {
-        $query = Empresa::searchAdmin($this->search, ['status' => $this->status]);
+        $query = Empresa::searchAdmin($this->search, [
+            'status' => $this->status
+        ]);
 
         $query = $this->applySort($query);
 
         $empresas = $query->paginate($this->per_page);
 
         return view('livewire.admin.empresas.list-empresa', [
-            'empresas' => $empresas, 
+            'empresas' => $empresas
         ]);
     }
 

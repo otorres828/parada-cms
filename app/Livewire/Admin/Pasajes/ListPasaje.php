@@ -51,9 +51,9 @@ class ListPasaje extends Component
     public function render()
     {
         $query = Pasaje::searchAdmin($this->search, [
-            'empresa_id' => $this->empresa_id, 
-            'estado_pago' => $this->status, 
-            'date_from' => $this->date_from, 
+            'empresa_id' => $this->empresa_id,
+            'estado_pago' => $this->status,
+            'date_from' => $this->date_from,
             'date_to' => $this->date_to
         ]);
 
@@ -64,7 +64,6 @@ class ListPasaje extends Component
         return view('livewire.admin.pasajes.list-pasaje', [
             'pasajes' => $pasajes
         ]);
-        
     }
 
     public function exportExcel()
@@ -75,7 +74,7 @@ class ListPasaje extends Component
             'empresa_id' => $this->empresa_id,
             'estado_pago' => $this->status,
             'date_from' => $this->date_from,
-            'date_to' => $this->date_to,
+            'date_to' => $this->date_to
         ]);
 
         return Excel::download(new PasajesExport($this->applySort($query)), 'pasajes-'.now()->format('Y-m-d-His').'.xlsx');

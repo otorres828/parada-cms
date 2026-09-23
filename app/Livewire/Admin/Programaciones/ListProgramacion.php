@@ -52,9 +52,9 @@ class ListProgramacion extends Component
     public function render()
     {
         $query = Programacion::searchAdmin($this->search, [
-            'empresa_id' => $this->empresa_id, 
-            'status' => $this->status, 
-            'date_from' => $this->date_from, 
+            'empresa_id' => $this->empresa_id,
+            'status' => $this->status,
+            'date_from' => $this->date_from,
             'date_to' => $this->date_to
         ]);
 
@@ -63,7 +63,7 @@ class ListProgramacion extends Component
         $programaciones = $query->paginate($this->per_page);
 
         return view('livewire.admin.programaciones.list-programacion', [
-            'programaciones' => $programaciones, 
+            'programaciones' => $programaciones
         ]);
     }
 

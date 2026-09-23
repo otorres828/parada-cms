@@ -42,10 +42,19 @@ class ListCampana extends Component
 
     public function render()
     {
-        $query = ConfiguracionCupon::searchAdmin($this->search, ['status' => $this->status, 'date_from' => $this->date_from, 'date_to' => $this->date_to]);
+        $query = ConfiguracionCupon::searchAdmin($this->search, [
+            'status' => $this->status,
+            'date_from' => $this->date_from,
+            'date_to' => $this->date_to
+        ]);
+
         $query = $this->applySort($query);
+
         $cupones = $query->paginate($this->per_page);
-        return view('livewire.admin.cupones.list-campana', ['cupones' => $cupones]);
+
+        return view('livewire.admin.cupones.list-campana', [
+            'cupones' => $cupones
+        ]);
     }
 
     public function updated($property): void

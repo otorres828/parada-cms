@@ -40,14 +40,18 @@ class ListAudit extends Component
 
     public function render()
     {
-        $query = Auditoria::searchAdmin($this->search, ['status' => $this->status, 'date_from' => $this->date_from, 'date_to' => $this->date_to]);
+        $query = Auditoria::searchAdmin($this->search, [
+            'status' => $this->status,
+            'date_from' => $this->date_from,
+            'date_to' => $this->date_to
+        ]);
 
         $query = $this->applySort($query);
 
         $auditorias = $query->paginate($this->per_page);
 
         return view('livewire.admin.auditoria.list-audit', [
-            'auditorias' => $auditorias, 
+            'auditorias' => $auditorias
         ]);
     }
 

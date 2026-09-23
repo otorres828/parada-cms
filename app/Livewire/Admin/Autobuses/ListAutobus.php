@@ -42,9 +42,8 @@ class ListAutobus extends Component
 
     public function render()
     {
-
         $query = Autobus::searchAdmin($this->search, [
-            'empresa_id' => $this->empresa_id, 
+            'empresa_id' => $this->empresa_id,
             'status' => $this->status
         ]);
 
@@ -55,7 +54,6 @@ class ListAutobus extends Component
         return view('livewire.admin.autobuses.list-autobus', [
             'autobuses' => $autobuses
         ]);
-        
     }
 
     public function updated($property): void

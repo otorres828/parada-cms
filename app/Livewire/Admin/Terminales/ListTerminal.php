@@ -46,15 +46,15 @@ class ListTerminal extends Component
     {
         $query = Terminal::searchAdmin($this->search, [
             'estado_id' => $this->estado_id,
-            'status' => $this->status,
+            'status' => $this->status
         ]);
-        
+
         $query = $this->applySort($query);
 
         $terminales = $query->paginate($this->per_page);
 
         return view('livewire.admin.terminales.list-terminal', [
-            'terminales' => $terminales, 
+            'terminales' => $terminales
         ]);
     }
 

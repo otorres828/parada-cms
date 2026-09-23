@@ -28,15 +28,17 @@ class ListLegal extends Component
 
     public function render()
     {
-
-        $query = Empresa::searchAdmin($this->search, ['con_legales' => true]);
-
-        $empresas = $this->applySort($query)->paginate($this->per_page);
-
-        return view('livewire.admin.legales.list-legal', [
-            'empresas' => $empresas, 
+        $query = Empresa::searchAdmin($this->search, [
+            'con_legales' => true
         ]);
 
+        $query = $this->applySort($query);
+
+        $empresas = $query->paginate($this->per_page);
+
+        return view('livewire.admin.legales.list-legal', [
+            'empresas' => $empresas
+        ]);
     }
 
     public function updated($property): void
