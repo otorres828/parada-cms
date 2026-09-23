@@ -11,6 +11,16 @@ class ConfiguracionCupon extends ModelHelper
 {
     use TraitGeneral;
 
+    const TIPO_RANDOM = 1;
+
+    const TIPO_PERSONALIZADO = 2;
+
+    const MODALIDAD_GENERAL = 'GENERAL';
+
+    const MODALIDAD_PRIMERA_COMPRA = 'PRIMERA_COMPRA';
+
+    const MODALIDAD_USUARIO_NUEVO = 'USUARIO_NUEVO';
+
     protected $table = 'configuracion_cupones';
 
     protected $fillable = [
@@ -18,11 +28,10 @@ class ConfiguracionCupon extends ModelHelper
         'nombre_campana',
         'tipo_cupon',
         'modalidad',
-        'codigo_base',
+        'codigo_personalizado',
         'cantidad_generar',
         'tipo_descuento',
         'monto_descuento',
-        'aplica_a',
         'fecha_inicio',
         'fecha_fin',
         'estatus',
@@ -30,7 +39,7 @@ class ConfiguracionCupon extends ModelHelper
 
     protected function casts(): array
     {
-        return ['cantidad_generar' => 'integer', 'monto_descuento' => 'decimal:2', 'fecha_inicio' => 'datetime', 'fecha_fin' => 'datetime', 'estatus' => 'boolean'];
+        return ['tipo_cupon' => 'integer', 'cantidad_generar' => 'integer', 'monto_descuento' => 'decimal:2', 'fecha_inicio' => 'datetime', 'fecha_fin' => 'datetime', 'estatus' => 'integer'];
     }
 
     public function empresa(): BelongsTo
@@ -51,7 +60,7 @@ class ConfiguracionCupon extends ModelHelper
             $query->where(function ($query) use ($search) {
                 $query->where('configuracion_cupones.id', ctype_digit($search) ? $search : -1);
                 $query->orWhere('configuracion_cupones.nombre_campana', 'like', '%' . $search . '%');
-                $query->orWhere('configuracion_cupones.codigo_base', 'like', '%' . $search . '%');
+                $query->orWhere('configuracion_cupones.codigo_personalizado', 'like', '%' . $search . '%');
             });
         }
 

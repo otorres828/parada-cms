@@ -45,10 +45,6 @@
 
             <div class="mb-3">
 
-                <input type="search" class="form-control mb-2" placeholder="Buscar opciones..."
-                    aria-label="Buscar Empresa (vacío para campaña general)"
-                    wire:model.live.debounce.500ms="search_empresa_id">
-
                 <x-form.dropdown label="Empresa (vacío para campaña general)" name="empresa_id"
                     x-model="$wire.empresa_id">
 
@@ -84,24 +80,11 @@
 
             <div class="mb-3">
 
-                <x-form.text-input type="text" name="codigo_base" x-model="$wire.codigo_base">
-                    Prefijo del código
-                </x-form.text-input>
-
-                @error('codigo_base')
-                    <div class="text-danger small">
-                        {{ $message }}
-                    </div>
-                @enderror
-
-            </div>
-
-            <div class="mb-3">
-
                 <x-form.dropdown label="Tipo de cupón" name="tipo_cupon" x-model="$wire.tipo_cupon">
 
                     <option value="">Seleccionar...</option>
-                    <option value="unico">Un solo uso</option>
+                    <option value="1">Aleatorio</option>
+                    <option value="2">Personalizado</option>
 
                 </x-form.dropdown>
 
@@ -113,12 +96,29 @@
 
             </div>
 
+            
+            <div class="mb-3" x-show="Number($wire.tipo_cupon) === 2" x-cloak>
+
+                <x-form.text-input type="text" name="codigo_personalizado" x-model="$wire.codigo_personalizado">
+                    Código personalizado
+                </x-form.text-input>
+
+                @error('codigo_personalizado')
+                    <div class="text-danger small">
+                        {{ $message }}
+                    </div>
+                @enderror
+
+            </div>
+            
             <div class="mb-3">
 
                 <x-form.dropdown label="Modalidad" name="modalidad" x-model="$wire.modalidad">
 
                     <option value="">Seleccionar...</option>
-                    <option value="codigo">Código promocional</option>
+                    <option value="GENERAL">General</option>
+                    <option value="PRIMERA_COMPRA">Primera compra</option>
+                    <option value="USUARIO_NUEVO">Usuario nuevo</option>
 
                 </x-form.dropdown>
 
@@ -151,7 +151,7 @@
 
                     <option value="">Seleccionar...</option>
                     <option value="porcentaje">Porcentaje</option>
-                    <option value="fijo">Importe fijo USD</option>
+                    <option value="monto_fijo">Importe fijo USD</option>
 
                 </x-form.dropdown>
 
@@ -171,23 +171,6 @@
                 </x-form.text-input>
 
                 @error('monto_descuento')
-                    <div class="text-danger small">
-                        {{ $message }}
-                    </div>
-                @enderror
-
-            </div>
-
-            <div class="mb-3">
-
-                <x-form.dropdown label="Aplicar a" name="aplica_a" x-model="$wire.aplica_a">
-
-                    <option value="">Seleccionar...</option>
-                    <option value="pasajes">Pasajes</option>
-
-                </x-form.dropdown>
-
-                @error('aplica_a')
                     <div class="text-danger small">
                         {{ $message }}
                     </div>
@@ -284,13 +267,13 @@
                         value: 255,
                         errorMessage: 'Máximo 255 caracteres'
                     }]);
-                    this.validator.addField(this.$refs.form.querySelector('[name="codigo_base"]'), [{
-                        rule: 'required',
-                        errorMessage: 'Este campo es requerido'
+                    this.validator.addField(this.$refs.form.querySelector('[name="codigo_personalizado"]'), [{
+                        validator: value => Number(this.$wire.tipo_cupon) !== 2 || value.trim().length > 0,
+                        errorMessage: 'Este campo es requerido para cupones personalizados'
                     }, {
                         rule: 'maxLength',
-                        value: 30,
-                        errorMessage: 'Máximo 30 caracteres'
+                        value: 100,
+                        errorMessage: 'Máximo 100 caracteres'
                     }]);
                     this.validator.addField(this.$refs.form.querySelector('[name="tipo_cupon"]'), [{
                         rule: 'required',
@@ -311,10 +294,6 @@
                     }]);
                     this.validator.addField(this.$refs.form.querySelector('[name="monto_descuento"]'),
                 [{
-                        rule: 'required',
-                        errorMessage: 'Este campo es requerido'
-                    }]);
-                    this.validator.addField(this.$refs.form.querySelector('[name="aplica_a"]'), [{
                         rule: 'required',
                         errorMessage: 'Este campo es requerido'
                     }]);

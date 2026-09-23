@@ -19,7 +19,7 @@ class TasasServicioService
 
             GroupAdmin::where('url', 'administracion')->lockForUpdate()->firstOrFail();
 
-            if (! in_array($reserva->estado_pago, [Reserva::ESTADO_PAGO_NUEVO, Reserva::ESTADO_PAGO_PENDIENTE], true) || $reserva->pagos()->exists()) {
+            if (! in_array($reserva->estado_pago, [Reserva::ESTADO_PAGO_NUEVO, Reserva::ESTADO_PAGO_PENDIENTE], true) || $reserva->pago()->exists()) {
                 throw ValidationException::withMessages(['reserva' => 'No se pueden recalcular tasas de una reserva cobrada o cerrada.']);
             }
 

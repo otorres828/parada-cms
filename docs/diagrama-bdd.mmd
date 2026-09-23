@@ -63,22 +63,15 @@ erDiagram
         int id PK
         int empresa_id FK
         string nombre_campana
-        string tipo_cupon
+        int tipo_cupon
         string modalidad
-        string codigo_base
+        string codigo_personalizado
         int cantidad_generar
         string tipo_descuento
         decimal monto_descuento
-        string aplica_a
         datetime fecha_inicio
         datetime fecha_fin
         boolean estatus
-    }
-
-    CONFIGURACIONES {
-        int id PK
-        string grupo UK
-        text valores
     }
 
     CUPONES {
@@ -110,7 +103,6 @@ erDiagram
         string telefono
         string email
         boolean estatus
-        text datos_bancarios
     }
 
     ESTADOS {
@@ -134,33 +126,14 @@ erDiagram
         boolean status
     }
 
-    MOVIMIENTOS {
-        int id PK
-        int empresa_id FK
-        int admin_id FK
-        int pago_id FK
-        int retiro_id FK,UK
-        int reembolso_id FK,UK
-        string clave UK
-        string tipo
-        decimal monto
-        string moneda
-        text descripcion
-    }
-
-    PAGOS {
+    PAGOS_RESERVAS {
         int id PK
         int reserva_id FK,UK
-        int empresa_id FK
-        int admin_id FK
-        decimal monto
-        decimal neto_empresa
-        decimal comision
-        string moneda
-        string referencia UK
-        string metodo
+        decimal total
+        decimal tasa_servicio
+        int metodo_pago
+        string referencia_pago UK
         string comprobante
-        text comentario
         datetime fecha_pago
     }
 
@@ -238,7 +211,7 @@ erDiagram
 
     REEMBOLSOS {
         int id PK
-        int pago_id FK,UK
+        int pago_reserva_id FK,UK
         int empresa_id FK
         int admin_id FK
         int revisado_por FK
@@ -263,27 +236,12 @@ erDiagram
         decimal tasa_servicio
         decimal monto_total
         string estado_pago
-        string metodo_pago
+        int metodo_pago
         datetime fecha_compra
         datetime fecha_expiracion
         int origen_terminal_id FK
         int destino_terminal_id FK
         int programacion_tramo_precio_id FK
-    }
-
-    RETIROS {
-        int id PK
-        int empresa_id FK
-        int admin_id FK
-        int revisado_por FK
-        decimal monto
-        string moneda
-        string estatus
-        text datos_bancarios
-        text comentario
-        string referencia UK
-        string comprobante
-        datetime fecha_resolucion
     }
 
     SECTIONS_ADMIN {
@@ -394,14 +352,7 @@ erDiagram
     CONFIGURACION_CUPONES ||--o{ CUPONES : "configuracion_cupon_id"
     ADMINS |o--o{ DOCUMENTOS_LEGALES : "admin_id"
     EMPRESAS ||--o{ DOCUMENTOS_LEGALES : "empresa_id"
-    REEMBOLSOS |o--o{ MOVIMIENTOS : "reembolso_id"
-    RETIROS |o--o{ MOVIMIENTOS : "retiro_id"
-    PAGOS |o--o{ MOVIMIENTOS : "pago_id"
-    ADMINS ||--o{ MOVIMIENTOS : "admin_id"
-    EMPRESAS ||--o{ MOVIMIENTOS : "empresa_id"
-    ADMINS ||--o{ PAGOS : "admin_id"
-    EMPRESAS ||--o{ PAGOS : "empresa_id"
-    RESERVAS ||--o{ PAGOS : "reserva_id"
+    RESERVAS ||--o| PAGOS_RESERVAS : "reserva_id"
     VIAJEROS |o--o{ PASAJES : "viajero_id"
     RESERVAS ||--o{ PASAJES : "reserva_id"
     PERMISSIONS_EMPRESA ||--o{ PERMISOS_USUARIOS_EMPRESA : "permiso_id"
@@ -418,16 +369,13 @@ erDiagram
     ADMINS |o--o{ REEMBOLSOS : "revisado_por"
     ADMINS ||--o{ REEMBOLSOS : "admin_id"
     EMPRESAS ||--o{ REEMBOLSOS : "empresa_id"
-    PAGOS ||--o{ REEMBOLSOS : "pago_id"
+    PAGOS_RESERVAS ||--o{ REEMBOLSOS : "pago_reserva_id"
     PROGRAMACION_TRAMO_PRECIOS |o--o{ RESERVAS : "programacion_tramo_precio_id"
     TERMINALES |o--o{ RESERVAS : "destino_terminal_id"
     TERMINALES |o--o{ RESERVAS : "origen_terminal_id"
     USERS ||--o{ RESERVAS : "usuario_id"
     PROGRAMACIONES ||--o{ RESERVAS : "programacion_id"
     CUPONES |o--o{ RESERVAS : "cupon_id"
-    ADMINS |o--o{ RETIROS : "revisado_por"
-    ADMINS ||--o{ RETIROS : "admin_id"
-    EMPRESAS ||--o{ RETIROS : "empresa_id"
     GROUPS_ADMIN ||--o{ SECTIONS_ADMIN : "group_id"
     GROUPS_EMPRESA ||--o{ SECTIONS_EMPRESA : "group_id"
     ESTADOS ||--o{ TERMINALES : "estado_id"

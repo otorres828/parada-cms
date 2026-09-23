@@ -7,6 +7,7 @@ use App\Models\Empresa;
 use App\Services\Admin\Access;
 use App\Services\Admin\Audit;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Locked;
@@ -26,19 +27,17 @@ class SaveCampana extends Component
 
     public $nombre_campana = '';
 
-    public $codigo_base = '';
+    public $codigo_personalizado = '';
 
-    public $tipo_cupon = 'unico';
+    public $tipo_cupon = ConfiguracionCupon::TIPO_RANDOM;
 
-    public $modalidad = 'codigo';
+    public $modalidad = ConfiguracionCupon::MODALIDAD_GENERAL;
 
     public $cantidad_generar = 1;
 
     public $tipo_descuento = 'porcentaje';
 
     public $monto_descuento = '';
-
-    public $aplica_a = 'pasajes';
 
     public $fecha_inicio = '';
 
@@ -57,7 +56,6 @@ class SaveCampana extends Component
 
     public function render()
     {
-        Access::authorize('cupones', $this->configuracion_cupon_id ? 'edit' : 'add');
         $query = Empresa::searchAdmin($this->search_empresa_id);
         $options_empresa_id = (clone $query)->orderBy('nombre')->limit(100)->pluck('nombre', 'id')->all();
         if ($this->empresa_id && ! isset($options_empresa_id[$this->empresa_id])) {
@@ -78,7 +76,7 @@ class SaveCampana extends Component
             Access::authorize('cupones', $this->configuracion_cupon_id ? 'edit' : 'add');
             $configuracionCupon = $this->configuracion_cupon_id ? $this->findConfiguracionCupon() : new ConfiguracionCupon;
             if ($this->configuracion_cupon_id && $configuracionCupon->cupones()->exists()) {
-                foreach (['empresa_id', 'codigo_base', 'cantidad_generar', 'tipo_descuento', 'monto_descuento', 'fecha_inicio'] as $immutable) {
+                foreach (['empresa_id', 'codigo_personalizado', 'cantidad_generar', 'tipo_cupon', 'tipo_descuento', 'monto_descuento', 'fecha_inicio'] as $immutable) {
                     unset($data[$immutable]);
                 }
             }
@@ -88,8 +86,8 @@ class SaveCampana extends Component
             if (array_key_exists('nombre_campana', $data)) {
                 $configuracionCupon->nombre_campana = $data['nombre_campana'];
             }
-            if (array_key_exists('codigo_base', $data)) {
-                $configuracionCupon->codigo_base = $data['codigo_base'];
+            if (array_key_exists('codigo_personalizado', $data)) {
+                $configuracionCupon->codigo_personalizado = $data['codigo_personalizado'];
             }
             if (array_key_exists('tipo_cupon', $data)) {
                 $configuracionCupon->tipo_cupon = $data['tipo_cupon'];
@@ -105,9 +103,6 @@ class SaveCampana extends Component
             }
             if (array_key_exists('monto_descuento', $data)) {
                 $configuracionCupon->monto_descuento = $data['monto_descuento'];
-            }
-            if (array_key_exists('aplica_a', $data)) {
-                $configuracionCupon->aplica_a = $data['aplica_a'];
             }
             if (array_key_exists('fecha_inicio', $data)) {
                 $configuracionCupon->fecha_inicio = $data['fecha_inicio'];
@@ -133,13 +128,12 @@ class SaveCampana extends Component
         $this->configuracionCupon = $configuracionCupon;
         $this->empresa_id = $configuracionCupon->empresa_id ?? '';
         $this->nombre_campana = $configuracionCupon->nombre_campana ?? '';
-        $this->codigo_base = $configuracionCupon->codigo_base ?? '';
-        $this->tipo_cupon = (string) (is_bool($configuracionCupon->tipo_cupon) ? (int) $configuracionCupon->tipo_cupon : $configuracionCupon->tipo_cupon);
-        $this->modalidad = (string) (is_bool($configuracionCupon->modalidad) ? (int) $configuracionCupon->modalidad : $configuracionCupon->modalidad);
+        $this->codigo_personalizado = $configuracionCupon->codigo_personalizado ?? '';
+        $this->tipo_cupon = $configuracionCupon->tipo_cupon;
+        $this->modalidad = $configuracionCupon->modalidad;
         $this->cantidad_generar = $configuracionCupon->cantidad_generar ?? '';
         $this->tipo_descuento = (string) (is_bool($configuracionCupon->tipo_descuento) ? (int) $configuracionCupon->tipo_descuento : $configuracionCupon->tipo_descuento);
         $this->monto_descuento = $configuracionCupon->monto_descuento ?? '';
-        $this->aplica_a = (string) (is_bool($configuracionCupon->aplica_a) ? (int) $configuracionCupon->aplica_a : $configuracionCupon->aplica_a);
         $this->fecha_inicio = $configuracionCupon->fecha_inicio?->format('Y-m-d\TH:i') ?? '';
         $this->fecha_fin = $configuracionCupon->fecha_fin?->format('Y-m-d\TH:i') ?? '';
         $this->estatus = (string) (is_bool($configuracionCupon->estatus) ? (int) $configuracionCupon->estatus : $configuracionCupon->estatus);
@@ -147,7 +141,23 @@ class SaveCampana extends Component
 
     protected function validateForm(): array
     {
-        $validated = $this->validate(['empresa_id' => ['nullable', 'integer', 'exists:empresas,id'], 'nombre_campana' => ['required', 'string', 'max:255'], 'codigo_base' => ['required', 'string', 'max:30', 'alpha_dash'], 'tipo_cupon' => ['required', 'in:unico'], 'modalidad' => ['required', 'in:codigo'], 'cantidad_generar' => ['required', 'integer', 'min:1', 'max:1000'], 'tipo_descuento' => ['required', 'in:porcentaje,fijo'], 'monto_descuento' => ['required', 'decimal:0,2', 'min:0.01', 'max:999999.99'], 'aplica_a' => ['required', 'in:pasajes'], 'fecha_inicio' => ['required', 'date'], 'fecha_fin' => ['required', 'date', 'after:fecha_inicio'], 'estatus' => ['required', 'in:0,1']], [], ['empresa_id' => 'Empresa (vacío para campaña general)', 'nombre_campana' => 'Nombre', 'codigo_base' => 'Prefijo del código', 'tipo_cupon' => 'Tipo de cupón', 'modalidad' => 'Modalidad', 'cantidad_generar' => 'Cantidad de cupones', 'tipo_descuento' => 'Descuento', 'monto_descuento' => 'Valor del descuento', 'aplica_a' => 'Aplicar a', 'fecha_inicio' => 'Inicio', 'fecha_fin' => 'Fin', 'estatus' => 'Estado']);
+        $cuponId = $this->configuracion_cupon_id
+            ? $this->configuracionCupon->cupones()->value('id')
+            : null;
+
+        $validated = $this->validate([
+            'empresa_id' => ['nullable', 'integer', 'exists:empresas,id'],
+            'nombre_campana' => ['required', 'string', 'max:255'],
+            'tipo_cupon' => ['required', 'integer', 'in:1,2'],
+            'modalidad' => ['required', 'in:GENERAL,PRIMERA_COMPRA,USUARIO_NUEVO'],
+            'codigo_personalizado' => ['required_if:tipo_cupon,2', 'nullable', 'string', 'max:100', 'alpha_dash', Rule::unique('cupones', 'codigo')->ignore($cuponId)],
+            'cantidad_generar' => ['required', 'integer', 'min:1', 'max:1000'],
+            'tipo_descuento' => ['required', 'in:porcentaje,monto_fijo'],
+            'monto_descuento' => ['required', 'decimal:0,2', 'min:0.01', 'max:999999.99'],
+            'fecha_inicio' => ['required', 'date'],
+            'fecha_fin' => ['required', 'date', 'after:fecha_inicio'],
+            'estatus' => ['required', 'in:0,1,2'],
+        ], [], ['empresa_id' => 'Empresa', 'nombre_campana' => 'Nombre', 'tipo_cupon' => 'Tipo de cupón', 'modalidad' => 'Modalidad', 'codigo_personalizado' => 'Código personalizado', 'cantidad_generar' => 'Cantidad de cupones', 'tipo_descuento' => 'Descuento', 'monto_descuento' => 'Valor del descuento', 'fecha_inicio' => 'Inicio', 'fecha_fin' => 'Fin', 'estatus' => 'Estado']);
         foreach ($validated as $key => &$value) {
             if ($value === '') {
                 $value = null;
@@ -156,6 +166,13 @@ class SaveCampana extends Component
         unset($value);
         if ($validated['tipo_descuento'] === 'porcentaje' && $validated['monto_descuento'] > 100) {
             throw ValidationException::withMessages(['monto_descuento' => 'El porcentaje no puede superar 100.']);
+        }
+
+        if ((int) $validated['tipo_cupon'] === ConfiguracionCupon::TIPO_PERSONALIZADO) {
+            $validated['cantidad_generar'] = 1;
+            $validated['codigo_personalizado'] = strtoupper($validated['codigo_personalizado']);
+        } else {
+            $validated['codigo_personalizado'] = null;
         }
 
         return $validated;

@@ -2,7 +2,7 @@
     EMPRESAS — FORMULARIO
     --------------------------------------------------------------------------
     Permite crear o editar los datos de identificación y contacto de una empresa. Integra su
-    estado, habilitación de retiros y datos bancarios en el mismo formulario.
+    datos generales y estado de la empresa en el mismo formulario.
 
     Componentes reutilizables utilizados:
     - <x-list.heading />: Cabecera del módulo con título y acciones.
@@ -117,20 +117,6 @@
 
             </div>
 
-            <div class="mb-3">
-
-                <label class="form-label" for="datos_bancarios">Datos bancarios</label>
-                <textarea id="datos_bancarios" name="datos_bancarios" class="form-control" rows="3" maxlength="2000"
-                    x-model="$wire.datos_bancarios"></textarea>
-
-                @error('datos_bancarios')
-                    <div class="text-danger small">
-                        {{ $message }}
-                    </div>
-                @enderror
-
-            </div>
-
         </x-form.container-sm>
 
         <hr>
@@ -200,12 +186,6 @@
                     .addField(this.$refs.form.querySelector('[name="estatus"]'), [{
                         rule: 'required',
                         errorMessage: 'Este campo es requerido'
-                    }])
-                    .addField(this.$refs.form.querySelector('[name="datos_bancarios"]'),
-                    [{
-                        rule: 'maxLength',
-                        value: 2000,
-                        errorMessage: 'Máximo 2000 caracteres'
                     }]);
                 });
             },

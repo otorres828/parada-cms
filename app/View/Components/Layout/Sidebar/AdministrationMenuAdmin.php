@@ -44,8 +44,6 @@ public bool $listTerminales = false;
     public bool $companiesReportes = false;
 
 
-    public bool $generalSettings = false;
-
     public bool $listLegales = false;
     public bool $listTasasServicio = false;
     public bool $listAuditoria = false;
@@ -78,7 +76,6 @@ public bool $listTerminales = false;
             'listAmenidades' => ['amenidades', 'list'],
             'salesReportes' => ['reportes', 'list-sales'],
             'companiesReportes' => ['reportes', 'list-companies'],
-            'generalSettings' => ['settings', 'general'],
             'listLegales' => ['legales', 'list'],
             'listTasasServicio' => ['tasas-servicio', 'list'],
             'listAuditoria' => ['auditoria', 'list'],

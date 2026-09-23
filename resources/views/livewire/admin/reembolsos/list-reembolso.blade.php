@@ -150,7 +150,7 @@
                     </td>
 
                     <td>
-                        {{ $reembolso->pago?->referencia ?? '—' }}
+                        {{ $reembolso->pagoReserva?->referencia_pago ?? '—' }}
                     </td>
 
                     <td>

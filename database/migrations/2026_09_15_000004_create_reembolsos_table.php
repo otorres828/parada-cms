@@ -10,7 +10,7 @@ return new class extends Migration
     {
         Schema::create('reembolsos', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('pago_id')->unique();
+            $table->unsignedBigInteger('pago_reserva_id')->unique();
             $table->unsignedBigInteger('empresa_id');
             $table->unsignedBigInteger('admin_id');
             $table->unsignedBigInteger('revisado_por')->nullable();
@@ -23,7 +23,7 @@ return new class extends Migration
             $table->string('comprobante')->nullable();
             $table->dateTime('fecha_resolucion')->nullable();
             $table->timestamps();
-            foreach (['pago_id' => 'pagos', 'empresa_id' => 'empresas', 'admin_id' => 'admins', 'revisado_por' => 'admins'] as $key => $parent) {
+            foreach (['pago_reserva_id' => 'pagos_reservas', 'empresa_id' => 'empresas', 'admin_id' => 'admins', 'revisado_por' => 'admins'] as $key => $parent) {
                 $table->foreign($key)->references('id')->on($parent)->onUpdate('cascade')->onDelete('restrict');
             }
         });

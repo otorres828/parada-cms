@@ -49,7 +49,7 @@
             <dl class="row mb-0">
                 <dt class="col-sm-4">Pago</dt>
                 <dd class="col-sm-8">
-                    {{ $reembolso->pago?->referencia ?? '—' }}
+                    {{ $reembolso->pagoReserva?->referencia_pago ?? '—' }}
                 </dd>
                 <dt class="col-sm-4">Empresa</dt>
                 <dd class="col-sm-8">

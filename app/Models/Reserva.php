@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Reserva extends ModelHelper
 {
@@ -39,9 +40,11 @@ class Reserva extends ModelHelper
     const ESTADO_PAGO_REEMBOLSADO = 5;
     const ESTADO_PAGO_FALLIDO = 6;
 
+    const METODO_TRANSFERENCIA = 1;
+
     protected function casts(): array
     {
-        return ['estado_pago' => 'integer', 'monto_pasajes' => 'decimal:2', 'descuento_aplicado' => 'decimal:2', 'tasa_servicio' => 'decimal:2', 'monto_total' => 'decimal:2', 'fecha_compra' => 'datetime', 'fecha_expiracion' => 'datetime'];
+        return ['estado_pago' => 'integer', 'metodo_pago' => 'integer', 'monto_pasajes' => 'decimal:2', 'descuento_aplicado' => 'decimal:2', 'tasa_servicio' => 'decimal:2', 'monto_total' => 'decimal:2', 'fecha_compra' => 'datetime', 'fecha_expiracion' => 'datetime'];
     }
 
     public function usuario(): BelongsTo
@@ -138,8 +141,8 @@ class Reserva extends ModelHelper
             ->orderByDesc('fecha_compra');
     }
 
-    public function pagos(): HasMany
+    public function pago(): HasOne
     {
-        return $this->hasMany(Pago::class, 'reserva_id');
+        return $this->hasOne(PagoReserva::class, 'reserva_id');
     }
 }

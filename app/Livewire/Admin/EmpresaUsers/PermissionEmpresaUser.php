@@ -40,8 +40,6 @@ class PermissionEmpresaUser extends Component
 
     public function render()
     {
-        Access::authorize('empresas.users', 'permissions');
-
         return view('livewire.admin.empresa-users.permission-empresa-user', ['usuarioEmpresa' => $this->usuario_empresa_id ? $this->findUsuarioEmpresa() : null]);
     }
 

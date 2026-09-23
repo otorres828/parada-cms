@@ -177,50 +177,6 @@
     },
     {
         "attributes": {
-            "id": 17
-        },
-        "values": {
-            "section_id": 5,
-            "name": "Consultar Retiros",
-            "url": "list",
-            "status": 1
-        }
-    },
-    {
-        "attributes": {
-            "id": 18
-        },
-        "values": {
-            "section_id": 5,
-            "name": "Crear Retiros",
-            "url": "add",
-            "status": 1
-        }
-    },
-    {
-        "attributes": {
-            "id": 19
-        },
-        "values": {
-            "section_id": 5,
-            "name": "Editar Retiros",
-            "url": "edit",
-            "status": 1
-        }
-    },
-    {
-        "attributes": {
-            "id": 20
-        },
-        "values": {
-            "section_id": 5,
-            "name": "Ver detalle Retiros",
-            "url": "detail",
-            "status": 1
-        }
-    },
-    {
-        "attributes": {
             "id": 21
         },
         "values": {

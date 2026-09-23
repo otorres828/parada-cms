@@ -29,8 +29,6 @@ class DetailEmpresaUser extends Component
 
     public function render()
     {
-        Access::authorize('empresas.users', 'detail');
-
         return view('livewire.admin.empresa-users.detail-empresa-user', ['usuarioEmpresa' => $this->usuario_empresa_id ? $this->findUsuarioEmpresa() : null]);
     }
 

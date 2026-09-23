@@ -75,7 +75,6 @@ use App\Livewire\Admin\Reportes\SalesReport;
 /*------------------------------Reporte de Ventas de Empresas---------------------*/
 use App\Livewire\Admin\Reportes\CompaniesReport;
 /*------------------------------Configuraciones-----------------------------------*/
-use App\Livewire\Admin\Settings\GeneralSettings;
 
 
 /*
@@ -271,16 +270,6 @@ Route::group(['middleware' => ['auth:admin', 'check.permisos']], function () {
         Route::livewire('empresas', CompaniesReport::class)->name('companies');
 
     });
-
-    /*----------------------------------------Configuracion de la plataforma--------------------------------------*/
-
-    Route::prefix('configuracion')->name('settings.')->group(function () {
-
-        Route::livewire('/', GeneralSettings::class)->name('general');
-
-    });
-
-
 
     /*----------------------------------------Mi cuenta--------------------------------------*/
 

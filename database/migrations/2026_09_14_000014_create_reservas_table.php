@@ -19,9 +19,9 @@ return new class extends Migration
             $table->decimal('tasa_servicio', 12, 2);
             $table->decimal('monto_total', 12, 2);
             $table->enum('estado_pago', [1, 2, 3, 4, 5, 6])->default(1);
-            $table->string('metodo_pago')->nullable();
             $table->dateTime('fecha_compra');
             $table->dateTime('fecha_expiracion')->nullable();
+            $table->unsignedTinyInteger('metodo_pago')->nullable();
             $table->index(['fecha_compra', 'estado_pago']);
             $table->timestamps();
             $table->foreign('usuario_id')->references('id')->on('users')->onUpdate('cascade')->onDelete('cascade');

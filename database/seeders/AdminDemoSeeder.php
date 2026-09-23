@@ -10,13 +10,10 @@ use App\Models\ConfiguracionCupon;
 use App\Models\Cupon;
 use App\Models\Empresa;
 use App\Models\Estado;
-use App\Models\Movimiento;
-use App\Models\Pago;
 use App\Models\Programacion;
 use App\Models\ProgramacionTramoPrecio;
 use App\Models\Reembolso;
 use App\Models\Reserva;
-use App\Models\Retiro;
 use App\Models\Terminal;
 use App\Models\User;
 use App\Models\UsuarioEmpresa;
@@ -82,7 +79,6 @@ class AdminDemoSeeder extends Seeder
                     'telefono' => '0000-0000',
                     'email' => 'demo-empresa-'.($c + 1).'@example.test',
                     'estatus' => true,
-                    'datos_bancarios' => 'DEMO: banco y cuenta ficticios. No realizar transferencias.',
                 ],
             );
             $desactivarAlFinal = $company->wasRecentlyCreated && $c === 2;
@@ -102,16 +98,14 @@ class AdminDemoSeeder extends Seeder
             }
 
             $campaign = ConfiguracionCupon::firstOrCreate(
-                ['codigo_base' => "DEMO-CAMP-$c"],
+                ['nombre_campana' => 'Bienvenida '.$name],
                 [
                     'empresa_id' => $company->id,
-                    'nombre_campana' => 'Bienvenida '.$name,
-                    'tipo_cupon' => 'unico',
-                    'modalidad' => 'codigo',
+                    'tipo_cupon' => ConfiguracionCupon::TIPO_RANDOM,
+                    'modalidad' => ConfiguracionCupon::MODALIDAD_GENERAL,
                     'cantidad_generar' => 5,
-                    'tipo_descuento' => 'fijo',
+                    'tipo_descuento' => 'monto_fijo',
                     'monto_descuento' => '5.00',
-                    'aplica_a' => 'pasajes',
                     'fecha_inicio' => $anchor->copy()->subWeek(),
                     'fecha_fin' => $anchor->copy()->addMonth(),
                     'estatus' => true,
@@ -245,7 +239,7 @@ class AdminDemoSeeder extends Seeder
                                 // Simula el instante de compra de los viajes históricos.
                                 Carbon::setTestNow($fechaCompra);
 
-                                $reservation = DB::transaction(function () use ($reference, $traveler, $ptp, $cp, $r, $day, $b, $coupons) {
+                                $reservation = DB::transaction(function () use ($reference, $traveler, $ptp, $cp, $r, $day, $b, $c, $coupons) {
                                     $cliente = $traveler['cliente'];
                                     $reservation = ReservaService::aplicarReserva($cliente, $ptp->id);
 
@@ -268,7 +262,13 @@ class AdminDemoSeeder extends Seeder
                                         return ReservaService::cancelarReserva($cliente, $reservation->id);
                                     }
 
-                                    $reservation = ReservaService::pasarAPendiente($cliente, $reservation->id, 'transferencia');
+                                    $reservation = ReservaService::pasarAPendiente(
+                                        $cliente,
+                                        $reservation->id,
+                                        Reserva::METODO_TRANSFERENCIA,
+                                        "DEMO-PAY-$c-$b-$day-" . ($r + 1),
+                                        $reservation->fecha_compra->toDateTimeString(),
+                                    );
 
                                     if ($r < 3) {
                                         // Confirmación ficticia del fixture; no se ejecuta ningún cobro externo.
@@ -293,62 +293,19 @@ class AdminDemoSeeder extends Seeder
                             continue;
                         }
 
-                        $payment = Pago::firstOrCreate(
-                            ['reserva_id' => $reservation->id],
-                            [
-                                'empresa_id' => $company->id,
-                                'admin_id' => $actor->id,
-                                'monto' => $reservation->monto_total,
-                                'comision' => '0.00',
-                                'neto_empresa' => bcsub($reservation->monto_pasajes, $reservation->descuento_aplicado, 2),
-                                'moneda' => 'USD',
-                                'referencia' => "DEMO-PAY-$c-$b-$day-".($r + 1),
-                                'metodo' => 'transferencia',
-                                'comentario' => 'DEMO: conciliación ficticia, sin cobro real.',
-                                'fecha_pago' => $reservation->fecha_compra,
-                            ],
-                        );
-
-                        Movimiento::firstOrCreate(
-                            ['clave' => 'pago:'.$payment->id],
-                            [
-                                'empresa_id' => $company->id,
-                                'admin_id' => $actor->id,
-                                'pago_id' => $payment->id,
-                                'tipo' => 'venta',
-                                'monto' => $payment->neto_empresa,
-                                'moneda' => 'USD',
-                                'descripcion' => 'Venta ficticia '.$reference,
-                            ],
-                        );
-
-                        $payments[] = $payment;
+                        $payments[] = $reservation->pago;
                     }
                 }
             }
 
             foreach (['pendiente', 'aprobado', 'rechazado'] as $i => $status) {
                 if (isset($payments[$i])) {
-                    Retiro::firstOrCreate(
-                        ['referencia' => "DEMO-RET-$c-$i"],
-                        [
-                            'empresa_id' => $company->id,
-                            'admin_id' => $actor->id,
-                            'monto' => '10.00',
-                            'moneda' => 'USD',
-                            'estatus' => $status,
-                            'datos_bancarios' => 'DEMO: cuenta ficticia, no transferir.',
-                            'comentario' => 'Solicitud de prueba',
-                            'revisado_por' => $i ? $actor->id : null,
-                            'fecha_resolucion' => $i ? now() : null,
-                        ],
-                    );
                     Reembolso::firstOrCreate(
-                        ['pago_id' => $payments[$i]->id],
+                        ['pago_reserva_id' => $payments[$i]->id],
                         [
                             'empresa_id' => $company->id,
                             'admin_id' => $actor->id,
-                            'monto' => $payments[$i]->monto,
+                            'monto' => $payments[$i]->total,
                             'moneda' => 'USD',
                             'estatus' => $status,
                             'motivo' => 'Cambio de planes del pasajero ficticio',

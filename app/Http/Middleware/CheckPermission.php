@@ -25,7 +25,6 @@ class CheckPermission
         'admin.cupones.detail' => ['cupones', 'detail'],
         'admin.cupones.edit' => ['cupones', 'edit'],
         'admin.cupones.add' => ['cupones', 'add'],
-        'admin.settings.general' => ['settings', 'general'],
         'admin.dashboard' => ['dashboard', 'list'],
         'admin.empresas.list' => ['empresas', 'list'],
         'admin.empresas.detail' => ['empresas', 'detail'],

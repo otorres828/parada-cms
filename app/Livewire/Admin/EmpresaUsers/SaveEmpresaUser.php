@@ -46,8 +46,6 @@ class SaveEmpresaUser extends Component
 
     public function render()
     {
-        Access::authorize('empresas.users', $this->usuario_empresa_id ? 'edit' : 'add');
-
         return view('livewire.admin.empresa-users.save-empresa-user');
     }
 

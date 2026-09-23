@@ -5,7 +5,6 @@ namespace App\Models;
 use App\Traits\TraitGeneral;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Reembolso extends ModelHelper
 {
@@ -14,7 +13,7 @@ class Reembolso extends ModelHelper
     protected $table = 'reembolsos';
 
     protected $fillable = [
-        'pago_id',
+        'pago_reserva_id',
         'empresa_id',
         'admin_id',
         'revisado_por',
@@ -33,9 +32,9 @@ class Reembolso extends ModelHelper
         return ['monto' => 'decimal:2', 'fecha_resolucion' => 'datetime'];
     }
 
-    public function pago(): BelongsTo
+    public function pagoReserva(): BelongsTo
     {
-        return $this->belongsTo(Pago::class, 'pago_id');
+        return $this->belongsTo(PagoReserva::class, 'pago_reserva_id');
     }
 
     public function empresa(): BelongsTo
@@ -55,7 +54,7 @@ class Reembolso extends ModelHelper
 
     public static function searchAdmin(string $search = '', array $filters = []): Builder
     {
-        $query = self::query()->with([0 => 'empresa', 1 => 'pago.reserva', 2 => 'admin', 3 => 'revisor']);
+        $query = self::query()->with([0 => 'empresa', 1 => 'pagoReserva.reserva', 2 => 'admin', 3 => 'revisor']);
 
         if ($search !== '') {
             $query->where(function ($query) use ($search) {
@@ -78,8 +77,8 @@ class Reembolso extends ModelHelper
             $query->where('reembolsos.empresa_id', $filters['empresa_id']);
         }
 
-        if (isset($filters['pago_id'])) {
-            $query->where('reembolsos.pago_id', $filters['pago_id']);
+        if (isset($filters['pago_reserva_id'])) {
+            $query->where('reembolsos.pago_reserva_id', $filters['pago_reserva_id']);
         }
 
         if (!empty($filters['date_from'])) {
@@ -93,8 +92,4 @@ class Reembolso extends ModelHelper
         return $query;
     }
 
-    public function movimientos(): HasMany
-    {
-        return $this->hasMany(Movimiento::class, 'reembolso_id');
-    }
 }

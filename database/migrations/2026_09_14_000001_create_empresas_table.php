@@ -15,7 +15,6 @@ return new class extends Migration
             $table->string('telefono');
             $table->string('email');
             $table->boolean('estatus')->default(true);
-            $table->text('datos_bancarios')->nullable();
             $table->timestamps();
         });
     }

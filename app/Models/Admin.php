@@ -126,16 +126,6 @@ class Admin extends ModelHelper implements Authenticatable, Authorizable, CanRes
         return [];
     }
 
-    public function pagos(): HasMany
-    {
-        return $this->hasMany(Pago::class, 'admin_id');
-    }
-
-    public function retiros(): HasMany
-    {
-        return $this->hasMany(Retiro::class, 'admin_id');
-    }
-
     public function reembolsos(): HasMany
     {
         return $this->hasMany(Reembolso::class, 'admin_id');

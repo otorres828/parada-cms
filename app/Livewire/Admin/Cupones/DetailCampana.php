@@ -43,7 +43,6 @@ class DetailCampana extends Component
 
     public function render()
     {
-        Access::authorize('cupones', 'detail');
         $query = Cupon::searchAdmin($this->search, ['configuracion_cupon_id' => $this->configuracion_cupon_id, 'status' => $this->status]);
         $cupones = $this->applySort($query)->paginate($this->per_page);
 
@@ -70,7 +69,10 @@ class DetailCampana extends Component
                 throw ValidationException::withMessages(['cupones' => 'La campaña está inactiva o vencida.']);
             }
             for ($i = 0; $i < $campaign->cantidad_generar; $i++) {
-                Cupon::create(['configuracion_cupon_id' => $campaign->id, 'codigo' => strtoupper($campaign->codigo_base).'-'.strtoupper(bin2hex(random_bytes(6))), 'redimido' => false]);
+                $codigo = $campaign->tipo_cupon === ConfiguracionCupon::TIPO_PERSONALIZADO
+                    ? $campaign->codigo_personalizado
+                    : 'CUP-' . strtoupper(bin2hex(random_bytes(8)));
+                Cupon::create(['configuracion_cupon_id' => $campaign->id, 'codigo' => $codigo, 'redimido' => false]);
             }
             Audit::record('cupones.generados', $campaign, ['cantidad' => $campaign->cantidad_generar]);
         });

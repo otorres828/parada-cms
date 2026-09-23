@@ -18,7 +18,6 @@ class Empresa extends ModelHelper
         'telefono',
         'email',
         'estatus',
-        'datos_bancarios',
     ];
 
     protected function casts(): array
@@ -82,16 +81,6 @@ class Empresa extends ModelHelper
         return $query;
     }
 
-    public function pagos(): HasMany
-    {
-        return $this->hasMany(Pago::class, 'empresa_id');
-    }
-
-    public function retiros(): HasMany
-    {
-        return $this->hasMany(Retiro::class, 'empresa_id');
-    }
-
     public function reembolsos(): HasMany
     {
         return $this->hasMany(Reembolso::class, 'empresa_id');
@@ -102,8 +91,4 @@ class Empresa extends ModelHelper
         return $this->hasMany(DocumentoLegal::class, 'empresa_id');
     }
 
-    public function movimientos(): HasMany
-    {
-        return $this->hasMany(Movimiento::class, 'empresa_id');
-    }
 }

@@ -40,8 +40,6 @@ class SaveTasaServicio extends Component
 
     public function render()
     {
-        Access::authorize('tasas-servicio', $this->tasa_servicio_id ? 'edit' : 'add');
-
         return view('livewire.admin.tasas-servicio.save-tasa-servicio');
     }
 

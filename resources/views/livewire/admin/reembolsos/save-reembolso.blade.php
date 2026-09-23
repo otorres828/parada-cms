@@ -47,19 +47,19 @@
 
                 <input type="search" class="form-control mb-2" placeholder="Buscar opciones..."
                     aria-label="Buscar Pago recibido"
-                    wire:model.live.debounce.500ms="search_pago_id">
+                    wire:model.live.debounce.500ms="search_pago_reserva_id">
 
-                <x-form.dropdown label="Pago recibido" name="pago_id" x-model="$wire.pago_id">
+                <x-form.dropdown label="Pago recibido" name="pago_reserva_id" x-model="$wire.pago_reserva_id">
 
                     <option value="">Seleccionar...</option>
 
-                    @foreach ($options_pago_id as $value => $label)
+                    @foreach ($options_pago_reserva_id as $value => $label)
                         <option value="{{ $value }}">{{ $label }}</option>
                     @endforeach
 
                 </x-form.dropdown>
 
-                @error('pago_id')
+                @error('pago_reserva_id')
                     <div class="text-danger small">
                         {{ $message }}
                     </div>
@@ -114,7 +114,7 @@
                         errorFieldCssClass: ['is-invalid'],
                         successFieldCssClass: ['is-valid'],
                     });
-                    this.validator.addField(this.$refs.form.querySelector('[name="pago_id"]'), [{
+                    this.validator.addField(this.$refs.form.querySelector('[name="pago_reserva_id"]'), [{
                         rule: 'required',
                         errorMessage: 'Este campo es requerido'
                     }]);

@@ -45,17 +45,6 @@
     },
     {
         "attributes": {
-            "id": 5
-        },
-        "values": {
-            "name": "Retiros",
-            "url": "retiros",
-            "group_id": 2,
-            "status": 1
-        }
-    },
-    {
-        "attributes": {
             "id": 6
         },
         "values": {

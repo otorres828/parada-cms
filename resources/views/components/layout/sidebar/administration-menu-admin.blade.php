@@ -183,21 +183,6 @@
     ])
 @endif
 
-@if ($generalSettings)
-    @include('components.layout.sidebar-li', [
-        'menu' => 'Configuración',
-        'icon' => 'nav-icon bi bi-gear',
-        'list' => [
-            [
-                'existe' => $generalSettings ?? false,
-                'route' => route('admin.settings.general'),
-                'name' => 'General',
-                'active' => request()->routeIs('admin.settings.general') ? 'active' : '',
-            ],
-        ],
-    ])
-@endif
-
 @if ($profileAccount or $passwordAccount)
     @include('components.layout.sidebar-li', [
         'menu' => 'Mi cuenta',

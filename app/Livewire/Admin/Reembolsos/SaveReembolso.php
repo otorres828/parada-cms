@@ -2,7 +2,7 @@
 
 namespace App\Livewire\Admin\Reembolsos;
 
-use App\Models\Pago;
+use App\Models\PagoReserva;
 use App\Models\Reembolso;
 use App\Services\Admin\Access;
 use App\Services\Admin\Finance;
@@ -18,9 +18,9 @@ class SaveReembolso extends Component
     #[Locked]
     public ?int $reembolso_id = null;
 
-    public $pago_id = '';
+    public $pago_reserva_id = '';
 
-    public string $search_pago_id = '';
+    public string $search_pago_reserva_id = '';
 
     public $motivo = '';
 
@@ -34,17 +34,16 @@ class SaveReembolso extends Component
 
     public function render()
     {
-        Access::authorize('reembolsos', $this->reembolso_id ? 'edit' : 'add');
-        $query = Pago::searchAdmin($this->search_pago_id);
-        $options_pago_id = (clone $query)->orderBy('referencia')->limit(100)->pluck('referencia', 'id')->all();
-        if ($this->pago_id && ! isset($options_pago_id[$this->pago_id])) {
-            $selected = Pago::searchAdmin()->find($this->pago_id);
+        $query = PagoReserva::searchAdmin($this->search_pago_reserva_id);
+        $options_pago_reserva_id = (clone $query)->orderBy('referencia_pago')->limit(100)->pluck('referencia_pago', 'id')->all();
+        if ($this->pago_reserva_id && ! isset($options_pago_reserva_id[$this->pago_reserva_id])) {
+            $selected = PagoReserva::searchAdmin()->find($this->pago_reserva_id);
             if ($selected) {
-                $options_pago_id[$selected->id] = $selected->referencia;
+                $options_pago_reserva_id[$selected->id] = $selected->referencia_pago;
             }
         }
 
-        return view('livewire.admin.reembolsos.save-reembolso', ['options_pago_id' => $options_pago_id]);
+        return view('livewire.admin.reembolsos.save-reembolso', ['options_pago_reserva_id' => $options_pago_reserva_id]);
     }
 
     public function save()
@@ -60,13 +59,13 @@ class SaveReembolso extends Component
     protected function editar(Reembolso $reembolso): void
     {
         $this->reembolso = $reembolso;
-        $this->pago_id = $reembolso->pago_id ?? '';
+        $this->pago_reserva_id = $reembolso->pago_reserva_id ?? '';
         $this->motivo = $reembolso->motivo ?? '';
     }
 
     protected function validateForm(): array
     {
-        $validated = $this->validate(['pago_id' => ['required', 'integer', 'exists:pagos,id'], 'motivo' => ['required', 'string', 'min:10', 'max:2000']], [], ['pago_id' => 'Pago recibido', 'motivo' => 'Motivo del reembolso total']);
+        $validated = $this->validate(['pago_reserva_id' => ['required', 'integer', 'exists:pagos_reservas,id'], 'motivo' => ['required', 'string', 'min:10', 'max:2000']], [], ['pago_reserva_id' => 'Pago recibido', 'motivo' => 'Motivo del reembolso total']);
         foreach ($validated as $key => &$value) {
             if ($value === '') {
                 $value = null;
@@ -79,6 +78,6 @@ class SaveReembolso extends Component
 
     protected function findReembolso(): Reembolso
     {
-        return Reembolso::searchAdmin()->with([0 => 'empresa', 1 => 'pago.reserva', 2 => 'admin', 3 => 'revisor'])->findOrFail($this->reembolso_id);
+        return Reembolso::searchAdmin()->with([0 => 'empresa', 1 => 'pagoReserva.reserva', 2 => 'admin', 3 => 'revisor'])->findOrFail($this->reembolso_id);
     }
 }
