@@ -161,32 +161,32 @@
                         errorLabelCssClass: ['invalid-feedback'],
                         errorFieldCssClass: ['is-invalid'],
                         successFieldCssClass: ['is-valid'],
-                    });
-                    this.validator.addField(this.$refs.form.querySelector('[name="nombre"]'), [{
+                    })
+                    .addField(this.$refs.form.querySelector('[name="nombre"]'), [{
                         rule: 'required',
                         errorMessage: 'Este campo es requerido'
                     }, {
                         rule: 'maxLength',
                         value: 255,
                         errorMessage: 'Máximo 255 caracteres'
-                    }]);
-                    this.validator.addField(this.$refs.form.querySelector('[name="rif"]'), [{
+                    }])
+                    .addField(this.$refs.form.querySelector('[name="rif"]'), [{
                         rule: 'required',
                         errorMessage: 'Este campo es requerido'
                     }, {
                         rule: 'maxLength',
                         value: 255,
                         errorMessage: 'Máximo 255 caracteres'
-                    }]);
-                    this.validator.addField(this.$refs.form.querySelector('[name="telefono"]'), [{
+                    }])
+                    .addField(this.$refs.form.querySelector('[name="telefono"]'), [{
                         rule: 'required',
                         errorMessage: 'Este campo es requerido'
                     }, {
                         rule: 'maxLength',
                         value: 255,
                         errorMessage: 'Máximo 255 caracteres'
-                    }]);
-                    this.validator.addField(this.$refs.form.querySelector('[name="email"]'), [{
+                    }])
+                    .addField(this.$refs.form.querySelector('[name="email"]'), [{
                         rule: 'required',
                         errorMessage: 'Este campo es requerido'
                     }, {
@@ -196,13 +196,13 @@
                         rule: 'maxLength',
                         value: 255,
                         errorMessage: 'Máximo 255 caracteres'
-                    }]);
-                    this.validator.addField(this.$refs.form.querySelector('[name="estatus"]'), [{
+                    }])
+                    .addField(this.$refs.form.querySelector('[name="estatus"]'), [{
                         rule: 'required',
                         errorMessage: 'Este campo es requerido'
-                    }]);
-                    this.validator.addField(this.$refs.form.querySelector('[name="datos_bancarios"]'),
-                [{
+                    }])
+                    .addField(this.$refs.form.querySelector('[name="datos_bancarios"]'),
+                    [{
                         rule: 'maxLength',
                         value: 2000,
                         errorMessage: 'Máximo 2000 caracteres'

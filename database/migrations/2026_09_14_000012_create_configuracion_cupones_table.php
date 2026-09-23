@@ -10,18 +10,17 @@ return new class extends Migration
     {
         Schema::create('configuracion_cupones', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('empresa_id')->nullable();
+            $table->unsignedBigInteger('empresa_id')->nullable(); //Si empresa_id es nulo, significa que es un cupón global para todas las empresas
             $table->string('nombre_campana');
-            $table->string('tipo_cupon');
-            $table->string('modalidad');
-            $table->string('codigo_base');
+            $table->integer('tipo_cupon')->default(1); // 1: random 2: custom (personalizado)
+            $table->enum('tipo_descuento',['monto_fijo','porcentaje'])->default('monto_fijo');
+            $table->enum('modalidad',['GENERAL','PRIMERA_COMPRA','USUARIO_NUEVO']);
+            $table->string('codigo_personalizado')->nullable();
             $table->unsignedInteger('cantidad_generar');
-            $table->string('tipo_descuento');
             $table->decimal('monto_descuento', 12, 2);
-            $table->string('aplica_a');
             $table->dateTime('fecha_inicio');
             $table->dateTime('fecha_fin');
-            $table->boolean('estatus')->default(true);
+            $table->integer('estatus')->default(1); // 1: activo, 2: inactivo, 0: eliminado
             $table->timestamps();
             $table->foreign('empresa_id')->references('id')->on('empresas')->onUpdate('cascade')->onDelete('cascade');
         });
