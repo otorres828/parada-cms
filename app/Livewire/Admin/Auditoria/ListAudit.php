@@ -35,15 +35,20 @@ class ListAudit extends Component
     {
         $this->sortColumn = 'id';
         $this->sortDirection = 'desc';
-        $this->checkPermissions('auditoria');
+        $this->checkPermissions('auditoria',['detail']);
     }
 
     public function render()
     {
         $query = Auditoria::searchAdmin($this->search, ['status' => $this->status, 'date_from' => $this->date_from, 'date_to' => $this->date_to]);
+
         $query = $this->applySort($query);
+
         $auditorias = $query->paginate($this->per_page);
-        return view('livewire.admin.auditoria.list-audit', ['auditorias' => $auditorias, 'capabilities' => Access::capabilities('auditoria')]);
+
+        return view('livewire.admin.auditoria.list-audit', [
+            'auditorias' => $auditorias, 
+        ]);
     }
 
     public function updated($property): void

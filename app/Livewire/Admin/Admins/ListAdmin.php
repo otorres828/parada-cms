@@ -35,10 +35,14 @@ class ListAdmin extends Component
     public function render()
     {
         $query = Admin::searchAdmin($this->search, ['status' => $this->status]);
+
         $query = $this->applySort($query);
+
         $admins = $query->paginate($this->per_page);
 
-        return view('livewire.admin.admins.list-admin', ['admins' => $admins, 'capabilities' => Access::capabilities('admins')]);
+        return view('livewire.admin.admins.list-admin', [
+            'admins' => $admins
+        ]);
     }
 
     public function updated($property): void

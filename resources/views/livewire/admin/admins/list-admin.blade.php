@@ -132,7 +132,7 @@
 
                         <x-list.button-group>
 
-                            @if ($capabilities['edit'])
+                            @if ($canEdit)
                                 <x-list.edit-button :route="route('admin.admins.edit', ['admin_id' => $admin->id])" />
                             @endif
 

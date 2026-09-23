@@ -14,18 +14,19 @@ class DetailAudit extends Component
     #[Locked]
     public ?int $audit_id = null;
 
+    public Auditoria $auditoria;
+
     public function mount(?int $audit_id = null): void
     {
         $this->audit_id = $audit_id;
         Access::authorize('auditoria', 'detail');
-        $auditoria = $this->findAuditoria();
+        $this->auditoria = $this->findAuditoria();
     }
 
     public function render()
     {
-        Access::authorize('auditoria', 'detail');
 
-        return view('livewire.admin.auditoria.detail-audit', ['auditoria' => $this->audit_id ? $this->findAuditoria() : null, 'capabilities' => Access::capabilities('auditoria')]);
+        return view('livewire.admin.auditoria.detail-audit');
     }
 
     protected function findAuditoria(): Auditoria

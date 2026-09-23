@@ -131,7 +131,7 @@
 
                         <x-list.button-group>
 
-                            @if ($capabilities['detail'])
+                            @if ($canDetail)
                                 <x-list.view-button :route="route('admin.auditoria.detail', ['audit_id' => $auditoria->id])" :target="false" />
                             @endif
 
