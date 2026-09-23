@@ -52,11 +52,6 @@ class Admin extends ModelHelper implements Authenticatable, Authorizable, CanRes
         return $this->level === self::SUPERADMIN;
     }
 
-    public function adminPermissions(): HasMany
-    {
-        return $this->hasMany(PermissionAdminAdmin::class, 'admin_id');
-    }
-
     public function permissions(): BelongsToMany
     {
         return $this->belongsToMany(PermissionAdmin::class, 'permission_admin_admin', 'admin_id', 'permission_id')->withPivot('status');

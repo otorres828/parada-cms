@@ -19,8 +19,6 @@ class AdministrationMenuAdmin extends Component
 
     public bool $listUsers = false;
 
-public bool $listSections = false;
-
 public bool $listViajes = false;
 
     public bool $listProgramaciones = false;
