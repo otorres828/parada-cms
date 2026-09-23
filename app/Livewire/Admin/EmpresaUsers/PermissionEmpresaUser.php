@@ -7,6 +7,7 @@ use App\Models\PermissionEmpresa;
 use App\Models\UsuarioEmpresa;
 use App\Services\Admin\Access;
 use App\Services\Admin\Audit;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 use Livewire\Attributes\Layout;
@@ -24,12 +25,15 @@ class PermissionEmpresaUser extends Component
 
     public array $selectedPermissions = [];
 
+    public Collection $permissions;
+
     public function mount(?int $empresa_id = null, ?int $usuario_empresa_id = null): void
     {
         $this->empresa_id = $empresa_id;
         Empresa::findOrFail($empresa_id);
         $this->usuario_empresa_id = $usuario_empresa_id;
         Access::authorize('empresas.users', 'permissions');
+        $this->permissions = PermissionEmpresa::searchAdmin('', ['status' => 1])->with('section')->whereHas('section', fn ($q) => $q->where('status', 1)->whereHas('group', fn ($g) => $g->where('status', 1)))->get()->groupBy('section.name');
         $usuarioEmpresa = $this->findUsuarioEmpresa();
         $this->selectedPermissions = $usuarioEmpresa->permisos()->pluck('permissions_empresa.id')->map(fn ($id) => (string) $id)->all();
     }
@@ -38,7 +42,7 @@ class PermissionEmpresaUser extends Component
     {
         Access::authorize('empresas.users', 'permissions');
 
-        return view('livewire.admin.empresa-users.permission-empresa-user', ['usuarioEmpresa' => $this->usuario_empresa_id ? $this->findUsuarioEmpresa() : null, 'permissions' => PermissionEmpresa::searchAdmin('', ['status' => 1])->with('section')->whereHas('section', fn ($q) => $q->where('status', 1)->whereHas('group', fn ($g) => $g->where('status', 1)))->get()->groupBy('section.name')]);
+        return view('livewire.admin.empresa-users.permission-empresa-user', ['usuarioEmpresa' => $this->usuario_empresa_id ? $this->findUsuarioEmpresa() : null]);
     }
 
     public function savePermissions(): void

@@ -52,7 +52,6 @@ class SaveTasaServicio extends Component
         $data['monto_maximo'] = $data['monto_maximo'] === '' ? null : $data['monto_maximo'];
         DB::transaction(function () use ($data) {
             GroupAdmin::where('url', 'administracion')->lockForUpdate()->firstOrFail();
-            Access::authorize('tasas-servicio', $this->tasa_servicio_id ? 'edit' : 'add');
             $tasa = $this->tasa_servicio_id ? TasaServicio::searchAdmin()->findOrFail($this->tasa_servicio_id) : new TasaServicio;
             $tasa->fill($data);
             $tasa->validarRango();

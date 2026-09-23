@@ -7,6 +7,7 @@ use App\Models\GroupAdmin;
 use App\Models\PermissionAdmin;
 use App\Services\Admin\Access;
 use App\Services\Admin\Audit;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
@@ -18,6 +19,8 @@ use Livewire\Component;
 class SaveAdmin extends Component
 {
     public Admin $admin;
+
+    public Collection $groups;
 
     #[Locked]
     public ?int $admin_id = null;
@@ -40,6 +43,7 @@ class SaveAdmin extends Component
     {
         $this->admin_id = $admin_id;
         Access::authorize('admins', $admin_id ? 'edit' : 'add');
+        $this->groups = GroupAdmin::where('status', 1)->with(['sections' => fn ($q) => $q->where('status', 1)->where('url', '!=', 'admins'), 'sections.permissions' => fn ($q) => $q->where('status', 1)])->orderBy('id')->get();
         if ($admin_id) {
             $this->editar(Admin::searchAdmin()->findOrFail($admin_id));
         }
@@ -47,9 +51,7 @@ class SaveAdmin extends Component
 
     public function render()
     {
-        $groups = GroupAdmin::where('status', 1)->with(['sections' => fn ($q) => $q->where('status', 1)->where('url', '!=', 'admins'), 'sections.permissions' => fn ($q) => $q->where('status', 1)])->orderBy('id')->get();
-
-        return view('livewire.admin.admins.save-admin', ['groups' => $groups, 'editingRoot' => $this->admin_id && $this->admin->isRoot()]);
+        return view('livewire.admin.admins.save-admin', ['editingRoot' => $this->admin_id && $this->admin->isRoot()]);
     }
 
     public function save()

@@ -6,6 +6,7 @@ use App\Models\Empresa;
 use App\Models\Reembolso;
 use App\Traits\Listing;
 use App\Traits\Permissions;
+use Illuminate\Database\Eloquent\Collection;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -16,6 +17,8 @@ class ListReembolso extends Component
     use Listing;
     use Permissions;
     use WithPagination;
+
+    public Collection $empresas;
 
     public string $empresa_id = '';
 
@@ -39,14 +42,24 @@ class ListReembolso extends Component
         $this->sortColumn = 'id';
         $this->sortDirection = 'desc';
         $this->checkPermissions('reembolsos',['detail', 'review']);
+        $this->empresas = Empresa::searchAdmin()->orderBy('nombre')->get();
     }
 
     public function render()
     {
-        $query = Reembolso::searchAdmin($this->search, ['empresa_id' => $this->empresa_id, 'status' => $this->status, 'date_from' => $this->date_from, 'date_to' => $this->date_to]);
+        $query = Reembolso::searchAdmin($this->search, ['empresa_id' => $this->empresa_id, 
+            'status' => $this->status, 
+            'date_from' => $this->date_from, 
+            'date_to' => $this->date_to
+        ]);
+
         $query = $this->applySort($query);
+
         $reembolsos = $query->paginate($this->per_page);
-        return view('livewire.admin.reembolsos.list-reembolso', ['reembolsos' => $reembolsos, 'empresas' => Empresa::searchAdmin()->orderBy('nombre')->get()]);
+
+        return view('livewire.admin.reembolsos.list-reembolso', [
+            'reembolsos' => $reembolsos
+        ]);
     }
 
     public function updated($property): void
