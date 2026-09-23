@@ -3,6 +3,7 @@
 namespace App\Traits;
 
 use App\Models\Admin;
+use App\Services\Admin\Access;
 use Illuminate\Support\Facades\Auth;
 
 trait Permissions
@@ -23,23 +24,20 @@ trait Permissions
 
     public function checkPermissions(string $module, array $permissions = []): void
     {
+
+        Access::authorize($module, 'list');
+        
         $admin = Admin::find(Auth::guard('admin')->id());
 
-        $checks = [
-            'list' => [$module, 'list']
-        ];
+        $checks = [];
 
         $permissions = array_merge(['add', 'edit', 'delete', 'download'], $permissions);
-        
+
         foreach ($permissions as $permission) {
             $checks['can' . ucfirst($permission)] = [$module, $permission];
         }
 
         $results = $admin?->checkPermissionsBatch($checks) ?? [];
-
-        abort_unless($results['list'] ?? false, 403, 'No tienes permiso para realizar esta acción.');
-
-        unset($results['list']);
 
         foreach ($results as $property => $allowed) {
             $this->{$property} = $allowed;
