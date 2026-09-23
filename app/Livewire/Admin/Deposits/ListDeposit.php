@@ -3,7 +3,6 @@
 namespace App\Livewire\Admin\Deposits;
 
 use App\Models\Pago;
-use App\Services\Admin\Access;
 use App\Traits\Listing;
 use App\Traits\Permissions;
 use Livewire\Attributes\Layout;
@@ -35,7 +34,7 @@ class ListDeposit extends Component
     {
         $this->sortColumn = 'id';
         $this->sortDirection = 'desc';
-        $this->checkPermissions('pagos');
+        $this->checkPermissions('pagos',['detail']);
     }
 
     public function render()
@@ -43,7 +42,7 @@ class ListDeposit extends Component
         $query = Pago::searchAdmin($this->search, ['status' => $this->status, 'date_from' => $this->date_from, 'date_to' => $this->date_to]);
         $query = $this->applySort($query);
         $pagos = $query->paginate($this->per_page);
-        return view('livewire.admin.deposits.list-deposit', ['pagos' => $pagos, 'capabilities' => Access::capabilities('pagos')]);
+        return view('livewire.admin.deposits.list-deposit', ['pagos' => $pagos]);
     }
 
     public function updated($property): void

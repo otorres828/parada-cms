@@ -66,7 +66,7 @@ class SaveCampana extends Component
             }
         }
 
-        return view('livewire.admin.cupones.save-campana', ['configuracionCupon' => $this->configuracion_cupon_id ? $this->findConfiguracionCupon() : null, 'capabilities' => Access::capabilities('cupones'), 'options_empresa_id' => $options_empresa_id]);
+        return view('livewire.admin.cupones.save-campana', ['configuracionCupon' => $this->configuracion_cupon_id ? $this->findConfiguracionCupon() : null, 'options_empresa_id' => $options_empresa_id]);
     }
 
     public function save()

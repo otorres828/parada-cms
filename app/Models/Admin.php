@@ -62,24 +62,9 @@ class Admin extends ModelHelper implements Authenticatable, Authorizable, CanRes
         return $this->belongsToMany(PermissionAdmin::class, 'permission_admin_admin', 'admin_id', 'permission_id')->withPivot('status');
     }
 
-    public function permisos(): BelongsToMany
-    {
-        return $this->permissions();
-    }
-
-    public function getPermissions()
-    {
-        return $this->adminPermissions()->where('status', 1)->pluck('permission_id');
-    }
-
     public function getPermissionsMap()
     {
         return Access::permissions($this);
-    }
-
-    public function existsPermission(string $sectionURL, string $permissionURL): bool
-    {
-        return $this->getPermissionsMap()->contains(fn ($item) => $item->section_url === $sectionURL && $item->permission_url === $permissionURL);
     }
 
     public function hasPermission(string $sectionURL, string $permissionURL): bool

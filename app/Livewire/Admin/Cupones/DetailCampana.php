@@ -44,7 +44,7 @@ class DetailCampana extends Component
         $query = Cupon::searchAdmin($this->search, ['configuracion_cupon_id' => $this->configuracion_cupon_id, 'status' => $this->status]);
         $cupones = $this->applySort($query)->paginate($this->per_page);
 
-        return view('livewire.admin.cupones.detail-campana', ['cupones' => $cupones, 'configuracionCupon' => $this->configuracion_cupon_id ? $this->findConfiguracionCupon() : null, 'capabilities' => Access::capabilities('cupones')]);
+        return view('livewire.admin.cupones.detail-campana', ['cupones' => $cupones, 'configuracionCupon' => $this->configuracion_cupon_id ? $this->findConfiguracionCupon() : null]);
     }
 
     public function updated($property): void

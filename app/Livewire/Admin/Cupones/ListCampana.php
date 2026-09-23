@@ -37,7 +37,7 @@ class ListCampana extends Component
     {
         $this->sortColumn = 'id';
         $this->sortDirection = 'desc';
-        $this->checkPermissions('cupones');
+        $this->checkPermissions('cupones',['detail']);
     }
 
     public function render()
@@ -45,7 +45,7 @@ class ListCampana extends Component
         $query = ConfiguracionCupon::searchAdmin($this->search, ['status' => $this->status, 'date_from' => $this->date_from, 'date_to' => $this->date_to]);
         $query = $this->applySort($query);
         $cupones = $query->paginate($this->per_page);
-        return view('livewire.admin.cupones.list-campana', ['cupones' => $cupones, 'capabilities' => Access::capabilities('cupones')]);
+        return view('livewire.admin.cupones.list-campana', ['cupones' => $cupones]);
     }
 
     public function updated($property): void

@@ -32,10 +32,18 @@ class Access
     public static function capabilities(string $module): array
     {
         $actions = ['list', 'add', 'edit', 'delete', 'detail', 'permissions', 'settings', 'passengers', 'review'];
+
         $admin = Admin::find(auth('admin')->id());
-        if (!$admin) return array_fill_keys($actions, false);
+
+        if (!$admin) {
+            return array_fill_keys($actions, false);
+        }
+
         $checks = [];
-        foreach ($actions as $action) $checks[$action] = [$module, $action];
+        foreach ($actions as $action){
+            $checks[$action] = [$module, $action];
+        } 
+        
         return $admin->checkPermissionsBatch($checks);
     }
 }

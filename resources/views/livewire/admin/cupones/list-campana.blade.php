@@ -165,13 +165,13 @@
 
                         <x-list.button-group>
 
-                            @if ($capabilities['detail'])
+                            @if ($canDetail)
                                 <x-list.view-button :route="route('admin.cupones.detail', [
                                     'configuracion_cupon_id' => $configuracionCupon->id
                                 ])" :target="false" />
                             @endif
 
-                            @if ($capabilities['edit'])
+                            @if ($canEdit)
                                 <x-list.edit-button :route="route('admin.cupones.edit', [
                                     'configuracion_cupon_id' => $configuracionCupon->id
                                 ])" />

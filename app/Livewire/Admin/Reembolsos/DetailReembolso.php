@@ -26,7 +26,7 @@ class DetailReembolso extends Component
     {
         Access::authorize('reembolsos', 'detail');
 
-        return view('livewire.admin.reembolsos.detail-reembolso', ['reembolso' => $this->reembolso_id ? $this->findReembolso() : null, 'capabilities' => Access::capabilities('reembolsos')]);
+        return view('livewire.admin.reembolsos.detail-reembolso', ['reembolso' => $this->reembolso_id ? $this->findReembolso() : null]);
     }
 
     public function downloadProof()

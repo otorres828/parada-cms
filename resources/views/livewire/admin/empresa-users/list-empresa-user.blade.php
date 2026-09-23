@@ -151,21 +151,21 @@
 
                         <x-list.button-group>
 
-                            @if ($capabilities['detail'])
+                            @if ($canDetail)
                                 <x-list.view-button :route="route('admin.empresas.users.detail', [
                                     'empresa_id' => $empresa_id,
                                     'usuario_empresa_id' => $usuarioEmpresa->id,
                                 ])" :target="false" />
                             @endif
 
-                            @if ($capabilities['edit'])
+                            @if ($canEdit)
                                 <x-list.edit-button :route="route('admin.empresas.users.edit', [
                                     'empresa_id' => $empresa_id,
                                     'usuario_empresa_id' => $usuarioEmpresa->id,
                                 ])" />
                             @endif
 
-                            @if ($capabilities['permissions'])
+                            @if ($canPermissions)
                                 <a class="btn btn-outline-secondary"
                                     href="{{ route('admin.empresas.users.permissions', ['empresa_id' => $empresa_id, 'usuario_empresa_id' => $usuarioEmpresa->id]) }}"
                                     wire:navigate title="Permisos" aria-label="Permisos"><i

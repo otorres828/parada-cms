@@ -42,7 +42,7 @@ class ReviewReembolso extends Component
     {
         Access::authorize('reembolsos', 'review');
 
-        return view('livewire.admin.reembolsos.review-reembolso', ['reembolso' => $this->reembolso_id ? $this->findReembolso() : null, 'capabilities' => Access::capabilities('reembolsos')]);
+        return view('livewire.admin.reembolsos.review-reembolso', ['reembolso' => $this->reembolso_id ? $this->findReembolso() : null]);
     }
 
     public function resolve()

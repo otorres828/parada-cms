@@ -147,7 +147,7 @@
 
                         <x-list.button-group>
 
-                            @if (Route::has('admin.pagos.detail') && $capabilities['detail'])
+                            @if (Route::has('admin.pagos.detail') && $canDetail)
                                 <x-list.view-button :route="route('admin.pagos.detail', ['pago_id' => $pago->id])" :target="false" />
                             @endif
 

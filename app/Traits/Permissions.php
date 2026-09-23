@@ -16,6 +16,10 @@ trait Permissions
 
     public bool $canDetail  = false;
 
+    public bool $canPermissions = false;
+
+    public bool $canReview = false;
+
     public function checkPermissions(string $module, array $permissions = []): void
     {
         Access::authorize($module, 'list');

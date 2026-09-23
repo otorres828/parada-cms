@@ -43,7 +43,7 @@ class SaveReembolso extends Component
             }
         }
 
-        return view('livewire.admin.reembolsos.save-reembolso', ['reembolso' => $this->reembolso_id ? $this->findReembolso() : null, 'capabilities' => Access::capabilities('reembolsos'), 'options_pago_id' => $options_pago_id]);
+        return view('livewire.admin.reembolsos.save-reembolso', ['reembolso' => $this->reembolso_id ? $this->findReembolso() : null, 'options_pago_id' => $options_pago_id]);
     }
 
     public function save()

@@ -59,7 +59,7 @@ class FormDeposit extends Component
             }
         }
 
-        return view('livewire.admin.deposits.form-deposit', ['pago' => $this->pago_id ? $this->findPago() : null, 'capabilities' => Access::capabilities('pagos'), 'options_reserva_id' => $options_reserva_id]);
+        return view('livewire.admin.deposits.form-deposit', ['pago' => $this->pago_id ? $this->findPago() : null, 'options_reserva_id' => $options_reserva_id]);
     }
 
     public function save()

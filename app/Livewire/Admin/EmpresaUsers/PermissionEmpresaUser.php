@@ -38,7 +38,7 @@ class PermissionEmpresaUser extends Component
     {
         Access::authorize('empresas.users', 'permissions');
 
-        return view('livewire.admin.empresa-users.permission-empresa-user', ['usuarioEmpresa' => $this->usuario_empresa_id ? $this->findUsuarioEmpresa() : null, 'capabilities' => Access::capabilities('empresas.users'), 'permissions' => PermissionEmpresa::searchAdmin('', ['status' => 1])->with('section')->whereHas('section', fn ($q) => $q->where('status', 1)->whereHas('group', fn ($g) => $g->where('status', 1)))->get()->groupBy('section.name')]);
+        return view('livewire.admin.empresa-users.permission-empresa-user', ['usuarioEmpresa' => $this->usuario_empresa_id ? $this->findUsuarioEmpresa() : null, 'permissions' => PermissionEmpresa::searchAdmin('', ['status' => 1])->with('section')->whereHas('section', fn ($q) => $q->where('status', 1)->whereHas('group', fn ($g) => $g->where('status', 1)))->get()->groupBy('section.name')]);
     }
 
     public function savePermissions(): void

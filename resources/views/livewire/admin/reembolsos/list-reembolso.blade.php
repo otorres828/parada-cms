@@ -173,11 +173,11 @@
 
                         <x-list.button-group>
 
-                            @if ($capabilities['detail'])
+                            @if ($canDetail)
                                 <x-list.view-button :route="route('admin.reembolsos.detail', ['reembolso_id' => $reembolso->id])" :target="false" />
                             @endif
 
-                            @if ($capabilities['review'])
+                            @if ($canReview)
                                 <a class="btn btn-outline-secondary"
                                     href="{{ route('admin.reembolsos.review', ['reembolso_id' => $reembolso->id]) }}"
                                     wire:navigate
