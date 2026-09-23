@@ -47,14 +47,14 @@ class CompaniesReport extends Component
 
     protected function columns(): array
     {
-        return ['nombre' => 'Empresa', 'cantidad' => 'Reservas pagadas', 'total' => 'Ventas USD'];
+        return ['nombre' => 'Empresa', 'cantidad' => 'Reservas pagadas', 'total' => 'Ventas USD', 'tasas' => 'Tasa de servicio USD'];
     }
 
     protected function query()
     {
         $filters = ['date_from' => $this->date_from, 'date_to' => $this->date_to];
 
-        return Reserva::searchAdmin('', $filters + ['estado_pago' => Reserva::ESTADO_PAGO_PAGADO])->join('programaciones', 'programaciones.id', '=', 'reservas.programacion_id')->join('viajes', 'viajes.id', '=', 'programaciones.viaje_id')->join('empresas', 'empresas.id', '=', 'viajes.empresa_id')->selectRaw('empresas.id, empresas.nombre, COUNT(*) as cantidad, SUM(reservas.monto_total) as total')->groupBy('empresas.id', 'empresas.nombre')->orderByDesc('total');
+        return Reserva::searchAdmin('', $filters + ['estado_pago' => Reserva::ESTADO_PAGO_PAGADO])->join('programaciones', 'programaciones.id', '=', 'reservas.programacion_id')->join('viajes', 'viajes.id', '=', 'programaciones.viaje_id')->join('empresas', 'empresas.id', '=', 'viajes.empresa_id')->selectRaw('empresas.id, empresas.nombre, COUNT(*) as cantidad, SUM(reservas.monto_total) as total, SUM(reservas.tasa_servicio) as tasas')->groupBy('empresas.id', 'empresas.nombre')->orderByDesc('total');
     }
 
     public function export()

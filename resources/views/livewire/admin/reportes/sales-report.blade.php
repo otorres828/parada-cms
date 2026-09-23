@@ -23,33 +23,34 @@
             Reporte de ventas
         </x-slot:title>
 
-        <x-slot:button>
-            <button type="button" class="btn btn-outline-primary" @click="preSave" :disabled="saving"
-                wire:loading.attr="disabled">Exportar
-                CSV</button>
-        </x-slot:button>
-
     </x-list.heading>
 
     <x-layout.error />
     <form x-ref="form" @submit.prevent="preSave" novalidate>
 
-        <div class="row">
+        <div class="row g-3 mb-3 align-items-end">
 
-            <div class="col-md-4">
+            <div class="col-md-6 col-xl-2">
 
-                <x-form.text-input type="date" name="date_from" wire:model.live="date_from">
+                <x-form.text-input margin="0" type="date" name="date_from" wire:model.live="date_from">
                     Desde
                 </x-form.text-input>
 
             </div>
 
-            <div class="col-md-4">
+            <div class="col-md-6 col-xl-2">
 
-                <x-form.text-input type="date" name="date_to" wire:model.live="date_to">
+                <x-form.text-input margin="0" type="date" name="date_to" wire:model.live="date_to">
                     Hasta
                 </x-form.text-input>
 
+            </div>
+
+            <div class="col-md-12 col-xl-auto ms-xl-auto text-md-end">
+                <button type="button" class="btn btn-success" @click="preSave" :disabled="saving"
+                    wire:loading.attr="disabled" wire:target="export">
+                    <i class="bi bi-file-earmark-excel" aria-hidden="true"></i> Exportar CSV
+                </button>
             </div>
 
         </div>
