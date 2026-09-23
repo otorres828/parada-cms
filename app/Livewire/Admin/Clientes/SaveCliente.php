@@ -6,7 +6,6 @@ use App\Models\User;
 use App\Services\Admin\Access;
 use App\Services\Admin\Audit;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Route;
 use Illuminate\Validation\Rule;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Locked;
@@ -64,10 +63,8 @@ class SaveCliente extends Component
             return $user;
         });
         session()->flash('admin_success', 'Registro guardado correctamente.');
-        $target = Route::has('admin.clientes.detail') && Access::allows('clientes', 'detail') ? 'detail' : 'list';
-        $url = Access::allows('clientes', $target) ? route('admin.clientes.'.$target, in_array($target, ['list', 'add']) ? [] : ['user_id' => $user->id]) : route('admin.account.profile');
 
-        return $this->redirect($url, navigate: true);
+        return $this->redirect(route('admin.clientes.list'), navigate: true);
     }
 
     protected function editar(User $user): void

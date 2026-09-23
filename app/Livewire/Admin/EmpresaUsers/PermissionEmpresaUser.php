@@ -55,7 +55,8 @@ class PermissionEmpresaUser extends Component
             $usuarioEmpresa->permisos()->sync($sync);
             Audit::record('permisos.actualizados', $usuarioEmpresa, ['permission_ids' => $ids]);
         });
-        $this->dispatch('successEventList', message: 'Permisos actualizados.');
+        session()->flash('admin_success', 'Permisos actualizados.');
+        $this->redirect(route('admin.empresas.users.list', ['empresa_id' => $this->empresa_id]), navigate: true);
     }
 
     protected function findUsuarioEmpresa(): UsuarioEmpresa

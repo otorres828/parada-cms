@@ -64,6 +64,6 @@ class SaveTasaServicio extends Component
         });
         session()->flash('admin_success', 'Tasa de servicio guardada.');
 
-        return $this->redirect(Access::allows('tasas-servicio', 'list') ? route('admin.tasas-servicio.list') : route('admin.account.profile'), navigate: true);
+        return $this->redirect(route('admin.tasas-servicio.list'), navigate: true);
     }
 }

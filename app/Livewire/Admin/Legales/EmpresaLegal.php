@@ -127,11 +127,8 @@ class EmpresaLegal extends Component
 
         }
 
-        $this->reset('titulo', 'tipo', 'observaciones', 'archivo', 'search', 'tipo_filtro');
-        $this->resetValidation();
-        $this->resetPage();
-        $this->dispatch('successEventList', message: 'Documento guardado correctamente.');
-        $this->dispatch('legalSaved');
+        session()->flash('admin_success', 'Documento guardado correctamente.');
+        $this->redirect(route('admin.legales.list'), navigate: true);
 
     }
 

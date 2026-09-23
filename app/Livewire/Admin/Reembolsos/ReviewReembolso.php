@@ -60,7 +60,7 @@ class ReviewReembolso extends Component
         }
         session()->flash('admin_success', 'Resolución registrada.');
 
-        return $this->redirect(route('admin.reembolsos.'.'detail', in_array('detail', ['list', 'add']) ? [] : ['reembolso_id' => $this->reembolso_id]), navigate: true);
+        return $this->redirect(route('admin.reembolsos.list'), navigate: true);
     }
 
     protected function storeProof(): ?string

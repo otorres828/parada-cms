@@ -6,7 +6,6 @@ use App\Models\Amenidad;
 use App\Services\Admin\Access;
 use App\Services\Admin\Audit;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Route;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Locked;
 use Livewire\Component;
@@ -55,10 +54,8 @@ class SaveAmenidad extends Component
             return $amenidad;
         });
         session()->flash('admin_success', 'Registro guardado correctamente.');
-        $target = Route::has('admin.amenidades.detail') && Access::allows('amenidades', 'detail') ? 'detail' : 'list';
-        $url = Access::allows('amenidades', $target) ? route('admin.amenidades.'.$target, in_array($target, ['list', 'add']) ? [] : ['amenidad_id' => $amenidad->id]) : route('admin.account.profile');
 
-        return $this->redirect($url, navigate: true);
+        return $this->redirect(route('admin.amenidades.list'), navigate: true);
     }
 
     protected function editar(Amenidad $amenidad): void

@@ -6,7 +6,6 @@ use App\Models\Empresa;
 use App\Services\Admin\Access;
 use App\Services\Admin\Audit;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Route;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Locked;
 use Livewire\Component;
@@ -73,11 +72,9 @@ class SaveEmpresa extends Component
 
         session()->flash('admin_success', 'Registro guardado correctamente.');
 
-        $target = Route::has('admin.empresas.detail') && Access::allows('empresas', 'detail') ? 'detail' : 'list';
         
-        $url = Access::allows('empresas', $target) ? route('admin.empresas.'.$target, in_array($target, ['list', 'add']) ? [] : ['empresa_id' => $empresa->id]) : route('admin.account.profile');
 
-        return $this->redirect($url, navigate: true);
+        return $this->redirect(route('admin.empresas.list'), navigate: true);
     }
 
     protected function editar(Empresa $empresa): void

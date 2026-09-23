@@ -75,9 +75,8 @@ class SaveTerminal extends Component
 
         session()->flash('admin_success', 'Registro guardado correctamente.');
 
-        $url = Access::allows('terminales', 'list') ? route('admin.terminales.list') : route('admin.account.profile');
 
-        return $this->redirect($url, navigate: true);
+        return $this->redirect(route('admin.terminales.list'), navigate: true);
     }
 
     protected function editar(Terminal $terminal): void

@@ -6,7 +6,6 @@ use App\Models\Pago;
 use App\Models\Reembolso;
 use App\Services\Admin\Access;
 use App\Services\Admin\Finance;
-use Illuminate\Support\Facades\Route;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Locked;
 use Livewire\Component;
@@ -52,10 +51,8 @@ class SaveReembolso extends Component
         $data = $this->validateForm();
         $reembolso = Finance::refund($data);
         session()->flash('admin_success', 'Registro guardado correctamente.');
-        $target = Route::has('admin.reembolsos.detail') && Access::allows('reembolsos', 'detail') ? 'detail' : 'list';
-        $url = Access::allows('reembolsos', $target) ? route('admin.reembolsos.'.$target, in_array($target, ['list', 'add']) ? [] : ['reembolso_id' => $reembolso->id]) : route('admin.account.profile');
 
-        return $this->redirect($url, navigate: true);
+        return $this->redirect(route('admin.reembolsos.list'), navigate: true);
     }
 
     protected function editar(Reembolso $reembolso): void

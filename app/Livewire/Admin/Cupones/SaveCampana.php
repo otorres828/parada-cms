@@ -7,7 +7,6 @@ use App\Models\Empresa;
 use App\Services\Admin\Access;
 use App\Services\Admin\Audit;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Route;
 use Illuminate\Validation\ValidationException;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Locked;
@@ -123,10 +122,8 @@ class SaveCampana extends Component
             return $configuracionCupon;
         });
         session()->flash('admin_success', 'Registro guardado correctamente.');
-        $target = Route::has('admin.cupones.detail') && Access::allows('cupones', 'detail') ? 'detail' : 'list';
-        $url = Access::allows('cupones', $target) ? route('admin.cupones.'.$target, in_array($target, ['list', 'add']) ? [] : ['configuracion_cupon_id' => $configuracionCupon->id]) : route('admin.account.profile');
 
-        return $this->redirect($url, navigate: true);
+        return $this->redirect(route('admin.cupones.list'), navigate: true);
     }
 
     protected function editar(ConfiguracionCupon $configuracionCupon): void
