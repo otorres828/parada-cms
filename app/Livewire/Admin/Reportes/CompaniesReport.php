@@ -30,7 +30,7 @@ class CompaniesReport extends Component
 
     public function mount(): void
     {
-        Access::authorize('reportes', 'companies');
+        Access::authorize('reportes', 'list-companies');
         $this->date_from = $this->date_from ?: now()->startOfMonth()->toDateString();
         $this->date_to = $this->date_to ?: now()->toDateString();
     }
@@ -52,7 +52,6 @@ class CompaniesReport extends Component
 
     protected function query()
     {
-        Access::authorize('reportes', 'companies');
         $filters = ['date_from' => $this->date_from, 'date_to' => $this->date_to];
 
         return Reserva::searchAdmin('', $filters + ['estado_pago' => Reserva::ESTADO_PAGO_PAGADO])->join('programaciones', 'programaciones.id', '=', 'reservas.programacion_id')->join('viajes', 'viajes.id', '=', 'programaciones.viaje_id')->join('empresas', 'empresas.id', '=', 'viajes.empresa_id')->selectRaw('empresas.id, empresas.nombre, COUNT(*) as cantidad, SUM(reservas.monto_total) as total')->groupBy('empresas.id', 'empresas.nombre')->orderByDesc('total');

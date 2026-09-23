@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
+
 /*
 |--------------------------------------------------------------------------
 | Livewire Classes
@@ -31,11 +33,11 @@ use App\Livewire\Admin\EmpresaUsers\ListEmpresaUser;
 use App\Livewire\Admin\EmpresaUsers\SaveEmpresaUser;
 use App\Livewire\Admin\EmpresaUsers\DetailEmpresaUser;
 use App\Livewire\Admin\EmpresaUsers\PermissionEmpresaUser;
-/*------------------------------Clientes------------------------------------------*/
+/*------------------------------Clientes------------------------------------ -----*/
 use App\Livewire\Admin\Clientes\ListCliente;
 use App\Livewire\Admin\Clientes\DetailCliente;
 use App\Livewire\Admin\Clientes\SaveCliente;
-/*------------------------------Legales------------------------------------------*/
+/*------------------------------Legales-------------------------------------------*/
 use App\Livewire\Admin\Legales\ListLegal;
 use App\Livewire\Admin\Legales\EmpresaLegal;
 use App\Http\Controllers\Admin\DocumentoLegalController;
@@ -54,31 +56,27 @@ use App\Livewire\Admin\Reservas\DetailReserva;
 /*------------------------------Pasajes-------------------------------------------*/
 use App\Livewire\Admin\Pasajes\ListPasaje;
 use App\Livewire\Admin\Pasajes\DetailPasaje;
-
+/*------------------------------Reembolsos----------------------------------------*/
 use App\Livewire\Admin\Reembolsos\ListReembolso;
 use App\Livewire\Admin\Reembolsos\DetailReembolso;
 use App\Livewire\Admin\Reembolsos\ReviewReembolso;
+/*------------------------------Cupones-------------------------------------------*/
 use App\Livewire\Admin\Cupones\ListCampana;
 use App\Livewire\Admin\Cupones\SaveCampana;
 use App\Livewire\Admin\Cupones\DetailCampana;
+/*------------------------------Terminales----------------------------------------*/
 use App\Livewire\Admin\Terminales\ListTerminal;
 use App\Livewire\Admin\Terminales\SaveTerminal;
+/*------------------------------Amenidades----------------------------------------*/
 use App\Livewire\Admin\Amenidades\ListAmenidad;
 use App\Livewire\Admin\Amenidades\SaveAmenidad;
+/*------------------------------Reporte de Ventas generales-----------------------*/
 use App\Livewire\Admin\Reportes\SalesReport;
+/*------------------------------Reporte de Ventas de Empresas---------------------*/
 use App\Livewire\Admin\Reportes\CompaniesReport;
+/*------------------------------Configuraciones-----------------------------------*/
 use App\Livewire\Admin\Settings\GeneralSettings;
 
-
-
-
-/*
-|--------------------------------------------------------------------------
-| Misc Classes
-|--------------------------------------------------------------------------
-*/
-
-use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -221,7 +219,6 @@ Route::group(['middleware' => ['auth:admin', 'check.permisos']], function () {
     });
 
 
-
     /*----------------------------------------Reembolsos--------------------------------------*/
 
     Route::prefix('reembolsos')->name('reembolsos.')->group(function () {
@@ -246,9 +243,8 @@ Route::group(['middleware' => ['auth:admin', 'check.permisos']], function () {
 
     });
 
-    /*----------------------------------------Autobuses--------------------------------------*/
 
-/*----------------------------------------Terminales--------------------------------------*/
+    /*----------------------------------------Terminales--------------------------------------*/
 
     Route::prefix('terminales')->name('terminales.')->group(function () {
 

@@ -122,6 +122,7 @@
       {"name": "Terminales", "url": "terminales", "status": 1,
         "permissions": [
           {"name": "Listar", "url": "list", "status": 1},
+          {"name": "Agregar", "url": "add", "status": 1},
           {"name": "Editar", "url": "edit", "status": 1}
         ]
       },
@@ -129,14 +130,19 @@
         "permissions": [
           {"name": "Listar", "url": "list", "status": 1},
           {"name": "Agregar", "url": "add", "status": 1},
-          {"name": "Editar", "url": "edit", "status": 1},
-          {"name": "Eliminar", "url": "delete", "status": 1}
+          {"name": "Editar", "url": "edit", "status": 1}
         ]
       }
     ]
   },
   {"id": 8, "name": "Reportes", "url": "reportes", "icon": "bi-bar-chart", "status": 1,
     "sections": [
+      {"name": "Reportes", "url": "reportes", "status": 1,
+        "permissions": [
+          {"name": "Listar Ventas", "url": "list-sales", "status": 1},
+          {"name": "Listar Empresas", "url": "list-companies", "status": 1}
+        ]
+      }
     ]
   },
   {"id": 9, "name": "Configuración", "url": "configuracion", "icon": "bi-gear", "status": 1,
