@@ -27,7 +27,7 @@
 
         <x-slot:button>
 
-            @if (\App\Services\Admin\Access::allows('reembolsos', 'list'))
+            @if ($canList)
                 <x-form.cancel-button :link="route('admin.reembolsos.list')">
                     Volver al listado
                 </x-form.cancel-button>

@@ -3,7 +3,6 @@
 namespace App\Livewire\Admin\Legales;
 
 use App\Models\Empresa;
-use App\Services\Admin\Access;
 use App\Traits\Listing;
 use App\Traits\Permissions;
 use Livewire\Attributes\Layout;
@@ -15,8 +14,6 @@ class ListLegal extends Component
 {
     use Listing, Permissions, WithPagination;
 
-    public bool $canDetail = false;
-
     protected array $queryString = [
         'search' => ['except' => ''], 
         'per_page' => ['except' => 10]
@@ -24,8 +21,7 @@ class ListLegal extends Component
 
     public function mount(): void
     {
-        $this->checkPermissions('legales');
-        $this->canDetail = Access::allows('legales', 'detail');
+        $this->checkPermissions('legales', ['detail']);
         $this->sortColumn = 'nombre';
         $this->sortDirection = 'asc';
     }

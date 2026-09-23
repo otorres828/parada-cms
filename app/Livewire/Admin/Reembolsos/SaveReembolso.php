@@ -14,6 +14,8 @@ use Livewire\Component;
 #[Layout('layouts.cms')]
 class SaveReembolso extends Component
 {
+    public bool $canList = false;
+
     #[Locked]
     public ?int $reembolso_id = null;
 
@@ -26,6 +28,7 @@ class SaveReembolso extends Component
     public function mount(): void
     {
         Access::authorize('reembolsos', $this->reembolso_id ? 'edit' : 'add');
+        $this->canList = Access::allows('reembolsos', 'list');
         if ($this->reembolso_id) {
             $this->editar($this->findReembolso());
         }

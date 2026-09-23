@@ -11,6 +11,8 @@ use Livewire\Component;
 #[Layout('layouts.cms')]
 class DetailAudit extends Component
 {
+    public bool $canList = false;
+
     #[Locked]
     public ?int $audit_id = null;
 
@@ -20,6 +22,7 @@ class DetailAudit extends Component
     {
         $this->audit_id = $audit_id;
         Access::authorize('auditoria', 'detail');
+        $this->canList = Access::allows('auditoria', 'list');
         $this->auditoria = $this->findAuditoria();
     }
 

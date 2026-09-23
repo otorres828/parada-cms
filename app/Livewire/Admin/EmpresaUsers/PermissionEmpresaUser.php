@@ -16,6 +16,8 @@ use Livewire\Component;
 #[Layout('layouts.cms')]
 class PermissionEmpresaUser extends Component
 {
+    public bool $canList = false;
+
     #[Locked]
     public ?int $usuario_empresa_id = null;
 
@@ -30,6 +32,7 @@ class PermissionEmpresaUser extends Component
         Empresa::findOrFail($empresa_id);
         $this->usuario_empresa_id = $usuario_empresa_id;
         Access::authorize('empresas.users', 'permissions');
+        $this->canList = Access::allows('empresas.users', 'list');
         $usuarioEmpresa = $this->findUsuarioEmpresa();
         $this->selectedPermissions = $usuarioEmpresa->permisos()->pluck('permissions_empresa.id')->map(fn ($id) => (string) $id)->all();
     }

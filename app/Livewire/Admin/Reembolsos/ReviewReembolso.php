@@ -15,6 +15,8 @@ use Livewire\WithFileUploads;
 #[Layout('layouts.cms')]
 class ReviewReembolso extends Component
 {
+    public bool $canList = false;
+
     #[Locked]
     public ?int $reembolso_id = null;
 
@@ -32,6 +34,7 @@ class ReviewReembolso extends Component
     {
         $this->reembolso_id = $reembolso_id;
         Access::authorize('reembolsos', 'review');
+        $this->canList = Access::allows('reembolsos', 'list');
         $reembolso = $this->findReembolso();
         if ($reembolso->estatus === 'aprobado') {
             $this->decision = 'pagado';

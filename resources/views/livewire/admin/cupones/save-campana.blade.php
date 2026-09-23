@@ -30,7 +30,7 @@
 
         <x-slot:button>
 
-            @if (\App\Services\Admin\Access::allows('cupones', 'list'))
+            @if ($canList)
                 <x-form.cancel-button :link="route('admin.cupones.list')">
                     Volver al listado
                 </x-form.cancel-button>

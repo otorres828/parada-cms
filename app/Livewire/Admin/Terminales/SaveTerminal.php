@@ -15,6 +15,8 @@ use Livewire\Component;
 #[Layout('layouts.cms')]
 class SaveTerminal extends Component
 {
+    public bool $canList = false;
+
     #[Locked]
     public ?int $terminal_id = null;
 
@@ -40,6 +42,7 @@ class SaveTerminal extends Component
     {
         $this->terminal_id = $terminal_id;
         Access::authorize('terminales', $this->terminal_id ? 'edit' : 'add');
+        $this->canList = Access::allows('terminales', 'list');
         $this->estados = Estado::searchAdmin()->orderBy('nombre')->get();
         if ($this->terminal_id) {
             $this->editar($this->findTerminal());

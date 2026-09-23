@@ -29,7 +29,7 @@
 
         <x-slot:button>
 
-            @if (\App\Services\Admin\Access::allows('empresas.users', 'list'))
+            @if ($canList)
                 <x-form.cancel-button :link="route('admin.empresas.users.list', ['empresa_id' => $empresa_id])">
                     Volver al listado
                 </x-form.cancel-button>

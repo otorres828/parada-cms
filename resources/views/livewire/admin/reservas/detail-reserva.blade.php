@@ -29,7 +29,7 @@
 
         <x-slot:button>
 
-            @if (\App\Services\Admin\Access::allows('reservas', 'list'))
+            @if ($canList)
                 <x-form.cancel-button :link="route('admin.reservas.list')">
                     Volver al listado
                 </x-form.cancel-button>
@@ -91,7 +91,7 @@
                             <dt class="col-sm-4">Programación</dt>
                             <dd class="col-sm-8">
 
-                                @if (\App\Services\Admin\Access::allows('programaciones', 'passengers'))
+                                @if ($canViewPassengers)
                                     <a href="{{ route('admin.programaciones.passengers', $reserva->programacion_id) }}"
                                         wire:navigate>
                                         Ver programación #{{ $reserva->programacion_id }}

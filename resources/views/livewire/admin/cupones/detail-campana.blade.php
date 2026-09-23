@@ -32,7 +32,7 @@
 
         <x-slot:button>
 
-            @if (\App\Services\Admin\Access::allows('cupones', 'list'))
+            @if ($canList)
                 <x-form.cancel-button :link="route('admin.cupones.list')">
                     Volver al listado
                 </x-form.cancel-button>
@@ -97,7 +97,7 @@
 
             <h4 class="h6">Cupones generados: {{ $configuracionCupon->cupones()->count() }}</h4>
 
-            @if (!$configuracionCupon->cupones()->exists() && \App\Services\Admin\Access::allows('cupones', 'edit'))
+            @if (!$configuracionCupon->cupones()->exists() && $canEdit)
                 <button class="btn btn-primary" type="button" @click="generateCoupons"
                     wire:loading.attr="disabled">Generar
                     cupones</button>
