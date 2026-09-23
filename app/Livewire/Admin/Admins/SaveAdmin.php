@@ -17,6 +17,8 @@ use Livewire\Component;
 #[Layout('layouts.cms')]
 class SaveAdmin extends Component
 {
+    public Admin $admin;
+
     #[Locked]
     public ?int $admin_id = null;
 
@@ -47,7 +49,7 @@ class SaveAdmin extends Component
     {
         $groups = GroupAdmin::where('status', 1)->with(['sections' => fn ($q) => $q->where('status', 1)->where('url', '!=', 'admins'), 'sections.permissions' => fn ($q) => $q->where('status', 1)])->orderBy('id')->get();
 
-        return view('livewire.admin.admins.save-admin', ['groups' => $groups, 'editingRoot' => $this->admin_id && Admin::findOrFail($this->admin_id)->isRoot()]);
+        return view('livewire.admin.admins.save-admin', ['groups' => $groups, 'editingRoot' => $this->admin_id && $this->admin->isRoot()]);
     }
 
     public function save()
@@ -91,6 +93,7 @@ class SaveAdmin extends Component
 
     protected function editar(Admin $admin): void
     {
+        $this->admin = $admin;
         $this->name = $admin->name;
         $this->username = $admin->username;
         $this->email = $admin->email;

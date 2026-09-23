@@ -14,6 +14,8 @@ use Livewire\Component;
 #[Layout('layouts.cms')]
 class SaveTasaServicio extends Component
 {
+    public TasaServicio $tasaServicio;
+
     #[Locked]
     public ?int $tasa_servicio_id = null;
 
@@ -32,12 +34,7 @@ class SaveTasaServicio extends Component
         $this->tasa_servicio_id = $tasa_servicio_id;
         Access::authorize('tasas-servicio', $tasa_servicio_id ? 'edit' : 'add');
         if ($tasa_servicio_id) {
-            $tasa = TasaServicio::searchAdmin()->findOrFail($tasa_servicio_id);
-            $this->monto_minimo = $tasa->monto_minimo;
-            $this->monto_maximo = $tasa->monto_maximo ?? '';
-            $this->cantidad = $tasa->cantidad;
-            $this->tipo_servicio = $tasa->tipo_servicio;
-            $this->estatus = (int) $tasa->estatus;
+            $this->editar(TasaServicio::searchAdmin()->findOrFail($tasa_servicio_id));
         }
     }
 
@@ -65,5 +62,15 @@ class SaveTasaServicio extends Component
         session()->flash('admin_success', 'Tasa de servicio guardada.');
 
         return $this->redirect(route('admin.tasas-servicio.list'), navigate: true);
+    }
+
+    protected function editar(TasaServicio $tasa): void
+    {
+        $this->tasaServicio = $tasa;
+        $this->monto_minimo = $tasa->monto_minimo;
+        $this->monto_maximo = $tasa->monto_maximo ?? '';
+        $this->cantidad = $tasa->cantidad;
+        $this->tipo_servicio = $tasa->tipo_servicio;
+        $this->estatus = (int) $tasa->estatus;
     }
 }

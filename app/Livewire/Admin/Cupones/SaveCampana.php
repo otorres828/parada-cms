@@ -15,6 +15,8 @@ use Livewire\Component;
 #[Layout('layouts.cms')]
 class SaveCampana extends Component
 {
+    public ConfiguracionCupon $configuracionCupon;
+
     #[Locked]
     public ?int $configuracion_cupon_id = null;
 
@@ -65,7 +67,7 @@ class SaveCampana extends Component
             }
         }
 
-        return view('livewire.admin.cupones.save-campana', ['configuracionCupon' => $this->configuracion_cupon_id ? $this->findConfiguracionCupon() : null, 'options_empresa_id' => $options_empresa_id]);
+        return view('livewire.admin.cupones.save-campana', ['options_empresa_id' => $options_empresa_id]);
     }
 
     public function save()
@@ -128,6 +130,7 @@ class SaveCampana extends Component
 
     protected function editar(ConfiguracionCupon $configuracionCupon): void
     {
+        $this->configuracionCupon = $configuracionCupon;
         $this->empresa_id = $configuracionCupon->empresa_id ?? '';
         $this->nombre_campana = $configuracionCupon->nombre_campana ?? '';
         $this->codigo_base = $configuracionCupon->codigo_base ?? '';

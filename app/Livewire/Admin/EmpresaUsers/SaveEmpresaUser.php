@@ -15,6 +15,8 @@ use Livewire\Component;
 #[Layout('layouts.cms')]
 class SaveEmpresaUser extends Component
 {
+    public UsuarioEmpresa $usuarioEmpresa;
+
     #[Locked]
     public ?int $empresa_id = null;
 
@@ -74,6 +76,7 @@ class SaveEmpresaUser extends Component
 
     protected function editar(UsuarioEmpresa $usuario): void
     {
+        $this->usuarioEmpresa = $usuario;
         $this->nombre = $usuario->nombre;
         $this->email = $usuario->email;
         $this->es_admin = (int) $usuario->es_admin;

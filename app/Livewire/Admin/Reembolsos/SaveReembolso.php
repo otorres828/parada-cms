@@ -13,6 +13,8 @@ use Livewire\Component;
 #[Layout('layouts.cms')]
 class SaveReembolso extends Component
 {
+    public Reembolso $reembolso;
+
     #[Locked]
     public ?int $reembolso_id = null;
 
@@ -42,7 +44,7 @@ class SaveReembolso extends Component
             }
         }
 
-        return view('livewire.admin.reembolsos.save-reembolso', ['reembolso' => $this->reembolso_id ? $this->findReembolso() : null, 'options_pago_id' => $options_pago_id]);
+        return view('livewire.admin.reembolsos.save-reembolso', ['options_pago_id' => $options_pago_id]);
     }
 
     public function save()
@@ -57,6 +59,7 @@ class SaveReembolso extends Component
 
     protected function editar(Reembolso $reembolso): void
     {
+        $this->reembolso = $reembolso;
         $this->pago_id = $reembolso->pago_id ?? '';
         $this->motivo = $reembolso->motivo ?? '';
     }
