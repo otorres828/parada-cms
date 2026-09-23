@@ -29,11 +29,9 @@
 
         <x-slot:button>
 
-            @if ($canList)
-                <x-form.cancel-button :link="route('admin.reservas.list')">
-                    Volver al listado
-                </x-form.cancel-button>
-            @endif
+            <x-form.cancel-button :link="route('admin.reservas.list')">
+                Volver al listado
+            </x-form.cancel-button>
 
         </x-slot:button>
 

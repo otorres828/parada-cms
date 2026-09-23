@@ -17,8 +17,6 @@ use Livewire\WithPagination;
 #[Layout('layouts.cms')]
 class DetailCampana extends Component
 {
-    public bool $canList = false;
-
     public bool $canEdit = false;
 
     use Listing, WithPagination;
@@ -40,7 +38,6 @@ class DetailCampana extends Component
         $this->sortColumn = 'id';
         $this->sortDirection = 'desc';
         Access::authorize('cupones', 'detail');
-        $this->canList = Access::allows('cupones', 'list');
         $this->canEdit = Access::allows('cupones', 'edit');
     }
 

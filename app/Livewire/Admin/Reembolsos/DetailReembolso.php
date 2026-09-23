@@ -12,8 +12,6 @@ use Livewire\Component;
 #[Layout('layouts.cms')]
 class DetailReembolso extends Component
 {
-    public bool $canList = false;
-
     #[Locked]
     public ?int $reembolso_id = null;
 
@@ -21,7 +19,6 @@ class DetailReembolso extends Component
     {
         $this->reembolso_id = $reembolso_id;
         Access::authorize('reembolsos', 'detail');
-        $this->canList = Access::allows('reembolsos', 'list');
         $reembolso = $this->findReembolso();
     }
 

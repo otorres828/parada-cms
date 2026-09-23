@@ -14,8 +14,6 @@ use Livewire\Component;
 #[Layout('layouts.cms')]
 class SaveAmenidad extends Component
 {
-    public bool $canList = false;
-
     #[Locked]
     public ?int $amenidad_id = null;
 
@@ -31,7 +29,6 @@ class SaveAmenidad extends Component
     {
         $this->amenidad_id = $amenidad_id;
         Access::authorize('amenidades', $this->amenidad_id ? 'edit' : 'add');
-        $this->canList = Access::allows('amenidades', 'list');
         if ($this->amenidad_id) {
             $this->editar($this->findAmenidad());
         }

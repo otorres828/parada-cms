@@ -18,8 +18,6 @@ use Livewire\WithFileUploads;
 #[Layout('layouts.cms')]
 class FormDeposit extends Component
 {
-    public bool $canList = false;
-
     #[Locked]
     public ?int $pago_id = null;
 
@@ -42,7 +40,6 @@ class FormDeposit extends Component
     public function mount(): void
     {
         Access::authorize('pagos', $this->pago_id ? 'edit' : 'add');
-        $this->canList = Access::allows('pagos', 'list');
         if ($this->pago_id) {
             $this->editar($this->findPago());
         }

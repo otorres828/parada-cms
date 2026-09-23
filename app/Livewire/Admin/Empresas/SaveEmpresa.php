@@ -14,8 +14,6 @@ use Livewire\Component;
 #[Layout('layouts.cms')]
 class SaveEmpresa extends Component
 {
-    public bool $canList = false;
-
     #[Locked]
     public ?int $empresa_id = null;
 
@@ -39,7 +37,6 @@ class SaveEmpresa extends Component
     {
         $this->empresa_id = $empresa_id;
         Access::authorize('empresas', $this->empresa_id ? 'edit' : 'add');
-        $this->canList = Access::allows('empresas', 'list');
         if ($this->empresa_id) {
             $this->editar($this->findEmpresa());
         }

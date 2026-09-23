@@ -16,8 +16,6 @@ use Livewire\Component;
 #[Layout('layouts.cms')]
 class SaveCampana extends Component
 {
-    public bool $canList = false;
-
     #[Locked]
     public ?int $configuracion_cupon_id = null;
 
@@ -51,7 +49,6 @@ class SaveCampana extends Component
     {
         $this->configuracion_cupon_id = $configuracion_cupon_id;
         Access::authorize('cupones', $this->configuracion_cupon_id ? 'edit' : 'add');
-        $this->canList = Access::allows('cupones', 'list');
         if ($this->configuracion_cupon_id) {
             $this->editar($this->findConfiguracionCupon());
         }

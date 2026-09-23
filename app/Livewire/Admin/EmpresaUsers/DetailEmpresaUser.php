@@ -12,8 +12,6 @@ use Livewire\Component;
 #[Layout('layouts.cms')]
 class DetailEmpresaUser extends Component
 {
-    public bool $canList = false;
-
     #[Locked]
     public ?int $usuario_empresa_id = null;
 
@@ -26,7 +24,6 @@ class DetailEmpresaUser extends Component
         Empresa::findOrFail($empresa_id);
         $this->usuario_empresa_id = $usuario_empresa_id;
         Access::authorize('empresas.users', 'detail');
-        $this->canList = Access::allows('empresas.users', 'list');
         $usuarioEmpresa = $this->findUsuarioEmpresa();
     }
 

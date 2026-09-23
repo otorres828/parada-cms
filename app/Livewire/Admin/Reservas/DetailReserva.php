@@ -11,8 +11,6 @@ use Livewire\Component;
 #[Layout('layouts.cms')]
 class DetailReserva extends Component
 {
-    public bool $canList = false;
-
     public bool $canViewPassengers = false;
 
     #[Locked]
@@ -24,7 +22,6 @@ class DetailReserva extends Component
     {
         $this->reserva_id = $reserva_id;
         Access::authorize('reservas', 'detail');
-        $this->canList = Access::allows('reservas', 'list');
         $this->canViewPassengers = Access::allows('programaciones', 'passengers');
         $this->reserva = $this->findReserva();
     }
