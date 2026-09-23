@@ -18,13 +18,12 @@ class Empresa extends ModelHelper
         'telefono',
         'email',
         'estatus',
-        'retiros_habilitados',
         'datos_bancarios',
     ];
 
     protected function casts(): array
     {
-        return ['estatus' => 'integer', 'retiros_habilitados' => 'boolean'];
+        return ['estatus' => 'integer'];
     }
 
     public function usuariosEmpresa(): HasMany

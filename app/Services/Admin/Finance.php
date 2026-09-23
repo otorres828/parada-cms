@@ -99,7 +99,7 @@ class Finance
 
         return DB::transaction(function () use ($data) {
             $empresa = Empresa::whereKey($data['empresa_id'])->lockForUpdate()->firstOrFail();
-            if (!$empresa->estatus || !$empresa->retiros_habilitados) {
+            if (!$empresa->estatus) {
                 self::fail('Esta empresa no tiene retiros habilitados.');
             }
             if (bccomp(self::balance($empresa->id)['disponible'], $data['monto'], 2) < 0) {
@@ -153,7 +153,7 @@ class Finance
             if (!in_array($decision, $allowed, true)) {
                 self::fail('La solicitud ya cambió de estado. Actualiza la pantalla.');
             }
-            if ($decision !== 'rechazado' && $module === 'retiros' && (!$empresa->estatus || !$empresa->retiros_habilitados)) {
+            if ($decision !== 'rechazado' && $module === 'retiros' && (!$empresa->estatus)) {
                 self::fail('La empresa tiene los retiros deshabilitados.');
             }
             if ($decision === 'pagado') {

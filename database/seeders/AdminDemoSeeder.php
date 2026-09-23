@@ -82,7 +82,6 @@ class AdminDemoSeeder extends Seeder
                     'telefono' => '0000-0000',
                     'email' => 'demo-empresa-'.($c + 1).'@example.test',
                     'estatus' => true,
-                    'retiros_habilitados' => $c !== 2,
                     'datos_bancarios' => 'DEMO: banco y cuenta ficticios. No realizar transferencias.',
                 ],
             );

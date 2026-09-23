@@ -119,22 +119,6 @@
 
             <div class="mb-3">
 
-                <x-form.dropdown label="Habilitar retiros" name="retiros_habilitados"
-                    x-model="$wire.retiros_habilitados">
-                    <option value="0">No</option>
-                    <option value="1">Sí</option>
-                </x-form.dropdown>
-
-                @error('retiros_habilitados')
-                    <div class="text-danger small">
-                        {{ $message }}
-                    </div>
-                @enderror
-
-            </div>
-
-            <div class="mb-3">
-
                 <label class="form-label" for="datos_bancarios">Datos bancarios</label>
                 <textarea id="datos_bancarios" name="datos_bancarios" class="form-control" rows="3" maxlength="2000"
                     x-model="$wire.datos_bancarios"></textarea>
@@ -214,11 +198,6 @@
                         errorMessage: 'Máximo 255 caracteres'
                     }]);
                     this.validator.addField(this.$refs.form.querySelector('[name="estatus"]'), [{
-                        rule: 'required',
-                        errorMessage: 'Este campo es requerido'
-                    }]);
-                    this.validator.addField(this.$refs.form.querySelector(
-                        '[name="retiros_habilitados"]'), [{
                         rule: 'required',
                         errorMessage: 'Este campo es requerido'
                     }]);

@@ -26,8 +26,6 @@ class SaveEmpresa extends Component
 
     public $estatus = 1;
 
-    public $retiros_habilitados = 0;
-
     public $datos_bancarios = '';
 
     public Empresa $empresa;
@@ -62,7 +60,6 @@ class SaveEmpresa extends Component
             $empresa->telefono = $data['telefono'];
             $empresa->email = $data['email'];
             $empresa->estatus = $data['estatus'];
-            $empresa->retiros_habilitados = $data['retiros_habilitados'];
             $empresa->datos_bancarios = $data['datos_bancarios'];
             $empresa->save();
             Audit::record($this->empresa_id ? 'registro.actualizado' : 'registro.creado', $empresa, $data);
@@ -84,7 +81,6 @@ class SaveEmpresa extends Component
         $this->rif = $empresa->rif ?? '';
         $this->telefono = $empresa->telefono ?? '';
         $this->email = $empresa->email ?? '';
-        $this->retiros_habilitados = (string) (int) $empresa->retiros_habilitados;
         $this->datos_bancarios = $empresa->datos_bancarios ?? '';
         $this->estatus = (string) (is_bool($empresa->estatus) ? (int) $empresa->estatus : $empresa->estatus);
     }
@@ -97,7 +93,6 @@ class SaveEmpresa extends Component
             'telefono' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', 'max:255'],
             'estatus' => ['required', 'in:0,1'],
-            'retiros_habilitados' => ['required', 'in:0,1'],
             'datos_bancarios' => ['nullable', 'string', 'max:2000'],
         ], [], [
             'nombre' => 'Nombre',
@@ -105,7 +100,6 @@ class SaveEmpresa extends Component
             'telefono' => 'Teléfono',
             'email' => 'Correo',
             'estatus' => 'Estado',
-            'retiros_habilitados' => 'Habilitar retiros',
             'datos_bancarios' => 'Datos bancarios',
         ]);
         foreach ($validated as $key => &$value) {
