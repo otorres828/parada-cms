@@ -29,6 +29,8 @@ class DatabaseSeeder extends Seeder
             
             TasaServicioSeeder::class,
 
+            AdminRolesSeeder::class,
+
             AdminDemoSeeder::class,
         ]);
     }

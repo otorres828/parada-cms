@@ -12,7 +12,6 @@ use App\Models\Empresa;
 use App\Models\Estado;
 use App\Models\Movimiento;
 use App\Models\Pago;
-use App\Models\PermissionAdmin;
 use App\Models\Programacion;
 use App\Models\ProgramacionTramoPrecio;
 use App\Models\Reembolso;
@@ -34,24 +33,7 @@ class AdminDemoSeeder extends Seeder
 {
     public function run(): void
     {
-        $actor = Admin::firstOrCreate(
-            ['username' => 'demo-operador'],
-            [
-                'name' => 'Operador ficticio',
-                'email' => 'demo-operador@example.test',
-                'password' => Str::random(40),
-                'level' => 3,
-                'status' => 2,
-            ],
-        );
-        $actor->permissions()->syncWithoutDetaching(
-            PermissionAdmin::where('status', 1)
-                ->whereIn('url', ['list', 'detail'])
-                ->whereHas('section', fn ($q) => $q->whereIn('url', ['empresas', 'reservas', 'pasajes', 'pagos', 'programaciones']))
-                ->pluck('id')
-                ->mapWithKeys(fn ($id) => [$id => ['status' => 1]])
-                ->all(),
-        );
+        $actor = Admin::where('email', 'contador@pidetuparada.com')->firstOrFail();
 
         $amenities = collect(['WiFi' => 'bi-wifi', 'Aire acondicionado' => 'bi-snow', 'USB' => 'bi-usb-plug', 'Baño' => 'bi-door-open'])->map(fn ($icon, $label) => Amenidad::firstOrCreate(['nombre' => ''.$label], ['icono' => $icon, 'estatus' => true]));
 

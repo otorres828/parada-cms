@@ -105,6 +105,10 @@
       },
       {"name": "Reembolsos", "url": "reembolsos", "status": 1,
         "permissions": [
+          {"name":"Listar","url":"list","status":1},
+          {"name":"Ver detalle","url":"detail","status":1},
+          {"name":"Solicitar reembolso","url":"add","status":1},
+          {"name":"Resolver reembolso","url":"review","status":1}
         ]
       }
     ]
@@ -113,6 +117,10 @@
     "sections": [
       {"name": "Cupones", "url": "cupones", "status": 1,
         "permissions": [
+          {"name":"Listar","url":"list","status":1},
+          {"name":"Ver detalle","url":"detail","status":1},
+          {"name":"Agregar","url":"add","status":1},
+          {"name":"Editar","url":"edit","status":1}
         ]
       }
     ]
@@ -155,6 +163,11 @@
   },
   {"id": 11, "name": "Dashboard", "url": "dashboard", "icon": "bi-speedometer2", "status": 1,
     "sections": [
+      {"name": "Dashboard", "url": "dashboard", "status": 1,
+        "permissions": [
+          {"name": "Ver resumen", "url": "list", "status": 1}
+        ]
+      }
     ]
   }
 ]
