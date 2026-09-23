@@ -29,21 +29,4 @@ class Access
             ->select('sections_admin.url as section_url', 'permissions_admin.url as permission_url')->get();
     }
 
-    public static function capabilities(string $module): array
-    {
-        $actions = ['list', 'add', 'edit', 'delete', 'detail', 'permissions', 'settings', 'passengers', 'review'];
-
-        $admin = Admin::find(auth('admin')->id());
-
-        if (!$admin) {
-            return array_fill_keys($actions, false);
-        }
-
-        $checks = [];
-        foreach ($actions as $action){
-            $checks[$action] = [$module, $action];
-        } 
-        
-        return $admin->checkPermissionsBatch($checks);
-    }
 }
