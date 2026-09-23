@@ -32,8 +32,6 @@ class Profile extends Component
 
     public function render()
     {
-        Access::authorize('account', 'profile');
-
         return view('livewire.admin.account.profile', ['mode' => 'profile']);
     }
 

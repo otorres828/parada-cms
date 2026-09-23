@@ -27,8 +27,6 @@ class Password extends Component
 
     public function render()
     {
-        Access::authorize('account', 'password');
-
         return view('livewire.admin.account.password', ['mode' => 'password']);
     }
 

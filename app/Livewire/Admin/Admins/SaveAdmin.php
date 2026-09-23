@@ -45,7 +45,6 @@ class SaveAdmin extends Component
 
     public function render()
     {
-        Access::authorize('admins', $this->admin_id ? 'edit' : 'add');
         $groups = GroupAdmin::where('status', 1)->with(['sections' => fn ($q) => $q->where('status', 1)->where('url', '!=', 'admins'), 'sections.permissions' => fn ($q) => $q->where('status', 1)])->orderBy('id')->get();
 
         return view('livewire.admin.admins.save-admin', ['groups' => $groups, 'editingRoot' => $this->admin_id && Admin::findOrFail($this->admin_id)->isRoot()]);
