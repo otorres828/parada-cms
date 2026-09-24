@@ -13,6 +13,10 @@ class DetailReserva extends Component
 {
     public bool $canViewPassengers = false;
 
+    public bool $canViewCampaign = false;
+
+    public bool $canViewReservation = false;
+
     #[Locked]
     public ?int $reserva_id = null;
 
@@ -23,6 +27,8 @@ class DetailReserva extends Component
         $this->reserva_id = $reserva_id;
         Access::authorize('reservas', 'detail');
         $this->canViewPassengers = Access::allows('programaciones', 'passengers');
+        $this->canViewCampaign = Access::allows('cupones', 'detail');
+        $this->canViewReservation = Access::allows('reservas', 'detail');
         $this->reserva = $this->findReserva();
     }
 
