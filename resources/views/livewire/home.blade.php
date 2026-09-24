@@ -16,7 +16,7 @@
     --------------------------------------------------------------------------
 --}}
 
-@section('title', 'Operación digital para agencias de autobuses')
+@section('title', 'Parada | Venta digital de pasajes para agencias de autobuses')
 
 <div>
 
