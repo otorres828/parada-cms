@@ -49,6 +49,8 @@ class Amenidad extends ModelHelper
 
         if ($status !== null && $status !== '') {
             $query->where('amenidades.estatus', $status);
+        } else {
+            $query->where('amenidades.estatus', '!=', self::ESTADO_DELETE);
         }
 
         if (!empty($filters['date_from'])) {
