@@ -42,29 +42,16 @@
 
         <x-slot:group>
 
+            <select id="listEmpresaUser-status" class="form-select" style="width: 240px;" wire:model.live="status"
+                aria-label="Filtrar por estado">
+                <option value="">Todos los estados</option>
+                <option value="1">Activo</option>
+                <option value="0">Inactivo</option>
+            </select>
+
         </x-slot:group>
 
     </x-list.actions>
-
-    <div class="row g-3 mb-3">
-
-        <div class="col-md-3">
-
-            <label class="form-label" for="listEmpresaUser-status">
-                Estado
-            </label>
-
-            <select id="listEmpresaUser-status" class="form-select" wire:model.live="status">
-
-                <option value="">Todos</option>
-                <option value="1">Activo</option>
-                <option value="0">Inactivo</option>
-
-            </select>
-
-        </div>
-
-    </div>
 
     <x-list.table>
 
@@ -197,4 +184,3 @@
         }));
     </script>
 @endscript
-
