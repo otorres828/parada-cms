@@ -32,7 +32,6 @@ class SaveTasaServicio extends Component
     public function mount(?int $tasa_servicio_id = null): void
     {
         $this->tasa_servicio_id = $tasa_servicio_id;
-        Access::authorize('tasas-servicio', $tasa_servicio_id ? 'edit' : 'add');
         if ($tasa_servicio_id) {
             $this->editar(TasaServicio::searchAdmin()->findOrFail($tasa_servicio_id));
         }

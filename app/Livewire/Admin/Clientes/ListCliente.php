@@ -7,7 +7,6 @@ use App\Services\Admin\Access;
 use App\Services\Admin\Audit;
 use App\Traits\Listing;
 use App\Traits\Permissions;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
@@ -23,22 +22,22 @@ class ListCliente extends Component
     public string $status = '';
 
     protected array $queryString = [
-        'search' => ['except' => ''], 
-        'per_page' => ['except' => 10], 
-        'status' => ['except' => '']
+        'search' => ['except' => ''],
+        'per_page' => ['except' => 10],
+        'status' => ['except' => ''],
     ];
 
     public function mount(): void
     {
         $this->sortColumn = 'id';
         $this->sortDirection = 'desc';
-        $this->checkPermissions('clientes',['detail']);
+        $this->checkPermissions('clientes', ['detail']);
     }
 
     public function render()
     {
         $query = User::searchAdmin($this->search, [
-            'status' => $this->status
+            'status' => $this->status,
         ]);
 
         $query = $this->applySort($query);
@@ -46,7 +45,7 @@ class ListCliente extends Component
         $users = $query->paginate($this->per_page);
 
         return view('livewire.admin.clientes.list-cliente', [
-            'users' => $users
+            'users' => $users,
         ]);
     }
 
@@ -64,15 +63,15 @@ class ListCliente extends Component
         DB::transaction(function () use ($id) {
 
             $user = User::findOrFail($id);
-            
+
             $inactive = 2;
-            
+
             $user->status = (int) $user->status === 1 ? $inactive : 1;
-            
+
             $user->save();
-            
+
             Audit::record('registro.estado', $user, ['status' => $user->status]);
-            
+
         });
         $this->dispatch('successEventList', message: 'Estado actualizado.');
     }

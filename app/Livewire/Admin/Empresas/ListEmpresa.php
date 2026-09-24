@@ -22,22 +22,22 @@ class ListEmpresa extends Component
     public string $status = '';
 
     protected array $queryString = [
-        'search' => ['except' => ''], 
-        'per_page' => ['except' => 10], 
-        'status' => ['except' => '']
+        'search' => ['except' => ''],
+        'per_page' => ['except' => 10],
+        'status' => ['except' => ''],
     ];
 
     public function mount(): void
     {
         $this->sortColumn = 'id';
         $this->sortDirection = 'desc';
-        $this->checkPermissions('empresas',['detail']);
+        $this->checkPermissions('empresas', ['detail']);
     }
 
     public function render()
     {
         $query = Empresa::searchAdmin($this->search, [
-            'status' => $this->status
+            'status' => $this->status,
         ]);
 
         $query = $this->applySort($query);
@@ -45,7 +45,7 @@ class ListEmpresa extends Component
         $empresas = $query->paginate($this->per_page);
 
         return view('livewire.admin.empresas.list-empresa', [
-            'empresas' => $empresas
+            'empresas' => $empresas,
         ]);
     }
 
@@ -59,19 +59,19 @@ class ListEmpresa extends Component
     public function changeStatus(int $id): void
     {
         Access::authorize('empresas', 'edit');
-        
+
         DB::transaction(function () use ($id) {
-            
+
             $empresa = Empresa::find($id);
-            
+
             $inactive = Empresa::ESTADO_INACTIVE;
-            
+
             $empresa->estatus = (int) $empresa->estatus === Empresa::ESTADO_ACTIVE ? $inactive : Empresa::ESTADO_ACTIVE;
-            
+
             $empresa->save();
-            
+
             Audit::record('registro.estado', $empresa, ['estatus' => $empresa->estatus]);
-            
+
         });
         $this->dispatch('successEventList', message: 'Estado actualizado.');
     }

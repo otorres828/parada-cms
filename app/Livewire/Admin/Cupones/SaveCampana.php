@@ -51,7 +51,6 @@ class SaveCampana extends Component
     public function mount(?int $configuracion_cupon_id = null): void
     {
         $this->configuracion_cupon_id = $configuracion_cupon_id;
-        Access::authorize('cupones', $this->configuracion_cupon_id ? 'edit' : 'add');
         if ($this->configuracion_cupon_id) {
             $this->editar($this->findConfiguracionCupon());
         }

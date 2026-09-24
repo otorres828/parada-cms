@@ -31,7 +31,6 @@ class PassengerProgramacion extends Component
     public function mount(?int $programacion_id = null): void
     {
         $this->programacion_id = $programacion_id;
-        Access::authorize('programaciones', 'passengers');
         $programacion = $this->findProgramacion();
 
         if (! $programacion) {

@@ -27,7 +27,6 @@ class SaveAmenidad extends Component
     public function mount(?int $amenidad_id = null): void
     {
         $this->amenidad_id = $amenidad_id;
-        Access::authorize('amenidades', $this->amenidad_id ? 'edit' : 'add');
         if ($this->amenidad_id) {
             $this->editar($this->findAmenidad());
         }

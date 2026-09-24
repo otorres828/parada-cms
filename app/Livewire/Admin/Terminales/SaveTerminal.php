@@ -39,7 +39,6 @@ class SaveTerminal extends Component
     public function mount(?int $terminal_id = null): void
     {
         $this->terminal_id = $terminal_id;
-        Access::authorize('terminales', $this->terminal_id ? 'edit' : 'add');
         $this->estados = Estado::searchAdmin()->orderBy('nombre')->get();
         if ($this->terminal_id) {
             $this->editar($this->findTerminal());
@@ -74,7 +73,6 @@ class SaveTerminal extends Component
         });
 
         session()->flash('admin_success', 'Registro guardado correctamente.');
-
 
         return $this->redirect(route('admin.terminales.list'), navigate: true);
     }

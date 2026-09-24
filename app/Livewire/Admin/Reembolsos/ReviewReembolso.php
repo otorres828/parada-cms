@@ -31,7 +31,6 @@ class ReviewReembolso extends Component
     public function mount(?int $reembolso_id = null): void
     {
         $this->reembolso_id = $reembolso_id;
-        Access::authorize('reembolsos', 'review');
         $reembolso = $this->findReembolso();
         if ($reembolso->estatus === 'aprobado') {
             $this->decision = 'pagado';

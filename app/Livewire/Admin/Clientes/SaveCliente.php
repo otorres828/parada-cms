@@ -32,7 +32,6 @@ class SaveCliente extends Component
     public function mount(?int $user_id = null): void
     {
         $this->user_id = $user_id;
-        Access::authorize('clientes', $this->user_id ? 'edit' : 'add');
         if ($this->user_id) {
             $this->editar($this->findUser());
         }

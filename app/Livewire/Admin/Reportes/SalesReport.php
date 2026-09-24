@@ -4,7 +4,6 @@ namespace App\Livewire\Admin\Reportes;
 
 use App\Models\ModelHelper;
 use App\Models\Reserva;
-use App\Services\Admin\Access;
 use App\Traits\TraitGeneral;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
@@ -32,14 +31,17 @@ class SalesReport extends Component
 
     public function mount(): void
     {
-        Access::authorize('reportes', 'list-sales');
         $this->date_from = $this->date_from ?: self::getDefaultDesde();
         $this->date_to = $this->date_to ?: self::getDefaultHasta();
     }
 
     public function render()
     {
-        return view('livewire.admin.reportes.sales-report', ['rows' => $this->query()->paginate($this->per_page), 'columns' => $this->columns(), 'report' => 'sales']);
+        return view('livewire.admin.reportes.sales-report', [
+            'rows' => $this->query()->paginate($this->per_page), 
+            'columns' => $this->columns(), 
+            'report' => 'sales'
+        ]);
     }
 
     public function updated(): void
@@ -54,7 +56,10 @@ class SalesReport extends Component
 
     protected function query()
     {
-        $filters = ['date_from' => $this->date_from, 'date_to' => $this->date_to];
+        $filters = [
+            'date_from' => $this->date_from, 
+            'date_to' => $this->date_to
+        ];
 
         return Reserva::searchAdmin('', $filters + ['estado_pago' => Reserva::ESTADO_PAGO_PAGADO])->selectRaw('DATE(fecha_compra) as fecha, COUNT(*) as cantidad, SUM(monto_total) as total, SUM(tasa_servicio) as tasas')->groupByRaw('DATE(fecha_compra)')->orderByDesc('fecha');
     }

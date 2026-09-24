@@ -3,7 +3,6 @@
 namespace App\Livewire\Admin\Auditoria;
 
 use App\Models\Auditoria;
-use App\Services\Admin\Access;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Locked;
 use Livewire\Component;
@@ -19,7 +18,6 @@ class DetailAudit extends Component
     public function mount(?int $audit_id = null): void
     {
         $this->audit_id = $audit_id;
-        Access::authorize('auditoria', 'detail');
         $this->auditoria = $this->findAuditoria();
     }
 

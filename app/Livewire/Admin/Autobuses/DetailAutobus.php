@@ -13,25 +13,22 @@ use Livewire\WithPagination;
 #[Layout('layouts.cms')]
 class DetailAutobus extends Component
 {
-
     use WithPagination;
 
     public int $per_page = 10;
 
     protected string $paginationTheme = 'bootstrap';
-    
+
     #[Locked]
     public ?int $autobus_id = null;
 
-    public  Autobus $autobus;
+    public Autobus $autobus;
 
     public bool $canViewPassengers = false;
-    
 
     public function mount(?int $autobus_id = null): void
     {
         $this->autobus_id = $autobus_id;
-        Access::authorize('autobuses', 'detail');
         $this->autobus = $this->findAutobus();
         $this->canViewPassengers = Access::allows('programaciones', 'passengers');
     }
@@ -43,13 +40,13 @@ class DetailAutobus extends Component
             'autobus_id' => $this->autobus_id,
             'historial_ventas' => true,
         ])
-        ->orderByDesc('fecha_salida')
-        ->orderByDesc('hora_salida')
-        ->orderByDesc('id')
-        ->paginate(max(1, min(100, $this->per_page)));
+            ->orderByDesc('fecha_salida')
+            ->orderByDesc('hora_salida')
+            ->orderByDesc('id')
+            ->paginate(max(1, min(100, $this->per_page)));
 
         return view('livewire.admin.autobuses.detail-autobus', [
-            'programaciones' => $programaciones
+            'programaciones' => $programaciones,
         ]);
     }
 

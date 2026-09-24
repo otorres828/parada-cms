@@ -34,7 +34,6 @@ class DetailCampana extends Component
         $this->configuracion_cupon_id = $configuracion_cupon_id;
         $this->sortColumn = 'id';
         $this->sortDirection = 'desc';
-        Access::authorize('cupones', 'detail');
         $this->canViewReservation = Access::allows('reservas', 'detail');
     }
 

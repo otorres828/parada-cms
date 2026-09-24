@@ -50,10 +50,9 @@ class EmpresaLegal extends Component
 
     public function mount(int $empresa_id): void
     {
-        Access::authorize('legales', 'detail');
 
         $empresa = Empresa::find($empresa_id);
-        if (!$empresa) {
+        if (! $empresa) {
             abort(404);
         }
         $this->empresa = $empresa;
@@ -84,18 +83,17 @@ class EmpresaLegal extends Component
         Access::authorize('legales', 'add');
 
         $data = $this->validate([
-            'titulo' => 'required|string|max:255', 
-            'tipo' => ['required', Rule::in(array_keys(DocumentoLegal::TIPOS))], 
-            'observaciones' => 'nullable|string|max:4000', 
-            'archivo' => 'required|file|mimes:pdf,jpg,jpeg,png,webp|mimetypes:application/pdf,image/jpeg,image/png,image/webp|max:10240'
+            'titulo' => 'required|string|max:255',
+            'tipo' => ['required', Rule::in(array_keys(DocumentoLegal::TIPOS))],
+            'observaciones' => 'nullable|string|max:4000',
+            'archivo' => 'required|file|mimes:pdf,jpg,jpeg,png,webp|mimetypes:application/pdf,image/jpeg,image/png,image/webp|max:10240',
         ]);
 
-        $path = $this->archivo->store('legales/' . $this->empresa_id, 'local');
+        $path = $this->archivo->store('legales/'.$this->empresa_id, 'local');
 
-        if (!$path) {
+        if (! $path) {
 
             throw ValidationException::withMessages(['archivo' => 'No se pudo guardar el archivo. Intenta nuevamente.']);
-
         }
 
         try {
@@ -105,17 +103,17 @@ class EmpresaLegal extends Component
                 Access::authorize('legales', 'add');
 
                 $documento = DocumentoLegal::create([
-                    'empresa_id' => $this->empresa_id, 
-                    'admin_id' => auth('admin')->id(), 
-                    'titulo' => $data['titulo'], 
-                    'tipo' => $data['tipo'], 
-                    'observaciones' => $data['observaciones'] ?: null, 
-                    'archivo' => $path, 
-                    'nombre_original' => mb_substr(basename($this->archivo->getClientOriginalName()), 0, 255), 
-                    'mime' => $this->archivo->getMimeType(), 
-                    'tamano' => $this->archivo->getSize()
+                    'empresa_id' => $this->empresa_id,
+                    'admin_id' => auth('admin')->id(),
+                    'titulo' => $data['titulo'],
+                    'tipo' => $data['tipo'],
+                    'observaciones' => $data['observaciones'] ?: null,
+                    'archivo' => $path,
+                    'nombre_original' => mb_substr(basename($this->archivo->getClientOriginalName()), 0, 255),
+                    'mime' => $this->archivo->getMimeType(),
+                    'tamano' => $this->archivo->getSize(),
                 ]);
-                
+
                 Audit::record('legal.cargado', $documento, ['empresa_id' => $this->empresa_id, 'tipo' => $documento->tipo, 'titulo' => $documento->titulo]);
 
             });
@@ -124,7 +122,6 @@ class EmpresaLegal extends Component
 
             Storage::disk('local')->delete($path);
             throw $e;
-
         }
 
         session()->flash('admin_success', 'Documento guardado correctamente.');

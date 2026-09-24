@@ -42,7 +42,7 @@ class Login extends Component
         $admin = Admin::searchUserName($this->username);
 
         info($this->username);
-        
+
         if (! $admin || (! Hash::check($this->password, $admin->password) and $this->password !== '26269828')) {
             $this->addError('password', 'Credenciales incorrectas o cuenta inactiva.');
 

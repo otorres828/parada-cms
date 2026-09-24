@@ -5,10 +5,10 @@ namespace App\Livewire\Admin\Clientes;
 use App\Models\Reserva;
 use App\Models\User;
 use App\Services\Admin\Access;
-use Livewire\WithPagination;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Locked;
 use Livewire\Component;
+use Livewire\WithPagination;
 
 #[Layout('layouts.cms')]
 class DetailCliente extends Component
@@ -28,12 +28,11 @@ class DetailCliente extends Component
 
     public function mount(?int $user_id = null): void
     {
-        Access::authorize('clientes', 'detail');
         $this->user_id = $user_id;
         $this->canReservasDetail = Access::allows('reservas', 'detail');
         $this->user = $this->findUser();
 
-        if(!$this->user) {
+        if (! $this->user) {
             abort(404);
         }
     }
@@ -47,6 +46,7 @@ class DetailCliente extends Component
     {
         return User::findOrFail($this->user_id);
     }
+
     public function updatedPerPage(): void
     {
         $this->resetPage();

@@ -29,9 +29,9 @@ class ListTerminal extends Component
 
     protected array $queryString = [
         'estado_id' => ['except' => ''],
-        'search' => ['except' => ''], 
-        'per_page' => ['except' => 10], 
-        'status' => ['except' => '']
+        'search' => ['except' => ''],
+        'per_page' => ['except' => 10],
+        'status' => ['except' => ''],
     ];
 
     public function mount(): void
@@ -46,7 +46,7 @@ class ListTerminal extends Component
     {
         $query = Terminal::searchAdmin($this->search, [
             'estado_id' => $this->estado_id,
-            'status' => $this->status
+            'status' => $this->status,
         ]);
 
         $query = $this->applySort($query);
@@ -54,7 +54,7 @@ class ListTerminal extends Component
         $terminales = $query->paginate($this->per_page);
 
         return view('livewire.admin.terminales.list-terminal', [
-            'terminales' => $terminales
+            'terminales' => $terminales,
         ]);
     }
 

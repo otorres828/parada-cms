@@ -26,7 +26,6 @@ class SaveReembolso extends Component
 
     public function mount(): void
     {
-        Access::authorize('reembolsos', $this->reembolso_id ? 'edit' : 'add');
         if ($this->reembolso_id) {
             $this->editar($this->findReembolso());
         }

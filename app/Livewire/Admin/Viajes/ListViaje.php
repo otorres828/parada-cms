@@ -4,7 +4,6 @@ namespace App\Livewire\Admin\Viajes;
 
 use App\Models\Empresa;
 use App\Models\Viaje;
-use App\Services\Admin\Access;
 use App\Traits\Listing;
 use App\Traits\Permissions;
 use Illuminate\Database\Eloquent\Collection;
@@ -26,17 +25,17 @@ class ListViaje extends Component
     public Collection $empresas;
 
     protected array $queryString = [
-        'empresa_id' => ['except' => ''], 
-        'search' => ['except' => ''], 
-        'per_page' => ['except' => 10], 
-        'status' => ['except' => '']
+        'empresa_id' => ['except' => ''],
+        'search' => ['except' => ''],
+        'per_page' => ['except' => 10],
+        'status' => ['except' => ''],
     ];
 
     public function mount(): void
     {
         $this->sortColumn = 'id';
         $this->sortDirection = 'desc';
-        $this->checkPermissions('viajes',['detail']);
+        $this->checkPermissions('viajes', ['detail']);
         $this->empresas = Empresa::searchAdmin()->orderBy('nombre')->get();
     }
 
@@ -45,7 +44,7 @@ class ListViaje extends Component
         $query = Viaje::searchAdmin($this->search, [
             'con_tasas' => true,
             'empresa_id' => $this->empresa_id,
-            'status' => $this->status
+            'status' => $this->status,
         ]);
 
         $query = $this->applySort($query);
@@ -53,7 +52,7 @@ class ListViaje extends Component
         $viajes = $query->paginate($this->per_page);
 
         return view('livewire.admin.viajes.list-viaje', [
-            'viajes' => $viajes
+            'viajes' => $viajes,
         ]);
     }
 

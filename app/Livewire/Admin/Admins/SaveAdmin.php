@@ -42,7 +42,6 @@ class SaveAdmin extends Component
     public function mount(?int $admin_id = null): void
     {
         $this->admin_id = $admin_id;
-        Access::authorize('admins', $admin_id ? 'edit' : 'add');
         $this->groups = GroupAdmin::where('status', 1)->with(['sections' => fn ($q) => $q->where('status', 1)->where('url', '!=', 'admins'), 'sections.permissions' => fn ($q) => $q->where('status', 1)])->orderBy('id')->get();
         if ($admin_id) {
             $this->editar(Admin::searchAdmin()->findOrFail($admin_id));

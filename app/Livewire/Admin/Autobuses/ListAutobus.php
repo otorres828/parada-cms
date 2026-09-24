@@ -4,7 +4,6 @@ namespace App\Livewire\Admin\Autobuses;
 
 use App\Models\Autobus;
 use App\Models\Empresa;
-use App\Services\Admin\Access;
 use App\Traits\Listing;
 use App\Traits\Permissions;
 use Illuminate\Database\Eloquent\Collection;
@@ -26,17 +25,17 @@ class ListAutobus extends Component
     public Collection $empresas;
 
     protected array $queryString = [
-        'empresa_id' => ['except' => ''], 
-        'search' => ['except' => ''], 
-        'per_page' => ['except' => 10], 
-        'status' => ['except' => '']
+        'empresa_id' => ['except' => ''],
+        'search' => ['except' => ''],
+        'per_page' => ['except' => 10],
+        'status' => ['except' => ''],
     ];
 
     public function mount(): void
     {
         $this->sortColumn = 'id';
         $this->sortDirection = 'desc';
-        $this->checkPermissions('autobuses',['detail']);
+        $this->checkPermissions('autobuses', ['detail']);
         $this->empresas = Empresa::searchAdmin()->orderBy('nombre')->get();
     }
 
@@ -44,7 +43,7 @@ class ListAutobus extends Component
     {
         $query = Autobus::searchAdmin($this->search, [
             'empresa_id' => $this->empresa_id,
-            'status' => $this->status
+            'status' => $this->status,
         ]);
 
         $query = $this->applySort($query);
@@ -52,7 +51,7 @@ class ListAutobus extends Component
         $autobuses = $query->paginate($this->per_page);
 
         return view('livewire.admin.autobuses.list-autobus', [
-            'autobuses' => $autobuses
+            'autobuses' => $autobuses,
         ]);
     }
 

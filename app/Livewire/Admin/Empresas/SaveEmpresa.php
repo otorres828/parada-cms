@@ -26,13 +26,11 @@ class SaveEmpresa extends Component
 
     public $estatus = 1;
 
-
     public Empresa $empresa;
 
     public function mount(?int $empresa_id = null): void
     {
         $this->empresa_id = $empresa_id;
-        Access::authorize('empresas', $this->empresa_id ? 'edit' : 'add');
         if ($this->empresa_id) {
             $this->editar($this->findEmpresa());
         }
@@ -66,8 +64,6 @@ class SaveEmpresa extends Component
         });
 
         session()->flash('admin_success', 'Registro guardado correctamente.');
-
-        
 
         return $this->redirect(route('admin.empresas.list'), navigate: true);
     }

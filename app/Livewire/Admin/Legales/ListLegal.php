@@ -15,8 +15,8 @@ class ListLegal extends Component
     use Listing, Permissions, WithPagination;
 
     protected array $queryString = [
-        'search' => ['except' => ''], 
-        'per_page' => ['except' => 10]
+        'search' => ['except' => ''],
+        'per_page' => ['except' => 10],
     ];
 
     public function mount(): void
@@ -29,7 +29,7 @@ class ListLegal extends Component
     public function render()
     {
         $query = Empresa::searchAdmin($this->search, [
-            'con_legales' => true
+            'con_legales' => true,
         ]);
 
         $query = $this->applySort($query);
@@ -37,7 +37,7 @@ class ListLegal extends Component
         $empresas = $query->paginate($this->per_page);
 
         return view('livewire.admin.legales.list-legal', [
-            'empresas' => $empresas
+            'empresas' => $empresas,
         ]);
     }
 

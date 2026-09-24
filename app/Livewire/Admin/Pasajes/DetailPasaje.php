@@ -25,7 +25,6 @@ class DetailPasaje extends Component
     public function mount(?int $pasaje_id = null): void
     {
         $this->pasaje_id = $pasaje_id;
-        Access::authorize('pasajes', 'detail');
         $this->canViewCampaign = Access::allows('cupones', 'detail');
         $this->canViewReservation = Access::allows('reservas', 'detail');
         $this->pasaje = $this->findPasaje();

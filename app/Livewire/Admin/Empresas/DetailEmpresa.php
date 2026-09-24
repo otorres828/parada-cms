@@ -31,7 +31,6 @@ class DetailEmpresa extends Component
     public function mount(?int $empresa_id = null): void
     {
         $this->empresa_id = $empresa_id;
-        Access::authorize('empresas', 'detail');
         $this->balance = Finance::balance($empresa_id);
         $this->canListUser = Access::allows('empresas.users', 'list');
         $this->empresa = $this->findEmpresa();

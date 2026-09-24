@@ -22,9 +22,9 @@ class ListAmenidad extends Component
     public string $status = '';
 
     protected array $queryString = [
-        'search' => ['except' => ''], 
-        'per_page' => ['except' => 10], 
-        'status' => ['except' => '']
+        'search' => ['except' => ''],
+        'per_page' => ['except' => 10],
+        'status' => ['except' => ''],
     ];
 
     public function mount(): void
@@ -37,7 +37,7 @@ class ListAmenidad extends Component
     public function render()
     {
         $query = Amenidad::searchAdmin($this->search, [
-            'status' => $this->status
+            'status' => $this->status,
         ]);
 
         $query = $this->applySort($query);
@@ -45,7 +45,7 @@ class ListAmenidad extends Component
         $amenidades = $query->paginate($this->per_page);
 
         return view('livewire.admin.amenidades.list-amenidad', [
-            'amenidades' => $amenidades
+            'amenidades' => $amenidades,
         ]);
     }
 
@@ -75,7 +75,7 @@ class ListAmenidad extends Component
             Audit::record('registro.estado', $amenidad, ['estatus' => $amenidad->estatus]);
 
         });
-        
+
         $this->dispatch('successEventList', message: 'Estado actualizado.');
     }
 }

@@ -2,7 +2,6 @@
 
 namespace App\Livewire\Admin\TasasServicio;
 
-use App\Models\GroupAdmin;
 use App\Models\TasaServicio;
 use App\Services\Admin\Access;
 use App\Services\Admin\Audit;
@@ -22,9 +21,9 @@ class ListTasaServicio extends Component
     public string $status = '';
 
     protected array $queryString = [
-        'search' => ['except' => ''], 
-        'status' => ['except' => ''], 
-        'per_page' => ['except' => 10]
+        'search' => ['except' => ''],
+        'status' => ['except' => ''],
+        'per_page' => ['except' => 10],
     ];
 
     public function mount(): void
@@ -37,7 +36,7 @@ class ListTasaServicio extends Component
     public function render()
     {
         $query = TasaServicio::searchAdmin($this->search, [
-            'status' => $this->status
+            'status' => $this->status,
         ]);
 
         $query = $this->applySort($query);
@@ -45,7 +44,7 @@ class ListTasaServicio extends Component
         $tasas = $query->paginate($this->per_page);
 
         return view('livewire.admin.tasas-servicio.list-tasa-servicio', [
-            'tasas' => $tasas
+            'tasas' => $tasas,
         ]);
     }
 
@@ -67,7 +66,7 @@ class ListTasaServicio extends Component
                 Access::authorize('tasas-servicio', 'edit');
 
                 $tasa = TasaServicio::findOrFail($id);
-                
+
                 $inactive = 2;
 
                 $tasa->estatus = (int) $tasa->estatus === 1 ? $inactive : 1;

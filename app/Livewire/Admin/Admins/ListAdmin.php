@@ -19,9 +19,9 @@ class ListAdmin extends Component
     public string $status = '';
 
     protected array $queryString = [
-        'search' => ['except' => ''], 
-        'per_page' => ['except' => 10], 
-        'status' => ['except' => '']
+        'search' => ['except' => ''],
+        'per_page' => ['except' => 10],
+        'status' => ['except' => ''],
     ];
 
     public function mount(): void
@@ -34,7 +34,7 @@ class ListAdmin extends Component
     public function render()
     {
         $query = Admin::searchAdmin($this->search, [
-            'status' => $this->status
+            'status' => $this->status,
         ]);
 
         $query = $this->applySort($query);
@@ -42,7 +42,7 @@ class ListAdmin extends Component
         $admins = $query->paginate($this->per_page);
 
         return view('livewire.admin.admins.list-admin', [
-            'admins' => $admins
+            'admins' => $admins,
         ]);
     }
 

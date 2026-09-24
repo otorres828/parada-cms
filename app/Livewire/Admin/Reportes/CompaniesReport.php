@@ -4,7 +4,6 @@ namespace App\Livewire\Admin\Reportes;
 
 use App\Models\ModelHelper;
 use App\Models\Reserva;
-use App\Services\Admin\Access;
 use App\Traits\TraitGeneral;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
@@ -32,7 +31,6 @@ class CompaniesReport extends Component
 
     public function mount(): void
     {
-        Access::authorize('reportes', 'list-companies');
         $this->date_from = $this->date_from ?: self::getDefaultDesde();
         $this->date_to = $this->date_to ?: self::getDefaultHasta();
     }

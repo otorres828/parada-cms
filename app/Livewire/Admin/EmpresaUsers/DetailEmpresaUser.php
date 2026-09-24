@@ -4,7 +4,6 @@ namespace App\Livewire\Admin\EmpresaUsers;
 
 use App\Models\Empresa;
 use App\Models\UsuarioEmpresa;
-use App\Services\Admin\Access;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Locked;
 use Livewire\Component;
@@ -23,7 +22,6 @@ class DetailEmpresaUser extends Component
         $this->empresa_id = $empresa_id;
         Empresa::findOrFail($empresa_id);
         $this->usuario_empresa_id = $usuario_empresa_id;
-        Access::authorize('empresas.users', 'detail');
         $usuarioEmpresa = $this->findUsuarioEmpresa();
     }
 

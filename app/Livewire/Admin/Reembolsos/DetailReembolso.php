@@ -18,7 +18,6 @@ class DetailReembolso extends Component
     public function mount(?int $reembolso_id = null): void
     {
         $this->reembolso_id = $reembolso_id;
-        Access::authorize('reembolsos', 'detail');
         $reembolso = $this->findReembolso();
     }
 
