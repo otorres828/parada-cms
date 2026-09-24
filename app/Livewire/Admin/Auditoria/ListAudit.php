@@ -3,7 +3,6 @@
 namespace App\Livewire\Admin\Auditoria;
 
 use App\Models\Auditoria;
-use App\Services\Admin\Access;
 use App\Traits\Listing;
 use App\Traits\Permissions;
 use App\Traits\TraitGeneral;
@@ -26,11 +25,11 @@ class ListAudit extends Component
     public string $date_to = '';
 
     protected array $queryString = [
-        'search' => ['except' => ''], 
-        'per_page' => ['except' => 10], 
-        'status' => ['except' => ''], 
-        'date_from' => ['except' => ''], 
-        'date_to' => ['except' => '']
+        'search' => ['except' => ''],
+        'per_page' => ['except' => 10],
+        'status' => ['except' => ''],
+        'date_from' => ['except' => ''],
+        'date_to' => ['except' => ''],
     ];
 
     public function mount(): void
@@ -39,7 +38,7 @@ class ListAudit extends Component
         $this->date_to = $this->date_to ?: self::getDefaultHasta();
         $this->sortColumn = 'id';
         $this->sortDirection = 'desc';
-        $this->checkPermissions('auditoria',['detail']);
+        $this->checkPermissions('auditoria', ['detail']);
     }
 
     public function render()
@@ -47,7 +46,7 @@ class ListAudit extends Component
         $query = Auditoria::searchAdmin($this->search, [
             'status' => $this->status,
             'date_from' => $this->date_from,
-            'date_to' => $this->date_to
+            'date_to' => $this->date_to,
         ]);
 
         $query = $this->applySort($query);
@@ -55,7 +54,7 @@ class ListAudit extends Component
         $auditorias = $query->paginate($this->per_page);
 
         return view('livewire.admin.auditoria.list-audit', [
-            'auditorias' => $auditorias
+            'auditorias' => $auditorias,
         ]);
     }
 
@@ -66,4 +65,3 @@ class ListAudit extends Component
         }
     }
 }
-

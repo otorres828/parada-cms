@@ -143,6 +143,8 @@
                 <thead>
 
                     <tr>
+                        <th>Pasaje</th>
+
                         <th>Nombre</th>
 
                         <th>Documento</th>
@@ -170,6 +172,16 @@
 
                     @forelse ($tickets as $ticket)
                         <tr>
+                            <td>
+                                @if ($canViewTicket)
+                                    <a href="{{ route('admin.pasajes.detail', $ticket->id) }}" wire:navigate>
+                                        #{{ $ticket->id }}
+                                    </a>
+                                @else
+                                    #{{ $ticket->id }}
+                                @endif
+                            </td>
+
                             <td>
                                 {{ $ticket->viajero?->nombre ?? 'Pasajero por completar' }} {{ $ticket->viajero?->apellido }}
                             </td>
@@ -215,7 +227,7 @@
                     @empty
 
                         <tr>
-                            <td colspan="10">
+                            <td colspan="11">
                                 No hay pasajeros.
                             </td>
 
@@ -253,4 +265,3 @@
         }));
     </script>
 @endscript
-

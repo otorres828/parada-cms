@@ -4,7 +4,6 @@ namespace App\Livewire\Admin\Reservas;
 
 use App\Models\Empresa;
 use App\Models\Reserva;
-use App\Services\Admin\Access;
 use App\Traits\Listing;
 use App\Traits\Permissions;
 use App\Traits\TraitGeneral;
@@ -32,12 +31,12 @@ class ListReserva extends Component
     public Collection $empresas;
 
     protected array $queryString = [
-        'empresa_id' => ['except' => ''], 
-        'search' => ['except' => ''], 
-        'per_page' => ['except' => 10], 
-        'status' => ['except' => ''], 
-        'date_from' => ['except' => ''], 
-        'date_to' => ['except' => '']
+        'empresa_id' => ['except' => ''],
+        'search' => ['except' => ''],
+        'per_page' => ['except' => 10],
+        'status' => ['except' => ''],
+        'date_from' => ['except' => ''],
+        'date_to' => ['except' => ''],
     ];
 
     public function mount(): void
@@ -46,7 +45,7 @@ class ListReserva extends Component
         $this->date_to = $this->date_to ?: self::getDefaultHasta();
         $this->sortColumn = 'id';
         $this->sortDirection = 'desc';
-        $this->checkPermissions('reservas',['detail']);
+        $this->checkPermissions('reservas', ['detail']);
         $this->empresas = Empresa::searchAdmin()->orderBy('nombre')->get();
     }
 
@@ -56,7 +55,7 @@ class ListReserva extends Component
             'empresa_id' => $this->empresa_id,
             'status' => $this->status,
             'date_from' => $this->date_from,
-            'date_to' => $this->date_to
+            'date_to' => $this->date_to,
         ]);
 
         $query = $this->applySort($query);
@@ -64,7 +63,7 @@ class ListReserva extends Component
         $reservas = $query->paginate($this->per_page);
 
         return view('livewire.admin.reservas.list-reserva', [
-            'reservas' => $reservas
+            'reservas' => $reservas,
         ]);
     }
 
@@ -75,4 +74,3 @@ class ListReserva extends Component
         }
     }
 }
-

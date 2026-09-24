@@ -2,9 +2,8 @@
 
 namespace App\Livewire\Admin\Pasajes;
 
-use App\Models\Empresa;
 use App\Exports\PasajesExport;
-use Maatwebsite\Excel\Facades\Excel;
+use App\Models\Empresa;
 use App\Models\Pasaje;
 use App\Services\Admin\Access;
 use App\Traits\Listing;
@@ -14,6 +13,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Maatwebsite\Excel\Facades\Excel;
 
 #[Layout('layouts.cms')]
 class ListPasaje extends Component
@@ -34,12 +34,12 @@ class ListPasaje extends Component
     public Collection $empresas;
 
     protected array $queryString = [
-        'empresa_id' => ['except' => ''], 
-        'search' => ['except' => ''], 
-        'per_page' => ['except' => 10], 
-        'status' => ['except' => ''], 
-        'date_from' => ['except' => ''], 
-        'date_to' => ['except' => '']
+        'empresa_id' => ['except' => ''],
+        'search' => ['except' => ''],
+        'per_page' => ['except' => 10],
+        'status' => ['except' => ''],
+        'date_from' => ['except' => ''],
+        'date_to' => ['except' => ''],
     ];
 
     public function mount(): void
@@ -48,7 +48,7 @@ class ListPasaje extends Component
         $this->date_to = $this->date_to ?: self::getDefaultHasta();
         $this->sortColumn = 'id';
         $this->sortDirection = 'desc';
-        $this->checkPermissions('pasajes',['detail']);
+        $this->checkPermissions('pasajes', ['detail']);
         $this->empresas = Empresa::searchAdmin()->orderBy('nombre')->get();
     }
 
@@ -58,7 +58,7 @@ class ListPasaje extends Component
             'empresa_id' => $this->empresa_id,
             'estado_pago' => $this->status,
             'date_from' => $this->date_from,
-            'date_to' => $this->date_to
+            'date_to' => $this->date_to,
         ]);
 
         $query = $this->applySort($query);
@@ -66,7 +66,7 @@ class ListPasaje extends Component
         $pasajes = $query->paginate($this->per_page);
 
         return view('livewire.admin.pasajes.list-pasaje', [
-            'pasajes' => $pasajes
+            'pasajes' => $pasajes,
         ]);
     }
 
@@ -78,7 +78,7 @@ class ListPasaje extends Component
             'empresa_id' => $this->empresa_id,
             'estado_pago' => $this->status,
             'date_from' => $this->date_from,
-            'date_to' => $this->date_to
+            'date_to' => $this->date_to,
         ]);
 
         return Excel::download(new PasajesExport($this->applySort($query)), 'pasajes-'.now()->format('Y-m-d-His').'.xlsx');
@@ -91,4 +91,3 @@ class ListPasaje extends Component
         }
     }
 }
-

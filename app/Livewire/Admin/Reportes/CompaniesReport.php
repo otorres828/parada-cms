@@ -49,7 +49,7 @@ class CompaniesReport extends Component
 
     protected function columns(): array
     {
-        return ['nombre' => 'Empresa', 'cantidad' => 'Reservas pagadas', 'total' => 'Ventas USD', 'tasas' => 'Tasa de servicio USD'];
+        return ['nombre' => 'Empresa', 'cantidad' => 'Reservas pagadas', 'total' => 'Ventas', 'tasas' => 'Tasa de servicio'];
     }
 
     protected function query()
@@ -77,14 +77,13 @@ class CompaniesReport extends Component
                     $value = ModelHelper::value($row, $key);
 
                     if (preg_match('/^[=+\-@\t\r]/', $value)) {
-                        $value = "'" . $value;
+                        $value = "'".$value;
                     }
                     $values[] = $value;
                 }
                 fputcsv($out, $values, ';', '"', '');
             }
             fclose($out);
-        }, 'reporte-' . 'companies' . '-' . $this->date_from . '.csv', ['Content-Type' => 'text/csv; charset=UTF-8']);
+        }, 'reporte-'.'companies'.'-'.$this->date_from.'.csv', ['Content-Type' => 'text/csv; charset=UTF-8']);
     }
 }
-

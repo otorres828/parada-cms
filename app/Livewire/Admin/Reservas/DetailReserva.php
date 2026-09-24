@@ -15,6 +15,8 @@ class DetailReserva extends Component
 
     public bool $canViewCampaign = false;
 
+    public bool $canViewTicket = false;
+
     #[Locked]
     public ?int $reserva_id = null;
 
@@ -26,6 +28,7 @@ class DetailReserva extends Component
         Access::authorize('reservas', 'detail');
         $this->canViewPassengers = Access::allows('programaciones', 'passengers');
         $this->canViewCampaign = Access::allows('cupones', 'detail');
+        $this->canViewTicket = Access::allows('pasajes', 'detail');
         $this->reserva = $this->findReserva();
     }
 

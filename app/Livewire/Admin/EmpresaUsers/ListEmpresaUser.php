@@ -33,11 +33,11 @@ class ListEmpresaUser extends Component
     public string $date_to = '';
 
     protected array $queryString = [
-        'search' => ['except' => ''], 
-        'per_page' => ['except' => 10], 
-        'status' => ['except' => ''], 
-        'date_from' => ['except' => ''], 
-        'date_to' => ['except' => '']
+        'search' => ['except' => ''],
+        'per_page' => ['except' => 10],
+        'status' => ['except' => ''],
+        'date_from' => ['except' => ''],
+        'date_to' => ['except' => ''],
     ];
 
     public function mount(?int $empresa_id = null): void
@@ -48,7 +48,7 @@ class ListEmpresaUser extends Component
         Empresa::findOrFail($empresa_id);
         $this->sortColumn = 'id';
         $this->sortDirection = 'desc';
-        $this->checkPermissions('empresas.users',['detail', 'permissions']);
+        $this->checkPermissions('empresas.users', ['detail', 'permissions']);
     }
 
     public function render()
@@ -57,7 +57,7 @@ class ListEmpresaUser extends Component
             'status' => $this->status,
             'date_from' => $this->date_from,
             'date_to' => $this->date_to,
-            'empresa_id' => $this->empresa_id
+            'empresa_id' => $this->empresa_id,
         ]);
 
         $query = $this->applySort($query);
@@ -65,7 +65,7 @@ class ListEmpresaUser extends Component
         $usuariosEmpresa = $query->paginate($this->per_page);
 
         return view('livewire.admin.empresa-users.list-empresa-user', [
-            'usuariosEmpresa' => $usuariosEmpresa
+            'usuariosEmpresa' => $usuariosEmpresa,
         ]);
     }
 
@@ -79,25 +79,24 @@ class ListEmpresaUser extends Component
     public function changeStatus(int $id): void
     {
         Access::authorize('empresas.users', 'edit');
-        
+
         DB::transaction(function () use ($id) {
-            
+
             $query = UsuarioEmpresa::searchAdmin();
-            
+
             $query->where('empresa_id', $this->empresa_id);
-            
+
             $usuarioEmpresa = $query->whereKey($id)->lockForUpdate()->firstOrFail();
-            
+
             $inactive = 2;
-            
+
             $usuarioEmpresa->estatus = (int) $usuarioEmpresa->estatus === 1 ? $inactive : 1;
-            
+
             $usuarioEmpresa->save();
-            
+
             Audit::record('registro.estado', $usuarioEmpresa, ['estatus' => $usuarioEmpresa->estatus]);
-            
+
         });
         $this->dispatch('successEventList', message: 'Estado actualizado.');
     }
 }
-

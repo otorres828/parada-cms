@@ -28,11 +28,11 @@ class ListCampana extends Component
     public string $date_to = '';
 
     protected array $queryString = [
-        'search' => ['except' => ''], 
-        'per_page' => ['except' => 10], 
-        'status' => ['except' => ''], 
-        'date_from' => ['except' => ''], 
-        'date_to' => ['except' => '']
+        'search' => ['except' => ''],
+        'per_page' => ['except' => 10],
+        'status' => ['except' => ''],
+        'date_from' => ['except' => ''],
+        'date_to' => ['except' => ''],
     ];
 
     public function mount(): void
@@ -41,7 +41,7 @@ class ListCampana extends Component
         $this->date_to = $this->date_to ?: self::getDefaultHasta();
         $this->sortColumn = 'id';
         $this->sortDirection = 'desc';
-        $this->checkPermissions('cupones',['detail']);
+        $this->checkPermissions('cupones', ['detail']);
     }
 
     public function render()
@@ -49,7 +49,7 @@ class ListCampana extends Component
         $query = ConfiguracionCupon::searchAdmin($this->search, [
             'status' => $this->status,
             'date_from' => $this->date_from,
-            'date_to' => $this->date_to
+            'date_to' => $this->date_to,
         ]);
 
         $query = $this->applySort($query);
@@ -57,7 +57,7 @@ class ListCampana extends Component
         $cupones = $query->paginate($this->per_page);
 
         return view('livewire.admin.cupones.list-campana', [
-            'cupones' => $cupones
+            'cupones' => $cupones,
         ]);
     }
 
@@ -87,8 +87,7 @@ class ListCampana extends Component
             Audit::record('registro.estado', $configuracionCupon, ['estatus' => $configuracionCupon->estatus]);
 
         });
-        
+
         $this->dispatch('successEventList', message: 'Estado actualizado.');
     }
 }
-

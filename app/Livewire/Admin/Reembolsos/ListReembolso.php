@@ -31,12 +31,12 @@ class ListReembolso extends Component
     public string $date_to = '';
 
     protected array $queryString = [
-        'empresa_id' => ['except' => ''], 
-        'search' => ['except' => ''], 
-        'per_page' => ['except' => 10], 
-        'status' => ['except' => ''], 
-        'date_from' => ['except' => ''], 
-        'date_to' => ['except' => '']
+        'empresa_id' => ['except' => ''],
+        'search' => ['except' => ''],
+        'per_page' => ['except' => 10],
+        'status' => ['except' => ''],
+        'date_from' => ['except' => ''],
+        'date_to' => ['except' => ''],
     ];
 
     public function mount(): void
@@ -45,7 +45,7 @@ class ListReembolso extends Component
         $this->date_to = $this->date_to ?: self::getDefaultHasta();
         $this->sortColumn = 'id';
         $this->sortDirection = 'desc';
-        $this->checkPermissions('reembolsos',['detail', 'review']);
+        $this->checkPermissions('reembolsos', ['detail', 'review']);
         $this->empresas = Empresa::searchAdmin()->orderBy('nombre')->get();
     }
 
@@ -55,7 +55,7 @@ class ListReembolso extends Component
             'empresa_id' => $this->empresa_id,
             'status' => $this->status,
             'date_from' => $this->date_from,
-            'date_to' => $this->date_to
+            'date_to' => $this->date_to,
         ]);
 
         $query = $this->applySort($query);
@@ -63,7 +63,7 @@ class ListReembolso extends Component
         $reembolsos = $query->paginate($this->per_page);
 
         return view('livewire.admin.reembolsos.list-reembolso', [
-            'reembolsos' => $reembolsos
+            'reembolsos' => $reembolsos,
         ]);
     }
 
@@ -74,4 +74,3 @@ class ListReembolso extends Component
         }
     }
 }
-

@@ -4,14 +4,14 @@ namespace App\Exports;
 
 use Illuminate\Database\Eloquent\Builder;
 use Maatwebsite\Excel\Concerns\FromQuery;
+use Maatwebsite\Excel\Concerns\WithCustomValueBinder;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
-use Maatwebsite\Excel\Concerns\WithCustomValueBinder;
 use PhpOffice\PhpSpreadsheet\Cell\Cell;
 use PhpOffice\PhpSpreadsheet\Cell\DataType;
 use PhpOffice\PhpSpreadsheet\Cell\DefaultValueBinder;
 
-class PasajesExport extends DefaultValueBinder implements FromQuery, WithHeadings, WithMapping, WithCustomValueBinder
+class PasajesExport extends DefaultValueBinder implements FromQuery, WithCustomValueBinder, WithHeadings, WithMapping
 {
     public function __construct(private Builder $consulta) {}
 
@@ -23,7 +23,7 @@ class PasajesExport extends DefaultValueBinder implements FromQuery, WithHeading
     public function headings(): array
     {
         return ['ID pasaje', 'Reserva', 'Fecha de reserva', 'Viajero', 'Documento', 'Fecha de nacimiento', 'Asiento',
-            'Precio base USD', 'Descuento USD', 'Subtotal USD', 'Tasa de servicio USD', 'Total USD',
+            'Precio base', 'Descuento', 'Subtotal', 'Tasa de servicio', 'Total',
             'Abordado', 'Estado de pago', 'Origen', 'Destino final',
             'Fecha de salida', 'Hora de salida'];
     }
@@ -48,6 +48,7 @@ class PasajesExport extends DefaultValueBinder implements FromQuery, WithHeading
     {
         if (is_string($value)) {
             $cell->setValueExplicit($value, DataType::TYPE_STRING);
+
             return true;
         }
 

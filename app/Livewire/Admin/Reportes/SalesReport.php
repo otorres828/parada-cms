@@ -49,7 +49,7 @@ class SalesReport extends Component
 
     protected function columns(): array
     {
-        return ['fecha' => 'Fecha', 'cantidad' => 'Reservas pagadas', 'total' => 'Ventas USD', 'tasas' => 'Tasas USD'];
+        return ['fecha' => 'Fecha', 'cantidad' => 'Reservas pagadas', 'total' => 'Ventas', 'tasas' => 'Tasas'];
     }
 
     protected function query()
@@ -77,14 +77,13 @@ class SalesReport extends Component
                     $value = ModelHelper::value($row, $key);
 
                     if (preg_match('/^[=+\-@\t\r]/', $value)) {
-                        $value = "'" . $value;
+                        $value = "'".$value;
                     }
                     $values[] = $value;
                 }
                 fputcsv($out, $values, ';', '"', '');
             }
             fclose($out);
-        }, 'reporte-' . 'sales' . '-' . $this->date_from . '.csv', ['Content-Type' => 'text/csv; charset=UTF-8']);
+        }, 'reporte-'.'sales'.'-'.$this->date_from.'.csv', ['Content-Type' => 'text/csv; charset=UTF-8']);
     }
 }
-
