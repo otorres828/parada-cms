@@ -52,9 +52,9 @@ class Empresa extends ModelHelper
         if ($search !== '') {
             $query->where(function ($query) use ($search) {
                 $query->where('empresas.id', ctype_digit($search) ? $search : -1);
-                $query->orWhere('empresas.nombre', 'like', '%' . $search . '%');
-                $query->orWhere('empresas.email', 'like', '%' . $search . '%');
-                $query->orWhere('empresas.rif', 'like', '%' . $search . '%');
+                $query->orWhere('empresas.nombre', 'like', '%'.$search.'%');
+                $query->orWhere('empresas.email', 'like', '%'.$search.'%');
+                $query->orWhere('empresas.rif', 'like', '%'.$search.'%');
             });
         }
 
@@ -62,23 +62,30 @@ class Empresa extends ModelHelper
 
         if ($status !== null && $status !== '') {
             $query->where('empresas.estatus', $status);
-        }else{
-            $query->where('empresas.estatus', '!=',self::ESTADO_DELETE);
+        } else {
+            $query->where('empresas.estatus', '!=', self::ESTADO_DELETE);
         }
 
-        if (!empty($filters['date_from'])) {
+        if (! empty($filters['date_from'])) {
             $query->whereDate('empresas.created_at', '>=', self::date($filters['date_from']));
         }
 
-        if (!empty($filters['date_to'])) {
+        if (! empty($filters['date_to'])) {
             $query->whereDate('empresas.created_at', '<=', self::date($filters['date_to']));
         }
 
-        if (!empty($filters['con_legales'])) {
+        if (! empty($filters['con_legales'])) {
             $query->withCount('documentosLegales');
         }
 
         return $query;
+    }
+
+    public static function dashboardSummary(): self
+    {
+        return self::searchAdmin()
+            ->selectRaw('COUNT(*) as total, COALESCE(SUM(CASE WHEN estatus = 1 THEN 1 ELSE 0 END), 0) as activas')
+            ->first();
     }
 
     public function reembolsos(): HasMany
@@ -90,5 +97,4 @@ class Empresa extends ModelHelper
     {
         return $this->hasMany(DocumentoLegal::class, 'empresa_id');
     }
-
 }

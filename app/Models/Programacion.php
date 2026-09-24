@@ -15,12 +15,12 @@ class Programacion extends ModelHelper
     protected $table = 'programaciones';
 
     protected $fillable = [
-        'viaje_id', 
-        'autobus_id', 
-        'fecha_salida', 
-        'hora_salida', 
-        'asientos_totales', 
-        'estatus'
+        'viaje_id',
+        'autobus_id',
+        'fecha_salida',
+        'hora_salida',
+        'asientos_totales',
+        'estatus',
     ];
 
     protected function casts(): array
@@ -61,7 +61,7 @@ class Programacion extends ModelHelper
             $query->where(function ($query) use ($search) {
                 $query->where('programaciones.id', ctype_digit($search) ? $search : -1);
                 $query->orWhereHas('viaje.empresa', function ($query) use ($search) {
-                    return $query->where('nombre', 'like', '%' . $search . '%');
+                    return $query->where('nombre', 'like', '%'.$search.'%');
                 });
             });
         }
@@ -72,15 +72,15 @@ class Programacion extends ModelHelper
             $query->where('programaciones.estatus', $status);
         }
 
-        if (!empty($filters['date_from'])) {
+        if (! empty($filters['date_from'])) {
             $query->whereDate('programaciones.fecha_salida', '>=', self::date($filters['date_from']));
         }
 
-        if (!empty($filters['date_to'])) {
+        if (! empty($filters['date_to'])) {
             $query->whereDate('programaciones.fecha_salida', '<=', self::date($filters['date_to']));
         }
 
-        if (!empty($filters['proximas'])) {
+        if (! empty($filters['proximas'])) {
             $from = now();
             $query->where(function ($query) use ($from) {
                 return $query->where('fecha_salida', '>', $from->toDateString())->orWhere(function ($query) use ($from) {
@@ -99,7 +99,7 @@ class Programacion extends ModelHelper
             });
         }
 
-        if (!empty($filters['historial_ventas'])) {
+        if (! empty($filters['historial_ventas'])) {
             $query
                 ->withCount([
                     'pasajes as pasajes_vendidos' => function ($query) {
@@ -143,11 +143,11 @@ class Programacion extends ModelHelper
     {
         return self::searchAdmin()
             ->where('viaje_id', $viaje_id)
-            ->withCount(['pasajes as pasajes_vendidos' => fn($q) => $q->where('reservas.estado_pago', Reserva::ESTADO_PAGO_PAGADO)])
-            ->withCount(['pasajes as pasajes_pendientes' => fn($q) => $q->where('reservas.estado_pago', Reserva::ESTADO_PAGO_PENDIENTE)])
-            ->withCount(['pasajes as pasajes_cancelados' => fn($q) => $q->where('reservas.estado_pago', Reserva::ESTADO_PAGO_CANCELADO)])
-            ->withCount(['pasajes as pasajes_reembolsados' => fn($q) => $q->where('reservas.estado_pago', Reserva::ESTADO_PAGO_REEMBOLSADO)])
-            ->withCount(['pasajes as pasajes_fallidos' => fn($q) => $q->where('reservas.estado_pago', Reserva::ESTADO_PAGO_FALLIDO)])
+            ->withCount(['pasajes as pasajes_vendidos' => fn ($q) => $q->where('reservas.estado_pago', Reserva::ESTADO_PAGO_PAGADO)])
+            ->withCount(['pasajes as pasajes_pendientes' => fn ($q) => $q->where('reservas.estado_pago', Reserva::ESTADO_PAGO_PENDIENTE)])
+            ->withCount(['pasajes as pasajes_cancelados' => fn ($q) => $q->where('reservas.estado_pago', Reserva::ESTADO_PAGO_CANCELADO)])
+            ->withCount(['pasajes as pasajes_reembolsados' => fn ($q) => $q->where('reservas.estado_pago', Reserva::ESTADO_PAGO_REEMBOLSADO)])
+            ->withCount(['pasajes as pasajes_fallidos' => fn ($q) => $q->where('reservas.estado_pago', Reserva::ESTADO_PAGO_FALLIDO)])
             ->withSum(
                 [
                     'pasajes as ventas_total' => function ($query) {
@@ -166,5 +166,17 @@ class Programacion extends ModelHelper
             )
             ->orderByDesc('fecha_salida')
             ->orderByDesc('hora_salida');
+    }
+
+    public static function upcomingForDashboard(string $dateFrom, string $dateTo): Builder
+    {
+        return self::searchAdmin('', [
+            'date_from' => $dateFrom,
+            'date_to' => $dateTo,
+            'activas' => true,
+            'proximas' => true,
+        ])->orderBy('fecha_salida')
+            ->orderBy('hora_salida')
+            ->orderBy('id');
     }
 }

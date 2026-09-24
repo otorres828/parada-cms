@@ -35,26 +35,35 @@ class Dashboard extends Component
         };
         $filtros = ['date_from' => $desde->toDateString(), 'date_to' => $ahora->toDateString()];
         $pagadas = $filtros + ['estado_pago' => Reserva::ESTADO_PAGO_PAGADO];
-        $resumen = Reserva::searchAdmin('', $pagadas)->selectRaw('COUNT(*) as cantidad, COALESCE(SUM(monto_total), 0) as ventas, COALESCE(SUM(tasa_servicio), 0) as tasas')->first();
-        $empresas = Empresa::searchAdmin()->selectRaw('COUNT(*) as total, COALESCE(SUM(CASE WHEN estatus = 1 THEN 1 ELSE 0 END), 0) as activas')->first();
-        $salidas = Programacion::searchAdmin('', ['date_from' => $ahora->toDateString(), 'date_to' => $ahora->copy()->addDays(6)->toDateString(), 'activas' => true, 'proximas' => true]);
-        $metrics = ['ventas' => $resumen->ventas, 'tasas' => $resumen->tasas, 'reservas_pagadas' => (int) $resumen->cantidad, 'pasajes' => Pasaje::searchAdmin('', $pagadas)->count(), 'pendientes' => Reserva::searchAdmin('', $filtros + ['estado_pago' => Reserva::ESTADO_PAGO_PENDIENTE])->count(), 'empresas' => (int) $empresas->total, 'empresas_activas' => (int) $empresas->activas, 'salidas' => (clone $salidas)->count()];
-        $ultimasReservas = Reserva::searchAdmin('', $filtros)
-            ->with(['usuario', 'programacion.viaje.empresa'])
-            ->withCount('pasajes')
-            ->orderByDesc('fecha_compra')
-            ->orderByDesc('id')
-            ->limit(6)
-            ->get();
-        $proximasSalidas = $salidas
-            ->with(['viaje.empresa', 'viaje.origenTerminal', 'viaje.destinoTerminal'])
-            ->orderBy('fecha_salida')
-            ->orderBy('hora_salida')
-            ->orderBy('id')
+        $resumen = Reserva::dashboardSummary($pagadas);
+        $empresas = Empresa::dashboardSummary();
+        $salidas = Programacion::upcomingForDashboard(
+            $ahora->toDateString(),
+            $ahora->copy()->addDays(6)->toDateString(),
+        );
+        $metrics = [
+            'ventas' => $resumen->ventas,
+            'tasas' => $resumen->tasas,
+            'reservas_pagadas' => (int) $resumen->cantidad,
+            'pasajes' => Pasaje::searchAdmin('', $pagadas)->count(),
+            'pendientes' => Reserva::searchAdmin('', $filtros + ['estado_pago' => Reserva::ESTADO_PAGO_PENDIENTE])->count(),
+            'empresas' => (int) $empresas->total,
+            'empresas_activas' => (int) $empresas->activas,
+            'salidas' => (clone $salidas)->count(),
+        ];
+        $ultimasReservas = Reserva::latestForDashboard($filtros);
+        $proximasSalidas = (clone $salidas)
             ->limit(5)
             ->get();
-        $estados = [Reserva::ESTADO_PAGO_PAGADO => ['label' => 'Pagadas', 'color' => 'success'], Reserva::ESTADO_PAGO_PENDIENTE => ['label' => 'Pendientes', 'color' => 'warning'], Reserva::ESTADO_PAGO_NUEVO => ['label' => 'Nuevas', 'color' => 'info'], Reserva::ESTADO_PAGO_FALLIDO => ['label' => 'Fallidas', 'color' => 'danger'], Reserva::ESTADO_PAGO_CANCELADO => ['label' => 'Canceladas', 'color' => 'secondary'], Reserva::ESTADO_PAGO_REEMBOLSADO => ['label' => 'Reembolsadas', 'color' => 'primary']];
-        $conteos = Reserva::searchAdmin('', $filtros)->selectRaw('estado_pago, COUNT(*) as cantidad')->groupBy('estado_pago')->pluck('cantidad', 'estado_pago');
+        $estados = [
+            Reserva::ESTADO_PAGO_PAGADO => ['label' => 'Pagadas', 'color' => 'success'],
+            Reserva::ESTADO_PAGO_PENDIENTE => ['label' => 'Pendientes', 'color' => 'warning'],
+            Reserva::ESTADO_PAGO_NUEVO => ['label' => 'Nuevas', 'color' => 'info'],
+            Reserva::ESTADO_PAGO_FALLIDO => ['label' => 'Fallidas', 'color' => 'danger'],
+            Reserva::ESTADO_PAGO_CANCELADO => ['label' => 'Canceladas', 'color' => 'secondary'],
+            Reserva::ESTADO_PAGO_REEMBOLSADO => ['label' => 'Reembolsadas', 'color' => 'primary'],
+        ];
+        $conteos = Reserva::statusCountsForDashboard($filtros);
         $totalReservas = (int) $conteos->sum();
         foreach ($estados as $estado => &$datos) {
             $datos['cantidad'] = (int) ($conteos[$estado] ?? 0);
@@ -62,7 +71,16 @@ class Dashboard extends Component
         }
         unset($datos);
 
-        return view('livewire.admin.dashboard', ['metrics' => $metrics, 'ultimasReservas' => $ultimasReservas, 'proximasSalidas' => $proximasSalidas, 'estados' => $estados, 'totalReservas' => $totalReservas, 'desde' => $desde, 'hasta' => $ahora, 'disponibilidadTramos' => ReservaService::consultarDisponibilidadPorTramos($proximasSalidas)]);
+        return view('livewire.admin.dashboard', [
+            'metrics' => $metrics,
+            'ultimasReservas' => $ultimasReservas,
+            'proximasSalidas' => $proximasSalidas,
+            'estados' => $estados,
+            'totalReservas' => $totalReservas,
+            'desde' => $desde,
+            'hasta' => $ahora,
+            'disponibilidadTramos' => ReservaService::consultarDisponibilidadPorTramos($proximasSalidas),
+        ]);
     }
 
     public function boot(): void

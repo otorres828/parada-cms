@@ -4,9 +4,11 @@ namespace App\Models;
 
 use App\Traits\TraitGeneral;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Support\Collection as SupportCollection;
 
 class Reserva extends ModelHelper
 {
@@ -178,6 +180,31 @@ class Reserva extends ModelHelper
                 'cupon.configuracionCupon',
             ])
             ->findOrFail($reservaId);
+    }
+
+    public static function dashboardSummary(array $filters): self
+    {
+        return self::searchAdmin('', $filters)
+            ->selectRaw('COUNT(*) as cantidad, COALESCE(SUM(monto_total), 0) as ventas, COALESCE(SUM(tasa_servicio), 0) as tasas')
+            ->first();
+    }
+
+    public static function latestForDashboard(array $filters, int $limit = 6): Collection
+    {
+        return self::searchAdmin('', $filters)
+            ->withCount('pasajes')
+            ->orderByDesc('fecha_compra')
+            ->orderByDesc('id')
+            ->limit($limit)
+            ->get();
+    }
+
+    public static function statusCountsForDashboard(array $filters): SupportCollection
+    {
+        return self::searchAdmin('', $filters)
+            ->selectRaw('estado_pago, COUNT(*) as cantidad')
+            ->groupBy('estado_pago')
+            ->pluck('cantidad', 'estado_pago');
     }
 
     public function pago(): HasOne

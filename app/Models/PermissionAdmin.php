@@ -37,7 +37,7 @@ class PermissionAdmin extends ModelHelper
 
         if ($search !== '') {
             $query->where(function ($query) use ($search) {
-                return $query->where('name', 'like', '%' . $search . '%')->orWhere('url', 'like', '%' . $search . '%');
+                return $query->where('name', 'like', '%'.$search.'%')->orWhere('url', 'like', '%'.$search.'%');
             });
         }
 

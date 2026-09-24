@@ -38,9 +38,9 @@ class SalesReport extends Component
     public function render()
     {
         return view('livewire.admin.reportes.sales-report', [
-            'rows' => $this->query()->paginate($this->per_page), 
-            'columns' => $this->columns(), 
-            'report' => 'sales'
+            'rows' => $this->query()->paginate($this->per_page),
+            'columns' => $this->columns(),
+            'report' => 'sales',
         ]);
     }
 

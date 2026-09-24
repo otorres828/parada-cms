@@ -38,9 +38,9 @@ class CompaniesReport extends Component
     public function render()
     {
         return view('livewire.admin.reportes.companies-report', [
-            'rows' => $this->query()->paginate($this->per_page), 
-            'columns' => $this->columns(), 
-            'report' => 'companies'
+            'rows' => $this->query()->paginate($this->per_page),
+            'columns' => $this->columns(),
+            'report' => 'companies',
         ]);
     }
 
