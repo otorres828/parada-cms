@@ -107,10 +107,8 @@
 
             <h4 class="h6">Cupones generados: {{ $configuracionCupon->cupones()->count() }}</h4>
 
-            @if (!$configuracionCupon->cupones()->exists() && $canEdit)
-                <button class="btn btn-primary" type="button" @click="generateCoupons"
-                    wire:loading.attr="disabled">Generar
-                    cupones</button>
+            @if ($configuracionCupon->tipo_cupon === \App\Models\ConfiguracionCupon::TIPO_PERSONALIZADO)
+                <p class="text-muted small">Las instancias de este código se crean cuando un cliente lo aplica.</p>
             @endif
 
             <x-list.actions>
@@ -123,13 +121,21 @@
 
                 <x-slot:group>
 
-                    <select class="form-select" wire:model.live="status" aria-label="Estado del cupón">
+                    <div class="row justify-content-end">
 
-                        <option value="">Todos</option>
-                        <option value="0">Disponible</option>
-                        <option value="1">Redimido</option>
+                        <div class="col-12 col-md-5 col-lg-4">
 
-                    </select>
+                            <select class="form-select" wire:model.live="status" aria-label="Estado del cupón">
+
+                                <option value="">Todos</option>
+                                <option value="0">Disponible</option>
+                                <option value="1">Redimido</option>
+
+                            </select>
+
+                        </div>
+
+                    </div>
 
                 </x-slot:group>
 
@@ -214,16 +220,6 @@
                 if (savedMessage) this.$nextTick(() => Livewire.dispatch('successEventList', {
                     message: savedMessage
                 }));
-            },
-            async generateCoupons() {
-                const result = await Swal.fire({
-                    title: '¿Generar los cupones de esta campaña?',
-                    icon: 'question',
-                    showCancelButton: true,
-                    confirmButtonText: 'Generar',
-                    cancelButtonText: 'Cancelar',
-                });
-                if (result.isConfirmed) await $wire.call('generateCoupons');
             },
         }));
     </script>

@@ -2,7 +2,6 @@
 
 namespace App\Services;
 
-use App\Models\ConfiguracionCupon;
 use App\Models\Cupon;
 use App\Models\PagoReserva;
 use App\Models\Programacion;
@@ -123,6 +122,10 @@ class ReservaService
             }
 
             if ($asignaciones->isEmpty()) {
+                if ($reserva->cupon_id) {
+                    app(CuponService::class)->cancelarYLiberarCupon($reserva);
+                    $reserva->refresh();
+                }
                 $tasa = TasaServicio::paraPrecio($tarifa->precio)->calcular($tarifa->precio);
                 $reserva->update([
                     'cupon_id' => null,
@@ -137,7 +140,7 @@ class ReservaService
 
             if ($cambiaLista && $codigoCupon !== null) {
                 // Reparte nuevamente el descuento entre los pasajeros actuales dentro de la misma transacción.
-                $reserva->update(['cupon_id' => null]);
+                app(CuponService::class)->cancelarYLiberarCupon($reserva);
                 self::aplicarCupon($cliente, $reserva->id, $codigoCupon);
             }
 
@@ -145,84 +148,18 @@ class ReservaService
         });
     }
 
-    // 3. Aplica el descuento una vez a la reserva o individualmente a cada pasaje, según la campaña.
+    // 3. Retiene el cupón y aplica el descuento a la reserva vigente.
     public static function aplicarCupon(User $cliente, int $reservaId, ?string $codigo): Reserva
     {
         return self::conReserva($cliente, $reservaId, function ($reserva) use ($codigo) {
             self::validarEditable($reserva);
             self::validarPasajeros($reserva);
-            $cupon = null;
-            $descuento = '0.00';
-            $pasajes = $reserva->pasajes()->orderBy('id')->get();
-            $base = self::sumar($pasajes, 'precio_base');
 
-            if ($codigo !== null && trim($codigo) !== '') {
-                $cupon = Cupon::where('codigo', trim($codigo))->lockForUpdate()->first();
-                self::exigir($cupon !== null, 'cupon', 'El cupón no existe.');
-                $campana = self::validarCupon($cupon, $reserva);
-                if ($reserva->cupon_id === $cupon->id) {
-                    return self::detalle($reserva);
-                }
-                self::exigir(bccomp($campana->monto_descuento, '0', 2) >= 0, 'cupon', 'El descuento es inválido.');
-                if ($campana->tipo_descuento === 'porcentaje') {
-                    self::exigir(bccomp($campana->monto_descuento, '100', 2) <= 0, 'cupon', 'El porcentaje es inválido.');
-                } else {
-                    self::exigir($campana->tipo_descuento === 'monto_fijo', 'cupon', 'El tipo de descuento es inválido.');
-                }
-
-                self::exigir(in_array($campana->aplica_en, [ConfiguracionCupon::APLICA_EN_RESERVA, ConfiguracionCupon::APLICA_EN_PASAJES], true), 'cupon', 'La aplicación del cupón es inválida.');
-
-                if ($campana->aplica_en === ConfiguracionCupon::APLICA_EN_RESERVA) {
-                    $descuento = $campana->tipo_descuento === 'porcentaje'
-                        ? bcadd(bcdiv(bcmul($base, $campana->monto_descuento, 4), '100', 6), '0.005', 2)
-                        : $campana->monto_descuento;
-                    $descuento = bccomp($descuento, $base, 2) > 0 ? $base : $descuento;
-                }
-            } elseif ($reserva->cupon_id === null) {
-                return self::detalle($reserva);
+            if ($codigo === null || trim($codigo) === '') {
+                return app(CuponService::class)->removerCupon($reserva);
             }
 
-            $restante = $descuento;
-            $descuentoAplicado = '0.00';
-            $ultimoIndice = $pasajes->count() - 1;
-
-            foreach ($pasajes as $indice => $pasaje) {
-                if (! $cupon) {
-                    $parte = '0.00';
-                } elseif ($campana->aplica_en === ConfiguracionCupon::APLICA_EN_PASAJES) {
-                    $parte = $campana->tipo_descuento === 'porcentaje'
-                        ? bcadd(bcdiv(bcmul($pasaje->precio_base, $campana->monto_descuento, 4), '100', 6), '0.005', 2)
-                        : $campana->monto_descuento;
-                    $parte = bccomp($parte, $pasaje->precio_base, 2) > 0 ? $pasaje->precio_base : $parte;
-                } elseif ($indice === $ultimoIndice) {
-                    $parte = $restante;
-                } else {
-                    $parte = bccomp($base, '0', 2) > 0
-                        ? bcdiv(bcmul($descuento, $pasaje->precio_base, 4), $base, 2)
-                        : '0.00';
-                }
-
-                $pasaje->fill([
-                    'descuento' => $parte,
-                    'subtotal' => bcsub($pasaje->precio_base, $parte, 2),
-                    'tasa_servicio' => '0.00',
-                    'total' => bcsub($pasaje->precio_base, $parte, 2),
-                    'servicio_json' => null,
-                ])->save();
-                $descuentoAplicado = bcadd($descuentoAplicado, $parte, 2);
-                if ($cupon && $campana->aplica_en === ConfiguracionCupon::APLICA_EN_RESERVA) {
-                    $restante = bcsub($restante, $parte, 2);
-                }
-            }
-            $reserva->update([
-                'cupon_id' => $cupon?->id,
-                'monto_pasajes' => $base,
-                'descuento_aplicado' => $descuentoAplicado,
-                'tasa_servicio' => '0.00',
-                'monto_total' => bcsub($base, $descuentoAplicado, 2),
-            ]);
-
-            return self::detalle($reserva);
+            return self::detalle(app(CuponService::class)->aplicarCupon($reserva, $codigo));
         });
     }
 
@@ -242,7 +179,7 @@ class ReservaService
     public static function pasarAPendiente(User $cliente, int $reservaId, int $metodo, string $referenciaPago, string $fechaPago, ?string $comprobante = null): Reserva
     {
         Validator::make(compact('metodo', 'referenciaPago', 'fechaPago'), [
-            'metodo' => 'required|integer|in:' . Reserva::METODO_TRANSFERENCIA,
+            'metodo' => 'required|integer|in:'.Reserva::METODO_TRANSFERENCIA,
             'referenciaPago' => 'required|string|max:255|unique:pagos_reservas,referencia_pago',
             'fechaPago' => 'required|date|before_or_equal:now',
         ])->validate();
@@ -290,11 +227,7 @@ class ReservaService
             self::validarVigente($reserva);
             self::exigir($reserva->estado_pago === Reserva::ESTADO_PAGO_PENDIENTE, 'reserva', 'La reserva no tiene un pago pendiente.');
             self::validarPasajeros($reserva);
-            if ($reserva->cupon_id) {
-                $cupon = Cupon::whereKey($reserva->cupon_id)->lockForUpdate()->firstOrFail();
-                self::exigir(! $cupon->redimido, 'cupon', 'El cupón ya fue redimido.');
-                $cupon->update(['redimido' => true, 'usuario_id' => $reserva->usuario_id, 'fecha_redencion' => now()]);
-            }
+            self::validarCuponReserva($reserva);
             $reserva->update(['estado_pago' => Reserva::ESTADO_PAGO_PAGADO]);
 
             return self::detalle($reserva);
@@ -306,8 +239,9 @@ class ReservaService
         return self::conReserva($cliente, $reservaId, function ($reserva) {
             self::exigir(in_array($reserva->estado_pago, [Reserva::ESTADO_PAGO_NUEVO, Reserva::ESTADO_PAGO_CANCELADO], true), 'reserva', 'Un pago pendiente debe resolverse antes de cancelar la reserva.');
             $reserva->update(['estado_pago' => Reserva::ESTADO_PAGO_CANCELADO]);
+            app(CuponService::class)->cancelarYLiberarCupon($reserva);
 
-            return self::detalle($reserva);
+            return self::detalle($reserva->refresh());
         });
     }
 
@@ -414,32 +348,7 @@ class ReservaService
 
     private static function validarCuponReserva(Reserva $reserva): void
     {
-        if ($reserva->cupon_id) {
-            self::validarCupon(Cupon::whereKey($reserva->cupon_id)->lockForUpdate()->firstOrFail(), $reserva);
-        }
-    }
-
-    private static function validarCupon(Cupon $cupon, Reserva $reserva): ConfiguracionCupon
-    {
-        $campana = $cupon->configuracionCupon;
-        self::exigir(! $cupon->redimido && ($cupon->usuario_id === null || (int) $cupon->usuario_id === (int) $reserva->usuario_id), 'cupon', 'El cupón no está disponible para este cliente.');
-        self::exigir($campana && $campana->estatus === 1 && $campana->fecha_inicio->lte(now()) && $campana->fecha_fin->gte(now()), 'cupon', 'La campaña no está vigente.');
-        self::exigir($campana->empresa_id === null || (int) $campana->empresa_id === (int) $reserva->programacion->viaje->empresa_id, 'cupon', 'El cupón corresponde a otra empresa.');
-        if ($campana->modalidad === ConfiguracionCupon::MODALIDAD_PRIMERA_COMPRA) {
-            $tieneCompra = Reserva::where('usuario_id', $reserva->usuario_id)
-                ->whereKeyNot($reserva->id)
-                ->whereIn('estado_pago', [Reserva::ESTADO_PAGO_PAGADO, Reserva::ESTADO_PAGO_REEMBOLSADO])
-                ->exists();
-            self::exigir(! $tieneCompra, 'cupon', 'Este cupón solo aplica a la primera compra.');
-        }
-        if ($campana->modalidad === ConfiguracionCupon::MODALIDAD_USUARIO_NUEVO) {
-            $creado = $reserva->usuario()->value('created_at');
-            self::exigir($creado !== null && Carbon::parse($creado)->gte($campana->fecha_inicio), 'cupon', 'Este cupón solo aplica a usuarios nuevos de la campaña.');
-        }
-        $ocupado = self::reservasQueBloquean()->where('cupon_id', $cupon->id)->whereKeyNot($reserva->id)->lockForUpdate()->first(['id']) !== null;
-        self::exigir(! $ocupado, 'cupon', 'El cupón ya está asociado a otra compra vigente.');
-
-        return $campana;
+        app(CuponService::class)->validarCuponAplicado($reserva);
     }
 
     private static function reservasQueBloquean(): Builder

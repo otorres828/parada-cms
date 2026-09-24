@@ -61,6 +61,12 @@
                                 {{ $pasaje->reserva?->codigo_referencia ?? '—' }}
                             </dd>
 
+                            <dt class="col-sm-4">Cupón aplicado</dt>
+
+                            <dd class="col-sm-8">
+                                {{ $pasaje->reserva?->cupon?->codigo ?? 'Sin cupón' }}
+                            </dd>
+
                             <dt class="col-sm-4">Fecha de reserva</dt>
 
                             <dd class="col-sm-8">

@@ -6,6 +6,7 @@ use App\Models\Empresa;
 use App\Models\PagoReserva;
 use App\Models\Reembolso;
 use App\Models\Reserva;
+use App\Services\CuponService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
@@ -76,6 +77,7 @@ class Finance
                     self::fail('La reserva ya no admite reembolso.');
                 }
                 $reserva->update(['estado_pago' => Reserva::ESTADO_PAGO_REEMBOLSADO]);
+                app(CuponService::class)->cancelarYLiberarCupon($reserva);
                 $record->referencia = $reference;
                 $record->comprobante = $proof;
             }
@@ -84,7 +86,7 @@ class Finance
             $record->revisado_por = auth('admin')->id();
             $record->fecha_resolucion = now();
             $record->save();
-            Audit::record($module . '.' . $decision, $record, ['comentario' => $comment]);
+            Audit::record($module.'.'.$decision, $record, ['comentario' => $comment]);
         });
     }
 }

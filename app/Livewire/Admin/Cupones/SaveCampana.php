@@ -3,6 +3,7 @@
 namespace App\Livewire\Admin\Cupones;
 
 use App\Models\ConfiguracionCupon;
+use App\Models\Cupon;
 use App\Models\Empresa;
 use App\Services\Admin\Access;
 use App\Services\Admin\Audit;
@@ -76,6 +77,7 @@ class SaveCampana extends Component
         $data = $this->validateForm();
         $configuracionCupon = DB::transaction(function () use ($data) {
             Access::authorize('cupones', $this->configuracion_cupon_id ? 'edit' : 'add');
+            $esNuevo = $this->configuracion_cupon_id === null;
             $configuracionCupon = $this->configuracion_cupon_id ? $this->findConfiguracionCupon() : new ConfiguracionCupon;
             if ($this->configuracion_cupon_id && $configuracionCupon->cupones()->exists()) {
                 foreach (['empresa_id', 'codigo_personalizado', 'cantidad_generar', 'tipo_cupon', 'tipo_descuento', 'aplica_en', 'monto_descuento', 'fecha_inicio'] as $immutable) {
@@ -119,6 +121,15 @@ class SaveCampana extends Component
                 $configuracionCupon->estatus = $data['estatus'];
             }
             $configuracionCupon->save();
+            if ($esNuevo && $configuracionCupon->tipo_cupon === ConfiguracionCupon::TIPO_RANDOM) {
+                for ($i = 0; $i < $configuracionCupon->cantidad_generar; $i++) {
+                    Cupon::create([
+                        'configuracion_cupon_id' => $configuracionCupon->id,
+                        'codigo' => 'CUP-'.strtoupper(bin2hex(random_bytes(8))),
+                        'redimido' => false,
+                    ]);
+                }
+            }
             Audit::record($this->configuracion_cupon_id ? 'registro.actualizado' : 'registro.creado', $configuracionCupon, $data);
 
             return $configuracionCupon;
@@ -147,17 +158,13 @@ class SaveCampana extends Component
 
     protected function validateForm(): array
     {
-        $cuponId = $this->configuracion_cupon_id
-            ? $this->configuracionCupon->cupones()->value('id')
-            : null;
-
         $validated = $this->validate([
             'empresa_id' => ['nullable', 'integer', 'exists:empresas,id'],
             'nombre_campana' => ['required', 'string', 'max:255'],
             'tipo_cupon' => ['required', 'integer', 'in:1,2'],
             'modalidad' => ['required', 'in:GENERAL,PRIMERA_COMPRA,USUARIO_NUEVO'],
             'aplica_en' => ['required', 'in:reserva,pasajes'],
-            'codigo_personalizado' => ['required_if:tipo_cupon,2', 'nullable', 'string', 'max:100', 'alpha_dash', Rule::unique('cupones', 'codigo')->ignore($cuponId)],
+            'codigo_personalizado' => ['required_if:tipo_cupon,2', 'nullable', 'string', 'max:100', 'alpha_dash', Rule::unique('configuracion_cupones', 'codigo_personalizado')->ignore($this->configuracion_cupon_id)],
             'cantidad_generar' => ['required', 'integer', 'min:1', 'max:1000'],
             'tipo_descuento' => ['required', 'in:porcentaje,monto_fijo'],
             'monto_descuento' => ['required', 'decimal:0,2', 'min:0.01', 'max:999999.99'],
@@ -176,7 +183,6 @@ class SaveCampana extends Component
         }
 
         if ((int) $validated['tipo_cupon'] === ConfiguracionCupon::TIPO_PERSONALIZADO) {
-            $validated['cantidad_generar'] = 1;
             $validated['codigo_personalizado'] = strtoupper($validated['codigo_personalizado']);
         } else {
             $validated['codigo_personalizado'] = null;

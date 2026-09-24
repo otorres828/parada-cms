@@ -22,11 +22,12 @@ return new class extends Migration
             $table->dateTime('fecha_compra');
             $table->dateTime('fecha_expiracion')->nullable();
             $table->unsignedTinyInteger('metodo_pago')->nullable();
+            $table->json('comentarios_auditoria')->nullable();
             $table->index(['fecha_compra', 'estado_pago']);
             $table->timestamps();
             $table->foreign('usuario_id')->references('id')->on('users')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('programacion_id')->references('id')->on('programaciones')->onUpdate('cascade')->onDelete('cascade');
-            $table->foreign('cupon_id')->references('id')->on('cupones')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('cupon_id')->references('id')->on('cupones')->onUpdate('cascade')->onDelete('set null');
         });
     }
 

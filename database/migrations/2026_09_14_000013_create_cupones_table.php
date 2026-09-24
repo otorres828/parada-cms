@@ -15,6 +15,8 @@ return new class extends Migration
             $table->string('codigo');
             $table->boolean('redimido')->default(false);
             $table->dateTime('fecha_redencion')->nullable();
+            $table->index('codigo');
+            $table->index(['configuracion_cupon_id', 'redimido']);
             $table->timestamps();
             $table->foreign('configuracion_cupon_id')->references('id')->on('configuracion_cupones')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('usuario_id')->references('id')->on('users')->onUpdate('cascade')->onDelete('cascade');
