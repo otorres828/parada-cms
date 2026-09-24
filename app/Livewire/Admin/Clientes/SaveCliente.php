@@ -78,7 +78,19 @@ class SaveCliente extends Component
 
     protected function validateForm(): array
     {
-        $validated = $this->validate(['name' => ['required', 'string', 'max:255'], 'lastname' => ['required', 'string', 'max:255'], 'email' => ['required', 'email', 'max:255', Rule::unique('users', 'email')->ignore($this->user_id)], 'telefono' => ['nullable', 'string', 'max:100'], 'status' => ['required', 'in:1,2']], [], ['name' => 'Nombre', 'lastname' => 'Apellido', 'email' => 'Correo', 'telefono' => 'Teléfono', 'status' => 'Estado']);
+        $validated = $this->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'lastname' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'email', 'max:255', Rule::unique('users', 'email')->ignore($this->user_id)],
+            'telefono' => ['nullable', 'string', 'max:100'],
+            'status' => ['required', 'in:1,2'],
+        ], [], [
+            'name' => 'Nombre',
+            'lastname' => 'Apellido',
+            'email' => 'Correo',
+            'telefono' => 'Teléfono',
+            'status' => 'Estado',
+        ]);
         foreach ($validated as $key => &$value) {
             if ($value === '') {
                 $value = null;

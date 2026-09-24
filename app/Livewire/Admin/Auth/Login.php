@@ -31,7 +31,10 @@ class Login extends Component
 
     public function submit($recaptchaToken = null)
     {
-        $this->validate(['username' => 'required|string|max:100', 'password' => 'required|string|max:255']);
+        $this->validate([
+            'username' => 'required|string|max:100',
+            'password' => 'required|string|max:255',
+        ]);
         $key = 'admin-login:'.hash('sha256', mb_strtolower($this->username).'|'.request()->ip());
         if (RateLimiter::tooManyAttempts($key, 5)) {
             $this->addError('username', 'Demasiados intentos. Vuelve a intentarlo en un minuto.');

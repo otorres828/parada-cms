@@ -32,7 +32,7 @@ class PermissionEmpresaUser extends Component
         $this->empresa_id = $empresa_id;
         Empresa::findOrFail($empresa_id);
         $this->usuario_empresa_id = $usuario_empresa_id;
-        $this->permissions = PermissionEmpresa::searchAdmin('', ['status' => 1])->with('section')->whereHas('section', fn ($q) => $q->where('status', 1)->whereHas('group', fn ($g) => $g->where('status', 1)))->get()->groupBy('section.name');
+        $this->permissions = PermissionEmpresa::activeGroupedBySection();
         $usuarioEmpresa = $this->findUsuarioEmpresa();
         $this->selectedPermissions = $usuarioEmpresa->permisos()->pluck('permissions_empresa.id')->map(fn ($id) => (string) $id)->all();
     }
@@ -45,10 +45,13 @@ class PermissionEmpresaUser extends Component
     public function savePermissions(): void
     {
         Access::authorize('empresas.users', 'permissions');
-        $this->validate(['selectedPermissions' => 'array', 'selectedPermissions.*' => 'integer|distinct|exists:permissions_empresa,id']);
+        $this->validate([
+            'selectedPermissions' => 'array',
+            'selectedPermissions.*' => 'integer|distinct|exists:permissions_empresa,id',
+        ]);
         DB::transaction(function () {
             $usuarioEmpresa = $this->findUsuarioEmpresa();
-            $ids = PermissionEmpresa::whereIn('id', $this->selectedPermissions)->where('status', 1)->whereHas('section', fn ($q) => $q->where('status', 1)->whereHas('group', fn ($g) => $g->where('status', 1)))->pluck('id')->all();
+            $ids = PermissionEmpresa::validAssignableIds($this->selectedPermissions);
             if (count($ids) !== count($this->selectedPermissions)) {
                 throw ValidationException::withMessages(['selectedPermissions' => 'Hay permisos inactivos. Actualiza la selección.']);
             }

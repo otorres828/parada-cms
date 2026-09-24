@@ -90,7 +90,21 @@ class SaveTerminal extends Component
 
     protected function validateForm(): array
     {
-        $validated = $this->validate(['estado_id' => ['required', 'integer', 'exists:estados,id'], 'nombre' => ['required', 'string', 'max:255'], 'direccion' => ['required', 'string', 'max:2000'], 'latitud' => ['required', 'numeric', 'between:-90,90'], 'longitud' => ['required', 'numeric', 'between:-180,180'], 'estatus' => ['required', 'in:0,1']], [], ['estado_id' => 'Estado', 'nombre' => 'Nombre', 'direccion' => 'Dirección', 'latitud' => 'Latitud', 'longitud' => 'Longitud', 'estatus' => 'Estado']);
+        $validated = $this->validate([
+            'estado_id' => ['required', 'integer', 'exists:estados,id'],
+            'nombre' => ['required', 'string', 'max:255'],
+            'direccion' => ['required', 'string', 'max:2000'],
+            'latitud' => ['required', 'numeric', 'between:-90,90'],
+            'longitud' => ['required', 'numeric', 'between:-180,180'],
+            'estatus' => ['required', 'in:0,1'],
+        ], [], [
+            'estado_id' => 'Estado',
+            'nombre' => 'Nombre',
+            'direccion' => 'Dirección',
+            'latitud' => 'Latitud',
+            'longitud' => 'Longitud',
+            'estatus' => 'Estado',
+        ]);
         foreach ($validated as $key => &$value) {
             if ($value === '') {
                 $value = null;

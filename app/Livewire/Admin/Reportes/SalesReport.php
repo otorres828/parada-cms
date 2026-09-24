@@ -56,17 +56,16 @@ class SalesReport extends Component
 
     protected function query()
     {
-        $filters = [
-            'date_from' => $this->date_from, 
-            'date_to' => $this->date_to
-        ];
-
-        return Reserva::searchAdmin('', $filters + ['estado_pago' => Reserva::ESTADO_PAGO_PAGADO])->selectRaw('DATE(fecha_compra) as fecha, COUNT(*) as cantidad, SUM(monto_total) as total, SUM(tasa_servicio) as tasas')->groupByRaw('DATE(fecha_compra)')->orderByDesc('fecha');
+        return Reserva::salesReport($this->date_from, $this->date_to);
     }
 
     public function export()
     {
-        $this->validate(['date_from' => 'required|date_format:Y-m-d', 'date_to' => 'required|date_format:Y-m-d|after_or_equal:date_from', 'per_page' => 'integer|in:10,25,50,100']);
+        $this->validate([
+            'date_from' => 'required|date_format:Y-m-d',
+            'date_to' => 'required|date_format:Y-m-d|after_or_equal:date_from',
+            'per_page' => 'integer|in:10,25,50,100',
+        ]);
         $query = $this->query();
         $columns = $this->columns();
 

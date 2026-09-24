@@ -145,6 +145,41 @@ class Reserva extends ModelHelper
             ->orderByDesc('fecha_compra');
     }
 
+    public static function salesReport(string $dateFrom, string $dateTo): Builder
+    {
+        return self::query()
+            ->where('estado_pago', self::ESTADO_PAGO_PAGADO)
+            ->whereDate('fecha_compra', '>=', self::date($dateFrom))
+            ->whereDate('fecha_compra', '<=', self::date($dateTo))
+            ->selectRaw('DATE(fecha_compra) as fecha, COUNT(*) as cantidad, SUM(monto_total) as total, SUM(tasa_servicio) as tasas')
+            ->groupByRaw('DATE(fecha_compra)')
+            ->orderByDesc('fecha');
+    }
+
+    public static function companiesReport(string $dateFrom, string $dateTo): Builder
+    {
+        return self::query()
+            ->where('reservas.estado_pago', self::ESTADO_PAGO_PAGADO)
+            ->whereDate('reservas.fecha_compra', '>=', self::date($dateFrom))
+            ->whereDate('reservas.fecha_compra', '<=', self::date($dateTo))
+            ->join('programaciones', 'programaciones.id', '=', 'reservas.programacion_id')
+            ->join('viajes', 'viajes.id', '=', 'programaciones.viaje_id')
+            ->join('empresas', 'empresas.id', '=', 'viajes.empresa_id')
+            ->selectRaw('empresas.id, empresas.nombre, COUNT(*) as cantidad, SUM(reservas.monto_total) as total, SUM(reservas.tasa_servicio) as tasas')
+            ->groupBy('empresas.id', 'empresas.nombre')
+            ->orderByDesc('total');
+    }
+
+    public static function findAdminDetail(int $reservaId): self
+    {
+        return self::searchAdmin()
+            ->with([
+                'pasajes.reserva',
+                'cupon.configuracionCupon',
+            ])
+            ->findOrFail($reservaId);
+    }
+
     public function pago(): HasOne
     {
         return $this->hasOne(PagoReserva::class, 'reserva_id');

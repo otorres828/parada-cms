@@ -166,7 +166,20 @@ class SaveCampana extends Component
             'fecha_inicio' => ['required', 'date'],
             'fecha_fin' => ['required', 'date', 'after:fecha_inicio'],
             'estatus' => ['required', 'in:0,1,2'],
-        ], [], ['empresa_id' => 'Empresa', 'nombre_campana' => 'Nombre', 'tipo_cupon' => 'Tipo de cupón', 'modalidad' => 'Modalidad', 'aplica_en' => 'Aplicación del descuento', 'codigo_personalizado' => 'Código personalizado', 'cantidad_generar' => 'Cantidad de cupones', 'tipo_descuento' => 'Descuento', 'monto_descuento' => 'Valor del descuento', 'fecha_inicio' => 'Inicio', 'fecha_fin' => 'Fin', 'estatus' => 'Estado']);
+        ], [], [
+            'empresa_id' => 'Empresa',
+            'nombre_campana' => 'Nombre',
+            'tipo_cupon' => 'Tipo de cupón',
+            'modalidad' => 'Modalidad',
+            'aplica_en' => 'Aplicación del descuento',
+            'codigo_personalizado' => 'Código personalizado',
+            'cantidad_generar' => 'Cantidad de cupones',
+            'tipo_descuento' => 'Descuento',
+            'monto_descuento' => 'Valor del descuento',
+            'fecha_inicio' => 'Inicio',
+            'fecha_fin' => 'Fin',
+            'estatus' => 'Estado',
+        ]);
         foreach ($validated as $key => &$value) {
             if ($value === '') {
                 $value = null;

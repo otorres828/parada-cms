@@ -39,7 +39,7 @@ class SaveEmpresaUser extends Component
         $this->usuario_empresa_id = $usuario_empresa_id;
         Empresa::findOrFail($empresa_id);
         if ($usuario_empresa_id) {
-            $this->editar(UsuarioEmpresa::searchAdmin('', ['empresa_id' => $empresa_id])->findOrFail($usuario_empresa_id));
+            $this->editar(UsuarioEmpresa::findAdminByCompany($usuario_empresa_id, $empresa_id));
         }
     }
 
@@ -51,10 +51,18 @@ class SaveEmpresaUser extends Component
     public function save()
     {
         Access::authorize('empresas.users', $this->usuario_empresa_id ? 'edit' : 'add');
-        $this->validate(['nombre' => 'required|string|max:255', 'email' => ['required', 'email', Rule::unique('usuarios_empresa', 'email')->ignore($this->usuario_empresa_id)], 'password' => [$this->usuario_empresa_id ? 'nullable' : 'required', 'string', 'min:10', 'max:255'], 'es_admin' => 'required|boolean', 'estatus' => 'required|boolean']);
+        $this->validate([
+            'nombre' => 'required|string|max:255',
+            'email' => ['required', 'email', Rule::unique('usuarios_empresa', 'email')->ignore($this->usuario_empresa_id)],
+            'password' => [$this->usuario_empresa_id ? 'nullable' : 'required', 'string', 'min:10', 'max:255'],
+            'es_admin' => 'required|boolean',
+            'estatus' => 'required|boolean',
+        ]);
         DB::transaction(function () {
             Empresa::findOrFail($this->empresa_id);
-            $usuario = $this->usuario_empresa_id ? UsuarioEmpresa::searchAdmin('', ['empresa_id' => $this->empresa_id])->lockForUpdate()->findOrFail($this->usuario_empresa_id) : new UsuarioEmpresa;
+            $usuario = $this->usuario_empresa_id
+                ? UsuarioEmpresa::findAdminByCompany($this->usuario_empresa_id, $this->empresa_id, true)
+                : new UsuarioEmpresa;
             $usuario->empresa_id = $this->empresa_id;
             $usuario->nombre = $this->nombre;
             $usuario->email = $this->email;

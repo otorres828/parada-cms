@@ -82,4 +82,15 @@ class UsuarioEmpresa extends ModelHelper implements Authenticatable, Authorizabl
 
         return $query;
     }
+
+    public static function findAdminByCompany(int $userId, int $companyId, bool $lockForUpdate = false): self
+    {
+        $query = self::query()->where('empresa_id', $companyId);
+
+        if ($lockForUpdate) {
+            $query->lockForUpdate();
+        }
+
+        return $query->findOrFail($userId);
+    }
 }

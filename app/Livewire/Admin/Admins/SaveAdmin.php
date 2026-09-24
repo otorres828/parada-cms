@@ -42,7 +42,7 @@ class SaveAdmin extends Component
     public function mount(?int $admin_id = null): void
     {
         $this->admin_id = $admin_id;
-        $this->groups = GroupAdmin::where('status', 1)->with(['sections' => fn ($q) => $q->where('status', 1)->where('url', '!=', 'admins'), 'sections.permissions' => fn ($q) => $q->where('status', 1)])->orderBy('id')->get();
+        $this->groups = GroupAdmin::activeForAdminAssignment();
         if ($admin_id) {
             $this->editar(Admin::searchAdmin()->findOrFail($admin_id));
         }
@@ -56,7 +56,16 @@ class SaveAdmin extends Component
     public function save()
     {
         Access::authorize('admins', $this->admin_id ? 'edit' : 'add');
-        $this->validate(['name' => 'required|string|max:255', 'username' => ['required', 'string', 'min:3', 'max:100', Rule::unique('admins', 'username')->ignore($this->admin_id)], 'email' => ['required', 'email', 'max:255', Rule::unique('admins', 'email')->ignore($this->admin_id)], 'password' => [$this->admin_id ? 'nullable' : 'required', 'string', 'min:10', 'max:255'], 'status' => 'required|in:1,2', 'is_superadmin' => 'boolean', 'selectedPermissions' => 'array', 'selectedPermissions.*' => 'integer|distinct|exists:permissions_admin,id']);
+        $this->validate([
+            'name' => 'required|string|max:255',
+            'username' => ['required', 'string', 'min:3', 'max:100', Rule::unique('admins', 'username')->ignore($this->admin_id)],
+            'email' => ['required', 'email', 'max:255', Rule::unique('admins', 'email')->ignore($this->admin_id)],
+            'password' => [$this->admin_id ? 'nullable' : 'required', 'string', 'min:10', 'max:255'],
+            'status' => 'required|in:1,2',
+            'is_superadmin' => 'boolean',
+            'selectedPermissions' => 'array',
+            'selectedPermissions.*' => 'integer|distinct|exists:permissions_admin,id',
+        ]);
         DB::transaction(function () {
             Admin::orderBy('id')->lockForUpdate()->get();
             Access::authorize('admins', $this->admin_id ? 'edit' : 'add');
@@ -66,30 +75,40 @@ class SaveAdmin extends Component
                 throw ValidationException::withMessages(['status' => 'No puedes desactivar tu propia cuenta.']);
             }
             $ids = [];
+
             if ($level === Admin::ADMIN) {
-                $ids = PermissionAdmin::query()->whereIn('id', $this->selectedPermissions)->where('status', 1)->whereHas('section', fn ($q) => $q->where('status', 1)->where('url', '!=', 'admins')->whereHas('group', fn ($g) => $g->where('status', 1)))->pluck('id')->all();
+                $ids = PermissionAdmin::validAssignableIds($this->selectedPermissions);
                 if (count($ids) !== count($this->selectedPermissions)) {
                     throw ValidationException::withMessages(['selectedPermissions' => 'Hay permisos inactivos o reservados para el root.']);
                 }
             }
+
             $admin->name = $this->name;
             $admin->username = $this->username;
             $admin->email = $this->email;
             $admin->level = $level;
             $admin->status = $this->status;
+
             if ($this->password !== '') {
                 $admin->password = $this->password;
             }
+
             $admin->save();
+
             if (! Admin::where('level', Admin::ROOT)->where('status', Admin::ACTIVO)->exists()) {
                 throw ValidationException::withMessages(['status' => 'Debe existir al menos un root activo.']);
             }
+
             $admin->permissions()->sync(array_fill_keys($ids, ['status' => 1]));
+
             Audit::record($this->admin_id ? 'administrador.actualizado' : 'administrador.creado', $admin, ['level' => $level, 'permission_ids' => $ids]);
+
         });
+
         session()->flash('admin_success', 'Administrador y permisos guardados correctamente.');
 
         return $this->redirect(route('admin.admins.list'), navigate: true);
+        
     }
 
     protected function editar(Admin $admin): void

@@ -64,7 +64,13 @@ class SaveReembolso extends Component
 
     protected function validateForm(): array
     {
-        $validated = $this->validate(['pago_reserva_id' => ['required', 'integer', 'exists:pagos_reservas,id'], 'motivo' => ['required', 'string', 'min:10', 'max:2000']], [], ['pago_reserva_id' => 'Pago recibido', 'motivo' => 'Motivo del reembolso total']);
+        $validated = $this->validate([
+            'pago_reserva_id' => ['required', 'integer', 'exists:pagos_reservas,id'],
+            'motivo' => ['required', 'string', 'min:10', 'max:2000'],
+        ], [], [
+            'pago_reserva_id' => 'Pago recibido',
+            'motivo' => 'Motivo del reembolso total',
+        ]);
         foreach ($validated as $key => &$value) {
             if ($value === '') {
                 $value = null;

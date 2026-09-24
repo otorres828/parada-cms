@@ -45,7 +45,13 @@ class SaveTasaServicio extends Component
     public function save()
     {
         Access::authorize('tasas-servicio', $this->tasa_servicio_id ? 'edit' : 'add');
-        $data = $this->validate(['tipo_servicio' => 'required|in:1,2', 'monto_minimo' => 'required|decimal:0,2|min:0|max:9999999999.99', 'monto_maximo' => 'nullable|decimal:0,2|gte:monto_minimo|max:9999999999.99', 'cantidad' => 'required|decimal:0,2|min:0|max:'.((int) $this->tipo_servicio === 2 ? '100' : '9999999999.99'), 'estatus' => 'required|in:0,1']);
+        $data = $this->validate([
+            'tipo_servicio' => 'required|in:1,2',
+            'monto_minimo' => 'required|decimal:0,2|min:0|max:9999999999.99',
+            'monto_maximo' => 'nullable|decimal:0,2|gte:monto_minimo|max:9999999999.99',
+            'cantidad' => 'required|decimal:0,2|min:0|max:'.((int) $this->tipo_servicio === 2 ? '100' : '9999999999.99'),
+            'estatus' => 'required|in:0,1',
+        ]);
         $data['monto_maximo'] = $data['monto_maximo'] === '' ? null : $data['monto_maximo'];
         DB::transaction(function () use ($data) {
             GroupAdmin::where('url', 'administracion')->lockForUpdate()->firstOrFail();

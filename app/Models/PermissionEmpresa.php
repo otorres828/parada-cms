@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Support\Collection;
 
 class PermissionEmpresa extends ModelHelper
 {
@@ -51,5 +52,34 @@ class PermissionEmpresa extends ModelHelper
         }
 
         return $query;
+    }
+
+    public static function activeGroupedBySection(): Collection
+    {
+        return self::searchAdmin('', ['status' => 1])
+            ->with('section')
+            ->whereHas('section', function ($query) {
+                $query->where('status', 1)
+                    ->whereHas('group', function ($query) {
+                        $query->where('status', 1);
+                    });
+            })
+            ->get()
+            ->groupBy('section.name');
+    }
+
+    public static function validAssignableIds(array $permissionIds): array
+    {
+        return self::query()
+            ->whereIn('id', $permissionIds)
+            ->where('status', 1)
+            ->whereHas('section', function ($query) {
+                $query->where('status', 1)
+                    ->whereHas('group', function ($query) {
+                        $query->where('status', 1);
+                    });
+            })
+            ->pluck('id')
+            ->all();
     }
 }

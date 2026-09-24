@@ -37,7 +37,11 @@ class CompaniesReport extends Component
 
     public function render()
     {
-        return view('livewire.admin.reportes.companies-report', ['rows' => $this->query()->paginate($this->per_page), 'columns' => $this->columns(), 'report' => 'companies']);
+        return view('livewire.admin.reportes.companies-report', [
+            'rows' => $this->query()->paginate($this->per_page), 
+            'columns' => $this->columns(), 
+            'report' => 'companies'
+        ]);
     }
 
     public function updated(): void
@@ -52,14 +56,16 @@ class CompaniesReport extends Component
 
     protected function query()
     {
-        $filters = ['date_from' => $this->date_from, 'date_to' => $this->date_to];
-
-        return Reserva::searchAdmin('', $filters + ['estado_pago' => Reserva::ESTADO_PAGO_PAGADO])->join('programaciones', 'programaciones.id', '=', 'reservas.programacion_id')->join('viajes', 'viajes.id', '=', 'programaciones.viaje_id')->join('empresas', 'empresas.id', '=', 'viajes.empresa_id')->selectRaw('empresas.id, empresas.nombre, COUNT(*) as cantidad, SUM(reservas.monto_total) as total, SUM(reservas.tasa_servicio) as tasas')->groupBy('empresas.id', 'empresas.nombre')->orderByDesc('total');
+        return Reserva::companiesReport($this->date_from, $this->date_to);
     }
 
     public function export()
     {
-        $this->validate(['date_from' => 'required|date_format:Y-m-d', 'date_to' => 'required|date_format:Y-m-d|after_or_equal:date_from', 'per_page' => 'integer|in:10,25,50,100']);
+        $this->validate([
+            'date_from' => 'required|date_format:Y-m-d',
+            'date_to' => 'required|date_format:Y-m-d|after_or_equal:date_from',
+            'per_page' => 'integer|in:10,25,50,100',
+        ]);
         $query = $this->query();
         $columns = $this->columns();
 

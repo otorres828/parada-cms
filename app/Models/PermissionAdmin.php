@@ -47,4 +47,20 @@ class PermissionAdmin extends ModelHelper
 
         return $query;
     }
+
+    public static function validAssignableIds(array $permissionIds): array
+    {
+        return self::query()
+            ->whereIn('id', $permissionIds)
+            ->where('status', 1)
+            ->whereHas('section', function ($query) {
+                $query->where('status', 1)
+                    ->where('url', '!=', 'admins')
+                    ->whereHas('group', function ($query) {
+                        $query->where('status', 1);
+                    });
+            })
+            ->pluck('id')
+            ->all();
+    }
 }

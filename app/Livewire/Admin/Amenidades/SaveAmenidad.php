@@ -67,7 +67,15 @@ class SaveAmenidad extends Component
 
     protected function validateForm(): array
     {
-        $validated = $this->validate(['nombre' => ['required', 'string', 'max:255'], 'icono' => ['required', 'string', 'max:64', 'regex:/^bi-[a-z0-9-]+$/'], 'estatus' => ['required', 'in:0,1']], [], ['nombre' => 'Nombre', 'icono' => 'Ícono Bootstrap (ej. bi-wifi)', 'estatus' => 'Estado']);
+        $validated = $this->validate([
+            'nombre' => ['required', 'string', 'max:255'],
+            'icono' => ['required', 'string', 'max:64', 'regex:/^bi-[a-z0-9-]+$/'],
+            'estatus' => ['required', 'in:0,1'],
+        ], [], [
+            'nombre' => 'Nombre',
+            'icono' => 'Ícono Bootstrap (ej. bi-wifi)',
+            'estatus' => 'Estado',
+        ]);
         foreach ($validated as $key => &$value) {
             if ($value === '') {
                 $value = null;

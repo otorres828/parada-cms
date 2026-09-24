@@ -45,7 +45,12 @@ class ReviewReembolso extends Component
     public function resolve()
     {
         Access::authorize('reembolsos', 'review');
-        $this->validate(['decision' => 'required|in:aprobado,rechazado,pagado', 'comentario' => 'required|string|min:5|max:2000', 'referencia' => 'required_if:decision,pagado|nullable|string|max:255', 'comprobante' => 'required_if:decision,pagado|nullable|file|mimes:jpg,jpeg,png,pdf|max:5120']);
+        $this->validate([
+            'decision' => 'required|in:aprobado,rechazado,pagado',
+            'comentario' => 'required|string|min:5|max:2000',
+            'referencia' => 'required_if:decision,pagado|nullable|string|max:255',
+            'comprobante' => 'required_if:decision,pagado|nullable|file|mimes:jpg,jpeg,png,pdf|max:5120',
+        ]);
         $path = $this->storeProof();
         try {
             Finance::review('reembolsos', $this->reembolso_id, $this->decision, $this->comentario, $this->referencia ?: null, $path);
