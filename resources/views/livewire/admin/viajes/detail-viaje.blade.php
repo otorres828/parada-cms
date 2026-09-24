@@ -176,38 +176,7 @@
 
                         @if ($tramoPreciosRecientes->isNotEmpty())
                             <div class="table-responsive">
-                                <table class="table table-sm align-middle mb-0">
-                                    <thead>
-                                        <tr>
-                                            <th>Tramo Comercial</th>
-                                            <th class="text-end">Precio Configurado</th>
-                                            <th class="text-center">Tope Asientos</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach ($tramoPreciosRecientes as $tp)
-                                            <tr>
-                                                <td>
-                                                    <span class="fw-semibold">{{ $tp->origenTerminal?->nombre }}</span>
-                                                    <i class="bi bi-arrow-right text-muted mx-1"></i>
-                                                    <span
-                                                        class="fw-semibold">{{ $tp->destinoTerminal?->nombre }}</span>
-                                                </td>
-                                                <td class="text-end text-success fw-bold"> {{ number_format($tp->precio, 2) }}
-                                                </td>
-                                                <td class="text-center">
-                                                    @if ($tp->asientos_maximos_permitidos)
-                                                        <span
-                                                            class="badge text-bg-warning">{{ $tp->asientos_maximos_permitidos }}
-                                                            asientos</span>
-                                                    @else
-                                                        <span class="badge text-bg-secondary">Sin tope (Libre)</span>
-                                                    @endif
-                                                </td>
-                                            </tr>
-                                        @endforeach
-                                    </tbody>
-                                </table>
+                                <x-viajes.tramo-precios-table :tramo-precios="$tramoPreciosRecientes" />
                             </div>
                         @else
                             <div class="text-body-secondary py-3 text-center">
@@ -233,69 +202,7 @@
 
         <div class="table-responsive">
 
-            <table class="table align-middle mb-0">
-
-                <thead>
-
-                    <tr>
-                        <th>Programación</th>
-
-                        <th>Salida</th>
-
-                        <th>Estado</th>
-
-                        <th>Pasajes vendidos</th>
-
-                        <th>Tasas de servicio</th>
-
-                    </tr>
-                </thead>
-
-                <tbody>
-
-                    @forelse($programaciones as $salida)
-                        <tr>
-                            <td>
-
-                                @if ($canViewPassengers)
-                                    <a href="{{ route('admin.programaciones.passengers', $salida->id) }}"
-                                        wire:navigate>#{{ $salida->id }}</a>
-                                @else
-                                    #{{ $salida->id }}
-                                @endif
-
-                            </td>
-
-                            <td>
-                                {{ $salida->fecha_salida->format('d/m/Y') }} {{ substr($salida->hora_salida, 0, 5) }}
-                            </td>
-
-                            <td>
-                                {{ $salida->estatus ? 'Activa' : 'Inactiva' }}
-                            </td>
-
-                            <td>
-                                {{ $salida->pasajes_vendidos }}
-                            </td>
-
-                            <td>
-                                {{ number_format($salida->tasas_servicio_total ?? 0, 2) }}
-                            </td>
-
-                        </tr>
-
-                    @empty
-
-                        <tr>
-                            <td colspan="6" class="text-center py-4">
-                                No hay programaciones registradas.
-                            </td>
-
-                        </tr>
-                    @endforelse
-
-                </tbody>
-            </table>
+            <x-viajes.programaciones-table :programaciones="$programaciones" :can-view-passengers="$canViewPassengers" />
 
         </div>
 
@@ -327,4 +234,5 @@
         }));
     </script>
 @endscript
+
 
