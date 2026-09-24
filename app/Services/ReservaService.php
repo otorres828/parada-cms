@@ -438,11 +438,6 @@ class ReservaService
         ];
     }
 
-    private static function sumar($pasajes, string $campo): string
-    {
-        return $pasajes->reduce(fn ($total, $pasaje) => bcadd($total, $pasaje->$campo, 2), '0.00');
-    }
-
     private static function detalle(Reserva $reserva): Reserva
     {
         return $reserva->load(['pasajes' => fn ($q) => $q->lockForUpdate(), 'pasajes.viajero', 'origenTerminal', 'destinoTerminal']);

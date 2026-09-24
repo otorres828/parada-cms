@@ -5,6 +5,7 @@ namespace App\Livewire\Admin\Viajes;
 use App\Models\Programacion;
 use App\Models\Viaje;
 use App\Services\Admin\Access;
+use App\Traits\Listing;
 use Livewire\WithPagination;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Locked;
@@ -13,6 +14,8 @@ use Livewire\Component;
 #[Layout('layouts.cms')]
 class DetailViaje extends Component
 {
+    use Listing;
+
     #[Locked]
     public ?int $viaje_id = null;
 
@@ -21,8 +24,6 @@ class DetailViaje extends Component
     public Viaje $viaje;
 
     use WithPagination;
-
-    public int $per_page = 10;
 
     protected string $paginationTheme = 'bootstrap';
 
@@ -48,8 +49,13 @@ class DetailViaje extends Component
 
     public function render()
     {
+
+        $query = Programacion::searchDetailViajes($this->viaje_id);
+
+        $programaciones = $query->paginate($this->per_page);
+
         return view('livewire.admin.viajes.detail-viaje', [
-            'programaciones' => Programacion::searchDetailViajes($this->viaje_id)->paginate(max(1, min(100, $this->per_page)))
+            'programaciones' => $programaciones
         ]);
     }
 
