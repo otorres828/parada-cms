@@ -3,7 +3,6 @@
 namespace App\Livewire\Admin\Account;
 
 use App\Models\Admin;
-use App\Services\Admin\Access;
 use App\Services\Admin\Audit;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
@@ -23,7 +22,6 @@ class Profile extends Component
 
     public function mount(): void
     {
-        Access::authorize('account', 'profile');
         $admin = auth('admin')->user();
         $this->name = $admin->name;
         $this->email = $admin->email;
@@ -37,7 +35,6 @@ class Profile extends Component
 
     public function save(): void
     {
-        Access::authorize('account', 'profile');
         $admin = Admin::findOrFail(auth('admin')->id());
         $rules = ['current_password' => 'required|current_password:admin'];
         $rules += ['name' => 'required|string|max:255', 'email' => ['required', 'email', Rule::unique('admins')->ignore($admin->id)], 'username' => ['required', 'string', 'min:3', 'max:100', Rule::unique('admins')->ignore($admin->id)]];

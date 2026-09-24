@@ -3,7 +3,6 @@
 namespace App\Livewire\Admin\Account;
 
 use App\Models\Admin;
-use App\Services\Admin\Access;
 use App\Services\Admin\Audit;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -19,12 +18,6 @@ class Password extends Component
 
     public string $current_password = '';
 
-    public function mount(): void
-    {
-        Access::authorize('account', 'password');
-        $admin = auth('admin')->user();
-    }
-
     public function render()
     {
         return view('livewire.admin.account.password', ['mode' => 'password']);
@@ -32,7 +25,6 @@ class Password extends Component
 
     public function save(): void
     {
-        Access::authorize('account', 'password');
         $admin = Admin::findOrFail(auth('admin')->id());
         $rules = ['current_password' => 'required|current_password:admin'];
         $rules['password'] = 'required|string|min:10|max:255|confirmed';

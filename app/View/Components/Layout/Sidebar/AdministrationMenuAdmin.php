@@ -19,7 +19,7 @@ class AdministrationMenuAdmin extends Component
 
     public bool $listUsers = false;
 
-public bool $listViajes = false;
+    public bool $listViajes = false;
 
     public bool $listProgramaciones = false;
 
@@ -29,13 +29,11 @@ public bool $listViajes = false;
 
     public bool $listPasajes = false;
 
-
-
     public bool $listReembolsos = false;
 
     public bool $listcupones = false;
 
-public bool $listTerminales = false;
+    public bool $listTerminales = false;
 
     public bool $listAmenidades = false;
 
@@ -43,9 +41,10 @@ public bool $listTerminales = false;
 
     public bool $companiesReportes = false;
 
-
     public bool $listLegales = false;
+
     public bool $listTasasServicio = false;
+
     public bool $listAuditoria = false;
 
     public bool $profileAccount = false;
@@ -59,6 +58,9 @@ public bool $listTerminales = false;
         if (! $this->admin || $this->admin->status !== Admin::ACTIVO) {
             return;
         }
+
+        $this->profileAccount = true;
+        $this->passwordAccount = true;
 
         $permissions = $this->admin->checkPermissionsBatch([
             'listDashboard' => ['dashboard', 'list'],
@@ -79,8 +81,6 @@ public bool $listTerminales = false;
             'listLegales' => ['legales', 'list'],
             'listTasasServicio' => ['tasas-servicio', 'list'],
             'listAuditoria' => ['auditoria', 'list'],
-            'profileAccount' => ['account', 'profile'],
-            'passwordAccount' => ['account', 'password'],
         ]);
 
         foreach ($permissions as $property => $hasPermission) {

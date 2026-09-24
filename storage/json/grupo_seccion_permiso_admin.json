@@ -153,11 +153,7 @@
       }
     ]
   },
-  {"id": 10, "name": "Mi cuenta", "url": "cuenta", "icon": "bi-person-circle", "status": 1,
-    "sections": [
-    ]
-  },
-  {"id": 11, "name": "Dashboard", "url": "dashboard", "icon": "bi-speedometer2", "status": 1,
+  {"id": 9, "name": "Dashboard", "url": "dashboard", "icon": "bi-speedometer2", "status": 1,
     "sections": [
       {"name": "Dashboard", "url": "dashboard", "status": 1,
         "permissions": [

@@ -10,6 +10,11 @@ use Symfony\Component\HttpFoundation\Response;
 
 class CheckPermission
 {
+    private const ROUTES_WITHOUT_PERMISSION = [
+        'admin.account.profile',
+        'admin.account.password',
+    ];
+
     private const ROUTE_PERMISSIONS = [
         'admin.admins.list' => ['admins', 'list'],
         'admin.admins.edit' => ['admins', 'edit'],
@@ -38,8 +43,6 @@ class CheckPermission
         'admin.legales.list' => ['legales', 'list'],
         'admin.legales.detail' => ['legales', 'detail'],
         'admin.legales.file' => ['legales', 'file'],
-        'admin.account.profile' => ['account', 'profile'],
-        'admin.account.password' => ['account', 'password'],
         'admin.pasajes.list' => ['pasajes', 'list'],
         'admin.pasajes.detail' => ['pasajes', 'detail'],
         'admin.programaciones.list' => ['programaciones', 'list'],
@@ -69,20 +72,25 @@ class CheckPermission
     {
         $route = $request->route()?->getName();
 
-        if (!$route || !str_starts_with($route, 'admin.') || in_array($route, ['admin.login', 'admin.auth.logout'], true)) {
+        if (! $route || ! str_starts_with($route, 'admin.') || in_array($route, ['admin.login', 'admin.auth.logout'], true)) {
             return $next($request);
         }
 
-        if (!Auth::guard('admin')->check()) {
+        if (! Auth::guard('admin')->check()) {
             return redirect()->route('admin.login');
         }
 
         $admin = Admin::find(Auth::guard('admin')->id());
         abort_unless($admin && $admin->status === Admin::ACTIVO, 403);
+
+        if (in_array($route, self::ROUTES_WITHOUT_PERMISSION, true)) {
+            return $next($request);
+        }
+
         abort_unless(isset(self::ROUTE_PERMISSIONS[$route]), 403);
         [$section, $action] = self::ROUTE_PERMISSIONS[$route];
 
-        if (!$admin->hasPermission($section, $action)) {
+        if (! $admin->hasPermission($section, $action)) {
             // Evitar ciclos si el administrador tampoco tiene permiso para Dashboard.
             $destination = $admin->hasPermission('dashboard', 'list') ? 'admin.dashboard' : 'admin.account.profile';
             abort_if($route === $destination, 403);
