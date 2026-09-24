@@ -27,6 +27,11 @@ class DetailViaje extends Component
 
     protected string $paginationTheme = 'bootstrap';
 
+    
+    protected array $queryString = [
+        'per_page' => ['except' => 10],
+    ];
+
     public function mount(?int $viaje_id = null): void
     {
         $this->viaje_id = $viaje_id;
