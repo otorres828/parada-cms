@@ -30,7 +30,7 @@
 
         <x-slot:button>
 
-            <x-form.cancel-button :link="route('admin.reembolsos.list')">
+            <x-form.cancel-button :link="route('empresas.reembolsos.list')">
                 Volver al listado
             </x-form.cancel-button>
 

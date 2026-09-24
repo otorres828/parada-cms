@@ -31,8 +31,8 @@
 
         <x-slot:button>
 
-            @if (Route::has('admin.reembolsos.add') && $canAdd)
-                <x-list.add-button :route="route('admin.reembolsos.add')">
+            @if (Route::has('empresas.reembolsos.add') && $canAdd)
+                <x-list.add-button :route="route('empresas.reembolsos.add')">
                     Nuevo registro
                 </x-list.add-button>
             @endif
@@ -174,12 +174,12 @@
                         <x-list.button-group>
 
                             @if ($canDetail)
-                                <x-list.view-button :route="route('admin.reembolsos.detail', ['reembolso_id' => $reembolso->id])" :target="false" />
+                                <x-list.view-button :route="route('empresas.reembolsos.detail', ['reembolso_id' => $reembolso->id])" :target="false" />
                             @endif
 
                             @if ($canReview)
                                 <a class="btn btn-outline-secondary"
-                                    href="{{ route('admin.reembolsos.review', ['reembolso_id' => $reembolso->id]) }}"
+                                    href="{{ route('empresas.reembolsos.review', ['reembolso_id' => $reembolso->id]) }}"
                                     wire:navigate
                                     title="Revisar" aria-label="Revisar"><i class="bi bi-clipboard-check-fill"></i></a>
                             @endif

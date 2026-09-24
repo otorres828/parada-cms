@@ -53,13 +53,13 @@ class AdminRolesSeeder extends Seeder
                 ->whereHas('section', fn ($query) => $query->where('status', 1)
                     ->whereHas('group', fn ($group) => $group->where('status', 1)))
                 ->get()
-                ->keyBy(fn ($permission) => $permission->section->url . '/' . $permission->url);
+                ->keyBy(fn ($permission) => $permission->section->url.'/'.$permission->url);
 
             $legacy = Admin::where('email', 'demo-operador@example.test')->first();
             $credentials = [];
 
             foreach ($profiles as $username => $profile) {
-                $email = $username . '@pidetuparada.com';
+                $email = $username.'@pidetuparada.com';
                 $admin = Admin::where('email', $email)->first();
                 $needsPassword = ! $admin;
 
@@ -84,7 +84,7 @@ class AdminRolesSeeder extends Seeder
 
                 foreach ($profile['permissions'] as $module => $actions) {
                     foreach ($actions as $action) {
-                        $key = $module . '/' . $action;
+                        $key = $module.'/'.$action;
                         $permission = $permissions->get($key);
 
                         if (! $permission) {

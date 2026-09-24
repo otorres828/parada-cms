@@ -52,7 +52,7 @@ class SaveReembolso extends Component
         $reembolso = Finance::refund($data);
         session()->flash('admin_success', 'Registro guardado correctamente.');
 
-        return $this->redirect(route('admin.reembolsos.list'), navigate: true);
+        return $this->redirect(route('empresas.reembolsos.list'), navigate: true);
     }
 
     protected function editar(Reembolso $reembolso): void
