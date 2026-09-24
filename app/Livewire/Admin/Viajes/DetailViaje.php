@@ -48,7 +48,9 @@ class DetailViaje extends Component
 
     public function render()
     {
-        return view('livewire.admin.viajes.detail-viaje', ['programaciones' => Programacion::searchDetailViajes($this->viaje_id)->paginate(max(1, min(100, $this->per_page)))]);
+        return view('livewire.admin.viajes.detail-viaje', [
+            'programaciones' => Programacion::searchDetailViajes($this->viaje_id)->paginate(max(1, min(100, $this->per_page)))
+        ]);
     }
 
 

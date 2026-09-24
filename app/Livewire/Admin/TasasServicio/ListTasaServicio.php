@@ -72,8 +72,6 @@ class ListTasaServicio extends Component
 
                 $tasa->estatus = (int) $tasa->estatus === 1 ? $inactive : 1;
 
-                // $tasa->validarRango();
-
                 $tasa->save();
 
                 Audit::record('tasa_servicio.estado', $tasa, ['estatus' => $tasa->estatus]);

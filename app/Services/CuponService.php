@@ -11,6 +11,31 @@ use Illuminate\Validation\ValidationException;
 
 class CuponService
 {
+    public function crearCuponesAleatorios(ConfiguracionCupon $configuracionCupon): void
+    {
+        DB::transaction(function () use ($configuracionCupon) {
+            $configuracionCupon = ConfiguracionCupon::whereKey($configuracionCupon->id)->lockForUpdate()->firstOrFail();
+
+            if ($configuracionCupon->tipo_cupon !== ConfiguracionCupon::TIPO_RANDOM) {
+                return;
+            }
+
+            $this->exigir(! $configuracionCupon->cupones()->exists(), 'cupones', 'Los cupones aleatorios de esta campaña ya fueron generados.');
+
+            for ($i = 0; $i < $configuracionCupon->cantidad_generar; $i++) {
+                do {
+                    $codigo = 'CUP-'.strtoupper(bin2hex(random_bytes(8)));
+                } while (Cupon::where('codigo', $codigo)->exists());
+
+                Cupon::create([
+                    'configuracion_cupon_id' => $configuracionCupon->id,
+                    'codigo' => $codigo,
+                    'redimido' => false,
+                ]);
+            }
+        }, 3);
+    }
+
     public function validarExistenciaYDisponibilidad(string $codigo, int $empresaId): array
     {
         return DB::transaction(function () use ($codigo, $empresaId) {

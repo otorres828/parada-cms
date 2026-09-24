@@ -4,7 +4,6 @@ namespace App\Models;
 
 use App\Traits\TraitGeneral;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
@@ -16,12 +15,12 @@ class Programacion extends ModelHelper
     protected $table = 'programaciones';
 
     protected $fillable = [
-        'viaje_id',
-        'autobus_id',
-        'fecha_salida',
-        'hora_salida',
-        'asientos_totales',
-        'estatus',
+        'viaje_id', 
+        'autobus_id', 
+        'fecha_salida', 
+        'hora_salida', 
+        'asientos_totales', 
+        'estatus'
     ];
 
     protected function casts(): array
@@ -101,31 +100,40 @@ class Programacion extends ModelHelper
         }
 
         if (!empty($filters['historial_ventas'])) {
-            $query->withCount([
-                'pasajes as pasajes_vendidos' => function ($query) {
-                    return $query->where('reservas.estado_pago', Reserva::ESTADO_PAGO_PAGADO);
-                },
-                'pasajes as pasajes_pendientes' => function ($query) {
-                    return $query->where('reservas.estado_pago', Reserva::ESTADO_PAGO_PENDIENTE);
-                },
-                'pasajes as pasajes_cancelados' => function ($query) {
-                    return $query->where('reservas.estado_pago', Reserva::ESTADO_PAGO_CANCELADO);
-                },
-                'pasajes as pasajes_reembolsados' => function ($query) {
-                    return $query->where('reservas.estado_pago', Reserva::ESTADO_PAGO_REEMBOLSADO);
-                },
-                'pasajes as pasajes_fallidos' => function ($query) {
-                    return $query->where('reservas.estado_pago', Reserva::ESTADO_PAGO_FALLIDO);
-                },
-            ])->withSum([
-                'pasajes as ventas_total' => function ($query) {
-                    return $query->where('reservas.estado_pago', Reserva::ESTADO_PAGO_PAGADO);
-                },
-            ], 'subtotal')->withSum([
-                'pasajes as tasas_servicio_total' => function ($query) {
-                    return $query->where('reservas.estado_pago', Reserva::ESTADO_PAGO_PAGADO);
-                },
-            ], 'tasa_servicio');
+            $query
+                ->withCount([
+                    'pasajes as pasajes_vendidos' => function ($query) {
+                        return $query->where('reservas.estado_pago', Reserva::ESTADO_PAGO_PAGADO);
+                    },
+                    'pasajes as pasajes_pendientes' => function ($query) {
+                        return $query->where('reservas.estado_pago', Reserva::ESTADO_PAGO_PENDIENTE);
+                    },
+                    'pasajes as pasajes_cancelados' => function ($query) {
+                        return $query->where('reservas.estado_pago', Reserva::ESTADO_PAGO_CANCELADO);
+                    },
+                    'pasajes as pasajes_reembolsados' => function ($query) {
+                        return $query->where('reservas.estado_pago', Reserva::ESTADO_PAGO_REEMBOLSADO);
+                    },
+                    'pasajes as pasajes_fallidos' => function ($query) {
+                        return $query->where('reservas.estado_pago', Reserva::ESTADO_PAGO_FALLIDO);
+                    },
+                ])
+                ->withSum(
+                    [
+                        'pasajes as ventas_total' => function ($query) {
+                            return $query->where('reservas.estado_pago', Reserva::ESTADO_PAGO_PAGADO);
+                        },
+                    ],
+                    'subtotal',
+                )
+                ->withSum(
+                    [
+                        'pasajes as tasas_servicio_total' => function ($query) {
+                            return $query->where('reservas.estado_pago', Reserva::ESTADO_PAGO_PAGADO);
+                        },
+                    ],
+                    'tasa_servicio',
+                );
         }
 
         return $query;
@@ -133,27 +141,30 @@ class Programacion extends ModelHelper
 
     public static function searchDetailViajes(int $viaje_id): Builder
     {
-
-        return self::searchAdmin()->where('viaje_id', $viaje_id)
-            ->withCount(['pasajes as pasajes_vendidos' => fn ($q) => 
-                $q->where('reservas.estado_pago', Reserva::ESTADO_PAGO_PAGADO)])
-            ->withCount(['pasajes as pasajes_pendientes' => fn ($q) => 
-                $q->where('reservas.estado_pago', Reserva::ESTADO_PAGO_PENDIENTE)])
-            ->withCount(['pasajes as pasajes_cancelados' => fn ($q) => 
-                $q->where('reservas.estado_pago', Reserva::ESTADO_PAGO_CANCELADO)])
-            ->withCount(['pasajes as pasajes_reembolsados' => fn ($q) => 
-                $q->where('reservas.estado_pago', Reserva::ESTADO_PAGO_REEMBOLSADO)])
-            ->withCount(['pasajes as pasajes_fallidos' => fn ($q) => 
-                $q->where('reservas.estado_pago', Reserva::ESTADO_PAGO_FALLIDO)])
-            ->withSum(['pasajes as ventas_total' => function ($query) {
-                return $query->where('reservas.estado_pago', Reserva::ESTADO_PAGO_PAGADO);
-            }], 'subtotal')
-            ->withSum(['pasajes as tasas_servicio_total' => function ($query) {
-                return $query->where('reservas.estado_pago', Reserva::ESTADO_PAGO_PAGADO);
-            }], 'tasa_servicio')
+        return self::searchAdmin()
+            ->where('viaje_id', $viaje_id)
+            ->withCount(['pasajes as pasajes_vendidos' => fn($q) => $q->where('reservas.estado_pago', Reserva::ESTADO_PAGO_PAGADO)])
+            ->withCount(['pasajes as pasajes_pendientes' => fn($q) => $q->where('reservas.estado_pago', Reserva::ESTADO_PAGO_PENDIENTE)])
+            ->withCount(['pasajes as pasajes_cancelados' => fn($q) => $q->where('reservas.estado_pago', Reserva::ESTADO_PAGO_CANCELADO)])
+            ->withCount(['pasajes as pasajes_reembolsados' => fn($q) => $q->where('reservas.estado_pago', Reserva::ESTADO_PAGO_REEMBOLSADO)])
+            ->withCount(['pasajes as pasajes_fallidos' => fn($q) => $q->where('reservas.estado_pago', Reserva::ESTADO_PAGO_FALLIDO)])
+            ->withSum(
+                [
+                    'pasajes as ventas_total' => function ($query) {
+                        return $query->where('reservas.estado_pago', Reserva::ESTADO_PAGO_PAGADO);
+                    },
+                ],
+                'subtotal',
+            )
+            ->withSum(
+                [
+                    'pasajes as tasas_servicio_total' => function ($query) {
+                        return $query->where('reservas.estado_pago', Reserva::ESTADO_PAGO_PAGADO);
+                    },
+                ],
+                'tasa_servicio',
+            )
             ->orderByDesc('fecha_salida')
             ->orderByDesc('hora_salida');
-
     }
-
 }

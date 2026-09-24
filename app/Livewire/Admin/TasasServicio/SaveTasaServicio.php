@@ -52,7 +52,6 @@ class SaveTasaServicio extends Component
             GroupAdmin::where('url', 'administracion')->lockForUpdate()->firstOrFail();
             $tasa = $this->tasa_servicio_id ? TasaServicio::searchAdmin()->findOrFail($this->tasa_servicio_id) : new TasaServicio;
             $tasa->fill($data);
-            $tasa->validarRango();
             $tasa->save();
             Audit::record('tasa_servicio.guardada', $tasa, $data);
         });

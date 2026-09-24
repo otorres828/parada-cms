@@ -3,10 +3,10 @@
 namespace App\Livewire\Admin\Cupones;
 
 use App\Models\ConfiguracionCupon;
-use App\Models\Cupon;
 use App\Models\Empresa;
 use App\Services\Admin\Access;
 use App\Services\Admin\Audit;
+use App\Services\CuponService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
@@ -75,7 +75,7 @@ class SaveCampana extends Component
     {
         Access::authorize('cupones', $this->configuracion_cupon_id ? 'edit' : 'add');
         $data = $this->validateForm();
-        $configuracionCupon = DB::transaction(function () use ($data) {
+        DB::transaction(function () use ($data) {
             Access::authorize('cupones', $this->configuracion_cupon_id ? 'edit' : 'add');
             $esNuevo = $this->configuracion_cupon_id === null;
             $configuracionCupon = $this->configuracion_cupon_id ? $this->findConfiguracionCupon() : new ConfiguracionCupon;
@@ -121,15 +121,11 @@ class SaveCampana extends Component
                 $configuracionCupon->estatus = $data['estatus'];
             }
             $configuracionCupon->save();
-            if ($esNuevo && $configuracionCupon->tipo_cupon === ConfiguracionCupon::TIPO_RANDOM) {
-                for ($i = 0; $i < $configuracionCupon->cantidad_generar; $i++) {
-                    Cupon::create([
-                        'configuracion_cupon_id' => $configuracionCupon->id,
-                        'codigo' => 'CUP-'.strtoupper(bin2hex(random_bytes(8))),
-                        'redimido' => false,
-                    ]);
-                }
+
+            if ($esNuevo) {
+                app(CuponService::class)->crearCuponesAleatorios($configuracionCupon);
             }
+
             Audit::record($this->configuracion_cupon_id ? 'registro.actualizado' : 'registro.creado', $configuracionCupon, $data);
 
             return $configuracionCupon;
