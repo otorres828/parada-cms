@@ -59,7 +59,6 @@ use App\Livewire\Admin\Pasajes\DetailPasaje;
 /*------------------------------Reembolsos----------------------------------------*/
 use App\Livewire\Admin\Reembolsos\ListReembolso;
 use App\Livewire\Admin\Reembolsos\DetailReembolso;
-use App\Livewire\Admin\Reembolsos\ReviewReembolso;
 /*------------------------------Cupones-------------------------------------------*/
 use App\Livewire\Admin\Cupones\ListCampana;
 use App\Livewire\Admin\Cupones\SaveCampana;
@@ -221,12 +220,8 @@ Route::group(['middleware' => ['auth:admin', 'check.permisos']], function () {
     /*----------------------------------------Reembolsos--------------------------------------*/
 
     Route::prefix('reembolsos')->name('reembolsos.')->group(function () {
-
-        Route::livewire('nuevo', \App\Livewire\Admin\Reembolsos\SaveReembolso::class)->name('add');
-
         Route::livewire('/', ListReembolso::class)->name('list');
         Route::livewire('detalle/{reembolso_id}', DetailReembolso::class)->whereNumber('reembolso_id')->name('detail');
-        Route::livewire('revision/{reembolso_id}', ReviewReembolso::class)->whereNumber('reembolso_id')->name('review');
 
     });
 

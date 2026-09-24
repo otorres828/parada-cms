@@ -56,10 +56,10 @@ class Autobus extends ModelHelper
         if ($search !== '') {
             $query->where(function ($query) use ($search) {
                 $query->where('autobuses.id', ctype_digit($search) ? $search : -1);
-                $query->orWhere('autobuses.placa', 'like', '%' . $search . '%');
-                $query->orWhere('autobuses.modelo', 'like', '%' . $search . '%');
+                $query->orWhere('autobuses.placa', 'like', '%'.$search.'%');
+                $query->orWhere('autobuses.modelo', 'like', '%'.$search.'%');
                 $query->orWhereHas('empresa', function ($query) use ($search) {
-                    return $query->where('nombre', 'like', '%' . $search . '%');
+                    return $query->where('nombre', 'like', '%'.$search.'%');
                 });
             });
         }
@@ -68,17 +68,19 @@ class Autobus extends ModelHelper
 
         if ($status !== null && $status !== '') {
             $query->where('autobuses.estatus', $status);
+        } else {
+            $query->where('autobuses.estatus', '!=', self::ESTADO_DELETE);
         }
 
         if (isset($filters['empresa_id']) && $filters['empresa_id'] !== '') {
             $query->where('autobuses.empresa_id', $filters['empresa_id']);
         }
 
-        if (!empty($filters['date_from'])) {
+        if (! empty($filters['date_from'])) {
             $query->whereDate('autobuses.created_at', '>=', self::date($filters['date_from']));
         }
 
-        if (!empty($filters['date_to'])) {
+        if (! empty($filters['date_to'])) {
             $query->whereDate('autobuses.created_at', '<=', self::date($filters['date_to']));
         }
 

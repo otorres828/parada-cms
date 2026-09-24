@@ -49,8 +49,6 @@ class CheckPermission
         'admin.programaciones.passengers' => ['programaciones', 'passengers'],
         'admin.reembolsos.list' => ['reembolsos', 'list'],
         'admin.reembolsos.detail' => ['reembolsos', 'detail'],
-        'admin.reembolsos.add' => ['reembolsos', 'add'],
-        'admin.reembolsos.review' => ['reembolsos', 'review'],
         'admin.reportes.companies' => ['reportes', 'list-companies'],
         'admin.reportes.sales' => ['reportes', 'list-sales'],
         'admin.reservas.list' => ['reservas', 'list'],

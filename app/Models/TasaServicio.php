@@ -35,13 +35,17 @@ class TasaServicio extends ModelHelper
         if ($search !== '') {
             $query->where(
                 function ($query) use ($search) {
-                    return $query->where('monto_minimo', 'like', '%' . $search . '%')->orWhere('monto_maximo', 'like', '%' . $search . '%')->orWhere('cantidad', 'like', '%' . $search . '%');
+                    return $query->where('monto_minimo', 'like', '%'.$search.'%')->orWhere('monto_maximo', 'like', '%'.$search.'%')->orWhere('cantidad', 'like', '%'.$search.'%');
                 },
             );
         }
 
-        if (isset($filters['status']) && $filters['status'] !== '') {
-            $query->where('estatus', $filters['status']);
+        $status = $filters['status'] ?? $filters['estatus'] ?? null;
+
+        if ($status !== null && $status !== '') {
+            $query->where('estatus', $status);
+        } else {
+            $query->where('estatus', '!=', self::ESTADO_DELETE);
         }
 
         return $query;
@@ -81,7 +85,7 @@ class TasaServicio extends ModelHelper
 
     public function validarRango(): void
     {
-        if (!$this->estatus) {
+        if (! $this->estatus) {
             return;
         }
         $query = self::searchAdmin('', ['status' => 1])->when($this->exists, fn ($q) => $q->whereKeyNot($this->id));

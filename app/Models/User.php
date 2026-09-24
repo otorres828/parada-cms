@@ -29,7 +29,7 @@ class User extends ModelHelper implements Authenticatable, Authorizable, CanRese
 
     public function getNameLastName()
     {
-        return $this->name . ' ' . $this->lastname;
+        return $this->name.' '.$this->lastname;
     }
 
     public function getGender(): string
@@ -79,10 +79,10 @@ class User extends ModelHelper implements Authenticatable, Authorizable, CanRese
         if ($search !== '') {
             $query->where(function ($query) use ($search) {
                 $query->where('users.id', ctype_digit($search) ? $search : -1);
-                $query->orWhere('users.name', 'like', '%' . $search . '%');
-                $query->orWhere('users.lastname', 'like', '%' . $search . '%');
-                $query->orWhere('users.email', 'like', '%' . $search . '%');
-                $query->orWhere('users.telefono', 'like', '%' . $search . '%');
+                $query->orWhere('users.name', 'like', '%'.$search.'%');
+                $query->orWhere('users.lastname', 'like', '%'.$search.'%');
+                $query->orWhere('users.email', 'like', '%'.$search.'%');
+                $query->orWhere('users.telefono', 'like', '%'.$search.'%');
             });
         }
 
@@ -94,11 +94,11 @@ class User extends ModelHelper implements Authenticatable, Authorizable, CanRese
             $query->where('users.status', '!=', self::ESTADO_DELETE);
         }
 
-        if (!empty($filters['date_from'])) {
+        if (! empty($filters['date_from'])) {
             $query->whereDate('users.created_at', '>=', self::date($filters['date_from']));
         }
 
-        if (!empty($filters['date_to'])) {
+        if (! empty($filters['date_to'])) {
             $query->whereDate('users.created_at', '<=', self::date($filters['date_to']));
         }
 

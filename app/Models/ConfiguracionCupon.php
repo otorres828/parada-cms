@@ -64,8 +64,8 @@ class ConfiguracionCupon extends ModelHelper
         if ($search !== '') {
             $query->where(function ($query) use ($search) {
                 $query->where('configuracion_cupones.id', ctype_digit($search) ? $search : -1);
-                $query->orWhere('configuracion_cupones.nombre_campana', 'like', '%' . $search . '%');
-                $query->orWhere('configuracion_cupones.codigo_personalizado', 'like', '%' . $search . '%');
+                $query->orWhere('configuracion_cupones.nombre_campana', 'like', '%'.$search.'%');
+                $query->orWhere('configuracion_cupones.codigo_personalizado', 'like', '%'.$search.'%');
             });
         }
 
@@ -73,17 +73,19 @@ class ConfiguracionCupon extends ModelHelper
 
         if ($status !== null && $status !== '') {
             $query->where('configuracion_cupones.estatus', $status);
+        } else {
+            $query->where('configuracion_cupones.estatus', '!=', self::ESTADO_DELETE);
         }
 
         if (isset($filters['empresa_id'])) {
             $query->where('configuracion_cupones.empresa_id', $filters['empresa_id']);
         }
 
-        if (!empty($filters['date_from'])) {
+        if (! empty($filters['date_from'])) {
             $query->whereDate('configuracion_cupones.fecha_inicio', '>=', self::date($filters['date_from']));
         }
 
-        if (!empty($filters['date_to'])) {
+        if (! empty($filters['date_to'])) {
             $query->whereDate('configuracion_cupones.fecha_inicio', '<=', self::date($filters['date_to']));
         }
 

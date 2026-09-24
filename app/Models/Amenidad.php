@@ -41,7 +41,7 @@ class Amenidad extends ModelHelper
         if ($search !== '') {
             $query->where(function ($query) use ($search) {
                 $query->where('amenidades.id', ctype_digit($search) ? $search : -1);
-                $query->orWhere('amenidades.nombre', 'like', '%' . $search . '%');
+                $query->orWhere('amenidades.nombre', 'like', '%'.$search.'%');
             });
         }
 
@@ -53,11 +53,11 @@ class Amenidad extends ModelHelper
             $query->where('amenidades.estatus', '!=', self::ESTADO_DELETE);
         }
 
-        if (!empty($filters['date_from'])) {
+        if (! empty($filters['date_from'])) {
             $query->whereDate('amenidades.created_at', '>=', self::date($filters['date_from']));
         }
 
-        if (!empty($filters['date_to'])) {
+        if (! empty($filters['date_to'])) {
             $query->whereDate('amenidades.created_at', '<=', self::date($filters['date_to']));
         }
 

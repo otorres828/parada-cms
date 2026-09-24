@@ -93,21 +93,25 @@ class Admin extends ModelHelper implements Authenticatable, Authorizable, CanRes
 
     public static function searchAdmin(string $search = '', array $filters = []): Builder
     {
-        $query = self::query()->where('status', '!=', self::ELIMINADO);
+        $query = self::query();
         $query->where('level', '!=', self::ROOT);
 
         if ($search !== '') {
             $query->where(
                 function ($query) use ($search) {
-                    return $query->where('name', 'like', '%' . $search . '%')
-                            ->orWhere('username', 'like', '%' . $search . '%')
-                            ->orWhere('email', 'like', '%' . $search . '%');
+                    return $query->where('name', 'like', '%'.$search.'%')
+                        ->orWhere('username', 'like', '%'.$search.'%')
+                        ->orWhere('email', 'like', '%'.$search.'%');
                 },
             );
         }
 
-        if (isset($filters['status']) && $filters['status'] !== '') {
-            $query->where('status', $filters['status']);
+        $status = $filters['status'] ?? null;
+
+        if ($status !== null && $status !== '') {
+            $query->where('status', $status);
+        } else {
+            $query->where('status', '!=', self::ELIMINADO);
         }
 
         return $query;

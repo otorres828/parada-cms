@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\Admin\Reembolsos;
+namespace App\Livewire\Empresas\Reembolsos;
 
 use App\Models\Empresa;
 use App\Models\Reembolso;
@@ -45,7 +45,7 @@ class ListReembolso extends Component
         $this->date_to = $this->date_to ?: self::getDefaultHasta();
         $this->sortColumn = 'id';
         $this->sortDirection = 'desc';
-        $this->checkPermissions('reembolsos', ['detail']);
+        $this->checkPermissions('reembolsos', ['detail', 'review']);
         $this->empresas = Empresa::searchAdmin()->orderBy('nombre')->get();
     }
 
@@ -62,7 +62,7 @@ class ListReembolso extends Component
 
         $reembolsos = $query->paginate($this->per_page);
 
-        return view('livewire.admin.reembolsos.list-reembolso', [
+        return view('livewire.empresas.reembolsos.list-reembolso', [
             'reembolsos' => $reembolsos,
         ]);
     }

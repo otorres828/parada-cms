@@ -66,6 +66,8 @@ class UsuarioEmpresa extends ModelHelper implements Authenticatable, Authorizabl
 
         if ($status !== null && $status !== '') {
             $query->where('usuarios_empresa.estatus', $status);
+        } else {
+            $query->where('usuarios_empresa.estatus', '!=', self::ESTADO_DELETE);
         }
 
         if (isset($filters['empresa_id'])) {

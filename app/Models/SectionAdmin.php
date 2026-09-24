@@ -43,12 +43,16 @@ class SectionAdmin extends ModelHelper
 
         if ($search !== '') {
             $query->where(function ($query) use ($search) {
-                return $query->where('name', 'like', '%' . $search . '%')->orWhere('url', 'like', '%' . $search . '%');
+                return $query->where('name', 'like', '%'.$search.'%')->orWhere('url', 'like', '%'.$search.'%');
             });
         }
 
-        if (isset($filters['status'])) {
-            $query->where('status', $filters['status']);
+        $status = $filters['status'] ?? null;
+
+        if ($status !== null && $status !== '') {
+            $query->where('status', $status);
+        } else {
+            $query->where('status', '!=', self::ESTADO_DELETE);
         }
 
         return $query;

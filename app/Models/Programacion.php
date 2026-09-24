@@ -70,6 +70,8 @@ class Programacion extends ModelHelper
 
         if ($status !== null && $status !== '') {
             $query->where('programaciones.estatus', $status);
+        } else {
+            $query->where('programaciones.estatus', '!=', self::ESTADO_DELETE);
         }
 
         if (! empty($filters['date_from'])) {

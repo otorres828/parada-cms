@@ -66,7 +66,7 @@ class Viaje extends ModelHelper
             $query->where(function ($query) use ($search) {
                 $query->where('viajes.id', ctype_digit($search) ? $search : -1);
                 $query->orWhereHas('empresa', function ($query) use ($search) {
-                    return $query->where('nombre', 'like', '%' . $search . '%');
+                    return $query->where('nombre', 'like', '%'.$search.'%');
                 });
             });
         }
@@ -75,21 +75,23 @@ class Viaje extends ModelHelper
 
         if ($status !== null && $status !== '') {
             $query->where('viajes.estatus', $status);
+        } else {
+            $query->where('viajes.estatus', '!=', self::ESTADO_DELETE);
         }
 
         if (isset($filters['empresa_id']) && $filters['empresa_id'] !== '') {
             $query->where('viajes.empresa_id', $filters['empresa_id']);
         }
 
-        if (!empty($filters['date_from'])) {
+        if (! empty($filters['date_from'])) {
             $query->whereDate('viajes.created_at', '>=', self::date($filters['date_from']));
         }
 
-        if (!empty($filters['date_to'])) {
+        if (! empty($filters['date_to'])) {
             $query->whereDate('viajes.created_at', '<=', self::date($filters['date_to']));
         }
 
-        if (!empty($filters['con_tasas'])) {
+        if (! empty($filters['con_tasas'])) {
             $query->withSum(['reservas as tasas_servicio_total' => function ($query) {
                 return $query->where('estado_pago', Reserva::ESTADO_PAGO_PAGADO);
             }], 'tasa_servicio');

@@ -49,8 +49,8 @@ class Terminal extends ModelHelper
         if ($search !== '') {
             $query->where(function ($query) use ($search) {
                 $query->where('terminales.id', ctype_digit($search) ? $search : -1);
-                $query->orWhere('terminales.nombre', 'like', '%' . $search . '%');
-                $query->orWhere('terminales.direccion', 'like', '%' . $search . '%');
+                $query->orWhere('terminales.nombre', 'like', '%'.$search.'%');
+                $query->orWhere('terminales.direccion', 'like', '%'.$search.'%');
             });
         }
 
@@ -58,17 +58,19 @@ class Terminal extends ModelHelper
 
         if ($status !== null && $status !== '') {
             $query->where('terminales.estatus', $status);
+        } else {
+            $query->where('terminales.estatus', '!=', self::ESTADO_DELETE);
         }
 
         if (isset($filters['estado_id']) && $filters['estado_id'] !== '') {
             $query->where('terminales.estado_id', $filters['estado_id']);
         }
 
-        if (!empty($filters['date_from'])) {
+        if (! empty($filters['date_from'])) {
             $query->whereDate('terminales.created_at', '>=', self::date($filters['date_from']));
         }
 
-        if (!empty($filters['date_to'])) {
+        if (! empty($filters['date_to'])) {
             $query->whereDate('terminales.created_at', '<=', self::date($filters['date_to']));
         }
 
