@@ -7,6 +7,7 @@ use App\Services\Admin\Access;
 use App\Services\Admin\Audit;
 use App\Traits\Listing;
 use App\Traits\Permissions;
+use App\Traits\TraitGeneral;
 use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
@@ -17,6 +18,7 @@ class ListCampana extends Component
 {
     use Listing;
     use Permissions;
+    use TraitGeneral;
     use WithPagination;
 
     public string $status = '';
@@ -35,6 +37,8 @@ class ListCampana extends Component
 
     public function mount(): void
     {
+        $this->date_from = $this->date_from ?: self::getDefaultDesde();
+        $this->date_to = $this->date_to ?: self::getDefaultHasta();
         $this->sortColumn = 'id';
         $this->sortDirection = 'desc';
         $this->checkPermissions('cupones',['detail']);
@@ -87,3 +91,4 @@ class ListCampana extends Component
         $this->dispatch('successEventList', message: 'Estado actualizado.');
     }
 }
+

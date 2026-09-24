@@ -7,6 +7,7 @@ use App\Models\Programacion;
 use App\Services\Admin\Access;
 use App\Traits\Listing;
 use App\Traits\Permissions;
+use App\Traits\TraitGeneral;
 use Illuminate\Database\Eloquent\Collection;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
@@ -17,6 +18,7 @@ class ListProgramacion extends Component
 {
     use Listing;
     use Permissions;
+    use TraitGeneral;
     use WithPagination;
 
     public string $empresa_id = '';
@@ -42,6 +44,8 @@ class ListProgramacion extends Component
 
     public function mount(): void
     {
+        $this->date_from = $this->date_from ?: self::getDefaultDesde();
+        $this->date_to = $this->date_to ?: self::getDefaultHasta();
         $this->sortColumn = 'id';
         $this->sortDirection = 'desc';
         $this->checkPermissions('programaciones');
@@ -74,3 +78,4 @@ class ListProgramacion extends Component
         }
     }
 }
+

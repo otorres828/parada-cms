@@ -8,6 +8,7 @@ use App\Services\Admin\Access;
 use App\Services\Admin\Audit;
 use App\Traits\Listing;
 use App\Traits\Permissions;
+use App\Traits\TraitGeneral;
 use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Locked;
@@ -22,6 +23,7 @@ class ListEmpresaUser extends Component
 
     use Listing;
     use Permissions;
+    use TraitGeneral;
     use WithPagination;
 
     public string $status = '';
@@ -40,6 +42,8 @@ class ListEmpresaUser extends Component
 
     public function mount(?int $empresa_id = null): void
     {
+        $this->date_from = $this->date_from ?: self::getDefaultDesde();
+        $this->date_to = $this->date_to ?: self::getDefaultHasta();
         $this->empresa_id = $empresa_id;
         Empresa::findOrFail($empresa_id);
         $this->sortColumn = 'id';
@@ -96,3 +100,4 @@ class ListEmpresaUser extends Component
         $this->dispatch('successEventList', message: 'Estado actualizado.');
     }
 }
+

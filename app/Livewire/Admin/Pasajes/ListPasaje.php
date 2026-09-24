@@ -9,6 +9,7 @@ use App\Models\Pasaje;
 use App\Services\Admin\Access;
 use App\Traits\Listing;
 use App\Traits\Permissions;
+use App\Traits\TraitGeneral;
 use Illuminate\Database\Eloquent\Collection;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
@@ -19,6 +20,7 @@ class ListPasaje extends Component
 {
     use Listing;
     use Permissions;
+    use TraitGeneral;
     use WithPagination;
 
     public string $empresa_id = '';
@@ -42,6 +44,8 @@ class ListPasaje extends Component
 
     public function mount(): void
     {
+        $this->date_from = $this->date_from ?: self::getDefaultDesde();
+        $this->date_to = $this->date_to ?: self::getDefaultHasta();
         $this->sortColumn = 'id';
         $this->sortDirection = 'desc';
         $this->checkPermissions('pasajes',['detail']);
@@ -87,3 +91,4 @@ class ListPasaje extends Component
         }
     }
 }
+

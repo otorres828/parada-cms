@@ -64,6 +64,7 @@ class PassengerProgramacion extends Component
             'capacidad' => max(0, min((int) $this->programacion->asientos_totales, (int) $this->programacion->autobus?->total_asientos)),
             'pasajesPagados' => ['cantidad' => $pasajesPagados->count(), 'monto' => $pasajesPagados->sum('total')],
             'pasajesPendientes' => ['cantidad' => $pasajesPendientes->count(), 'monto' => $pasajesPendientes->sum('total')],
+            'totalTasasServicio' => $pasajesPagados->sum('tasa_servicio') + $pasajesPendientes->sum('tasa_servicio'),
         ]);
     }
 

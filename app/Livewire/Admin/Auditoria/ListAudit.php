@@ -6,6 +6,7 @@ use App\Models\Auditoria;
 use App\Services\Admin\Access;
 use App\Traits\Listing;
 use App\Traits\Permissions;
+use App\Traits\TraitGeneral;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -15,6 +16,7 @@ class ListAudit extends Component
 {
     use Listing;
     use Permissions;
+    use TraitGeneral;
     use WithPagination;
 
     public string $status = '';
@@ -33,6 +35,8 @@ class ListAudit extends Component
 
     public function mount(): void
     {
+        $this->date_from = $this->date_from ?: self::getDefaultDesde();
+        $this->date_to = $this->date_to ?: self::getDefaultHasta();
         $this->sortColumn = 'id';
         $this->sortDirection = 'desc';
         $this->checkPermissions('auditoria',['detail']);
@@ -62,3 +66,4 @@ class ListAudit extends Component
         }
     }
 }
+

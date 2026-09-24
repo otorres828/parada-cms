@@ -123,9 +123,9 @@
                                 {{ $pasajesPendientes['cantidad'] }} pasajes / ${{ number_format($pasajesPendientes['monto'], 2) }}
                             </dd>
 
-                            <dt class="col-sm-4">Total tasas de servicio</dt>
+                            <dt class="col-sm-4">Total tasas de servicio pagadas y pendientes</dt>
 
-                            <dd class="col-sm-8">${{ number_format($tickets->sum('tasa_servicio'), 2) }}</dd>
+                            <dd class="col-sm-8">${{ number_format($totalTasasServicio, 2) }}</dd>
 
                         </dl>
 

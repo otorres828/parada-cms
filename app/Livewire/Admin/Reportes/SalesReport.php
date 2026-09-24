@@ -5,6 +5,7 @@ namespace App\Livewire\Admin\Reportes;
 use App\Models\ModelHelper;
 use App\Models\Reserva;
 use App\Services\Admin\Access;
+use App\Traits\TraitGeneral;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -12,6 +13,7 @@ use Livewire\WithPagination;
 #[Layout('layouts.cms')]
 class SalesReport extends Component
 {
+    use TraitGeneral;
     use WithPagination;
 
     protected string $paginationTheme = 'bootstrap';
@@ -31,8 +33,8 @@ class SalesReport extends Component
     public function mount(): void
     {
         Access::authorize('reportes', 'list-sales');
-        $this->date_from = $this->date_from ?: now()->startOfMonth()->toDateString();
-        $this->date_to = $this->date_to ?: now()->toDateString();
+        $this->date_from = $this->date_from ?: self::getDefaultDesde();
+        $this->date_to = $this->date_to ?: self::getDefaultHasta();
     }
 
     public function render()
@@ -85,3 +87,4 @@ class SalesReport extends Component
         }, 'reporte-' . 'sales' . '-' . $this->date_from . '.csv', ['Content-Type' => 'text/csv; charset=UTF-8']);
     }
 }
+
