@@ -29,14 +29,6 @@
             Administradores
         </x-slot:title>
 
-        <x-slot:button>
-
-            <x-list.add-button :route="route('admin.admins.add')">
-                Nuevo registro
-            </x-list.add-button>
-
-        </x-slot:button>
-
     </x-list.heading>
 
     <x-list.actions>
@@ -50,6 +42,14 @@
         <x-slot:group>
 
         </x-slot:group>
+
+        @if ($canAdd)
+            <x-slot:button>
+                <x-list.add-button :route="route('admin.admins.add')">
+                    Nuevo registro
+                </x-list.add-button>
+            </x-slot:button>
+        @endif
 
     </x-list.actions>
 

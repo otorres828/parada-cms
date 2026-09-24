@@ -31,16 +31,6 @@
             Empresas
         </x-slot:title>
 
-        <x-slot:button>
-
-            @if ($canAdd)
-                <x-list.add-button :route="route('admin.empresas.add')">
-                    Nuevo registro
-                </x-list.add-button>
-            @endif
-
-        </x-slot:button>
-
     </x-list.heading>
 
     <x-list.actions>
@@ -54,6 +44,14 @@
         <x-slot:group>
 
         </x-slot:group>
+
+        @if ($canAdd)
+            <x-slot:button>
+                <x-list.add-button :route="route('admin.empresas.add')">
+                    Nuevo registro
+                </x-list.add-button>
+            </x-slot:button>
+        @endif
 
     </x-list.actions>
 

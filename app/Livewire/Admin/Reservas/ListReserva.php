@@ -2,8 +2,10 @@
 
 namespace App\Livewire\Admin\Reservas;
 
+use App\Exports\ReservasExport;
 use App\Models\Empresa;
 use App\Models\Reserva;
+use App\Services\Admin\Access;
 use App\Traits\Listing;
 use App\Traits\Permissions;
 use App\Traits\TraitGeneral;
@@ -11,6 +13,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Maatwebsite\Excel\Facades\Excel;
 
 #[Layout('layouts.cms')]
 class ListReserva extends Component
@@ -65,6 +68,23 @@ class ListReserva extends Component
         return view('livewire.admin.reservas.list-reserva', [
             'reservas' => $reservas,
         ]);
+    }
+
+    public function exportExcel()
+    {
+        Access::authorize('reservas', 'download');
+
+        $query = Reserva::searchAdmin($this->search, [
+            'empresa_id' => $this->empresa_id,
+            'status' => $this->status,
+            'date_from' => $this->date_from,
+            'date_to' => $this->date_to,
+        ])->with('cupon')->withCount('pasajes');
+
+        return Excel::download(
+            new ReservasExport($this->applySort($query)),
+            'reservas-' . now()->format('Y-m-d-His') . '.xlsx',
+        );
     }
 
     public function updated($property): void

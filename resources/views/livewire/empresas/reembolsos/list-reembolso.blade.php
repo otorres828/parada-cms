@@ -29,16 +29,6 @@
             Reembolsos
         </x-slot:title>
 
-        <x-slot:button>
-
-            @if (Route::has('empresas.reembolsos.add') && $canAdd)
-                <x-list.add-button :route="route('empresas.reembolsos.add')">
-                    Nuevo registro
-                </x-list.add-button>
-            @endif
-
-        </x-slot:button>
-
     </x-list.heading>
 
     <x-list.actions>
@@ -52,6 +42,14 @@
         <x-slot:group>
 
         </x-slot:group>
+
+        @if (Route::has('empresas.reembolsos.add') && $canAdd)
+            <x-slot:button>
+                <x-list.add-button :route="route('empresas.reembolsos.add')">
+                    Nuevo registro
+                </x-list.add-button>
+            </x-slot:button>
+        @endif
 
     </x-list.actions>
 

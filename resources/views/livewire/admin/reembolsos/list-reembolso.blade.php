@@ -14,6 +14,7 @@
     - <x-list.status-badge />: Etiqueta visual del estado del registro.
     - <x-list.table />: Contenedor reutilizable para tablas.
     - <x-list.view-button />: Enlace para consultar el detalle del registro.
+    - Botón Descargar Excel: Exporta los reembolsos que coinciden con los filtros aplicados.
     --------------------------------------------------------------------------
 --}}
 
@@ -43,9 +44,9 @@
 
     </x-list.actions>
 
-    <div class="row g-3 mb-3">
+    <div class="row g-3 mb-3 align-items-end">
 
-        <div class="col-md-3">
+        <div class="col-md-6 col-xl-2">
 
             <label class="form-label" for="filtro-empresa">
                 Empresa
@@ -63,7 +64,7 @@
 
         </div>
 
-        <div class="col-md-3">
+        <div class="col-md-6 col-xl-2">
 
             <label class="form-label" for="listReembolso-status">
                 Estado
@@ -81,7 +82,7 @@
 
         </div>
 
-        <div class="col-md-3">
+        <div class="col-md-6 col-xl-2">
 
             <label class="form-label" for="listReembolso-from">
                 Desde
@@ -89,13 +90,22 @@
             <input id="listReembolso-from" type="date" class="form-control" wire:model.live="date_from">
         </div>
 
-        <div class="col-md-3">
+        <div class="col-md-6 col-xl-2">
 
             <label class="form-label" for="listReembolso-to">
                 Hasta
             </label>
             <input id="listReembolso-to" type="date" class="form-control" wire:model.live="date_to">
         </div>
+
+        @if ($canDownload)
+            <div class="col-md-12 col-xl-auto ms-xl-auto text-md-end">
+                <button type="button" class="btn btn-success" wire:click="exportExcel"
+                    wire:loading.attr="disabled" wire:target="exportExcel">
+                    <i class="bi bi-file-earmark-excel" aria-hidden="true"></i> Descargar Excel
+                </button>
+            </div>
+        @endif
 
     </div>
 

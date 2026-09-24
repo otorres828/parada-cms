@@ -45,14 +45,19 @@
 
                     <x-empresas.description :empresa="$empresa" />
 
-                </div>
+                    @if ($canListUser)
+                        <div class="card-footer bg-transparent d-flex justify-content-end py-3">
 
-                @if ($canListUser)
-                    <a class="btn btn-primary"
-                        href="{{ route('admin.empresas.users.list', ['empresa_id' => $empresa->id]) }}"
-                        wire:navigate>Gestionar
-                        usuarios de la empresa</a>
-                @endif
+                            <a class="btn btn-outline-primary"
+                                href="{{ route('admin.empresas.users.list', ['empresa_id' => $empresa->id]) }}"
+                                wire:navigate>
+                                <i class="bi bi-people me-2" aria-hidden="true"></i>Gestionar usuarios
+                            </a>
+
+                        </div>
+                    @endif
+
+                </div>
 
             </div>
 

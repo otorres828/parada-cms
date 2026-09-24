@@ -31,16 +31,6 @@
             Usuarios de empresa
         </x-slot:title>
 
-        <x-slot:button>
-
-            @if (Route::has('admin.empresas.users.add') && $canAdd)
-                <x-list.add-button :route="route('admin.empresas.users.add', ['empresa_id' => $empresa_id])">
-                    Nuevo registro
-                </x-list.add-button>
-            @endif
-
-        </x-slot:button>
-
     </x-list.heading>
 
     <x-list.actions>
@@ -54,6 +44,14 @@
         <x-slot:group>
 
         </x-slot:group>
+
+        @if (Route::has('admin.empresas.users.add') && $canAdd)
+            <x-slot:button>
+                <x-list.add-button :route="route('admin.empresas.users.add', ['empresa_id' => $empresa_id])">
+                    Nuevo registro
+                </x-list.add-button>
+            </x-slot:button>
+        @endif
 
     </x-list.actions>
 

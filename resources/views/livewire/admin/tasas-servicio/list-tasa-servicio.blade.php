@@ -30,16 +30,6 @@
             Tasa de Servicio
         </x-slot:title>
 
-        <x-slot:button>
-
-            @if ($canAdd)
-                <x-list.add-button :route="route('admin.tasas-servicio.add')">
-                    Nueva tasa
-                </x-list.add-button>
-            @endif
-
-        </x-slot:button>
-
     </x-list.heading>
 
     <p class="text-body-secondary">Monto fijo o porcentaje por pasaje, según su precio final después de descuentos. Los
@@ -57,6 +47,14 @@
         <x-slot:group>
 
         </x-slot:group>
+
+        @if ($canAdd)
+            <x-slot:button>
+                <x-list.add-button :route="route('admin.tasas-servicio.add')">
+                    Nueva tasa
+                </x-list.add-button>
+            </x-slot:button>
+        @endif
 
     </x-list.actions>
 

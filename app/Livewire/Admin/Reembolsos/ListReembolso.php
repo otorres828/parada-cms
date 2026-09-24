@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Admin\Reembolsos;
 
+use App\Exports\ReembolsosExport;
 use App\Models\Empresa;
 use App\Models\Reembolso;
 use App\Services\Admin\Access;
@@ -12,6 +13,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Maatwebsite\Excel\Facades\Excel;
 
 #[Layout('layouts.cms')]
 class ListReembolso extends Component
@@ -69,6 +71,23 @@ class ListReembolso extends Component
         return view('livewire.admin.reembolsos.list-reembolso', [
             'reembolsos' => $reembolsos,
         ]);
+    }
+
+    public function exportExcel()
+    {
+        Access::authorize('reembolsos', 'download');
+
+        $query = Reembolso::searchAdmin($this->search, [
+            'empresa_id' => $this->empresa_id,
+            'status' => $this->status,
+            'date_from' => $this->date_from,
+            'date_to' => $this->date_to,
+        ]);
+
+        return Excel::download(
+            new ReembolsosExport($this->applySort($query)),
+            'reembolsos-' . now()->format('Y-m-d-His') . '.xlsx',
+        );
     }
 
     public function updated($property): void

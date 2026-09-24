@@ -94,7 +94,8 @@
       {"name": "Reservas", "url": "reservas", "status": 1,
         "permissions": [
           {"name": "Listar", "url": "list", "status": 1},
-          {"name": "Ver detalle", "url": "detail", "status": 1}
+          {"name": "Ver detalle", "url": "detail", "status": 1},
+          {"name": "Descargar Excel", "url": "download", "status": 1}
         ]
       },
       {"name": "Pasajes", "url": "pasajes", "status": 1,
@@ -106,7 +107,8 @@
       {"name": "Reembolsos", "url": "reembolsos", "status": 1,
         "permissions": [
           {"name":"Listar","url":"list","status":1},
-          {"name":"Ver detalle","url":"detail","status":1}
+          {"name":"Ver detalle","url":"detail","status":1},
+          {"name":"Descargar Excel","url":"download","status":1}
         ]
       }
     ]
@@ -156,6 +158,18 @@
       {"name": "Dashboard", "url": "dashboard", "status": 1,
         "permissions": [
           {"name": "Ver resumen", "url": "list", "status": 1}
+        ]
+      }
+    ]
+  },
+  {"id": 10, "name": "Soporte", "url": "soporte", "icon": "bi-headset", "status": 1,
+    "sections": [
+      {"name": "Solicitudes", "url": "solicitudes", "status": 1,
+        "permissions": [
+          {"name": "Listar", "url": "list", "status": 1},
+          {"name": "Ver detalle", "url": "detail", "status": 1},
+          {"name": "Editar estado", "url": "edit", "status": 1},
+          {"name": "Eliminar", "url": "delete", "status": 1}
         ]
       }
     ]
