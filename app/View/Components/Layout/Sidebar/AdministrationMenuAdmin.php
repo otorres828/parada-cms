@@ -47,6 +47,8 @@ class AdministrationMenuAdmin extends Component
 
     public bool $listAuditoria = false;
 
+    public bool $listSolicitudes = false;
+
     public bool $profileAccount = false;
 
     public bool $passwordAccount = false;
@@ -81,6 +83,7 @@ class AdministrationMenuAdmin extends Component
             'listLegales' => ['legales', 'list'],
             'listTasasServicio' => ['tasas-servicio', 'list'],
             'listAuditoria' => ['auditoria', 'list'],
+            'listSolicitudes' => ['solicitudes', 'list'],
         ]);
 
         foreach ($permissions as $property => $hasPermission) {

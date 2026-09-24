@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Plataforma para digitalizar la venta y operación de agencias de autobuses.">
-    <meta name="theme-color" content="#071c2c">
+    <meta name="theme-color" content="#010409">
 
     <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
 

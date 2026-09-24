@@ -34,7 +34,7 @@
 
     <div class="card border-0 shadow-sm mb-4">
 
-        <div class="card-body d-flex flex-wrap align-items-center justify-content-between gap-3">
+        <div class="card-body d-flex flex-wrap align-items-end justify-content-between gap-3">
 
             <div>
 
@@ -42,33 +42,61 @@
 
                 <div class="text-body-secondary small">
 
-                    {{ $desde->format('d/m/Y') }} — {{ $hasta->format('d/m/Y H:i') }}
+                    {{ $desde->format('d/m/Y') }} — {{ $hasta->format('d/m/Y') }}
                     <span wire:loading class="ms-2 text-primary" role="status">Actualizando…</span>
 
                 </div>
 
             </div>
 
-            <div class="d-flex align-items-center gap-2">
+            <div class="row g-2 align-items-end ms-auto">
 
-                <label for="dashboard-periodo" class="small text-body-secondary">
-                    Período
-                </label>
+                <div class="col-12 col-sm-auto">
 
-                <select id="dashboard-periodo" class="form-select form-select-sm w-auto" wire:model.live="periodo">
+                    <label for="dashboard-periodo" class="form-label small text-body-secondary mb-1">
+                        Período
+                    </label>
 
-                    <option value="hoy">Hoy</option>
-                    <option value="7">Últimos 7 días</option>
-                    <option value="30">Últimos 30 días</option>
-                    <option value="mes">Este mes</option>
+                    <select id="dashboard-periodo" class="form-select form-select-sm" wire:model.live="periodo">
 
-                </select>
+                        <option value="hoy">Hoy</option>
+                        <option value="7">Últimos 7 días</option>
+                        <option value="30">Últimos 30 días</option>
+                        <option value="mes">Este mes</option>
+                        <option value="personalizado">Personalizado</option>
 
-                <button type="button" class="btn btn-outline-secondary btn-sm" wire:click="$refresh"
-                    wire:loading.attr="disabled"
-                    aria-label="Actualizar indicadores">
-                    <i class="bi bi-arrow-clockwise" aria-hidden="true"></i>
-                </button>
+                    </select>
+
+                </div>
+
+                <div class="col-6 col-sm-auto">
+
+                    <label for="dashboard-date-from" class="form-label small text-body-secondary mb-1">
+                        Desde
+                    </label>
+                    <input id="dashboard-date-from" type="date" class="form-control form-control-sm"
+                        wire:model.live="date_from" max="{{ $date_to }}">
+
+                </div>
+
+                <div class="col-6 col-sm-auto">
+
+                    <label for="dashboard-date-to" class="form-label small text-body-secondary mb-1">
+                        Hasta
+                    </label>
+                    <input id="dashboard-date-to" type="date" class="form-control form-control-sm"
+                        wire:model.live="date_to" min="{{ $date_from }}">
+
+                </div>
+
+                <div class="col-auto">
+
+                    <button type="button" class="btn btn-outline-secondary btn-sm" wire:click="$refresh"
+                        wire:loading.attr="disabled" aria-label="Actualizar indicadores">
+                        <i class="bi bi-arrow-clockwise" aria-hidden="true"></i>
+                    </button>
+
+                </div>
 
             </div>
 

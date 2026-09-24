@@ -53,6 +53,8 @@ class CheckPermission
         'admin.reportes.sales' => ['reportes', 'list-sales'],
         'admin.reservas.list' => ['reservas', 'list'],
         'admin.reservas.detail' => ['reservas', 'detail'],
+        'admin.solicitudes.list' => ['solicitudes', 'list'],
+        'admin.solicitudes.detail' => ['solicitudes', 'detail'],
         'admin.tasas-servicio.list' => ['tasas-servicio', 'list'],
         'admin.tasas-servicio.edit' => ['tasas-servicio', 'edit'],
         'admin.tasas-servicio.add' => ['tasas-servicio', 'add'],

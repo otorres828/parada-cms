@@ -61,6 +61,8 @@ use App\Livewire\Admin\Reportes\SalesReport;
 /* ------------------------------Cupones------------------------------------------- */
 use App\Livewire\Admin\Reservas\DetailReserva;
 use App\Livewire\Admin\Reservas\ListReserva;
+use App\Livewire\Admin\Solicitudes\DetailSolicitud;
+use App\Livewire\Admin\Solicitudes\ListSolicitud;
 use App\Livewire\Admin\TasasServicio\ListTasaServicio;
 /* ------------------------------Terminales---------------------------------------- */
 use App\Livewire\Admin\TasasServicio\SaveTasaServicio;
@@ -259,6 +261,15 @@ Route::group(['middleware' => ['auth:admin', 'check.permisos']], function () {
 
         Route::livewire('ventas', SalesReport::class)->name('sales');
         Route::livewire('empresas', CompaniesReport::class)->name('companies');
+
+    });
+
+    /* ----------------------------------------Solicitudes de empresas-------------------------------------- */
+
+    Route::prefix('solicitudes')->name('solicitudes.')->group(function () {
+
+        Route::livewire('/', ListSolicitud::class)->name('list');
+        Route::livewire('detalle/{solicitud_id}', DetailSolicitud::class)->whereNumber('solicitud_id')->name('detail');
 
     });
 

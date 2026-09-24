@@ -183,6 +183,21 @@
     ])
 @endif
 
+@if ($listSolicitudes)
+    @include('components.layout.sidebar-li', [
+        'menu' => 'Soporte',
+        'icon' => 'nav-icon bi bi-headset',
+        'list' => [
+            [
+                'existe' => $listSolicitudes ?? false,
+                'route' => route('admin.solicitudes.list'),
+                'name' => 'Solicitudes',
+                'active' => request()->routeIs('admin.solicitudes.*') ? 'active' : '',
+            ],
+        ],
+    ])
+@endif
+
 @if ($profileAccount or $passwordAccount)
     @include('components.layout.sidebar-li', [
         'menu' => 'Mi cuenta',
