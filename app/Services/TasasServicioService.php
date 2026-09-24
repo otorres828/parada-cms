@@ -40,7 +40,12 @@ class TasasServicioService
 
                 $pasaje->subtotal = bcsub($pasaje->precio_base, $pasaje->descuento, 2);
 
-                if ($pasaje->servicio_json !== null) {
+                if ($reserva->esReprogramacion()) {
+
+                    $tasaCalculada = '0.00';
+                    $pasaje->servicio_json = null;
+
+                } elseif ($pasaje->servicio_json !== null) {
 
                     $tasaCalculada = $pasaje->tasa_servicio;
 

@@ -13,6 +13,7 @@ return new class extends Migration
             $table->unsignedBigInteger('usuario_id');
             $table->unsignedBigInteger('programacion_id');
             $table->unsignedBigInteger('cupon_id')->nullable();
+            $table->unsignedBigInteger('reprogramacion_id')->nullable();
             $table->string('codigo_referencia')->unique();
             $table->decimal('monto_pasajes', 12, 2);
             $table->decimal('descuento_aplicado', 12, 2);
@@ -27,6 +28,7 @@ return new class extends Migration
             $table->foreign('usuario_id')->references('id')->on('users')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('programacion_id')->references('id')->on('programaciones')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('cupon_id')->references('id')->on('cupones')->onUpdate('cascade')->onDelete('set null');
+            $table->foreign('reprogramacion_id')->references('id')->on('reservas')->onUpdate('cascade')->onDelete('restrict');
         });
     }
 

@@ -7,12 +7,21 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Viajero extends ModelHelper
 {
+    public const DOCUMENTO_CEDULA = 1;
+
+    public const DOCUMENTO_DNI_EXTERIOR = 2;
+
+    public const DOCUMENTO_PASAPORTE = 3;
+
+    public const DOCUMENTO_OTRO_DOCUMENTO = 4;
+
     protected $table = 'viajeros';
 
     protected $fillable = [
         'usuario_id',
         'nombre',
         'apellido',
+        'tipo_documento',
         'documento_identidad',
         'fecha_nacimiento',
         'tipo_pasajero',
@@ -20,7 +29,10 @@ class Viajero extends ModelHelper
 
     protected function casts(): array
     {
-        return ['fecha_nacimiento' => 'date'];
+        return [
+            'tipo_documento' => 'integer',
+            'fecha_nacimiento' => 'date',
+        ];
     }
 
     public function usuario(): BelongsTo
@@ -31,5 +43,16 @@ class Viajero extends ModelHelper
     public function pasajes(): HasMany
     {
         return $this->hasMany(Pasaje::class, 'viajero_id');
+    }
+
+    public function getTipoDocumento(): string
+    {
+        return match ($this->tipo_documento) {
+            self::DOCUMENTO_CEDULA => 'Cédula',
+            self::DOCUMENTO_DNI_EXTERIOR => 'DNI extranjero',
+            self::DOCUMENTO_PASAPORTE => 'Pasaporte',
+            self::DOCUMENTO_OTRO_DOCUMENTO => 'Otro',
+            default => 'Sin documento',
+        };
     }
 }

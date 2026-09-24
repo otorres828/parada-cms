@@ -70,7 +70,8 @@ class ReservaService
             'pasajeros.*.numero_asiento' => 'required|integer|min:1|distinct',
             'pasajeros.*.nombre' => 'required|string|max:255',
             'pasajeros.*.apellido' => 'required|string|max:255',
-            'pasajeros.*.documento_identidad' => 'required|string|max:255',
+            'pasajeros.*.tipo_documento' => 'required_with:pasajeros.*.documento_identidad|nullable|integer|in:1,2,3,4',
+            'pasajeros.*.documento_identidad' => 'nullable|string|max:255',
             'pasajeros.*.fecha_nacimiento' => 'required|date_format:Y-m-d|before_or_equal:today',
             'pasajeros.*.tipo_pasajero' => 'required|in:adulto,nino,infante',
         ])->validate()['pasajeros'];
@@ -111,7 +112,7 @@ class ReservaService
                     ]);
                 }
                 unset($persona['numero_asiento']);
-                $persona = array_intersect_key($persona, array_flip(['nombre', 'apellido', 'documento_identidad', 'fecha_nacimiento', 'tipo_pasajero']));
+                $persona = array_intersect_key($persona, array_flip(['nombre', 'apellido', 'tipo_documento', 'documento_identidad', 'fecha_nacimiento', 'tipo_pasajero']));
                 $persona['usuario_id'] = $reserva->usuario_id;
                 $actual = $pasaje->viajero;
                 if ($actual && ! $actual->fill($persona)->isDirty()) {

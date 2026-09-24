@@ -23,6 +23,7 @@ class Reserva extends ModelHelper
         'destino_terminal_id',
         'programacion_tramo_precio_id',
         'cupon_id',
+        'reprogramacion_id',
         'codigo_referencia',
         'monto_pasajes',
         'descuento_aplicado',
@@ -48,7 +49,7 @@ class Reserva extends ModelHelper
 
     protected function casts(): array
     {
-        return ['estado_pago' => 'integer', 'monto_pasajes' => 'decimal:2', 'descuento_aplicado' => 'decimal:2', 'tasa_servicio' => 'decimal:2', 'monto_total' => 'decimal:2', 'fecha_compra' => 'datetime', 'fecha_expiracion' => 'datetime', 'comentarios_auditoria' => 'array'];
+        return ['reprogramacion_id' => 'integer', 'estado_pago' => 'integer', 'monto_pasajes' => 'decimal:2', 'descuento_aplicado' => 'decimal:2', 'tasa_servicio' => 'decimal:2', 'monto_total' => 'decimal:2', 'fecha_compra' => 'datetime', 'fecha_expiracion' => 'datetime', 'comentarios_auditoria' => 'array'];
     }
 
     public function usuario(): BelongsTo
@@ -79,6 +80,21 @@ class Reserva extends ModelHelper
     public function cupon(): BelongsTo
     {
         return $this->belongsTo(Cupon::class, 'cupon_id');
+    }
+
+    public function reservaOriginal(): BelongsTo
+    {
+        return $this->belongsTo(self::class, 'reprogramacion_id');
+    }
+
+    public function reservasReprogramadas(): HasMany
+    {
+        return $this->hasMany(self::class, 'reprogramacion_id');
+    }
+
+    public function esReprogramacion(): bool
+    {
+        return $this->reprogramacion_id !== null;
     }
 
     public function pasajes(): HasMany
