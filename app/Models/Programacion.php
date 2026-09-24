@@ -12,6 +12,14 @@ class Programacion extends ModelHelper
 {
     use TraitGeneral;
 
+    public const ESTADO_ELIMINADO = 0;
+
+    public const ESTADO_PROGRAMADO = 1;
+
+    public const ESTADO_INACTIVO = 2;
+
+    public const ESTADO_FINALIZADO = 3;
+
     protected $table = 'programaciones';
 
     protected $fillable = [
