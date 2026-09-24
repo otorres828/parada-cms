@@ -2,13 +2,11 @@
     REEMBOLSOS — LISTADO
     --------------------------------------------------------------------------
     Permite consultar las solicitudes de reembolso. Incluye búsqueda, ordenación y paginación.
-    Ofrece los filtros disponibles en la pantalla. Presenta las acciones de cada registro según
-    las autorizaciones del administrador.
+    Ofrece los filtros disponibles en la pantalla y acceso de solo lectura al detalle.
 
     Componentes reutilizables utilizados:
     - <x-layout.loader.fullpage />: Indicador global durante operaciones de Livewire.
     - <x-list.actions />: Contenedor del buscador y filtros del listado.
-    - <x-list.add-button />: Botón para registrar un nuevo elemento.
     - <x-list.button-group />: Agrupa las acciones disponibles por registro.
     - <x-list.heading />: Cabecera del módulo con título y acciones.
     - <x-list.search-input />: Buscador reactivo del listado.
@@ -28,16 +26,6 @@
         <x-slot:title>
             Reembolsos
         </x-slot:title>
-
-        <x-slot:button>
-
-            @if (Route::has('admin.reembolsos.add') && $canAdd)
-                <x-list.add-button :route="route('admin.reembolsos.add')">
-                    Nuevo registro
-                </x-list.add-button>
-            @endif
-
-        </x-slot:button>
 
     </x-list.heading>
 
@@ -175,13 +163,6 @@
 
                             @if ($canDetail)
                                 <x-list.view-button :route="route('admin.reembolsos.detail', ['reembolso_id' => $reembolso->id])" :target="false" />
-                            @endif
-
-                            @if ($canReview)
-                                <a class="btn btn-outline-secondary"
-                                    href="{{ route('admin.reembolsos.review', ['reembolso_id' => $reembolso->id]) }}"
-                                    wire:navigate
-                                    title="Revisar" aria-label="Revisar"><i class="bi bi-clipboard-check-fill"></i></a>
                             @endif
 
                         </x-list.button-group>
