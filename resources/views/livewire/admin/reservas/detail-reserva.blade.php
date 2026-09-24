@@ -52,6 +52,10 @@
                             <dd class="col-sm-8">
                                 {{ $reserva->codigo_referencia ?? '—' }}
                             </dd>
+                            <dt class="col-sm-4">Cupón aplicado</dt>
+                            <dd class="col-sm-8">
+                                {{ $reserva->cupon?->codigo ?? 'Sin cupón' }}
+                            </dd>
                             <dt class="col-sm-4">Origen</dt>
 
                             <dd class="col-sm-8">
@@ -76,7 +80,7 @@
                             <dd class="col-sm-8">
                                 {{ $reserva->fecha_compra?->format('d/m/Y H:i') ?? '—' }}
                             </dd>
-                            <dt class="col-sm-4">Total USD</dt>
+                            <dt class="col-sm-4">Total</dt>
                             <dd class="col-sm-8">
                                 {{ number_format($reserva->monto_total ?? 0, 2) }}
                             </dd>
@@ -84,7 +88,7 @@
                             <dd class="col-sm-8">
                                 <x-list.status-reserva :status="$reserva->estado_pago" />
                             </dd>
-                            <dt class="col-sm-4">Tasa de servicio USD</dt>
+                            <dt class="col-sm-4">Tasa de servicio</dt>
                             <dd class="col-sm-8">{{ number_format($reserva->tasa_servicio, 2) }}</dd>
                             <dt class="col-sm-4">Programación</dt>
                             <dd class="col-sm-8">
@@ -134,15 +138,15 @@
 
                         <th>Abordaje</th>
 
-                        <th class="text-end">Precio USD</th>
+                        <th class="text-end">Precio</th>
 
-                        <th class="text-end">Descuento USD</th>
+                        <th class="text-end">Descuento</th>
 
-                        <th class="text-end">Subtotal USD</th>
+                        <th class="text-end">Subtotal</th>
 
-                        <th class="text-end">Tasa de servicio USD</th>
+                        <th class="text-end">Tasa de servicio</th>
 
-                        <th class="text-end">Total USD</th>
+                        <th class="text-end">Total</th>
 
                         <th class="text-center">QR</th>
 
@@ -236,3 +240,4 @@
         }));
     </script>
 @endscript
+

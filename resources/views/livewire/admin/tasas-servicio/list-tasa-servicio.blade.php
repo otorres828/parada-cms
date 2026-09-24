@@ -85,11 +85,11 @@
         <thead>
 
             <tr>
-                <th>Monto mínimo USD
+                <th>Monto mínimo
                     <x-list.sortable-button column="monto_minimo" :$sortColumn :$sortDirection />
                 </th>
 
-                <th>Monto máximo USD</th>
+                <th>Monto máximo</th>
 
                 <th>Tipo</th>
 
@@ -119,7 +119,7 @@
                     </td>
 
                     <td>
-                        {{ number_format($tasa->cantidad, 2) }} {{ $tasa->tipo_servicio === 2 ? '%' : 'USD' }}
+                        {{ number_format($tasa->cantidad, 2) }} {{ $tasa->tipo_servicio === 2 ? '%' : '' }}
                     </td>
 
                     <td>
@@ -179,3 +179,4 @@
         }));
     </script>
 @endscript
+

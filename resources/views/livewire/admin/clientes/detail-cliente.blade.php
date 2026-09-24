@@ -111,7 +111,7 @@
 
                         <th>Estado</th>
 
-                        <th>Total USD</th>
+                        <th>Total</th>
 
                     </tr>
                 </thead>
@@ -212,3 +212,4 @@
         }));
     </script>
 @endscript
+

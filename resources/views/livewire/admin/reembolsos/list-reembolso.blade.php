@@ -124,7 +124,7 @@
 
                 <th>Empresa </th>
 
-                <th>Monto USD
+                <th>Monto
                     <x-list.sortable-button column="monto" :$sortColumn :$sortDirection />
                 </th>
 
@@ -230,3 +230,4 @@
         }));
     </script>
 @endscript
+

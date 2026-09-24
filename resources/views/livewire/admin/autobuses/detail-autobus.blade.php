@@ -111,15 +111,15 @@
 
                         <th>Estado</th>
 
-                        <th>Precio por pasaje USD</th>
+                        <th>Precio por pasaje</th>
 
                         <th>Pasajes pagados</th>
 
                         <th>Pasajes pendientes de pago</th>
 
-                        <th>Venta de pasajes USD</th>
+                        <th>Venta de pasajes</th>
 
-                        <th>Tasas cobradas USD</th>
+                        <th>Tasas cobradas</th>
 
                     </tr>
 
@@ -218,3 +218,4 @@
         }));
     </script>
 @endscript
+

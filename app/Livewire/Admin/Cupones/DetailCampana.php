@@ -16,6 +16,8 @@ class DetailCampana extends Component
 {
     use Listing, WithPagination;
 
+    public bool $canViewReservation = false;
+
     public string $status = '';
 
     protected array $queryString = [
@@ -33,11 +35,12 @@ class DetailCampana extends Component
         $this->sortColumn = 'id';
         $this->sortDirection = 'desc';
         Access::authorize('cupones', 'detail');
+        $this->canViewReservation = Access::allows('reservas', 'detail');
     }
 
     public function render()
     {
-        $query = Cupon::searchAdmin($this->search, ['configuracion_cupon_id' => $this->configuracion_cupon_id, 'status' => $this->status]);
+        $query = Cupon::searchAdmin($this->search, ['configuracion_cupon_id' => $this->configuracion_cupon_id, 'status' => $this->status])->with('reserva');
         $cupones = $this->applySort($query)->paginate($this->per_page);
 
         return view('livewire.admin.cupones.detail-campana', ['cupones' => $cupones, 'configuracionCupon' => $this->configuracion_cupon_id ? $this->findConfiguracionCupon() : null]);

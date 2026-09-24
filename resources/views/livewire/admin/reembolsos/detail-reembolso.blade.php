@@ -54,7 +54,7 @@
                             <dd class="col-sm-8">
                                 {{ $reembolso->empresa?->nombre ?? '—' }}
                             </dd>
-                            <dt class="col-sm-4">Monto USD</dt>
+                            <dt class="col-sm-4">Monto</dt>
                             <dd class="col-sm-8">
                                 {{ number_format($reembolso->monto ?? 0, 2) }}
                             </dd>
@@ -113,3 +113,4 @@
         }));
     </script>
 @endscript
+

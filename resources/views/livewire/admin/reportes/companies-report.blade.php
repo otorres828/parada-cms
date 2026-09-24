@@ -56,7 +56,7 @@
         </div>
 
     </form>
-    <p class="text-body-secondary">Reservas con estado actual pagado, agrupadas por fecha de compra. Importes en USD.
+    <p class="text-body-secondary">Reservas con estado actual pagado, agrupadas por fecha de compra. Importes en.
     </p>
 
     <x-list.table>
@@ -68,9 +68,9 @@
 
                 <th>Reservas pagadas</th>
 
-                <th>Ventas USD</th>
+                <th>Ventas</th>
 
-                <th>Tasa de servicio USD</th>
+                <th>Tasa de servicio</th>
 
             </tr>
         </thead>
@@ -161,3 +161,4 @@
         }));
     </script>
 @endscript
+

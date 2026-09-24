@@ -125,7 +125,7 @@
                     <x-list.sortable-button column="fecha_compra" :$sortColumn :$sortDirection />
                 </th>
 
-                <th>Total USD
+                <th>Total
                     <x-list.sortable-button column="monto_total" :$sortColumn :$sortDirection />
                 </th>
 
@@ -235,3 +235,4 @@
         }));
     </script>
 @endscript
+

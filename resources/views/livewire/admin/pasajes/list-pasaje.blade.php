@@ -127,21 +127,21 @@
                     <x-list.sortable-button column="abordado" :$sortColumn :$sortDirection />
                 </th>
 
-                <th>Precio USD
+                <th>Precio
                     <x-list.sortable-button column="precio_base" :$sortColumn :$sortDirection />
                 </th>
 
-                <th>Descuento USD
+                <th>Descuento
                     <x-list.sortable-button column="descuento" :$sortColumn :$sortDirection />
                 </th>
 
-                <th>Subtotal USD
+                <th>Subtotal
                     <x-list.sortable-button column="subtotal" :$sortColumn :$sortDirection />
                 </th>
 
-                <th>Tasa de servicio USD</th>
+                <th>Tasa de servicio</th>
 
-                <th>Total USD
+                <th>Total
                     <x-list.sortable-button column="total" :$sortColumn :$sortDirection />
                 </th>
 
@@ -261,3 +261,4 @@
         }));
     </script>
 @endscript
+

@@ -55,7 +55,7 @@
 
                 <x-form.text-input type="number" name="monto_minimo" x-model="$wire.monto_minimo" min="0"
                     step="0.01">
-                    Monto mínimo USD
+                    Monto mínimo
                 </x-form.text-input>
 
                 @error('monto_minimo')
@@ -70,7 +70,7 @@
 
                 <x-form.text-input type="number" name="monto_maximo" x-model="$wire.monto_maximo" min="0"
                     step="0.01">
-                    Monto máximo USD
+                    Monto máximo
                 </x-form.text-input>
                 <small class="text-body-secondary">Déjalo vacío para un rango sin
                     límite superior. Ambos límites están incluidos.</small>
@@ -87,7 +87,7 @@
                 <x-form.text-input type="number" name="cantidad" x-model="$wire.cantidad" min="0"
                     step="0.01">
                     <span
-                        x-text="Number($wire.tipo_servicio) === 2 ? 'Porcentaje sobre el precio final (%)' : 'Monto fijo por pasaje (USD)'"></span>
+                        x-text="Number($wire.tipo_servicio) === 2 ? 'Porcentaje sobre el precio final (%)' : 'Monto fijo por pasaje'"></span>
                 </x-form.text-input>
 
                 @error('cantidad')
@@ -185,3 +185,4 @@
         }));
     </script>
 @endscript
+

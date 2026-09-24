@@ -11,17 +11,20 @@ use Livewire\Component;
 #[Layout('layouts.cms')]
 class DetailPasaje extends Component
 {
+    public bool $canViewCampaign = false;
+
     #[Locked]
     public ?int $pasaje_id = null;
 
     public Pasaje $pasaje;
 
     public string $qr;
-    
+
     public function mount(?int $pasaje_id = null): void
     {
         $this->pasaje_id = $pasaje_id;
         Access::authorize('pasajes', 'detail');
+        $this->canViewCampaign = Access::allows('cupones', 'detail');
         $this->pasaje = $this->findPasaje();
         $this->qr = $this->pasaje->getQr() ?? '';
     }
@@ -34,6 +37,6 @@ class DetailPasaje extends Component
 
     protected function findPasaje(): Pasaje
     {
-        return Pasaje::searchAdmin()->with([0 => 'reserva', 1 => 'viajero'])->findOrFail($this->pasaje_id);
+        return Pasaje::searchAdmin()->with([0 => 'reserva.cupon.configuracionCupon', 1 => 'viajero'])->findOrFail($this->pasaje_id);
     }
 }

@@ -68,8 +68,8 @@
                 </div>
 
                 <div class="alert alert-light border">
-                    Saldo contable: {{ $balance['saldo'] }} USD · Reservado: {{ $balance['retenido'] }} USD ·
-                    Disponible: {{ $balance['disponible'] }} USD
+                    Saldo contable: {{ $balance['saldo'] }} · Reservado: {{ $balance['retenido'] }} ·
+                    Disponible: {{ $balance['disponible'] }}
                 </div>
 
                 @if ($canListUser)
@@ -109,3 +109,4 @@
         }));
     </script>
 @endscript
+

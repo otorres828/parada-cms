@@ -109,23 +109,23 @@
                                 @endif
                             </dd>
 
-                            <dt class="col-sm-4">Precio USD</dt>
+                            <dt class="col-sm-4">Precio</dt>
 
                             <dd class="col-sm-8">{{ number_format($pasaje->precio_base, 2) }}</dd>
 
-                            <dt class="col-sm-4">Descuento USD</dt>
+                            <dt class="col-sm-4">Descuento</dt>
 
                             <dd class="col-sm-8">{{ number_format($pasaje->descuento, 2) }}</dd>
 
-                            <dt class="col-sm-4">Subtotal USD</dt>
+                            <dt class="col-sm-4">Subtotal</dt>
 
                             <dd class="col-sm-8">{{ number_format($pasaje->subtotal, 2) }}</dd>
 
-                            <dt class="col-sm-4">Tasa de servicio USD</dt>
+                            <dt class="col-sm-4">Tasa de servicio</dt>
 
                             <dd class="col-sm-8">{{ number_format($pasaje->tasa_servicio, 2) }}</dd>
 
-                            <dt class="col-sm-4">Total USD</dt>
+                            <dt class="col-sm-4">Total</dt>
 
                             <dd class="col-sm-8">{{ number_format($pasaje->total, 2) }}</dd>
 
@@ -144,10 +144,10 @@
                             <dt class="col-sm-4">Valor aplicado</dt>
 
                             <dd class="col-sm-8">
-                                {{ $pasaje->valor !== null ? number_format($pasaje->valor, 2) . ($pasaje->tipo_servicio === 2 ? ' %' : ' USD') : 'No registrado' }}
+                                {{ $pasaje->valor !== null ? number_format($pasaje->valor, 2) . ($pasaje->tipo_servicio === 2 ? ' %' : '') : 'No registrado' }}
                             </dd>
 
-                            <dt class="col-sm-4">Rango aplicado USD</dt>
+                            <dt class="col-sm-4">Rango aplicado</dt>
 
                             <dd class="col-sm-8">
                                 @if ($pasaje->monto_minimo !== null)
@@ -218,3 +218,4 @@
         }));
     </script>
 @endscript
+

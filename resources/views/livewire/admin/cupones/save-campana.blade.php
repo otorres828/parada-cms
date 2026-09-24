@@ -174,7 +174,7 @@
 
                     <option value="">Seleccionar...</option>
                     <option value="porcentaje">Porcentaje</option>
-                    <option value="monto_fijo">Importe fijo USD</option>
+                    <option value="monto_fijo">Importe fijo</option>
 
                 </x-form.dropdown>
 
@@ -354,3 +354,4 @@
         }));
     </script>
 @endscript
+

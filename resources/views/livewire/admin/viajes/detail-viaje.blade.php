@@ -193,8 +193,7 @@
                                                     <span
                                                         class="fw-semibold">{{ $tp->destinoTerminal?->nombre }}</span>
                                                 </td>
-                                                <td class="text-end text-success fw-bold">
-                                                    USD {{ number_format($tp->precio, 2) }}
+                                                <td class="text-end text-success fw-bold"> {{ number_format($tp->precio, 2) }}
                                                 </td>
                                                 <td class="text-center">
                                                     @if ($tp->asientos_maximos_permitidos)
@@ -247,7 +246,7 @@
 
                         <th>Pasajes vendidos</th>
 
-                        <th>Tasas de servicio USD</th>
+                        <th>Tasas de servicio</th>
 
                     </tr>
                 </thead>
@@ -328,3 +327,4 @@
         }));
     </script>
 @endscript
+

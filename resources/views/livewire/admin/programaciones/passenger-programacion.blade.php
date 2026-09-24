@@ -84,7 +84,7 @@
 
                             <dd class="col-sm-8">{{ $tickets->count() }}</dd>
 
-                            <dt class="col-sm-4">Tasas servicio USD</dt>
+                            <dt class="col-sm-4">Tasas servicio</dt>
 
                             <dd class="col-sm-8">{{ number_format($tickets->sum('tasa_servicio'), 2) }}</dd>
 
@@ -113,7 +113,7 @@
                                     <thead>
                                         <tr>
                                             <th>Tramo Comercial</th>
-                                            <th class="text-end">Precio USD</th>
+                                            <th class="text-end">Precio</th>
                                             <th class="text-center">Tope Asientos</th>
                                             <th class="text-center">Ocupados</th>
                                             <th class="text-center">Disponibles</th>
@@ -344,3 +344,4 @@
         }));
     </script>
 @endscript
+

@@ -6,6 +6,7 @@ use App\Traits\TraitGeneral;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Cupon extends ModelHelper
 {
@@ -39,6 +40,11 @@ class Cupon extends ModelHelper
     public function reservas(): HasMany
     {
         return $this->hasMany(Reserva::class, 'cupon_id');
+    }
+
+    public function reserva(): HasOne
+    {
+        return $this->hasOne(Reserva::class, 'cupon_id');
     }
 
     public static function searchAdmin(string $search = '', array $filters = []): Builder
