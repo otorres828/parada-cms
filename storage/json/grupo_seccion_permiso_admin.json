@@ -106,9 +106,7 @@
       {"name": "Reembolsos", "url": "reembolsos", "status": 1,
         "permissions": [
           {"name":"Listar","url":"list","status":1},
-          {"name":"Ver detalle","url":"detail","status":1},
-          {"name":"Solicitar reembolso","url":"add","status":1},
-          {"name":"Resolver reembolso","url":"review","status":1}
+          {"name":"Ver detalle","url":"detail","status":1}
         ]
       }
     ]
