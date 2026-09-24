@@ -65,9 +65,6 @@ class DetailCampana extends Component
             if ($campaign->cupones()->exists()) {
                 throw ValidationException::withMessages(['cupones' => 'Esta campaña ya tiene cupones generados.']);
             }
-            if (! $campaign->estatus || $campaign->fecha_fin->isPast()) {
-                throw ValidationException::withMessages(['cupones' => 'La campaña está inactiva o vencida.']);
-            }
             for ($i = 0; $i < $campaign->cantidad_generar; $i++) {
                 $codigo = $campaign->tipo_cupon === ConfiguracionCupon::TIPO_PERSONALIZADO
                     ? $campaign->codigo_personalizado

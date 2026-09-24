@@ -12,7 +12,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('configuracion_cupon_id');
             $table->unsignedBigInteger('usuario_id')->nullable();
-            $table->string('codigo')->unique();
+            $table->string('codigo');
             $table->boolean('redimido')->default(false);
             $table->dateTime('fecha_redencion')->nullable();
             $table->timestamps();

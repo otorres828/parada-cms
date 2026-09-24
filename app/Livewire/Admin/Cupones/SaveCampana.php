@@ -16,36 +16,36 @@ use Livewire\Component;
 #[Layout('layouts.cms')]
 class SaveCampana extends Component
 {
-    public ConfiguracionCupon $configuracionCupon;
+    public ?ConfiguracionCupon $configuracionCupon = null;
 
     #[Locked]
     public ?int $configuracion_cupon_id = null;
 
-    public $empresa_id = '';
+    public int|string $empresa_id = '';
 
     public string $search_empresa_id = '';
 
-    public $nombre_campana = '';
+    public string $nombre_campana = '';
 
-    public $codigo_personalizado = '';
+    public string $codigo_personalizado = '';
 
-    public $tipo_cupon = ConfiguracionCupon::TIPO_RANDOM;
+    public int|string $tipo_cupon = ConfiguracionCupon::TIPO_RANDOM;
 
-    public $modalidad = ConfiguracionCupon::MODALIDAD_GENERAL;
+    public string $modalidad = ConfiguracionCupon::MODALIDAD_GENERAL;
 
-    public $aplica_en = ConfiguracionCupon::APLICA_EN_RESERVA;
+    public string $aplica_en = ConfiguracionCupon::APLICA_EN_RESERVA;
 
-    public $cantidad_generar = 1;
+    public int|string $cantidad_generar = 1;
 
-    public $tipo_descuento = 'porcentaje';
+    public string $tipo_descuento = 'porcentaje';
 
-    public $monto_descuento = '';
+    public string $monto_descuento = '';
 
-    public $fecha_inicio = '';
+    public string $fecha_inicio = '';
 
-    public $fecha_fin = '';
+    public string $fecha_fin = '';
 
-    public $estatus = 1;
+    public int|string $estatus = 1;
 
     public function mount(?int $configuracion_cupon_id = null): void
     {
