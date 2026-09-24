@@ -66,6 +66,7 @@ class AdminDemoSeeder extends Seeder
                 'cliente' => $user,
                 'nombre' => $user->name,
                 'apellido' => 'Prueba',
+                'tipo_documento' => 1,
                 'documento_identidad' => 'DEMO-DOC-'.($i + 1),
                 'fecha_nacimiento' => '1990-01-01',
                 'tipo_pasajero' => 'adulto',

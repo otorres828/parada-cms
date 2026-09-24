@@ -72,6 +72,20 @@ class User extends ModelHelper implements Authenticatable, Authorizable, CanRese
         return $this->hasMany(Cupon::class, 'usuario_id');
     }
 
+    public static function findAdminDetail(int $userId): self
+    {
+        return self::query()
+            ->with([
+                'viajeros' => function ($query) {
+                    $query->orderBy('nombre')
+                        ->orderBy('apellido')
+                        ->orderBy('id');
+                },
+            ])
+            ->where('status', '!=', self::ESTADO_DELETE)
+            ->findOrFail($userId);
+    }
+
     public static function searchAdmin(string $search = '', array $filters = []): Builder
     {
         $query = self::query();

@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('documento_identidad')->nullable();
             $table->date('fecha_nacimiento');
             $table->enum('tipo_pasajero', ['adulto', 'nino', 'infante'])->default('adulto');
+            $table->enum('estatus', [0, 1, 2])->default(1);
             $table->timestamps();
             $table->foreign('usuario_id')->references('id')->on('users')->onUpdate('cascade')->onDelete('cascade');
         });

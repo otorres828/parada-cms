@@ -44,7 +44,7 @@ class DetailCliente extends Component
 
     protected function findUser(): User
     {
-        return User::findOrFail($this->user_id);
+        return User::findAdminDetail($this->user_id);
     }
 
     public function updatedPerPage(): void

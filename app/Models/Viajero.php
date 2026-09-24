@@ -25,6 +25,7 @@ class Viajero extends ModelHelper
         'documento_identidad',
         'fecha_nacimiento',
         'tipo_pasajero',
+        'estatus',
     ];
 
     protected function casts(): array
@@ -32,6 +33,7 @@ class Viajero extends ModelHelper
         return [
             'tipo_documento' => 'integer',
             'fecha_nacimiento' => 'date',
+            'estatus' => 'integer',
         ];
     }
 

@@ -25,11 +25,32 @@ class ReservaService
     public const MINUTOS_BLOQUEO = 20;
 
     // 1. Al continuar desde el itinerario, crea solo la reserva NUEVA con la cotización de un pasaje.
-    public static function aplicarReserva(User $cliente, int $tarifaId): Reserva
+    public static function aplicarReserva(User $cliente, int $tarifaId, ?int $reprogramacionId = null): Reserva
     {
         self::validarCliente($cliente);
 
-        return DB::transaction(function () use ($cliente, $tarifaId) {
+        return DB::transaction(function () use ($cliente, $tarifaId, $reprogramacionId) {
+
+            $reservaOriginal = null;
+
+            if ($reprogramacionId !== null) {
+                $reservaOriginal = Reserva::query()
+                    ->where('usuario_id', $cliente->id)
+                    ->lockForUpdate()
+                    ->findOrFail($reprogramacionId);
+
+                self::exigir(
+                    $reservaOriginal->estado_pago === Reserva::ESTADO_PAGO_CANCELADO,
+                    'reprogramacion_id',
+                    'La reserva original debe estar cancelada antes de reprogramarla.',
+                );
+
+                self::exigir(
+                    ! $reservaOriginal->reservasReprogramadas()->exists(),
+                    'reprogramacion_id',
+                    'Esta reserva ya fue reprogramada.',
+                );
+            }
 
             $referencia = ProgramacionTramoPrecio::findOrFail($tarifaId);
             $programacion = self::bloquearProgramacion($referencia->programacion_id);
@@ -40,7 +61,9 @@ class ReservaService
             self::exigir(bccomp($tarifa->precio, '0', 2) >= 0, 'tarifa', 'La tarifa no puede ser negativa.');
             $disponibilidad = self::disponibilidad($programacion, $tarifa, $terminales);
             self::exigir($disponibilidad['cupo_tramo'] > 0, 'tarifa', 'No hay cupo disponible para este trayecto.');
-            $tasa = TasaServicio::paraPrecio($tarifa->precio)->calcular($tarifa->precio);
+            $tasa = $reservaOriginal
+                ? '0.00'
+                : TasaServicio::paraPrecio($tarifa->precio)->calcular($tarifa->precio);
 
             $reserva = Reserva::create([
                 'usuario_id' => $cliente->id,
@@ -48,6 +71,7 @@ class ReservaService
                 'origen_terminal_id' => $tarifa->origen_terminal_id,
                 'destino_terminal_id' => $tarifa->destino_terminal_id,
                 'programacion_tramo_precio_id' => $tarifa->id,
+                'reprogramacion_id' => $reservaOriginal?->id,
                 'codigo_referencia' => (string) Str::ulid(),
                 'monto_pasajes' => $tarifa->precio,
                 'descuento_aplicado' => '0.00',

@@ -28,7 +28,7 @@ return new class extends Migration
             $table->foreign('usuario_id')->references('id')->on('users')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('programacion_id')->references('id')->on('programaciones')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('cupon_id')->references('id')->on('cupones')->onUpdate('cascade')->onDelete('set null');
-            $table->foreign('reprogramacion_id')->references('id')->on('reservas')->onUpdate('cascade')->onDelete('restrict');
+            $table->foreign('reprogramacion_id')->references('id')->on('reservas')->onUpdate('cascade')->onDelete('cascade');
         });
     }
 

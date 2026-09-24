@@ -6,6 +6,7 @@
 
     Componentes reutilizables utilizados:
     - <x-clientes.description />: Ficha descriptiva del cliente.
+    - <x-clientes.viajeros-table />: Tabla de viajeros asociados al cliente.
     - <x-clientes.reservas-table />: Tabla de reservas del cliente.
     - <x-form.cancel-button />: Enlace para regresar al listado anterior.
     - <x-layout.loader.fullpage />: Indicador global durante operaciones de Livewire.
@@ -50,17 +51,22 @@
 
             </div>
 
+            <div class="col-md-6">
+
+                <x-clientes.viajeros-table :viajeros="$user->viajeros" />
+
+            </div>
+
         </div>
 
     </div>
 
     <div class="card mt-4">
 
-        <div class="card-header d-flex align-items-center justify-content-between flex-wrap gap-3">
-            <span>Reservas pagadas y
-                pendientes</span>
+        <div class="card-header d-flex align-items-center flex-wrap gap-3">
+            <span>Reservas pagadas y pendientes</span>
 
-            <div style="width: 320px; max-width: 100%;">
+            <div class="ms-auto" style="width: 320px; max-width: 100%;">
 
                 <label for="buscar-reservas" class="visually-hidden">
                     Buscar reserva
