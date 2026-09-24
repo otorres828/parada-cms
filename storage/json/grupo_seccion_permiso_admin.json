@@ -47,7 +47,6 @@
       {"name": "Usuarios de empresa", "url": "empresas.users", "status": 1,
         "permissions": [
           {"name": "Listar", "url": "list", "status": 1},
-          {"name": "Agregar", "url": "add", "status": 1},
           {"name": "Editar", "url": "edit", "status": 1},
           {"name": "Ver detalle", "url": "detail", "status": 1},
           {"name": "Asignar permisos", "url": "permissions", "status": 1}

@@ -8,7 +8,6 @@
     Componentes reutilizables utilizados:
     - <x-layout.loader.fullpage />: Indicador global durante operaciones de Livewire.
     - <x-list.actions />: Contenedor del buscador y filtros del listado.
-    - <x-list.add-button />: Botón para registrar un nuevo elemento.
     - <x-list.button-group />: Agrupa las acciones disponibles por registro.
     - <x-list.edit-button />: Enlace para editar el registro.
     - <x-list.heading />: Cabecera del módulo con título y acciones.
@@ -45,14 +44,6 @@
 
         </x-slot:group>
 
-        @if (Route::has('admin.empresas.users.add') && $canAdd)
-            <x-slot:button>
-                <x-list.add-button :route="route('admin.empresas.users.add', ['empresa_id' => $empresa_id])">
-                    Nuevo registro
-                </x-list.add-button>
-            </x-slot:button>
-        @endif
-
     </x-list.actions>
 
     <div class="row g-3 mb-3">
@@ -71,22 +62,6 @@
 
             </select>
 
-        </div>
-
-        <div class="col-md-3">
-
-            <label class="form-label" for="listEmpresaUser-from">
-                Desde
-            </label>
-            <input id="listEmpresaUser-from" type="date" class="form-control" wire:model.live="date_from">
-        </div>
-
-        <div class="col-md-3">
-
-            <label class="form-label" for="listEmpresaUser-to">
-                Hasta
-            </label>
-            <input id="listEmpresaUser-to" type="date" class="form-control" wire:model.live="date_to">
         </div>
 
     </div>

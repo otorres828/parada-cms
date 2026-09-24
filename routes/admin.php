@@ -145,7 +145,6 @@ Route::group(['middleware' => ['auth:admin', 'check.permisos']], function () {
     Route::prefix('empresas/{empresa_id}/usuarios')->name('empresas.users.')->group(function () {
 
         Route::livewire('/', ListEmpresaUser::class)->whereNumber('empresa_id')->name('list');
-        Route::livewire('nuevo', SaveEmpresaUser::class)->whereNumber('empresa_id')->name('add');
         Route::livewire('editar/{usuario_empresa_id}', SaveEmpresaUser::class)->whereNumber(['empresa_id', 'usuario_empresa_id'])->name('edit');
         Route::livewire('detalle/{usuario_empresa_id}', DetailEmpresaUser::class)->whereNumber(['empresa_id', 'usuario_empresa_id'])->name('detail');
         Route::livewire('permisos/{usuario_empresa_id}', PermissionEmpresaUser::class)->whereNumber(['empresa_id', 'usuario_empresa_id'])->name('permissions');

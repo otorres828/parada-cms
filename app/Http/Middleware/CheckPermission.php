@@ -38,7 +38,6 @@ class CheckPermission
         'admin.empresas.users.list' => ['empresas.users', 'list'],
         'admin.empresas.users.detail' => ['empresas.users', 'detail'],
         'admin.empresas.users.edit' => ['empresas.users', 'edit'],
-        'admin.empresas.users.add' => ['empresas.users', 'add'],
         'admin.empresas.users.permissions' => ['empresas.users', 'permissions'],
         'admin.legales.list' => ['legales', 'list'],
         'admin.legales.detail' => ['legales', 'detail'],

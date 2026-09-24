@@ -8,7 +8,6 @@ use App\Services\Admin\Access;
 use App\Services\Admin\Audit;
 use App\Traits\Listing;
 use App\Traits\Permissions;
-use App\Traits\TraitGeneral;
 use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Locked;
@@ -23,27 +22,18 @@ class ListEmpresaUser extends Component
 
     use Listing;
     use Permissions;
-    use TraitGeneral;
     use WithPagination;
 
     public string $status = '';
-
-    public string $date_from = '';
-
-    public string $date_to = '';
 
     protected array $queryString = [
         'search' => ['except' => ''],
         'per_page' => ['except' => 10],
         'status' => ['except' => ''],
-        'date_from' => ['except' => ''],
-        'date_to' => ['except' => ''],
     ];
 
     public function mount(?int $empresa_id = null): void
     {
-        $this->date_from = $this->date_from ?: self::getDefaultDesde();
-        $this->date_to = $this->date_to ?: self::getDefaultHasta();
         $this->empresa_id = $empresa_id;
         Empresa::findOrFail($empresa_id);
         $this->sortColumn = 'id';
@@ -55,8 +45,6 @@ class ListEmpresaUser extends Component
     {
         $query = UsuarioEmpresa::searchAdmin($this->search, [
             'status' => $this->status,
-            'date_from' => $this->date_from,
-            'date_to' => $this->date_to,
             'empresa_id' => $this->empresa_id,
         ]);
 
@@ -71,7 +59,7 @@ class ListEmpresaUser extends Component
 
     public function updated($property): void
     {
-        if (in_array($property, ['search', 'status', 'date_from', 'date_to', 'per_page'])) {
+        if (in_array($property, ['search', 'status', 'per_page'])) {
             $this->resetPage();
         }
     }
