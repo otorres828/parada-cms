@@ -42,28 +42,7 @@
 
                 <div class="card">
 
-                    <div class="card-body">
-
-                        <dl class="row mb-0">
-                            <dt class="col-sm-4">Empresa</dt>
-                            <dd class="col-sm-8">
-                                {{ $empresa->nombre ?? '—' }}
-                            </dd>
-                            <dt class="col-sm-4">Identificación</dt>
-                            <dd class="col-sm-8">
-                                {{ $empresa->rif ?? '—' }}
-                            </dd>
-                            <dt class="col-sm-4">Correo</dt>
-                            <dd class="col-sm-8">
-                                {{ $empresa->email ?? '—' }}
-                            </dd>
-                            <dt class="col-sm-4">Estado</dt>
-                            <dd class="col-sm-8">
-                                <x-list.status-badge :status="$empresa->estatus" />
-                            </dd>
-                        </dl>
-
-                    </div>
+                    <x-empresas.description :empresa="$empresa" />
 
                 </div>
 
@@ -109,4 +88,5 @@
         }));
     </script>
 @endscript
+
 
