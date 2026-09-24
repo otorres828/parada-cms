@@ -58,23 +58,14 @@
                             <dt class="col-sm-4">Reserva</dt>
 
                             <dd class="col-sm-8">
-                                {{ $pasaje->reserva?->codigo_referencia ?? '—' }}
+                                @if ($pasaje->reserva && $canViewReservation)
+                                    <a href="{{ route('admin.reservas.detail', $pasaje->reserva_id) }}" wire:navigate>
+                                        {{ $pasaje->reserva->codigo_referencia }}
+                                    </a>
+                                @else
+                                    {{ $pasaje->reserva?->codigo_referencia ?? '—' }}
+                                @endif
                             </dd>
-
-                            @if ($pasaje->reserva?->cupon)
-                                <dt class="col-sm-4">Cupón aplicado</dt>
-
-                                <dd class="col-sm-8">
-                                    @if ($canViewCampaign)
-                                        <a href="{{ route('admin.cupones.detail', $pasaje->reserva->cupon->configuracion_cupon_id) }}"
-                                            wire:navigate>
-                                            {{ $pasaje->reserva->cupon->codigo }}
-                                        </a>
-                                    @else
-                                        {{ $pasaje->reserva->cupon->codigo }}
-                                    @endif
-                                </dd>
-                            @endif
 
                             <dt class="col-sm-4">Fecha de reserva</dt>
 
@@ -88,6 +79,8 @@
                                 {{ $pasaje->reserva?->programacion?->fecha_salida?->format('d/m/Y') ?? '—' }}                                 {{ $pasaje->reserva?->programacion?->hora_salida ? substr($pasaje->reserva->programacion->hora_salida, 0, 5) : '—' }}
 
                             </dd>
+
+                            <hr class="col-12 my-3">
 
                             <dt class="col-sm-4">Viajero</dt>
 
@@ -118,6 +111,25 @@
                                 @endif
                             </dd>
 
+                            @if ($pasaje->reserva?->cupon)
+                                <hr class="col-12 my-3">
+
+                                <dt class="col-sm-4">Cupón aplicado</dt>
+
+                                <dd class="col-sm-8">
+                                    @if ($canViewCampaign)
+                                        <a href="{{ route('admin.cupones.detail', $pasaje->reserva->cupon->configuracion_cupon_id) }}"
+                                            wire:navigate>
+                                            {{ $pasaje->reserva->cupon->codigo }}
+                                        </a>
+                                    @else
+                                        {{ $pasaje->reserva->cupon->codigo }}
+                                    @endif
+                                </dd>
+                            @endif
+
+                            <hr class="col-12 my-3">
+
                             <dt class="col-sm-4">Precio</dt>
 
                             <dd class="col-sm-8">{{ number_format($pasaje->precio_base, 2) }}</dd>
@@ -144,7 +156,9 @@
                                 <x-list.status-reserva :status="$pasaje->reserva->estado_pago" />
                             </dd>
 
-                            <dt class="col-sm-4">Tipo de tasa aplicada</dt>
+                            <hr class="col-12 my-3">
+
+                            <dt class="col-sm-4">Tipo de tasa de servicio aplicada</dt>
 
                             <dd class="col-sm-8">
                                 {{ $pasaje->tipo_servicio === 2 ? 'Porcentaje' : ($pasaje->tipo_servicio === 1 ? 'Monto fijo' : 'Registro histórico') }}

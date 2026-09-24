@@ -76,17 +76,56 @@
                                 <x-list.status-badge :status="$programacion->estatus" />
                             </dd>
 
-                            <dt class="col-sm-4">Capacidad Bus</dt>
+                            <hr class="col-12 my-3">
+
+                            <dt class="col-sm-4">Autobús</dt>
+
+                            <dd class="col-sm-8">
+                                @if ($canAutobusesDetail && $programacion->autobus_id)
+                                    <a href="{{ route('admin.autobuses.detail', $programacion->autobus_id) }}"
+                                        wire:navigate>
+                                        {{ $programacion->autobus?->placa ?? '—' }}
+                                    </a>
+                                @else
+                                    {{ $programacion->autobus?->placa ?? '—' }}
+                                @endif
+                            </dd>
+
+                            <dt class="col-sm-4">Modelo</dt>
+
+                            <dd class="col-sm-8">{{ $programacion->autobus?->modelo ?? '—' }}</dd>
+
+                            <dt class="col-sm-4">Tipo de asiento</dt>
+
+                            <dd class="col-sm-8">{{ $programacion->autobus?->tipo_asiento ?? '—' }}</dd>
+
+                            <dt class="col-sm-4">Capacidad</dt>
 
                             <dd class="col-sm-8">{{ $capacidad }} asientos</dd>
 
-                            <dt class="col-sm-4">Pasajes vendidos</dt>
+                            <dt class="col-sm-4">Amenidades</dt>
 
-                            <dd class="col-sm-8">{{ $tickets->count() }}</dd>
+                            <dd class="col-sm-8">
+                                {{ $programacion->autobus?->amenidades->pluck('nombre')->implode(', ') ?: 'Sin amenidades' }}
+                            </dd>
 
-                            <dt class="col-sm-4">Tasas servicio</dt>
+                            <hr class="col-12 my-3">
 
-                            <dd class="col-sm-8">{{ number_format($tickets->sum('tasa_servicio'), 2) }}</dd>
+                            <dt class="col-sm-4">Pasajes pagados</dt>
+
+                            <dd class="col-sm-8">
+                                {{ $pasajesPagados['cantidad'] }} pasajes / ${{ number_format($pasajesPagados['monto'], 2) }}
+                            </dd>
+
+                            <dt class="col-sm-4">Pasajes pendientes</dt>
+
+                            <dd class="col-sm-8">
+                                {{ $pasajesPendientes['cantidad'] }} pasajes / ${{ number_format($pasajesPendientes['monto'], 2) }}
+                            </dd>
+
+                            <dt class="col-sm-4">Total tasas de servicio</dt>
+
+                            <dd class="col-sm-8">${{ number_format($tickets->sum('tasa_servicio'), 2) }}</dd>
 
                         </dl>
 
