@@ -154,6 +154,8 @@
 
                         <th>Cliente</th>
 
+                        <th>Reserva</th>
+
                         <th>Fecha de redención</th>
 
                     </tr>
@@ -176,6 +178,21 @@
                             </td>
 
                             <td>
+                                @if ($cupon->reserva)
+                                    @if ($canViewReservation)
+                                        <a href="{{ route('admin.reservas.detail', $cupon->reserva->id) }}"
+                                            wire:navigate>
+                                            {{ $cupon->reserva->codigo_referencia }}
+                                        </a>
+                                    @else
+                                        {{ $cupon->reserva->codigo_referencia }}
+                                    @endif
+                                @else
+                                    —
+                                @endif
+                            </td>
+
+                            <td>
                                 {{ $cupon->fecha_redencion?->format('d/m/Y H:i') ?? '—' }}
                             </td>
 
@@ -184,7 +201,7 @@
                     @empty
 
                         <tr>
-                            <td colspan="4" class="text-center py-4">
+                            <td colspan="5" class="text-center py-4">
                                 No se encontraron cupones.
                             </td>
 

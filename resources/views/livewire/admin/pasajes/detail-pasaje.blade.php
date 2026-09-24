@@ -61,11 +61,20 @@
                                 {{ $pasaje->reserva?->codigo_referencia ?? '—' }}
                             </dd>
 
-                            <dt class="col-sm-4">Cupón aplicado</dt>
+                            @if ($pasaje->reserva?->cupon)
+                                <dt class="col-sm-4">Cupón aplicado</dt>
 
-                            <dd class="col-sm-8">
-                                {{ $pasaje->reserva?->cupon?->codigo ?? 'Sin cupón' }}
-                            </dd>
+                                <dd class="col-sm-8">
+                                    @if ($canViewCampaign)
+                                        <a href="{{ route('admin.cupones.detail', $pasaje->reserva->cupon->configuracion_cupon_id) }}"
+                                            wire:navigate>
+                                            {{ $pasaje->reserva->cupon->codigo }}
+                                        </a>
+                                    @else
+                                        {{ $pasaje->reserva->cupon->codigo }}
+                                    @endif
+                                </dd>
+                            @endif
 
                             <dt class="col-sm-4">Fecha de reserva</dt>
 
@@ -145,17 +154,6 @@
 
                             <dd class="col-sm-8">
                                 {{ $pasaje->valor !== null ? number_format($pasaje->valor, 2) . ($pasaje->tipo_servicio === 2 ? ' %' : '') : 'No registrado' }}
-                            </dd>
-
-                            <dt class="col-sm-4">Rango aplicado</dt>
-
-                            <dd class="col-sm-8">
-                                @if ($pasaje->monto_minimo !== null)
-                                    {{ number_format($pasaje->monto_minimo, 2) }} —
-                                    {{ $pasaje->monto_maximo !== null ? number_format($pasaje->monto_maximo, 2) : 'Sin límite' }}
-                                @else
-                                    No registrado
-                                @endif
                             </dd>
 
                         </dl>

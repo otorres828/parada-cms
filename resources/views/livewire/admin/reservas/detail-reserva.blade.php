@@ -50,12 +50,29 @@
                         <dl class="row mb-0">
                             <dt class="col-sm-4">Referencia</dt>
                             <dd class="col-sm-8">
-                                {{ $reserva->codigo_referencia ?? '—' }}
+                                @if ($canViewReservation)
+                                    <a href="{{ route('admin.reservas.detail', $reserva->id) }}" wire:navigate>
+                                        {{ $reserva->codigo_referencia ?? '—' }}
+                                    </a>
+                                @else
+                                    {{ $reserva->codigo_referencia ?? '—' }}
+                                @endif
                             </dd>
-                            <dt class="col-sm-4">Cupón aplicado</dt>
-                            <dd class="col-sm-8">
-                                {{ $reserva->cupon?->codigo ?? 'Sin cupón' }}
-                            </dd>
+
+                            @if ($reserva->cupon)
+                                <dt class="col-sm-4">Cupón aplicado</dt>
+                                <dd class="col-sm-8">
+                                    @if ($canViewCampaign)
+                                        <a href="{{ route('admin.cupones.detail', $reserva->cupon->configuracion_cupon_id) }}"
+                                            wire:navigate>
+                                            {{ $reserva->cupon->codigo }}
+                                        </a>
+                                    @else
+                                        {{ $reserva->cupon->codigo }}
+                                    @endif
+                                </dd>
+                            @endif
+
                             <dt class="col-sm-4">Origen</dt>
 
                             <dd class="col-sm-8">

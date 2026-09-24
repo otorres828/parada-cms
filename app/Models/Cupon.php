@@ -54,7 +54,7 @@ class Cupon extends ModelHelper
         if ($search !== '') {
             $query->where(function ($query) use ($search) {
                 $query->where('cupones.id', ctype_digit($search) ? $search : -1);
-                $query->orWhere('cupones.codigo', 'like', '%' . $search . '%');
+                $query->orWhere('cupones.codigo', 'like', '%'.$search.'%');
             });
         }
 
@@ -68,11 +68,11 @@ class Cupon extends ModelHelper
             $query->where('cupones.configuracion_cupon_id', $filters['configuracion_cupon_id']);
         }
 
-        if (!empty($filters['date_from'])) {
+        if (! empty($filters['date_from'])) {
             $query->whereDate('cupones.created_at', '>=', self::date($filters['date_from']));
         }
 
-        if (!empty($filters['date_to'])) {
+        if (! empty($filters['date_to'])) {
             $query->whereDate('cupones.created_at', '<=', self::date($filters['date_to']));
         }
 
