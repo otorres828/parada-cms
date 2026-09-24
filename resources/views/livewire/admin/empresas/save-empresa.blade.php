@@ -101,6 +101,24 @@
 
             <div class="mb-3">
 
+                <x-form.dropdown label="Gestión de pagos" name="tipo_contrato" x-model="$wire.tipo_contrato">
+
+                    <option value="">Seleccionar...</option>
+                    <option value="{{ \App\Models\Empresa::CONTRATO_ELLOS_RECIBEN }}">La empresa recibe los pagos</option>
+                    <option value="{{ \App\Models\Empresa::CONTRATO_NOSOTROS_RECIBIMOS }}">La plataforma recibe los pagos</option>
+
+                </x-form.dropdown>
+
+                @error('tipo_contrato')
+                    <div class="text-danger small">
+                        {{ $message }}
+                    </div>
+                @enderror
+
+            </div>
+
+            <div class="mb-3">
+
                 <x-form.dropdown label="Estado" name="estatus" x-model="$wire.estatus">
 
                     <option value="">Seleccionar...</option>
@@ -182,6 +200,10 @@
                         rule: 'maxLength',
                         value: 255,
                         errorMessage: 'Máximo 255 caracteres'
+                    }])
+                    .addField(this.$refs.form.querySelector('[name="tipo_contrato"]'), [{
+                        rule: 'required',
+                        errorMessage: 'Este campo es requerido'
                     }])
                     .addField(this.$refs.form.querySelector('[name="estatus"]'), [{
                         rule: 'required',

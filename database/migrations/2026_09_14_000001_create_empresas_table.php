@@ -14,6 +14,7 @@ return new class extends Migration
             $table->string('rif');
             $table->string('telefono');
             $table->string('email');
+            $table->unsignedTinyInteger('tipo_contrato')->default(1);
             $table->boolean('estatus')->default(true);
             $table->timestamps();
         });

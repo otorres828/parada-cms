@@ -5,6 +5,7 @@
 
     Componentes reutilizables utilizados:
     - <x-empresas.description />: Ficha descriptiva de la empresa.
+    - <x-empresas.datos-bancarios />: Listado de cuentas bancarias y Pago Móvil.
     - <x-form.cancel-button />: Enlace para regresar al listado anterior.
     - <x-layout.loader.fullpage />: Indicador global durante operaciones de Livewire.
     - <x-list.heading />: Cabecera del módulo con título y acciones.
@@ -46,17 +47,22 @@
 
                 </div>
 
-                <div class="alert alert-light border">
-                    Saldo contable: {{ $balance['saldo'] }} · Reservado: {{ $balance['retenido'] }} ·
-                    Disponible: {{ $balance['disponible'] }}
-                </div>
-
                 @if ($canListUser)
                     <a class="btn btn-primary"
                         href="{{ route('admin.empresas.users.list', ['empresa_id' => $empresa->id]) }}"
                         wire:navigate>Gestionar
                         usuarios de la empresa</a>
                 @endif
+
+            </div>
+
+        </div>
+
+        <div class="row mt-4">
+
+            <div class="col-12">
+
+                <x-empresas.datos-bancarios :datos-bancarios="$empresa->datosBancarios" />
 
             </div>
 

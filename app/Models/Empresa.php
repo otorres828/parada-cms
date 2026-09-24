@@ -10,6 +10,10 @@ class Empresa extends ModelHelper
 {
     use TraitGeneral;
 
+    public const CONTRATO_ELLOS_RECIBEN = 1;
+
+    public const CONTRATO_NOSOTROS_RECIBIMOS = 2;
+
     protected $table = 'empresas';
 
     protected $fillable = [
@@ -17,12 +21,16 @@ class Empresa extends ModelHelper
         'rif',
         'telefono',
         'email',
+        'tipo_contrato',
         'estatus',
     ];
 
     protected function casts(): array
     {
-        return ['estatus' => 'integer'];
+        return [
+            'tipo_contrato' => 'integer',
+            'estatus' => 'integer',
+        ];
     }
 
     public function usuariosEmpresa(): HasMany
@@ -43,6 +51,20 @@ class Empresa extends ModelHelper
     public function configuracionCupones(): HasMany
     {
         return $this->hasMany(ConfiguracionCupon::class, 'empresa_id');
+    }
+
+    public function datosBancarios(): HasMany
+    {
+        return $this->hasMany(DatoBancario::class, 'empresa_id');
+    }
+
+    public function getTipoContrato(): string
+    {
+        return match ($this->tipo_contrato) {
+            self::CONTRATO_ELLOS_RECIBEN => 'La empresa recibe los pagos',
+            self::CONTRATO_NOSOTROS_RECIBIMOS => 'La plataforma recibe los pagos',
+            default => 'Sin configurar',
+        };
     }
 
     public static function searchAdmin(string $search = '', array $filters = []): Builder
@@ -86,6 +108,20 @@ class Empresa extends ModelHelper
         return self::searchAdmin()
             ->selectRaw('COUNT(*) as total, COALESCE(SUM(CASE WHEN estatus = 1 THEN 1 ELSE 0 END), 0) as activas')
             ->first();
+    }
+
+    public static function findAdminDetail(int $empresaId): self
+    {
+        return self::query()
+            ->with([
+                'datosBancarios' => function ($query) {
+                    $query->where('estatus', '!=', DatoBancario::ELIMINADO)
+                        ->orderByDesc('estatus')
+                        ->orderBy('tipo')
+                        ->orderBy('id');
+                },
+            ])
+            ->findOrFail($empresaId);
     }
 
     public function reembolsos(): HasMany

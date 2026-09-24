@@ -4,6 +4,7 @@ namespace App\Livewire\Admin\Reembolsos;
 
 use App\Models\Empresa;
 use App\Models\Reembolso;
+use App\Services\Admin\Access;
 use App\Traits\Listing;
 use App\Traits\Permissions;
 use App\Traits\TraitGeneral;
@@ -21,6 +22,8 @@ class ListReembolso extends Component
     use WithPagination;
 
     public Collection $empresas;
+
+    public bool $canViewReservation = false;
 
     public string $empresa_id = '';
 
@@ -46,6 +49,7 @@ class ListReembolso extends Component
         $this->sortColumn = 'id';
         $this->sortDirection = 'desc';
         $this->checkPermissions('reembolsos', ['detail']);
+        $this->canViewReservation = Access::allows('reservas', 'detail');
         $this->empresas = Empresa::searchAdmin()->orderBy('nombre')->get();
     }
 

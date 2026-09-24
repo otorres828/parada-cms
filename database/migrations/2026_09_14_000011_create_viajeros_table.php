@@ -13,7 +13,7 @@ return new class extends Migration
             $table->unsignedBigInteger('usuario_id');
             $table->string('nombre');
             $table->string('apellido');
-            $table->string('documento_identidad');
+            $table->string('documento_identidad')->nullable();
             $table->date('fecha_nacimiento');
             $table->enum('tipo_pasajero', ['adulto', 'nino', 'infante'])->default('adulto');
             $table->timestamps();

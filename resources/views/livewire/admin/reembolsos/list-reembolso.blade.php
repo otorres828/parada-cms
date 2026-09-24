@@ -108,7 +108,7 @@
                     <x-list.sortable-button column="id" :$sortColumn :$sortDirection />
                 </th>
 
-                <th>Pago </th>
+                <th>Reserva</th>
 
                 <th>Empresa </th>
 
@@ -138,7 +138,20 @@
                     </td>
 
                     <td>
-                        {{ $reembolso->pagoReserva?->referencia_pago ?? '—' }}
+                        @if ($reembolso->pagoReserva?->reserva)
+
+                            @if ($canViewReservation)
+                                <a href="{{ route('admin.reservas.detail', ['reserva_id' => $reembolso->pagoReserva->reserva->id]) }}"
+                                    wire:navigate>
+                                    {{ $reembolso->pagoReserva->reserva->codigo_referencia }}
+                                </a>
+                            @else
+                                {{ $reembolso->pagoReserva->reserva->codigo_referencia }}
+                            @endif
+
+                        @else
+                            —
+                        @endif
                     </td>
 
                     <td>

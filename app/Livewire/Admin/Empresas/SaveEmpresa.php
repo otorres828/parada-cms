@@ -16,15 +16,17 @@ class SaveEmpresa extends Component
     #[Locked]
     public ?int $empresa_id = null;
 
-    public $nombre = '';
+    public string $nombre = '';
 
-    public $rif = '';
+    public string $rif = '';
 
-    public $telefono = '';
+    public string $telefono = '';
 
-    public $email = '';
+    public string $email = '';
 
-    public $estatus = 1;
+    public int|string $tipo_contrato = Empresa::CONTRATO_ELLOS_RECIBEN;
+
+    public int|string $estatus = 1;
 
     public Empresa $empresa;
 
@@ -56,6 +58,7 @@ class SaveEmpresa extends Component
             $empresa->rif = $data['rif'];
             $empresa->telefono = $data['telefono'];
             $empresa->email = $data['email'];
+            $empresa->tipo_contrato = $data['tipo_contrato'];
             $empresa->estatus = $data['estatus'];
             $empresa->save();
             Audit::record($this->empresa_id ? 'registro.actualizado' : 'registro.creado', $empresa, $data);
@@ -75,6 +78,7 @@ class SaveEmpresa extends Component
         $this->rif = $empresa->rif ?? '';
         $this->telefono = $empresa->telefono ?? '';
         $this->email = $empresa->email ?? '';
+        $this->tipo_contrato = (string) $empresa->tipo_contrato;
         $this->estatus = (string) (is_bool($empresa->estatus) ? (int) $empresa->estatus : $empresa->estatus);
     }
 
@@ -85,12 +89,14 @@ class SaveEmpresa extends Component
             'rif' => ['required', 'string', 'max:255'],
             'telefono' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', 'max:255'],
+            'tipo_contrato' => ['required', 'integer', 'in:1,2'],
             'estatus' => ['required', 'in:0,1'],
         ], [], [
             'nombre' => 'Nombre',
             'rif' => 'Identificación fiscal',
             'telefono' => 'Teléfono',
             'email' => 'Correo',
+            'tipo_contrato' => 'Tipo de contrato',
             'estatus' => 'Estado',
         ]);
         foreach ($validated as $key => &$value) {

@@ -8,6 +8,7 @@ use App\Models\Auditoria;
 use App\Models\Autobus;
 use App\Models\ConfiguracionCupon;
 use App\Models\Cupon;
+use App\Models\DatoBancario;
 use App\Models\Empresa;
 use App\Models\Estado;
 use App\Models\Programacion;
@@ -78,9 +79,31 @@ class AdminDemoSeeder extends Seeder
                     'nombre' => ''.$name,
                     'telefono' => '0000-0000',
                     'email' => 'demo-empresa-'.($c + 1).'@example.test',
+                    'tipo_contrato' => $c === 1
+                        ? Empresa::CONTRATO_NOSOTROS_RECIBIMOS
+                        : Empresa::CONTRATO_ELLOS_RECIBEN,
                     'estatus' => true,
                 ],
             );
+
+            DatoBancario::firstOrCreate(
+                [
+                    'empresa_id' => $company->id,
+                    'numero_cuenta_telefono' => $c % 2 === 0
+                        ? '0412000000'.($c + 1)
+                        : '0134000000000000000'.($c + 1),
+                ],
+                [
+                    'tipo' => $c % 2 === 0 ? DatoBancario::PAGO_MOVIL : DatoBancario::CUENTA_BANCARIA,
+                    'banco' => $c % 2 === 0 ? 'Banesco' : 'Mercantil',
+                    'nombre_titular' => $company->nombre,
+                    'tipo_titular' => 'juridico',
+                    'numero_documento' => $company->rif,
+                    'tipo_cuenta' => $c % 2 === 0 ? null : 'corriente',
+                    'estatus' => DatoBancario::ACTIVO,
+                ],
+            );
+
             $desactivarAlFinal = $company->wasRecentlyCreated && $c === 2;
             $anchor = $company->created_at->copy()->startOfDay();
 
@@ -269,7 +292,7 @@ class AdminDemoSeeder extends Seeder
                                         $cliente,
                                         $reservation->id,
                                         Reserva::METODO_TRANSFERENCIA,
-                                        "DEMO-PAY-$c-$b-$day-" . ($r + 1),
+                                        "DEMO-PAY-$c-$b-$day-".($r + 1),
                                         $reservation->fecha_compra->toDateTimeString(),
                                     );
 

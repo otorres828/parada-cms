@@ -19,6 +19,10 @@
         <dd class="col-sm-8">
             {{ $empresa->email ?? '—' }}
         </dd>
+        <dt class="col-sm-4">Gestión de pagos</dt>
+        <dd class="col-sm-8">
+            {{ $empresa->getTipoContrato() }}
+        </dd>
         <dt class="col-sm-4">Estado</dt>
         <dd class="col-sm-8">
             <x-list.status-badge :status="$empresa->estatus" />
