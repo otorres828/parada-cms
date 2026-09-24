@@ -5,15 +5,16 @@
     <div class="home-container journey-grid">
 
         <div class="journey-copy">
-            <span class="section-kicker light">El día del viaje</span>
-            <h2>Del teléfono al autobús, sin fricción.</h2>
-            <p>Cada pasaje pagado genera un código QR único. Tu equipo puede validarlo al abordar y registrar el ingreso en segundos.</p>
+            <span class="section-kicker light">Una operación conectada</span>
+            <h2>De la venta digital al momento de abordar.</h2>
+            <p>Parada conecta el sitio web de compra, el CRM de tu agencia y la aplicación de validación para que todo el proceso se gestione desde un mismo ecosistema.</p>
 
             <ol class="journey-list">
-                <li><span>1</span><div><strong>Compra digital</strong><small>El pasajero elige tramo, asiento y forma de pago.</small></div></li>
-                <li><span>2</span><div><strong>Pasaje QR</strong><small>Recibe un pase único, seguro y fácil de presentar.</small></div></li>
-                <li><span>3</span><div><strong>Embarque ágil</strong><small>La aplicación lectora confirma el pasaje al instante.</small></div></li>
-                <li><span>4</span><div><strong>Impresión térmica</strong><small>También puedes entregar un comprobante físico.</small></div></li>
+                <li><span>1</span><div><strong>Compra desde el sitio web</strong><small>El pasajero elige su tramo y forma de pago directamente desde el portal.</small></div></li>
+                <li><span>2</span><div><strong>Pasaje QR y Wallet</strong><small>Recibe un pase digital que puede guardar en Google Wallet o Apple Wallet.</small></div></li>
+                <li><span>3</span><div><strong>Confirmaciones por correo</strong><small>Enviamos automáticamente la confirmación, el pasaje y las notificaciones del viaje.</small></div></li>
+                <li><span>4</span><div><strong>Aplicación para validar pasajes</strong><small>Tu personal escanea el QR y comprueba si el pasaje es válido, ya fue utilizado o pertenece a otra salida.</small></div></li>
+                <li><span>5</span><div><strong>Impresión térmica (Próximamente)</strong><small>Tu agencia podrá entregar el pasaje impreso directamente en taquilla.</small></div></li>
             </ol>
         </div>
 
@@ -21,7 +22,7 @@
             <div class="phone-frame">
                 <div class="phone-top"></div>
                 <div class="phone-screen">
-                    <span class="scan-label">ESCANEAR PASAJE</span>
+                    <span class="scan-label">APLICACIÓN DE VALIDACIÓN</span>
                     <div class="scan-box">
                         <i class="corner top-left"></i><i class="corner top-right"></i>
                         <i class="corner bottom-left"></i><i class="corner bottom-right"></i>
@@ -31,7 +32,7 @@
                     <div class="scan-result"><i class="bi bi-check-circle-fill"></i><div><small>Pasaje válido</small><strong>Caracas → Valencia</strong></div></div>
                 </div>
             </div>
-            <div class="print-card"><i class="bi bi-printer"></i><div><small>Impresión térmica</small><strong>Lista en segundos</strong></div></div>
+            <div class="print-card"><i class="bi bi-printer"></i><div><small>Impresión térmica</small><strong>Próximamente</strong></div></div>
         </div>
 
     </div>
