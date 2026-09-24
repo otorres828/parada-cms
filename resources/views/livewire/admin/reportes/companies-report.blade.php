@@ -49,7 +49,7 @@
             <div class="col-md-12 col-xl-auto ms-xl-auto text-md-end">
                 <button type="button" class="btn btn-success" @click="preSave" :disabled="saving"
                     wire:loading.attr="disabled" wire:target="export">
-                    <i class="bi bi-file-earmark-excel" aria-hidden="true"></i> Exportar CSV
+                    <i class="bi bi-file-earmark-excel" aria-hidden="true"></i> Descargar Excel
                 </button>
             </div>
 

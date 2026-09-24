@@ -65,6 +65,10 @@ class GroupSectionPermissionAdminSeeder extends Seeder
                             'status' => $permission['status'],
                         ]);
                     }
+
+                    PermissionAdmin::where('section_id', $sectionRecord->id)
+                        ->whereNotIn('url', array_column($section['permissions'], 'url'))
+                        ->delete();
                 }
             }
         });

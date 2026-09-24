@@ -2,12 +2,14 @@
 
 namespace App\Livewire\Admin\Reportes;
 
-use App\Models\ModelHelper;
+use App\Exports\CompaniesReportExport;
 use App\Models\Reserva;
+use App\Services\Admin\Access;
 use App\Traits\TraitGeneral;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Maatwebsite\Excel\Facades\Excel;
 
 #[Layout('layouts.cms')]
 class CompaniesReport extends Component
@@ -61,33 +63,16 @@ class CompaniesReport extends Component
 
     public function export()
     {
+        Access::authorize('reportes', 'list-companies');
+
         $this->validate([
             'date_from' => 'required|date_format:Y-m-d',
             'date_to' => 'required|date_format:Y-m-d|after_or_equal:date_from',
             'per_page' => 'integer|in:10,25,50,100',
         ]);
-        $query = $this->query();
-        $columns = $this->columns();
-
-        return response()->streamDownload(function () use ($query, $columns) {
-            $out = fopen('php://output', 'w');
-            fwrite($out, '﻿');
-            fputcsv($out, array_values($columns), ';', '"', '');
-
-            foreach ($query->cursor() as $row) {
-                $values = [];
-
-                foreach (array_keys($columns) as $key) {
-                    $value = ModelHelper::value($row, $key);
-
-                    if (preg_match('/^[=+\-@\t\r]/', $value)) {
-                        $value = "'".$value;
-                    }
-                    $values[] = $value;
-                }
-                fputcsv($out, $values, ';', '"', '');
-            }
-            fclose($out);
-        }, 'reporte-'.'companies'.'-'.$this->date_from.'.csv', ['Content-Type' => 'text/csv; charset=UTF-8']);
+        return Excel::download(
+            new CompaniesReportExport($this->query()),
+            'reporte-empresas-' . $this->date_from . '-' . $this->date_to . '.xlsx',
+        );
     }
 }
