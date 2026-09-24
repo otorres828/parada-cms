@@ -6,15 +6,14 @@
     reserva, su importe y el acceso al detalle según los permisos.
 
     Componentes reutilizables utilizados:
+    - <x-layout.loader.fullpage />: Indicador global durante operaciones de Livewire.
+    - <x-list.actions />: Contenedor del buscador y filtros del listado.
+    - <x-list.button-group />: Agrupa las acciones disponibles por registro.
     - <x-list.heading />: Cabecera del módulo con título y acciones.
-    - <x-list.actions />: Contenedor del buscador y las acciones del listado.
-    - <x-list.search-input />: Buscador vinculado al estado del listado.
-    - <x-list.table />: Contenedor reutilizable de la tabla del listado.
-    - <x-list.sortable-button />: Control para ordenar por una columna.
-    - <x-list.status-reserva />: Etiqueta del estado de pago según las constantes de Reserva.
-    - <x-list.button-group />: Agrupación de los botones de acción de una fila.
-    - <x-list.view-button />: Enlace para consultar el detalle del registro.
-    - <x-layout.loader.fullpage />: Indicador de carga durante las operaciones de Livewire.
+    - <x-list.search-input />: Buscador reactivo del listado.
+    - <x-list.sortable-button />: Control de ordenación por columna.
+    - <x-list.status-reserva />: Etiqueta del estado de pago de la reserva.
+    - <x-list.table />: Contenedor reutilizable para tablas.
     --------------------------------------------------------------------------
 --}}
 
@@ -235,4 +234,5 @@
         }));
     </script>
 @endscript
+
 

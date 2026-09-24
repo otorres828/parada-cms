@@ -6,10 +6,11 @@
     pendientes, ventas y tasas de servicio.
 
     Componentes reutilizables utilizados:
+    - <x-autobuses.description />: Ficha descriptiva del autobús.
+    - <x-autobuses.programaciones-table />: Historial de programaciones del autobús.
+    - <x-form.cancel-button />: Enlace para regresar al listado anterior.
+    - <x-layout.loader.fullpage />: Indicador global durante operaciones de Livewire.
     - <x-list.heading />: Cabecera del módulo con título y acciones.
-    - <x-form.cancel-button />: Enlace para regresar o cancelar la edición.
-    - <x-list.status-badge />: Etiqueta visual del estado del registro.
-    - <x-layout.loader.fullpage />: Indicador de carga durante las operaciones de Livewire.
     --------------------------------------------------------------------------
 --}}
 
@@ -94,6 +95,7 @@
         }));
     </script>
 @endscript
+
 
 
 

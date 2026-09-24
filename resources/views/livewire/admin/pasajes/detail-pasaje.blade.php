@@ -7,10 +7,10 @@
     Muestra el QR generado localmente con el localizador únicamente si la reserva está pagada.
 
     Componentes reutilizables utilizados:
+    - <x-form.cancel-button />: Enlace para regresar al listado anterior.
+    - <x-layout.loader.fullpage />: Indicador global durante operaciones de Livewire.
     - <x-list.heading />: Cabecera del módulo con título y acciones.
-    - <x-form.cancel-button />: Enlace para regresar o cancelar la edición.
-    - <x-list.status-reserva />: Etiqueta del estado de pago según las constantes de Reserva.
-    - <x-layout.loader.fullpage />: Indicador de carga durante las operaciones de Livewire.
+    - <x-pasajes.description />: Ficha descriptiva del pasaje.
     --------------------------------------------------------------------------
 --}}
 
@@ -103,5 +103,6 @@
         }));
     </script>
 @endscript
+
 
 

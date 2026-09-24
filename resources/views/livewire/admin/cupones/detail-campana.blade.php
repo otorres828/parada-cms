@@ -5,15 +5,14 @@
     Permite generar los códigos cuando la campaña y los permisos lo autorizan.
 
     Componentes reutilizables utilizados:
+    - <x-cupones.cupones-table />: Tabla de códigos pertenecientes a la campaña.
+    - <x-cupones.description />: Ficha descriptiva de la campaña.
+    - <x-form.cancel-button />: Enlace para regresar al listado anterior.
+    - <x-layout.error />: Resumen de errores de validación.
+    - <x-layout.loader.fullpage />: Indicador global durante operaciones de Livewire.
+    - <x-list.actions />: Contenedor del buscador y filtros del listado.
     - <x-list.heading />: Cabecera del módulo con título y acciones.
-    - <x-form.cancel-button />: Enlace para regresar o cancelar la edición.
-    - <x-layout.error />: Resumen de los errores de validación de Livewire.
-    - <x-list.status-badge />: Etiqueta visual del estado del registro.
-    - <x-list.actions />: Contenedor del buscador y las acciones del listado.
-    - <x-list.search-input />: Buscador vinculado al estado del listado.
-    - <x-list.table />: Contenedor reutilizable de la tabla del listado.
-    - <x-list.sortable-button />: Control para ordenar por una columna.
-    - <x-layout.loader.fullpage />: Indicador de carga durante las operaciones de Livewire.
+    - <x-list.search-input />: Buscador reactivo del listado.
     --------------------------------------------------------------------------
 --}}
 
@@ -131,5 +130,6 @@
         }));
     </script>
 @endscript
+
 
 

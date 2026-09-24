@@ -6,11 +6,11 @@
     descuentos, precios finales, tasas de servicio y total individual de cada boleto.
 
     Componentes reutilizables utilizados:
-    - <x-list.pasaje-qr />: Botón y modal QR para pasajes pagados.
+    - <x-form.cancel-button />: Enlace para regresar al listado anterior.
+    - <x-layout.loader.fullpage />: Indicador global durante operaciones de Livewire.
     - <x-list.heading />: Cabecera del módulo con título y acciones.
-    - <x-form.cancel-button />: Enlace para regresar o cancelar la edición.
-    - <x-list.status-reserva />: Etiqueta del estado de pago según las constantes de Reserva.
-    - <x-layout.loader.fullpage />: Indicador de carga durante las operaciones de Livewire.
+    - <x-reservas.description />: Ficha descriptiva de la reserva.
+    - <x-reservas.pasajes-table />: Tabla de pasajes asociados a la reserva.
     --------------------------------------------------------------------------
 --}}
 
@@ -95,5 +95,6 @@
         }));
     </script>
 @endscript
+
 
 
