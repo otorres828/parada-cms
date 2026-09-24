@@ -63,7 +63,19 @@
                             </dd>
                             <dt class="col-sm-4">Descuento</dt>
                             <dd class="col-sm-8">
-                                {{ $configuracionCupon->tipo_descuento ?? '—' }}
+                                {{ $configuracionCupon->tipo_descuento === 'porcentaje' ? 'Porcentaje' : 'Monto fijo' }}
+                            </dd>
+                            <dt class="col-sm-4">Modalidad</dt>
+                            <dd class="col-sm-8">
+                                {{ match ($configuracionCupon->modalidad) {
+                                    'PRIMERA_COMPRA' => 'Primera compra',
+                                    'USUARIO_NUEVO' => 'Usuario nuevo',
+                                    default => 'General',
+                                } }}
+                            </dd>
+                            <dt class="col-sm-4">Aplica en</dt>
+                            <dd class="col-sm-8">
+                                {{ $configuracionCupon->aplica_en === 'pasajes' ? 'Cada pasaje' : 'Reserva general' }}
                             </dd>
                             <dt class="col-sm-4">Valor</dt>
                             <dd class="col-sm-8">

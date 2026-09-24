@@ -145,7 +145,7 @@ class ReservaService
         });
     }
 
-    // 3. El descuento es por reserva; se distribuye entre sus boletos en centavos exactos.
+    // 3. Aplica el descuento una vez a la reserva o individualmente a cada pasaje, según la campaña.
     public static function aplicarCupon(User $cliente, int $reservaId, ?string $codigo): Reserva
     {
         return self::conReserva($cliente, $reservaId, function ($reserva) use ($codigo) {
@@ -168,10 +168,15 @@ class ReservaService
                     self::exigir(bccomp($campana->monto_descuento, '100', 2) <= 0, 'cupon', 'El porcentaje es inválido.');
                 } else {
                     self::exigir($campana->tipo_descuento === 'monto_fijo', 'cupon', 'El tipo de descuento es inválido.');
-                    $descuento = $campana->monto_descuento;
                 }
-                if (bccomp($descuento, $base, 2) > 0) {
-                    $descuento = $base;
+
+                self::exigir(in_array($campana->aplica_en, [ConfiguracionCupon::APLICA_EN_RESERVA, ConfiguracionCupon::APLICA_EN_PASAJES], true), 'cupon', 'La aplicación del cupón es inválida.');
+
+                if ($campana->aplica_en === ConfiguracionCupon::APLICA_EN_RESERVA) {
+                    $descuento = $campana->tipo_descuento === 'porcentaje'
+                        ? bcadd(bcdiv(bcmul($base, $campana->monto_descuento, 4), '100', 6), '0.005', 2)
+                        : $campana->monto_descuento;
+                    $descuento = bccomp($descuento, $base, 2) > 0 ? $base : $descuento;
                 }
             } elseif ($reserva->cupon_id === null) {
                 return self::detalle($reserva);
@@ -182,8 +187,12 @@ class ReservaService
             $ultimoIndice = $pasajes->count() - 1;
 
             foreach ($pasajes as $indice => $pasaje) {
-                if ($cupon && $campana->tipo_descuento === 'porcentaje') {
-                    $parte = bcadd(bcdiv(bcmul($pasaje->precio_base, $campana->monto_descuento, 4), '100', 6), '0.005', 2);
+                if (! $cupon) {
+                    $parte = '0.00';
+                } elseif ($campana->aplica_en === ConfiguracionCupon::APLICA_EN_PASAJES) {
+                    $parte = $campana->tipo_descuento === 'porcentaje'
+                        ? bcadd(bcdiv(bcmul($pasaje->precio_base, $campana->monto_descuento, 4), '100', 6), '0.005', 2)
+                        : $campana->monto_descuento;
                     $parte = bccomp($parte, $pasaje->precio_base, 2) > 0 ? $pasaje->precio_base : $parte;
                 } elseif ($indice === $ultimoIndice) {
                     $parte = $restante;
@@ -201,7 +210,7 @@ class ReservaService
                     'servicio_json' => null,
                 ])->save();
                 $descuentoAplicado = bcadd($descuentoAplicado, $parte, 2);
-                if (! $cupon || $campana->tipo_descuento === 'monto_fijo') {
+                if ($cupon && $campana->aplica_en === ConfiguracionCupon::APLICA_EN_RESERVA) {
                     $restante = bcsub($restante, $parte, 2);
                 }
             }

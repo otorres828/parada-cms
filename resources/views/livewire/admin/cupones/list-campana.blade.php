@@ -112,6 +112,14 @@
                     <x-list.sortable-button column="tipo_descuento" :$sortColumn :$sortDirection />
                 </th>
 
+                <th>Modalidad
+                    <x-list.sortable-button column="modalidad" :$sortColumn :$sortDirection />
+                </th>
+
+                <th>Aplica en
+                    <x-list.sortable-button column="aplica_en" :$sortColumn :$sortDirection />
+                </th>
+
                 <th>Valor
                     <x-list.sortable-button column="monto_descuento" :$sortColumn :$sortDirection />
                 </th>
@@ -146,7 +154,19 @@
                     </td>
 
                     <td>
-                        {{ $configuracionCupon->tipo_descuento ?? '—' }}
+                        {{ $configuracionCupon->tipo_descuento === 'porcentaje' ? 'Porcentaje' : 'Monto fijo' }}
+                    </td>
+
+                    <td>
+                        {{ match ($configuracionCupon->modalidad) {
+                            'PRIMERA_COMPRA' => 'Primera compra',
+                            'USUARIO_NUEVO' => 'Usuario nuevo',
+                            default => 'General',
+                        } }}
+                    </td>
+
+                    <td>
+                        {{ $configuracionCupon->aplica_en === 'pasajes' ? 'Cada pasaje' : 'Reserva general' }}
                     </td>
 
                     <td>
@@ -192,7 +212,7 @@
             @empty
 
                 <tr>
-                    <td colspan="8" class="text-center py-5">
+                    <td colspan="10" class="text-center py-5">
                         No se encontraron registros.
                     </td>
 

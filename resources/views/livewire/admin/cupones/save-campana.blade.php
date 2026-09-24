@@ -132,6 +132,29 @@
 
             <div class="mb-3">
 
+                <x-form.dropdown label="Aplicar descuento en" name="aplica_en" x-model="$wire.aplica_en">
+
+                    <option value="">Seleccionar...</option>
+                    <option value="reserva">Reserva general</option>
+                    <option value="pasajes">Cada pasaje</option>
+
+                </x-form.dropdown>
+
+                @error('aplica_en')
+                    <div class="text-danger small">
+                        {{ $message }}
+                    </div>
+                @enderror
+
+                <div class="form-text">
+                    Reserva general aplica el valor una sola vez y lo distribuye entre los pasajes. Cada pasaje aplica
+                    el valor completo individualmente a cada boleto.
+                </div>
+
+            </div>
+
+            <div class="mb-3">
+
                 <x-form.text-input type="number" name="cantidad_generar" x-model="$wire.cantidad_generar">
                     Cantidad de
                     cupones
@@ -280,6 +303,10 @@
                         errorMessage: 'Este campo es requerido'
                     }]);
                     this.validator.addField(this.$refs.form.querySelector('[name="modalidad"]'), [{
+                        rule: 'required',
+                        errorMessage: 'Este campo es requerido'
+                    }]);
+                    this.validator.addField(this.$refs.form.querySelector('[name="aplica_en"]'), [{
                         rule: 'required',
                         errorMessage: 'Este campo es requerido'
                     }]);

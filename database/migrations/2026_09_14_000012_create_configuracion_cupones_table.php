@@ -15,6 +15,7 @@ return new class extends Migration
             $table->integer('tipo_cupon')->default(1); // 1: random 2: custom (personalizado)
             $table->enum('tipo_descuento',['monto_fijo','porcentaje'])->default('monto_fijo');
             $table->enum('modalidad',['GENERAL','PRIMERA_COMPRA','USUARIO_NUEVO']);
+            $table->enum('aplica_en', ['reserva', 'pasajes'])->default('reserva');
             $table->string('codigo_personalizado')->nullable();
             $table->unsignedInteger('cantidad_generar');
             $table->decimal('monto_descuento', 12, 2);

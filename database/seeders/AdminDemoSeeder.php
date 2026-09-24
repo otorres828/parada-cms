@@ -103,6 +103,9 @@ class AdminDemoSeeder extends Seeder
                     'empresa_id' => $company->id,
                     'tipo_cupon' => ConfiguracionCupon::TIPO_RANDOM,
                     'modalidad' => ConfiguracionCupon::MODALIDAD_GENERAL,
+                    'aplica_en' => $c % 2 === 0
+                        ? ConfiguracionCupon::APLICA_EN_PASAJES
+                        : ConfiguracionCupon::APLICA_EN_RESERVA,
                     'cantidad_generar' => 5,
                     'tipo_descuento' => 'monto_fijo',
                     'monto_descuento' => '5.00',

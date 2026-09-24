@@ -21,6 +21,10 @@ class ConfiguracionCupon extends ModelHelper
 
     const MODALIDAD_USUARIO_NUEVO = 'USUARIO_NUEVO';
 
+    const APLICA_EN_RESERVA = 'reserva';
+
+    const APLICA_EN_PASAJES = 'pasajes';
+
     protected $table = 'configuracion_cupones';
 
     protected $fillable = [
@@ -28,6 +32,7 @@ class ConfiguracionCupon extends ModelHelper
         'nombre_campana',
         'tipo_cupon',
         'modalidad',
+        'aplica_en',
         'codigo_personalizado',
         'cantidad_generar',
         'tipo_descuento',

@@ -33,6 +33,8 @@ class SaveCampana extends Component
 
     public $modalidad = ConfiguracionCupon::MODALIDAD_GENERAL;
 
+    public $aplica_en = ConfiguracionCupon::APLICA_EN_RESERVA;
+
     public $cantidad_generar = 1;
 
     public $tipo_descuento = 'porcentaje';
@@ -76,7 +78,7 @@ class SaveCampana extends Component
             Access::authorize('cupones', $this->configuracion_cupon_id ? 'edit' : 'add');
             $configuracionCupon = $this->configuracion_cupon_id ? $this->findConfiguracionCupon() : new ConfiguracionCupon;
             if ($this->configuracion_cupon_id && $configuracionCupon->cupones()->exists()) {
-                foreach (['empresa_id', 'codigo_personalizado', 'cantidad_generar', 'tipo_cupon', 'tipo_descuento', 'monto_descuento', 'fecha_inicio'] as $immutable) {
+                foreach (['empresa_id', 'codigo_personalizado', 'cantidad_generar', 'tipo_cupon', 'tipo_descuento', 'aplica_en', 'monto_descuento', 'fecha_inicio'] as $immutable) {
                     unset($data[$immutable]);
                 }
             }
@@ -94,6 +96,9 @@ class SaveCampana extends Component
             }
             if (array_key_exists('modalidad', $data)) {
                 $configuracionCupon->modalidad = $data['modalidad'];
+            }
+            if (array_key_exists('aplica_en', $data)) {
+                $configuracionCupon->aplica_en = $data['aplica_en'];
             }
             if (array_key_exists('cantidad_generar', $data)) {
                 $configuracionCupon->cantidad_generar = $data['cantidad_generar'];
@@ -131,6 +136,7 @@ class SaveCampana extends Component
         $this->codigo_personalizado = $configuracionCupon->codigo_personalizado ?? '';
         $this->tipo_cupon = $configuracionCupon->tipo_cupon;
         $this->modalidad = $configuracionCupon->modalidad;
+        $this->aplica_en = $configuracionCupon->aplica_en;
         $this->cantidad_generar = $configuracionCupon->cantidad_generar ?? '';
         $this->tipo_descuento = (string) (is_bool($configuracionCupon->tipo_descuento) ? (int) $configuracionCupon->tipo_descuento : $configuracionCupon->tipo_descuento);
         $this->monto_descuento = $configuracionCupon->monto_descuento ?? '';
@@ -150,6 +156,7 @@ class SaveCampana extends Component
             'nombre_campana' => ['required', 'string', 'max:255'],
             'tipo_cupon' => ['required', 'integer', 'in:1,2'],
             'modalidad' => ['required', 'in:GENERAL,PRIMERA_COMPRA,USUARIO_NUEVO'],
+            'aplica_en' => ['required', 'in:reserva,pasajes'],
             'codigo_personalizado' => ['required_if:tipo_cupon,2', 'nullable', 'string', 'max:100', 'alpha_dash', Rule::unique('cupones', 'codigo')->ignore($cuponId)],
             'cantidad_generar' => ['required', 'integer', 'min:1', 'max:1000'],
             'tipo_descuento' => ['required', 'in:porcentaje,monto_fijo'],
@@ -157,7 +164,7 @@ class SaveCampana extends Component
             'fecha_inicio' => ['required', 'date'],
             'fecha_fin' => ['required', 'date', 'after:fecha_inicio'],
             'estatus' => ['required', 'in:0,1,2'],
-        ], [], ['empresa_id' => 'Empresa', 'nombre_campana' => 'Nombre', 'tipo_cupon' => 'Tipo de cupón', 'modalidad' => 'Modalidad', 'codigo_personalizado' => 'Código personalizado', 'cantidad_generar' => 'Cantidad de cupones', 'tipo_descuento' => 'Descuento', 'monto_descuento' => 'Valor del descuento', 'fecha_inicio' => 'Inicio', 'fecha_fin' => 'Fin', 'estatus' => 'Estado']);
+        ], [], ['empresa_id' => 'Empresa', 'nombre_campana' => 'Nombre', 'tipo_cupon' => 'Tipo de cupón', 'modalidad' => 'Modalidad', 'aplica_en' => 'Aplicación del descuento', 'codigo_personalizado' => 'Código personalizado', 'cantidad_generar' => 'Cantidad de cupones', 'tipo_descuento' => 'Descuento', 'monto_descuento' => 'Valor del descuento', 'fecha_inicio' => 'Inicio', 'fecha_fin' => 'Fin', 'estatus' => 'Estado']);
         foreach ($validated as $key => &$value) {
             if ($value === '') {
                 $value = null;
