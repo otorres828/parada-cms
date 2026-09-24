@@ -17,6 +17,11 @@ class PagoReserva extends ModelHelper
         return ['total' => 'decimal:2', 'tasa_servicio' => 'decimal:2', 'metodo_pago' => 'integer', 'fecha_pago' => 'datetime'];
     }
 
+    public function datoBancario(): BelongsTo
+    {
+        return $this->belongsTo(DatoBancario::class, 'metodo_pago');
+    }
+
     public function reserva(): BelongsTo
     {
         return $this->belongsTo(Reserva::class, 'reserva_id');
@@ -29,13 +34,16 @@ class PagoReserva extends ModelHelper
 
     public static function searchAdmin(string $search = '', array $filters = []): Builder
     {
-        $query = self::query()->with('reserva.programacion.viaje.empresa');
+        $query = self::query()->with([
+            'reserva.programacion.viaje.empresa',
+            'datoBancario',
+        ]);
 
         if ($search !== '') {
             $query->where(function ($query) use ($search) {
                 $query->where('pagos_reservas.id', ctype_digit($search) ? $search : -1)
-                    ->orWhere('pagos_reservas.referencia_pago', 'like', '%' . $search . '%')
-                    ->orWhereHas('reserva', fn ($reserva) => $reserva->where('codigo_referencia', 'like', '%' . $search . '%'));
+                    ->orWhere('pagos_reservas.referencia_pago', 'like', '%'.$search.'%')
+                    ->orWhereHas('reserva', fn ($reserva) => $reserva->where('codigo_referencia', 'like', '%'.$search.'%'));
             });
         }
 

@@ -21,7 +21,6 @@ return new class extends Migration
             $table->enum('estado_pago', [1, 2, 3, 4, 5, 6])->default(1);
             $table->dateTime('fecha_compra');
             $table->dateTime('fecha_expiracion')->nullable();
-            $table->unsignedTinyInteger('metodo_pago')->nullable();
             $table->json('comentarios_auditoria')->nullable();
             $table->index(['fecha_compra', 'estado_pago']);
             $table->timestamps();

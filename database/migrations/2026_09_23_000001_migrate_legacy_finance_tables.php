@@ -38,9 +38,8 @@ return new class extends Migration
         }
 
         if (Schema::hasColumn('reservas', 'metodo_pago')) {
-            DB::table('reservas')->whereNotNull('metodo_pago')->update(['metodo_pago' => 1]);
             Schema::table('reservas', function (Blueprint $table) {
-                $table->unsignedTinyInteger('metodo_pago')->nullable()->change();
+                $table->dropColumn('metodo_pago');
             });
         }
 

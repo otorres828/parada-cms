@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class DatoBancario extends ModelHelper
 {
@@ -42,6 +43,11 @@ class DatoBancario extends ModelHelper
     public function empresa(): BelongsTo
     {
         return $this->belongsTo(Empresa::class, 'empresa_id');
+    }
+
+    public function pagosReservas(): HasMany
+    {
+        return $this->hasMany(PagoReserva::class, 'metodo_pago');
     }
 
     public static function searchAdmin(string $search = '', array $filters = []): Builder

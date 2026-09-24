@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Cupon;
+use App\Models\DatoBancario;
 use App\Models\PagoReserva;
 use App\Models\Programacion;
 use App\Models\ProgramacionTramoPrecio;
@@ -176,18 +177,31 @@ class ReservaService
     }
 
     // 5. Al reportar el pago, congela el resumen y elimina la expiración durante la revisión.
-    public static function pasarAPendiente(User $cliente, int $reservaId, int $metodo, string $referenciaPago, string $fechaPago, ?string $comprobante = null): Reserva
+    public static function pasarAPendiente(User $cliente, int $reservaId, int $metodoPagoId, string $referenciaPago, string $fechaPago, ?string $comprobante = null): Reserva
     {
-        Validator::make(compact('metodo', 'referenciaPago', 'fechaPago'), [
-            'metodo' => 'required|integer|in:'.Reserva::METODO_TRANSFERENCIA,
+        Validator::make(compact('metodoPagoId', 'referenciaPago', 'fechaPago'), [
+            'metodoPagoId' => 'required|integer|exists:datos_bancarios,id',
             'referenciaPago' => 'required|string|max:255|unique:pagos_reservas,referencia_pago',
             'fechaPago' => 'required|date|before_or_equal:now',
+        ], [], [
+            'metodoPagoId' => 'Método de pago',
+            'referenciaPago' => 'Referencia de pago',
+            'fechaPago' => 'Fecha de pago',
         ])->validate();
 
-        return self::conReserva($cliente, $reservaId, function ($reserva) use ($metodo, $referenciaPago, $fechaPago, $comprobante) {
+        return self::conReserva($cliente, $reservaId, function ($reserva) use ($metodoPagoId, $referenciaPago, $fechaPago, $comprobante) {
             self::validarVigente($reserva);
+
+            $datoBancario = DatoBancario::query()
+                ->whereKey($metodoPagoId)
+                ->where('estatus', DatoBancario::ACTIVO)
+                ->first();
+
+            self::exigir($datoBancario !== null, 'metodoPagoId', 'El método de pago no está activo.');
+
             if ($reserva->estado_pago === Reserva::ESTADO_PAGO_PENDIENTE) {
-                self::exigir($reserva->metodo_pago === $metodo, 'metodo', 'La reserva ya tiene otro intento de pago pendiente.');
+                $pagoReserva = $reserva->pago()->first();
+                self::exigir($pagoReserva?->metodo_pago === $metodoPagoId, 'metodoPagoId', 'La reserva ya tiene otro método de pago pendiente.');
 
                 return self::detalle($reserva);
             }
@@ -195,12 +209,15 @@ class ReservaService
             self::validarPasajeros($reserva);
             self::validarCuponReserva($reserva);
             $reserva = TasasServicioService::calcularTasasReserva($reserva->id);
-            $reserva->update(['estado_pago' => Reserva::ESTADO_PAGO_PENDIENTE, 'metodo_pago' => $metodo, 'fecha_expiracion' => null]);
+            $reserva->update([
+                'estado_pago' => Reserva::ESTADO_PAGO_PENDIENTE,
+                'fecha_expiracion' => null,
+            ]);
             PagoReserva::create([
                 'reserva_id' => $reserva->id,
                 'total' => $reserva->monto_total,
                 'tasa_servicio' => $reserva->tasa_servicio,
-                'metodo_pago' => $metodo,
+                'metodo_pago' => $metodoPagoId,
                 'referencia_pago' => $referenciaPago,
                 'fecha_pago' => $fechaPago,
                 'comprobante' => $comprobante,

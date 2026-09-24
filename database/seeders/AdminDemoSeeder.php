@@ -86,7 +86,7 @@ class AdminDemoSeeder extends Seeder
                 ],
             );
 
-            DatoBancario::firstOrCreate(
+            $datoBancario = DatoBancario::firstOrCreate(
                 [
                     'empresa_id' => $company->id,
                     'numero_cuenta_telefono' => $c % 2 === 0
@@ -265,7 +265,7 @@ class AdminDemoSeeder extends Seeder
                                 // Simula el instante de compra de los viajes históricos.
                                 Carbon::setTestNow($fechaCompra);
 
-                                $reservation = DB::transaction(function () use ($reference, $traveler, $ptp, $cp, $r, $day, $b, $c, $coupons) {
+                                $reservation = DB::transaction(function () use ($reference, $traveler, $ptp, $cp, $r, $day, $b, $c, $coupons, $datoBancario) {
                                     $cliente = $traveler['cliente'];
                                     $reservation = ReservaService::aplicarReserva($cliente, $ptp->id);
 
@@ -291,7 +291,7 @@ class AdminDemoSeeder extends Seeder
                                     $reservation = ReservaService::pasarAPendiente(
                                         $cliente,
                                         $reservation->id,
-                                        Reserva::METODO_TRANSFERENCIA,
+                                        $datoBancario->id,
                                         "DEMO-PAY-$c-$b-$day-".($r + 1),
                                         $reservation->fecha_compra->toDateTimeString(),
                                     );

@@ -29,7 +29,6 @@ class Reserva extends ModelHelper
         'tasa_servicio',
         'monto_total',
         'estado_pago',
-        'metodo_pago',
         'fecha_compra',
         'fecha_expiracion',
         'comentarios_auditoria',
@@ -47,11 +46,9 @@ class Reserva extends ModelHelper
 
     const ESTADO_PAGO_FALLIDO = 6;
 
-    const METODO_TRANSFERENCIA = 1;
-
     protected function casts(): array
     {
-        return ['estado_pago' => 'integer', 'metodo_pago' => 'integer', 'monto_pasajes' => 'decimal:2', 'descuento_aplicado' => 'decimal:2', 'tasa_servicio' => 'decimal:2', 'monto_total' => 'decimal:2', 'fecha_compra' => 'datetime', 'fecha_expiracion' => 'datetime', 'comentarios_auditoria' => 'array'];
+        return ['estado_pago' => 'integer', 'monto_pasajes' => 'decimal:2', 'descuento_aplicado' => 'decimal:2', 'tasa_servicio' => 'decimal:2', 'monto_total' => 'decimal:2', 'fecha_compra' => 'datetime', 'fecha_expiracion' => 'datetime', 'comentarios_auditoria' => 'array'];
     }
 
     public function usuario(): BelongsTo

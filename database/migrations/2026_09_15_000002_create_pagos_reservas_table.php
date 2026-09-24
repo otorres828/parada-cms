@@ -13,13 +13,23 @@ return new class extends Migration
             $table->unsignedBigInteger('reserva_id')->unique();
             $table->decimal('total', 12, 2);
             $table->decimal('tasa_servicio', 12, 2);
-            $table->unsignedTinyInteger('metodo_pago');
+            $table->unsignedBigInteger('metodo_pago');
             $table->string('referencia_pago')->unique();
             $table->dateTime('fecha_pago');
             $table->string('comprobante')->nullable();
             $table->timestamps();
 
-            $table->foreign('reserva_id')->references('id')->on('reservas')->onUpdate('cascade')->onDelete('restrict');
+            $table->foreign('reserva_id')
+                ->references('id')
+                ->on('reservas')
+                ->onUpdate('cascade')
+                ->onDelete('restrict');
+
+            $table->foreign('metodo_pago')
+                ->references('id')
+                ->on('datos_bancarios')
+                ->onUpdate('cascade')
+                ->onDelete('restrict');
         });
     }
 
