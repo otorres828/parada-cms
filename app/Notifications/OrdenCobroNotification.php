@@ -2,12 +2,17 @@
 
 namespace App\Notifications;
 
+use App\Exports\PasajesExport;
+use App\Exports\ReservasExport;
 use App\Models\OrdenCobro;
+use App\Models\Pasaje;
+use App\Models\Reserva;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
-use Illuminate\Support\Facades\Log;
+use Maatwebsite\Excel\Excel as ExcelFormat;
+use Maatwebsite\Excel\Facades\Excel;
 
 class OrdenCobroNotification extends Notification implements ShouldQueue
 {
@@ -24,13 +29,60 @@ class OrdenCobroNotification extends Notification implements ShouldQueue
     {
         $orden = OrdenCobro::findOrFail($this->ordenCobroId);
 
-        return (new MailMessage)
+        $mensaje = (new MailMessage)
             ->subject($this->asunto($orden))
             ->greeting('Hola, '.$orden->empresa->nombre)
             ->line($this->mensaje($orden))
             ->line('Período: '.$orden->periodo_desde->format('d/m/Y').' al '.$orden->periodo_hasta->format('d/m/Y'))
             ->line('Total: '.$orden->total)
             ->line('Vencimiento: '.$orden->fecha_vencimiento->format('d/m/Y H:i'));
+
+        if ($this->tipo !== 'emitida') {
+            return $mensaje;
+        }
+
+        $reservaIds = collect($orden->reservas_incluidas)
+            ->pluck('reserva_id')
+            ->filter()
+            ->map(function ($reservaId) {
+                return (int) $reservaId;
+            })
+            ->values()
+            ->all();
+
+        if ($reservaIds === []) {
+            return $mensaje;
+        }
+
+        $consultaReservas = Reserva::searchAdmin()
+            ->with(['cupon', 'reservaOriginal'])
+            ->withCount('pasajes')
+            ->whereKey($reservaIds)
+            ->orderBy('reservas.id');
+
+        $consultaPasajes = Pasaje::searchAdmin()
+            ->whereIn('pasajes.reserva_id', $reservaIds)
+            ->orderBy('pasajes.id');
+
+        $mensaje->attachData(
+            Excel::raw(
+                new ReservasExport($consultaReservas, ['empresa']),
+                ExcelFormat::XLSX,
+            ),
+            'reservas-'.$orden->codigo.'.xlsx',
+            ['mime' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'],
+        );
+
+        $mensaje->attachData(
+            Excel::raw(
+                new PasajesExport($consultaPasajes),
+                ExcelFormat::XLSX,
+            ),
+            'pasajes-'.$orden->codigo.'.xlsx',
+            ['mime' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'],
+        );
+
+        return $mensaje;
     }
 
     private function asunto(OrdenCobro $orden): string
@@ -58,11 +110,11 @@ class OrdenCobroNotification extends Notification implements ShouldQueue
     public function failed(\Throwable $exception): void
     {
         // Aquí llega la excepción. Puedes hacer lo que quieras con ella.
-        
+
         info('Fallo el correo de la orden '.$this->ordenCobroId, [
-            'motivo' => $exception->getMessage()
+            'motivo' => $exception->getMessage(),
         ]);
-        
+
         // Ejemplo: Marcar en base de datos que hubo un error
         // $orden = OrdenCobro::find($this->ordenCobroId);
         // $orden->update(['estado_notificacion' => 'error']);

@@ -13,7 +13,10 @@ use PhpOffice\PhpSpreadsheet\Cell\DefaultValueBinder;
 
 class ReservasExport extends DefaultValueBinder implements FromQuery, WithCustomValueBinder, WithHeadings, WithMapping
 {
-    public function __construct(private Builder $consulta) {}
+    public function __construct(
+        private Builder $consulta,
+        private array $columnasOmitidas = [],
+    ) {}
 
     public function query(): Builder
     {
@@ -22,52 +25,34 @@ class ReservasExport extends DefaultValueBinder implements FromQuery, WithCustom
 
     public function headings(): array
     {
-        return [
-            'ID reserva',
-            'Referencia',
-            'Reprogramación',
-            'Fecha de reserva',
-            'Cliente',
-            'Correo del cliente',
-            'Empresa',
-            'Origen',
-            'Destino final',
-            'Cantidad de pasajes',
-            'Subtotal',
-            'Descuento',
-            'Total',
-            'Tasa de servicio',
-            'Total + tasa de servicio',
-            'Cupón',
-            'Estado de pago',
-            'Fecha de salida',
-            'Hora de salida',
-        ];
+        return array_values($this->filtrarColumnas($this->encabezados()));
     }
 
     public function map($reserva): array
     {
-        return [
-            $reserva->id,
-            $reserva->codigo_referencia,
-            $reserva->reservaOriginal?->codigo_referencia,
-            $reserva->fecha_compra?->format('d/m/Y H:i'),
-            $reserva->usuario?->name,
-            $reserva->usuario?->email,
-            $reserva->programacion?->viaje?->empresa?->nombre,
-            $reserva->origenTerminal?->nombre,
-            $reserva->destinoTerminal?->nombre,
-            $reserva->pasajes_count,
-            (float) $reserva->monto_pasajes,
-            (float) $reserva->descuento_aplicado,
-            (float) $reserva->monto_pasajes - (float) $reserva->descuento_aplicado,
-            (float) $reserva->tasa_servicio,
-            (float) $reserva->monto_total,
-            $reserva->cupon?->codigo,
-            $reserva->getStatusPago(),
-            $reserva->programacion?->fecha_salida?->format('d/m/Y'),
-            $reserva->programacion?->hora_salida,
+        $valores = [
+            'id' => $reserva->id,
+            'referencia' => $reserva->codigo_referencia,
+            'reprogramacion' => $reserva->reservaOriginal?->codigo_referencia,
+            'fecha_reserva' => $reserva->fecha_compra?->format('d/m/Y H:i'),
+            'cliente' => $reserva->usuario?->name,
+            'correo_cliente' => $reserva->usuario?->email,
+            'empresa' => $reserva->programacion?->viaje?->empresa?->nombre,
+            'origen' => $reserva->origenTerminal?->nombre,
+            'destino' => $reserva->destinoTerminal?->nombre,
+            'cantidad_pasajes' => $reserva->pasajes_count,
+            'subtotal' => (float) $reserva->monto_pasajes,
+            'descuento' => (float) $reserva->descuento_aplicado,
+            'total' => (float) $reserva->monto_pasajes - (float) $reserva->descuento_aplicado,
+            'tasa_servicio' => (float) $reserva->tasa_servicio,
+            'total_tasa_servicio' => (float) $reserva->monto_total,
+            'cupon' => $reserva->cupon?->codigo,
+            'estado_pago' => $reserva->getStatusPago(),
+            'fecha_salida' => $reserva->programacion?->fecha_salida?->format('d/m/Y'),
+            'hora_salida' => $reserva->programacion?->hora_salida,
         ];
+
+        return array_values($this->filtrarColumnas($valores));
     }
 
     public function bindValue(Cell $cell, mixed $value): bool
@@ -79,5 +64,35 @@ class ReservasExport extends DefaultValueBinder implements FromQuery, WithCustom
         }
 
         return parent::bindValue($cell, $value);
+    }
+
+    private function encabezados(): array
+    {
+        return [
+            'id' => 'ID reserva',
+            'referencia' => 'Referencia',
+            'reprogramacion' => 'Reprogramación',
+            'fecha_reserva' => 'Fecha de reserva',
+            'cliente' => 'Cliente',
+            'correo_cliente' => 'Correo del cliente',
+            'empresa' => 'Empresa',
+            'origen' => 'Origen',
+            'destino' => 'Destino final',
+            'cantidad_pasajes' => 'Cantidad de pasajes',
+            'subtotal' => 'Subtotal',
+            'descuento' => 'Descuento',
+            'total' => 'Total',
+            'tasa_servicio' => 'Tasa de servicio',
+            'total_tasa_servicio' => 'Total + tasa de servicio',
+            'cupon' => 'Cupón',
+            'estado_pago' => 'Estado de pago',
+            'fecha_salida' => 'Fecha de salida',
+            'hora_salida' => 'Hora de salida',
+        ];
+    }
+
+    private function filtrarColumnas(array $columnas): array
+    {
+        return array_diff_key($columnas, array_flip($this->columnasOmitidas));
     }
 }
