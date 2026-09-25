@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Cupon;
 use App\Models\DatoBancario;
+use App\Models\ExoneracionTasaServicio;
 use App\Models\PagoReserva;
 use App\Models\Programacion;
 use App\Models\ProgramacionTramoPrecio;
@@ -61,9 +62,10 @@ class ReservaService
             self::exigir(bccomp($tarifa->precio, '0', 2) >= 0, 'tarifa', 'La tarifa no puede ser negativa.');
             $disponibilidad = self::disponibilidad($programacion, $tarifa, $terminales);
             self::exigir($disponibilidad['cupo_tramo'] > 0, 'tarifa', 'No hay cupo disponible para este trayecto.');
-            $tasa = $reservaOriginal
-                ? '0.00'
-                : TasaServicio::paraPrecio($tarifa->precio)->calcular($tarifa->precio);
+            $exoneracionTasa = self::obtenerExoneracionTasa($programacion, $reservaOriginal);
+            $tasa = $exoneracionTasa === null
+                ? TasaServicio::paraPrecio($tarifa->precio)->calcular($tarifa->precio)
+                : '0.00';
 
             $reserva = Reserva::create([
                 'usuario_id' => $cliente->id,
@@ -75,6 +77,7 @@ class ReservaService
                 'codigo_referencia' => (string) Str::ulid(),
                 'monto_pasajes' => $tarifa->precio,
                 'descuento_aplicado' => '0.00',
+                'exoneracion_tasa_json' => $exoneracionTasa,
                 'tasa_servicio' => $tasa,
                 'monto_total' => bcadd($tarifa->precio, $tasa, 2),
                 'estado_pago' => Reserva::ESTADO_PAGO_NUEVO,
@@ -159,7 +162,9 @@ class ReservaService
                     app(CuponService::class)->cancelarYLiberarCupon($reserva);
                     $reserva->refresh();
                 }
-                $tasa = TasaServicio::paraPrecio($tarifa->precio)->calcular($tarifa->precio);
+                $tasa = $reserva->exoneracion_tasa_json === null
+                    ? TasaServicio::paraPrecio($tarifa->precio)->calcular($tarifa->precio)
+                    : '0.00';
                 $reserva->update([
                     'cupon_id' => null,
                     'monto_pasajes' => $tarifa->precio,
@@ -371,6 +376,23 @@ class ReservaService
     private static function bloquearProgramacion(int $id): Programacion
     {
         return Programacion::with(['viaje.tramos', 'viaje.empresa', 'autobus'])->whereKey($id)->lockForUpdate()->firstOrFail();
+    }
+
+    private static function obtenerExoneracionTasa(Programacion $programacion, ?Reserva $reservaOriginal): ?array
+    {
+        if ($reservaOriginal !== null) {
+            return [
+                'exoneracion_id' => null,
+                'fecha_desde' => null,
+                'fecha_hasta' => null,
+                'motivo' => 'Reprogramación de la reserva '.$reservaOriginal->codigo_referencia,
+            ];
+        }
+
+        $empresaId = (int) $programacion->viaje->empresa_id;
+        $exoneracion = ExoneracionTasaServicio::vigenteParaEmpresa($empresaId);
+
+        return $exoneracion?->snapshot();
     }
 
     private static function validarCliente(User $cliente): void
