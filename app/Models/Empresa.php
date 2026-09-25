@@ -71,6 +71,11 @@ class Empresa extends ModelHelper
         return $this->hasMany(OrdenCobro::class, 'empresa_id');
     }
 
+    public function exoneracionesTasaServicio(): HasMany
+    {
+        return $this->hasMany(ExoneracionTasaServicio::class, 'empresa_id');
+    }
+
     public function estaBloqueadaPorCobranza(): bool
     {
         return $this->bloqueada_por_cobranza_at !== null;

@@ -47,6 +47,8 @@ class AdministrationMenuAdmin extends Component
 
     public bool $listTasasServicio = false;
 
+    public bool $listExoneracionesTasaServicio = false;
+
     public bool $listAuditoria = false;
 
     public bool $listSolicitudes = false;
@@ -85,6 +87,7 @@ class AdministrationMenuAdmin extends Component
             'companiesReportes' => ['reportes', 'list-companies'],
             'listLegales' => ['legales', 'list'],
             'listTasasServicio' => ['tasas-servicio', 'list'],
+            'listExoneracionesTasaServicio' => ['exoneraciones-tasa-servicio', 'list'],
             'listAuditoria' => ['auditoria', 'list'],
             'listSolicitudes' => ['solicitudes', 'list'],
         ]);

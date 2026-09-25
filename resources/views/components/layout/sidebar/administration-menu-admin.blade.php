@@ -7,7 +7,7 @@
     ])
 @endif
 
-@if ($listAdmins or $listAuditoria or $listTasasServicio)
+@if ($listAdmins or $listAuditoria or $listTasasServicio or $listExoneracionesTasaServicio)
     @include('components.layout.sidebar-li', [
         'menu' => 'Administración',
         'icon' => 'nav-icon bi bi-shield-lock',
@@ -23,6 +23,12 @@
                 'route' => route('admin.tasas-servicio.list'),
                 'name' => 'Tasa de Servicio',
                 'active' => request()->routeIs('admin.tasas-servicio.*') ? 'active' : '',
+            ],
+            [
+                'existe' => $listExoneracionesTasaServicio,
+                'route' => route('admin.exoneraciones-tasa-servicio.list'),
+                'name' => 'Exoneraciones de tasa',
+                'active' => request()->routeIs('admin.exoneraciones-tasa-servicio.*') ? 'active' : '',
             ],
             [
                 'existe' => $listAuditoria ?? false,

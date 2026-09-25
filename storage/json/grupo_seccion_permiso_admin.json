@@ -17,6 +17,14 @@
           {"name": "Eliminar", "url": "delete", "status": 1}
         ]
       },
+      {"name": "Exoneraciones de tasa", "url": "exoneraciones-tasa-servicio", "status": 1,
+        "permissions": [
+          {"name": "Listar", "url": "list", "status": 1},
+          {"name": "Agregar", "url": "add", "status": 1},
+          {"name": "Editar", "url": "edit", "status": 1},
+          {"name": "Eliminar", "url": "delete", "status": 1}
+        ]
+      },
       {"name": "Auditoría", "url": "auditoria", "status": 1,
         "permissions": [
           {"name": "Listar", "url": "list", "status": 1},

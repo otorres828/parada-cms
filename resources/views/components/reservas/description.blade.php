@@ -85,6 +85,13 @@
             {{ number_format($reserva->tasa_servicio ?? 0, 2) }}
         </dd>
 
+        @if ($reserva->exoneracion_tasa_json !== null)
+            <dt class="col-sm-4">Exoneración de tasa</dt>
+            <dd class="col-sm-8">
+                {{ data_get($reserva->exoneracion_tasa_json, 'motivo', 'Reserva sin tasa de servicio') }}
+            </dd>
+        @endif
+
         <dt class="col-sm-4">Total + tasa de servicio</dt>
         <dd class="col-sm-8 fw-semibold">
             {{ number_format($reserva->monto_total ?? 0, 2) }}

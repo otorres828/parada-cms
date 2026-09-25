@@ -9,72 +9,79 @@ use App\Http\Controllers\Admin\DocumentoLegalController;
 
 /* ------------------------------Autenticacion----------------------------------- */
 use App\Livewire\Admin\Account\Password;
+use App\Livewire\Admin\Auth\Login;
 /* ------------------------------Dashboard--------------------------------------- */
-use App\Livewire\Admin\Account\Profile;
+use App\Livewire\Admin\Dashboard;
 /* ------------------------------Perfil------------------------------------------ */
+use App\Livewire\Admin\Account\Profile;
+/* ------------------------------Administradores---------------------------------- */
 use App\Livewire\Admin\Admins\ListAdmin;
 use App\Livewire\Admin\Admins\SaveAdmin;
-/* ------------------------------Administradores---------------------------------- */
-use App\Livewire\Admin\Amenidades\ListAmenidad;
-use App\Livewire\Admin\Amenidades\SaveAmenidad;
 /* ------------------------------Tasa de Servicio--------------------------------- */
-use App\Livewire\Admin\Auditoria\DetailAudit;
-use App\Livewire\Admin\Auditoria\ListAudit;
+use App\Livewire\Admin\TasasServicio\ListTasaServicio;
+use App\Livewire\Admin\TasasServicio\SaveTasaServicio;
+/* ------------------------------Exoneracion de tasas de servicio ----------------- */
+use App\Livewire\Admin\ExoneracionesTasaServicio\ListExoneracionTasaServicio;
+use App\Livewire\Admin\ExoneracionesTasaServicio\SaveExoneracionTasaServicio;
 /* ------------------------------Auditoria---------------------------------------- */
-use App\Livewire\Admin\Auth\Login;
-use App\Livewire\Admin\Autobuses\DetailAutobus;
+use App\Livewire\Admin\Auditoria\ListAudit;
+use App\Livewire\Admin\Auditoria\DetailAudit;
 /* ------------------------------Empresas----------------------------------------- */
-use App\Livewire\Admin\Autobuses\ListAutobus;
-use App\Livewire\Admin\Clientes\DetailCliente;
-use App\Livewire\Admin\Clientes\ListCliente;
-/* ------------------------------Usuarios Empresas-------------------------------- */
-use App\Livewire\Admin\Clientes\SaveCliente;
-use App\Livewire\Admin\Cupones\DetailCampana;
-use App\Livewire\Admin\Cupones\ListCampana;
-use App\Livewire\Admin\Cupones\SaveCampana;
-/* ------------------------------Clientes------------------------------------ ----- */
-use App\Livewire\Admin\Dashboard;
-use App\Livewire\Admin\Empresas\DetailEmpresa;
 use App\Livewire\Admin\Empresas\ListEmpresa;
-/* ------------------------------Legales------------------------------------------- */
 use App\Livewire\Admin\Empresas\SaveEmpresa;
-use App\Livewire\Admin\EmpresaUsers\DetailEmpresaUser;
+use App\Livewire\Admin\Empresas\DetailEmpresa;
+/* ------------------------------Usuarios Empresas-------------------------------- */
 use App\Livewire\Admin\EmpresaUsers\ListEmpresaUser;
-/* ------------------------------Rutas de viaje------------------------------------ */
+use App\Livewire\Admin\EmpresaUsers\DetailEmpresaUser;
 use App\Livewire\Admin\EmpresaUsers\PermissionEmpresaUser;
 use App\Livewire\Admin\EmpresaUsers\SaveEmpresaUser;
-/* ------------------------------Programaciones------------------------------------ */
-use App\Livewire\Admin\Legales\EmpresaLegal;
+/* ------------------------------Clientes------------------------------------ ----- */
+use App\Livewire\Admin\Clientes\ListCliente;
+use App\Livewire\Admin\Clientes\SaveCliente;
+use App\Livewire\Admin\Clientes\DetailCliente;
+/* ------------------------------Legales------------------------------------------- */
 use App\Livewire\Admin\Legales\ListLegal;
-use App\Livewire\Admin\OrdenesCobro\DetailOrdenCobro;
-use App\Livewire\Admin\OrdenesCobro\ListOrdenCobro;
-/* ------------------------------Autobuses----------------------------------------- */
-use App\Livewire\Admin\Pasajes\DetailPasaje;
-use App\Livewire\Admin\Pasajes\ListPasaje;
-/* ------------------------------Reservas------------------------------------------ */
+use App\Livewire\Admin\Legales\EmpresaLegal;
+/* ------------------------------Rutas de viajes----------------------------------- */
+use App\Livewire\Admin\Viajes\ListViaje;
+use App\Livewire\Admin\Viajes\DetailViaje;
+/* ------------------------------Programaciones------------------------------------ */
 use App\Livewire\Admin\Programaciones\ListProgramacion;
 use App\Livewire\Admin\Programaciones\PassengerProgramacion;
+/* ------------------------------Autobuses----------------------------------------- */
+use App\Livewire\Admin\Autobuses\ListAutobus;
+use App\Livewire\Admin\Autobuses\DetailAutobus;
+/* ------------------------------Reservas------------------------------------------ */
+use App\Livewire\Admin\Reservas\ListReserva;
+use App\Livewire\Admin\Reservas\DetailReserva;
 /* ------------------------------Pasajes------------------------------------------- */
-use App\Livewire\Admin\Reembolsos\DetailReembolso;
-use App\Livewire\Admin\Reembolsos\ListReembolso;
+use App\Livewire\Admin\Pasajes\ListPasaje;
+use App\Livewire\Admin\Pasajes\DetailPasaje;
 /* ------------------------------Reembolsos---------------------------------------- */
+use App\Livewire\Admin\Reembolsos\ListReembolso;
+use App\Livewire\Admin\Reembolsos\DetailReembolso;
+/* ------------------------------Ordenes de Cobro----------------------------------- */
+use App\Livewire\Admin\OrdenesCobro\ListOrdenCobro;
+use App\Livewire\Admin\OrdenesCobro\DetailOrdenCobro;
+/* ------------------------------Cupones------------------------------------------- */
+use App\Livewire\Admin\Cupones\ListCampana;
+use App\Livewire\Admin\Cupones\SaveCampana;
+use App\Livewire\Admin\Cupones\DetailCampana;
+/* ------------------------------Terminales---------------------------------------- */
+use App\Livewire\Admin\Terminales\ListTerminal;
+use App\Livewire\Admin\Terminales\SaveTerminal;
+/* ------------------------------Amenidades---------------------------------------- */
+use App\Livewire\Admin\Amenidades\ListAmenidad;
+use App\Livewire\Admin\Amenidades\SaveAmenidad;
+/* ------------------------------Reporte de Ventas de Empresas--------------------- */
 use App\Livewire\Admin\Reportes\CompaniesReport;
 use App\Livewire\Admin\Reportes\SalesReport;
-/* ------------------------------Cupones------------------------------------------- */
-use App\Livewire\Admin\Reservas\DetailReserva;
-use App\Livewire\Admin\Reservas\ListReserva;
+/* ------------------------------Solicitudes de Nuevas Empresas-------------------- */
 use App\Livewire\Admin\Solicitudes\DetailSolicitud;
 use App\Livewire\Admin\Solicitudes\ListSolicitud;
-use App\Livewire\Admin\TasasServicio\ListTasaServicio;
-/* ------------------------------Terminales---------------------------------------- */
-use App\Livewire\Admin\TasasServicio\SaveTasaServicio;
-use App\Livewire\Admin\Terminales\ListTerminal;
-/* ------------------------------Amenidades---------------------------------------- */
-use App\Livewire\Admin\Terminales\SaveTerminal;
-use App\Livewire\Admin\Viajes\DetailViaje;
-/* ------------------------------Reporte de Ventas generales----------------------- */
-use App\Livewire\Admin\Viajes\ListViaje;
-/* ------------------------------Reporte de Ventas de Empresas--------------------- */
+
+
+
 use Illuminate\Support\Facades\Route;
 
 /* ------------------------------Configuraciones----------------------------------- */
@@ -119,6 +126,17 @@ Route::group(['middleware' => ['auth:admin', 'check.permisos']], function () {
         Route::livewire('/', ListTasaServicio::class)->name('list');
         Route::livewire('nuevo', SaveTasaServicio::class)->name('add');
         Route::livewire('editar/{tasa_servicio_id}', SaveTasaServicio::class)->whereNumber('tasa_servicio_id')->name('edit');
+
+    });
+
+    /* ----------------------------------------Exoneraciones de tasa de servicio-------------------------------------- */
+
+    Route::prefix('exoneraciones-tasa-servicio')->name('exoneraciones-tasa-servicio.')->group(function () {
+
+        Route::livewire('/', ListExoneracionTasaServicio::class)->name('list');
+        Route::livewire('nuevo', SaveExoneracionTasaServicio::class)->name('add');
+        Route::livewire('editar/{exoneracion_tasa_servicio_id}', SaveExoneracionTasaServicio::class)
+            ->whereNumber('exoneracion_tasa_servicio_id')->name('edit');
 
     });
 
@@ -221,6 +239,7 @@ Route::group(['middleware' => ['auth:admin', 'check.permisos']], function () {
     /* ----------------------------------------Reembolsos-------------------------------------- */
 
     Route::prefix('reembolsos')->name('reembolsos.')->group(function () {
+
         Route::livewire('/', ListReembolso::class)->name('list');
         Route::livewire('detalle/{reembolso_id}', DetailReembolso::class)->whereNumber('reembolso_id')->name('detail');
 
