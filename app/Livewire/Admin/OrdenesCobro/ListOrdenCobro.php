@@ -2,14 +2,18 @@
 
 namespace App\Livewire\Admin\OrdenesCobro;
 
+use App\Exports\OrdenesCobroExport;
 use App\Models\Empresa;
 use App\Models\OrdenCobro;
+use App\Services\Admin\Access;
 use App\Traits\Listing;
 use App\Traits\Permissions;
 use App\Traits\TraitGeneral;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Maatwebsite\Excel\Facades\Excel;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 #[Layout('layouts.cms')]
 class ListOrdenCobro extends Component
@@ -66,5 +70,22 @@ class ListOrdenCobro extends Component
         if (in_array($property, ['search', 'empresa_id', 'estatus', 'date_from', 'date_to', 'per_page'], true)) {
             $this->resetPage();
         }
+    }
+
+    public function exportExcel(): BinaryFileResponse
+    {
+        Access::authorize('ordenes-cobro', 'download');
+
+        $query = OrdenCobro::searchAdmin($this->search, [
+            'empresa_id' => $this->empresa_id,
+            'estatus' => $this->estatus,
+            'date_from' => $this->date_from,
+            'date_to' => $this->date_to,
+        ]);
+
+        return Excel::download(
+            new OrdenesCobroExport($this->applySort($query)),
+            'ordenes-cobro-'.now()->format('Y-m-d-His').'.xlsx',
+        );
     }
 }

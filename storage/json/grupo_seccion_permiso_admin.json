@@ -114,7 +114,8 @@
         "permissions": [
           {"name": "Listar", "url": "list", "status": 1},
           {"name": "Ver detalle", "url": "detail", "status": 1},
-          {"name": "Revisar pago", "url": "review", "status": 1}
+          {"name": "Revisar pago", "url": "review", "status": 1},
+          {"name": "Descargar Excel", "url": "download", "status": 1}
         ]
       }
     ]

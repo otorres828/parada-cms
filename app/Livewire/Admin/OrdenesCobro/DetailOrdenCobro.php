@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Admin\OrdenesCobro;
 
+use App\Exports\ReservasOrdenCobroExport;
 use App\Models\OrdenCobro;
 use App\Services\Admin\Access;
 use App\Services\Admin\Audit;
@@ -10,6 +11,8 @@ use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Locked;
 use Livewire\Component;
+use Maatwebsite\Excel\Facades\Excel;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 #[Layout('layouts.cms')]
 class DetailOrdenCobro extends Component
@@ -21,10 +24,13 @@ class DetailOrdenCobro extends Component
 
     public bool $canReview = false;
 
+    public bool $canDownload = false;
+
     public function mount(int $orden_cobro_id): void
     {
         $this->orden_cobro_id = $orden_cobro_id;
         $this->canReview = Access::allows('ordenes-cobro', 'review') ?? false;
+        $this->canDownload = Access::allows('ordenes-cobro', 'download') ?? false;
     }
 
     public function render()
@@ -62,5 +68,17 @@ class DetailOrdenCobro extends Component
         Audit::record('orden-cobro.rechazada', $orden, ['motivo' => $data['motivo']]);
         $this->motivo = '';
         $this->dispatch('successEventList', message: 'Orden de cobro rechazada.');
+    }
+
+    public function exportExcel(): BinaryFileResponse
+    {
+        Access::authorize('ordenes-cobro', 'download');
+
+        $orden = OrdenCobro::findAdminDetail($this->orden_cobro_id);
+
+        return Excel::download(
+            new ReservasOrdenCobroExport($orden->reservas_incluidas ?? []),
+            'reservas-'.$orden->codigo.'-'.now()->format('Y-m-d-His').'.xlsx',
+        );
     }
 }

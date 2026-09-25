@@ -10,6 +10,7 @@
     - <x-list.table />: Tabla paginada.
     - <x-list.view-button />: Acceso al detalle.
     - <x-layout.loader.fullpage />: Indicador global de carga.
+    - Botón Descargar Excel: Exporta las órdenes que coinciden con los filtros aplicados.
     --------------------------------------------------------------------------
 --}}
 
@@ -33,9 +34,9 @@
 
     </x-list.actions>
 
-    <div class="row g-3 mb-3">
+    <div class="row g-3 mb-3 align-items-end">
 
-        <div class="col-md-6 col-xl-3">
+        <div class="col-md-6 col-xl-2">
             <label class="form-label" for="orden-empresa">Empresa</label>
             <select id="orden-empresa" class="form-select" wire:model.live="empresa_id">
                 <option value="">Todas</option>
@@ -45,7 +46,7 @@
             </select>
         </div>
 
-        <div class="col-md-6 col-xl-3">
+        <div class="col-md-6 col-xl-2">
             <label class="form-label" for="orden-estatus">Estado</label>
             <select id="orden-estatus" class="form-select" wire:model.live="estatus">
                 <option value="">Todos</option>
@@ -56,15 +57,24 @@
             </select>
         </div>
 
-        <div class="col-md-6 col-xl-3">
+        <div class="col-md-6 col-xl-2">
             <label class="form-label" for="orden-desde">Desde</label>
             <input id="orden-desde" class="form-control" type="date" wire:model.live="date_from">
         </div>
 
-        <div class="col-md-6 col-xl-3">
+        <div class="col-md-6 col-xl-2">
             <label class="form-label" for="orden-hasta">Hasta</label>
             <input id="orden-hasta" class="form-control" type="date" wire:model.live="date_to">
         </div>
+
+        @if ($canDownload)
+            <div class="col-md-12 col-xl-auto ms-xl-auto text-md-end">
+                <button type="button" class="btn btn-success" wire:click="exportExcel"
+                    wire:loading.attr="disabled" wire:target="exportExcel">
+                    <i class="bi bi-file-earmark-excel" aria-hidden="true"></i> Descargar Excel
+                </button>
+            </div>
+        @endif
 
     </div>
 

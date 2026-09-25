@@ -8,6 +8,8 @@
     - <x-form.cancel-button />: Enlace al listado.
     - <x-layout.error />: Errores de validación.
     - <x-layout.loader.fullpage />: Indicador global de carga.
+    - Buscador Alpine: Filtra en el navegador las reservas incluidas.
+    - Botón Descargar Excel: Exporta las reservas congeladas en la orden.
     --------------------------------------------------------------------------
 --}}
 
@@ -85,7 +87,36 @@
     </div>
 
     <div class="card mt-3">
-        <div class="card-header fw-semibold">Reservas incluidas</div>
+
+        <div class="card-header">
+
+            <div class="d-flex flex-column flex-lg-row align-items-lg-center w-100 gap-3">
+
+                <span class="fw-semibold">Reservas incluidas</span>
+
+                <div class="d-flex flex-column flex-sm-row align-items-stretch gap-2 ms-lg-auto">
+
+                    <div class="input-group" style="width: 280px; max-width: 100%;">
+                        <span class="input-group-text">
+                            <i class="bi bi-search" aria-hidden="true"></i>
+                        </span>
+                        <input type="search" class="form-control" x-model.debounce.300ms="search"
+                            placeholder="Buscar reserva" aria-label="Buscar reserva">
+                    </div>
+
+                    @if ($canDownload)
+                        <button type="button" class="btn btn-success text-nowrap" wire:click="exportExcel"
+                            wire:loading.attr="disabled" wire:target="exportExcel">
+                            <i class="bi bi-file-earmark-excel" aria-hidden="true"></i> Descargar Excel
+                        </button>
+                    @endif
+
+                </div>
+
+            </div>
+
+        </div>
+
         <div class="table-responsive">
             <table class="table table-striped align-middle mb-0">
                 <thead>
@@ -98,7 +129,12 @@
                 </thead>
                 <tbody>
                     @foreach ($orden->reservas_incluidas ?? [] as $reserva)
-                        <tr>
+                        <tr x-show="matches(@js([
+                            $reserva['reserva_id'],
+                            $reserva['codigo_referencia'],
+                            $reserva['fecha_pago'],
+                            $reserva['tasa_servicio'],
+                        ]))">
                             <td>{{ $reserva['reserva_id'] }}</td>
                             <td>{{ $reserva['codigo_referencia'] }}</td>
                             <td>{{ $reserva['fecha_pago'] ? \Carbon\Carbon::parse($reserva['fecha_pago'])->format('d/m/Y H:i') : '—' }}</td>
@@ -130,6 +166,8 @@
 @script
     <script>
         Alpine.data('detailOrdenCobro', () => ({
+            search: '',
+
             init() {
                 this.toastCleanup = [
                     Livewire.on('successEventList', data => this.$store.toast.success(data.message)),
@@ -138,6 +176,16 @@
             },
             destroy() {
                 this.toastCleanup?.forEach(cleanup => cleanup());
+            },
+
+            matches(values) {
+                const term = this.search.toString().trim().toLocaleLowerCase('es');
+
+                if (term === '') {
+                    return true;
+                }
+
+                return values.some(value => value?.toString().toLocaleLowerCase('es').includes(term));
             },
         }));
     </script>
