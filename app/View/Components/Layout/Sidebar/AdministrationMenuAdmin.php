@@ -31,6 +31,8 @@ class AdministrationMenuAdmin extends Component
 
     public bool $listReembolsos = false;
 
+    public bool $listOrdenesCobro = false;
+
     public bool $listcupones = false;
 
     public bool $listTerminales = false;
@@ -75,6 +77,7 @@ class AdministrationMenuAdmin extends Component
             'listReservas' => ['reservas', 'list'],
             'listPasajes' => ['pasajes', 'list'],
             'listReembolsos' => ['reembolsos', 'list'],
+            'listOrdenesCobro' => ['ordenes-cobro', 'list'],
             'listcupones' => ['cupones', 'list'],
             'listTerminales' => ['terminales', 'list'],
             'listAmenidades' => ['amenidades', 'list'],

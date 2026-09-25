@@ -57,6 +57,56 @@
 
             </div>
 
+            <div x-show="Number($wire.tipo_contrato) === {{ \App\Models\Empresa::CONTRATO_ELLOS_RECIBEN }}" x-cloak>
+
+                <div class="row g-3">
+
+                    <div class="col-md-6">
+                        <x-form.dropdown label="Día de corte" name="dia_corte" x-model="$wire.dia_corte">
+                            <option value="">Seleccionar...</option>
+                            <option value="1">Lunes</option>
+                            <option value="2">Martes</option>
+                            <option value="3">Miércoles</option>
+                            <option value="4">Jueves</option>
+                            <option value="5">Viernes</option>
+                            <option value="6">Sábado</option>
+                            <option value="7">Domingo</option>
+                        </x-form.dropdown>
+                        @error('dia_corte') <div class="text-danger small">{{ $message }}</div> @enderror
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label" for="hora_corte">Hora de corte</label>
+                        <input id="hora_corte" class="form-control" type="time" name="hora_corte" x-model="$wire.hora_corte">
+                        @error('hora_corte') <div class="text-danger small">{{ $message }}</div> @enderror
+                    </div>
+
+                    <div class="col-md-6">
+                        <x-form.dropdown label="Día de cierre" name="dia_vencimiento" x-model="$wire.dia_vencimiento">
+                            <option value="">Seleccionar...</option>
+                            <option value="1">Lunes</option>
+                            <option value="2">Martes</option>
+                            <option value="3">Miércoles</option>
+                            <option value="4">Jueves</option>
+                            <option value="5">Viernes</option>
+                            <option value="6">Sábado</option>
+                            <option value="7">Domingo</option>
+                        </x-form.dropdown>
+                        @error('dia_vencimiento') <div class="text-danger small">{{ $message }}</div> @enderror
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label" for="hora_vencimiento">Hora de cierre</label>
+                        <input id="hora_vencimiento" class="form-control" type="time" name="hora_vencimiento" x-model="$wire.hora_vencimiento">
+                        @error('hora_vencimiento') <div class="text-danger small">{{ $message }}</div> @enderror
+                    </div>
+
+                </div>
+
+                <p class="form-text mt-2">El corte genera la orden semanal y el cierre establece el límite para reportar el pago.</p>
+
+            </div>
+
             <div class="mb-3">
 
                 <x-form.text-input type="text" name="rif" x-model="$wire.rif">
@@ -202,6 +252,14 @@
                         errorMessage: 'Máximo 255 caracteres'
                     }])
                     .addField(this.$refs.form.querySelector('[name="tipo_contrato"]'), [{
+                        rule: 'required',
+                        errorMessage: 'Este campo es requerido'
+                    }])
+                    .addField(this.$refs.form.querySelector('[name="hora_corte"]'), [{
+                        rule: 'required',
+                        errorMessage: 'Este campo es requerido'
+                    }])
+                    .addField(this.$refs.form.querySelector('[name="hora_vencimiento"]'), [{
                         rule: 'required',
                         errorMessage: 'Este campo es requerido'
                     }])

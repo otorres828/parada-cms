@@ -31,6 +31,7 @@ class Reserva extends ModelHelper
         'monto_total',
         'estado_pago',
         'fecha_compra',
+        'fecha_pago',
         'fecha_expiracion',
         'comentarios_auditoria',
     ];
@@ -51,7 +52,7 @@ class Reserva extends ModelHelper
 
     protected function casts(): array
     {
-        return ['reprogramacion_id' => 'integer', 'estado_pago' => 'integer', 'monto_pasajes' => 'decimal:2', 'descuento_aplicado' => 'decimal:2', 'tasa_servicio' => 'decimal:2', 'monto_total' => 'decimal:2', 'fecha_compra' => 'datetime', 'fecha_expiracion' => 'datetime', 'comentarios_auditoria' => 'array'];
+        return ['reprogramacion_id' => 'integer', 'estado_pago' => 'integer', 'monto_pasajes' => 'decimal:2', 'descuento_aplicado' => 'decimal:2', 'tasa_servicio' => 'decimal:2', 'monto_total' => 'decimal:2', 'fecha_compra' => 'datetime', 'fecha_pago' => 'datetime', 'fecha_expiracion' => 'datetime', 'comentarios_auditoria' => 'array'];
     }
 
     public function usuario(): BelongsTo
@@ -140,9 +141,11 @@ class Reserva extends ModelHelper
         $status = $filters['status'] ?? $filters['estatus'] ?? $filters['estado_pago'] ?? null;
 
         if ($status !== null && $status !== '') {
-            if($status == self::ESTADO_PAGO_PAGADO){
-                $query->whereIn('reservas.estado_pago', [self::ESTADO_PAGO_PAGADO, self::ESTADO_PAGO_REEMBOLSADO]);
-            }else{
+            if ($status == self::ESTADO_PAGO_PAGADO) {
+                // Si el estado es "pagado", incluimos también los estados "reembolsado" y "reprogramado"
+                // Esto se debe a que la tasa de servicio es no reembolsable, por lo que se considera que la reserva ha sido pagada en términos de la plataforma.
+                $query->whereIn('reservas.estado_pago', [self::ESTADO_PAGO_PAGADO, self::ESTADO_PAGO_REEMBOLSADO, self::ESTADO_PAGO_REPROGRAMADO]);
+            } else {
                 $query->where('reservas.estado_pago', $status);
             }
         }

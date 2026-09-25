@@ -99,7 +99,7 @@
     ])
 @endif
 
-@if ($listReservas or $listPasajes or $listReembolsos)
+@if ($listReservas or $listPasajes or $listReembolsos or $listOrdenesCobro)
     @include('components.layout.sidebar-li', [
         'menu' => 'Ventas y finanzas',
         'icon' => 'nav-icon bi bi-wallet2',
@@ -121,6 +121,12 @@
                 'route' => route('admin.reembolsos.list'),
                 'name' => 'Reembolsos',
                 'active' => request()->routeIs('admin.reembolsos.*') ? 'active' : '',
+            ],
+            [
+                'existe' => $listOrdenesCobro ?? false,
+                'route' => route('admin.ordenes-cobro.list'),
+                'name' => 'Órdenes de cobro',
+                'active' => request()->routeIs('admin.ordenes-cobro.*') ? 'active' : '',
             ],
         ],
     ])

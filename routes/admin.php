@@ -46,6 +46,8 @@ use App\Livewire\Admin\EmpresaUsers\SaveEmpresaUser;
 /* ------------------------------Programaciones------------------------------------ */
 use App\Livewire\Admin\Legales\EmpresaLegal;
 use App\Livewire\Admin\Legales\ListLegal;
+use App\Livewire\Admin\OrdenesCobro\DetailOrdenCobro;
+use App\Livewire\Admin\OrdenesCobro\ListOrdenCobro;
 /* ------------------------------Autobuses----------------------------------------- */
 use App\Livewire\Admin\Pasajes\DetailPasaje;
 use App\Livewire\Admin\Pasajes\ListPasaje;
@@ -221,6 +223,15 @@ Route::group(['middleware' => ['auth:admin', 'check.permisos']], function () {
     Route::prefix('reembolsos')->name('reembolsos.')->group(function () {
         Route::livewire('/', ListReembolso::class)->name('list');
         Route::livewire('detalle/{reembolso_id}', DetailReembolso::class)->whereNumber('reembolso_id')->name('detail');
+
+    });
+
+    /* ----------------------------------------Órdenes de cobro-------------------------------------- */
+
+    Route::prefix('ordenes-cobro')->name('ordenes-cobro.')->group(function () {
+
+        Route::livewire('/', ListOrdenCobro::class)->name('list');
+        Route::livewire('detalle/{orden_cobro_id}', DetailOrdenCobro::class)->whereNumber('orden_cobro_id')->name('detail');
 
     });
 

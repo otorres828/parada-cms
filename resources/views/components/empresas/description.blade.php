@@ -27,6 +27,24 @@
         <dd class="col-sm-8">
             <x-list.status-badge :status="$empresa->estatus" />
         </dd>
+        @if ($empresa->tipo_contrato === \App\Models\Empresa::CONTRATO_ELLOS_RECIBEN)
+            <dt class="col-sm-4">Corte semanal</dt>
+            <dd class="col-sm-8">
+                {{ $empresa->getDiaCorte() }} a las {{ substr($empresa->hora_corte, 0, 5) }}
+            </dd>
+            <dt class="col-sm-4">Cierre de pago</dt>
+            <dd class="col-sm-8">
+                {{ $empresa->getDiaVencimiento() }} a las {{ substr($empresa->hora_vencimiento, 0, 5) }}
+            </dd>
+            <dt class="col-sm-4">Estado de cobranza</dt>
+            <dd class="col-sm-8">
+                @if ($empresa->estaBloqueadaPorCobranza())
+                    <span class="badge text-bg-danger">Suspendida desde {{ $empresa->bloqueada_por_cobranza_at->format('d/m/Y H:i') }}</span>
+                @else
+                    <span class="badge text-bg-success">Al día</span>
+                @endif
+            </dd>
+        @endif
     </dl>
 
 </div>

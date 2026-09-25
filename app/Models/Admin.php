@@ -141,4 +141,9 @@ class Admin extends ModelHelper implements Authenticatable, Authorizable, CanRes
     {
         return $this->hasMany(Auditoria::class, 'admin_id');
     }
+
+    public function ordenesCobroAprobadas(): HasMany
+    {
+        return $this->hasMany(OrdenCobro::class, 'admin_id');
+    }
 }

@@ -42,6 +42,8 @@ class CheckPermission
         'admin.legales.list' => ['legales', 'list'],
         'admin.legales.detail' => ['legales', 'detail'],
         'admin.legales.file' => ['legales', 'file'],
+        'admin.ordenes-cobro.list' => ['ordenes-cobro', 'list'],
+        'admin.ordenes-cobro.detail' => ['ordenes-cobro', 'detail'],
         'admin.pasajes.list' => ['pasajes', 'list'],
         'admin.pasajes.detail' => ['pasajes', 'detail'],
         'admin.programaciones.list' => ['programaciones', 'list'],

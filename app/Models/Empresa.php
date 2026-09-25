@@ -22,6 +22,11 @@ class Empresa extends ModelHelper
         'telefono',
         'email',
         'tipo_contrato',
+        'dia_corte',
+        'dia_vencimiento',
+        'hora_corte',
+        'hora_vencimiento',
+        'bloqueada_por_cobranza_at',
         'estatus',
     ];
 
@@ -29,6 +34,9 @@ class Empresa extends ModelHelper
     {
         return [
             'tipo_contrato' => 'integer',
+            'dia_corte' => 'integer',
+            'dia_vencimiento' => 'integer',
+            'bloqueada_por_cobranza_at' => 'datetime',
             'estatus' => 'integer',
         ];
     }
@@ -58,6 +66,16 @@ class Empresa extends ModelHelper
         return $this->hasMany(DatoBancario::class, 'empresa_id');
     }
 
+    public function ordenesCobro(): HasMany
+    {
+        return $this->hasMany(OrdenCobro::class, 'empresa_id');
+    }
+
+    public function estaBloqueadaPorCobranza(): bool
+    {
+        return $this->bloqueada_por_cobranza_at !== null;
+    }
+
     public function getTipoContrato(): string
     {
         return match ($this->tipo_contrato) {
@@ -65,6 +83,29 @@ class Empresa extends ModelHelper
             self::CONTRATO_NOSOTROS_RECIBIMOS => 'La plataforma recibe los pagos',
             default => 'Sin configurar',
         };
+    }
+
+    public function getDiaCorte(): string
+    {
+        return $this->getDiaSemana($this->dia_corte);
+    }
+
+    public function getDiaVencimiento(): string
+    {
+        return $this->getDiaSemana($this->dia_vencimiento);
+    }
+
+    private function getDiaSemana(?int $dia): string
+    {
+        return [
+            1 => 'Lunes',
+            2 => 'Martes',
+            3 => 'Miércoles',
+            4 => 'Jueves',
+            5 => 'Viernes',
+            6 => 'Sábado',
+            7 => 'Domingo',
+        ][$dia] ?? 'Sin configurar';
     }
 
     public static function searchAdmin(string $search = '', array $filters = []): Builder

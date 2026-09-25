@@ -109,6 +109,13 @@
           {"name":"Ver detalle","url":"detail","status":1},
           {"name":"Descargar Excel","url":"download","status":1}
         ]
+      },
+      {"name": "Órdenes de cobro", "url": "ordenes-cobro", "status": 1,
+        "permissions": [
+          {"name": "Listar", "url": "list", "status": 1},
+          {"name": "Ver detalle", "url": "detail", "status": 1},
+          {"name": "Revisar pago", "url": "review", "status": 1}
+        ]
       }
     ]
   },

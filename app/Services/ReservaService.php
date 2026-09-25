@@ -277,7 +277,10 @@ class ReservaService
             self::exigir($reserva->estado_pago === Reserva::ESTADO_PAGO_PENDIENTE, 'reserva', 'La reserva no tiene un pago pendiente.');
             self::validarPasajeros($reserva);
             self::validarCuponReserva($reserva);
-            $reserva->update(['estado_pago' => Reserva::ESTADO_PAGO_PAGADO]);
+            $reserva->update([
+                'estado_pago' => Reserva::ESTADO_PAGO_PAGADO,
+                'fecha_pago' => now(),
+            ]);
 
             return self::detalle($reserva);
         });
@@ -441,7 +444,17 @@ class ReservaService
 
     private static function validarSalida(Programacion $programacion, int $origen, array $terminales): void
     {
-        self::exigir($programacion->estatus === 1 && $programacion->viaje->estatus && $programacion->viaje->empresa?->estatus && $programacion->autobus?->estatus && ! $programacion->autobus->es_plantilla && (int) $programacion->autobus->empresa_id === (int) $programacion->viaje->empresa_id, 'programacion', 'La salida no está habilitada para venta.');
+        self::exigir(
+            $programacion->estatus === Programacion::ESTADO_PROGRAMADO
+                && $programacion->viaje->estatus
+                && $programacion->viaje->empresa?->estatus
+                && ! $programacion->viaje->empresa?->estaBloqueadaPorCobranza()
+                && $programacion->autobus?->estatus
+                && ! $programacion->autobus->es_plantilla
+                && (int) $programacion->autobus->empresa_id === (int) $programacion->viaje->empresa_id,
+            'programacion',
+            'La salida no está habilitada para venta.',
+        );
         $posicion = array_search($origen, $terminales, true);
         self::exigir($posicion !== false, 'trayecto', 'El origen no pertenece a la ruta.');
         $salida = Carbon::parse($programacion->fecha_salida->format('Y-m-d').' '.$programacion->hora_salida);

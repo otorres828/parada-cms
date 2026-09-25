@@ -64,7 +64,13 @@ class ListEmpresa extends Component
 
             $empresa = Empresa::find($id);
 
-            $inactive = Empresa::ESTADO_INACTIVE;
+            $inactive = Empresa::ESTADO_DELETE;
+
+            if ((int) $empresa->estatus !== Empresa::ESTADO_ACTIVE && $empresa->estaBloqueadaPorCobranza()) {
+                $this->dispatch('errorEventList', message: 'La empresa tiene órdenes de cobro vencidas y no puede activarse.');
+
+                return;
+            }
 
             $empresa->estatus = (int) $empresa->estatus === Empresa::ESTADO_ACTIVE ? $inactive : Empresa::ESTADO_ACTIVE;
 
