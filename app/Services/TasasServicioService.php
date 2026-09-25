@@ -40,7 +40,7 @@ class TasasServicioService
 
                 $pasaje->subtotal = bcsub($pasaje->precio_base, $pasaje->descuento, 2);
 
-                if ($reserva->esReprogramacion()) {
+                if ($reserva->exoneracion_tasa_json !== null || $reserva->esReprogramacion()) {
 
                     $tasaCalculada = '0.00';
                     $pasaje->servicio_json = null;
@@ -68,6 +68,7 @@ class TasasServicioService
                 $base = bcadd($base, $pasaje->precio_base, 2);
                 $descuentos = bcadd($descuentos, $pasaje->descuento, 2);
             }
+            
             $reserva->update([
                 'monto_pasajes' => $base,
                 'descuento_aplicado' => $descuentos,
