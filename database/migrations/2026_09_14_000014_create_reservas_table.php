@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('codigo_referencia')->unique();
             $table->decimal('monto_pasajes', 12, 2);
             $table->decimal('descuento_aplicado', 12, 2);
+            $table->json('exoneracion_tasa_json')->nullable();
             $table->decimal('tasa_servicio', 12, 2);
             $table->decimal('monto_total', 12, 2);
             $table->enum('estado_pago', [1, 2, 3, 4, 5, 6, 7])->default(1);
