@@ -43,9 +43,11 @@ class Reserva extends ModelHelper
 
     const ESTADO_PAGO_CANCELADO = 4;
 
-    const ESTADO_PAGO_REEMBOLSADO = 5;
+    const ESTADO_PAGO_REPROGRAMADO = 5; // RESERVA CANCELADA POR REPROGRAMACION
 
-    const ESTADO_PAGO_FALLIDO = 6;
+    const ESTADO_PAGO_REEMBOLSADO = 6;
+
+    const ESTADO_PAGO_FALLIDO = 7;
 
     protected function casts(): array
     {
@@ -92,6 +94,11 @@ class Reserva extends ModelHelper
         return $this->hasMany(self::class, 'reprogramacion_id');
     }
 
+    public function reprogramado(): HasOne
+    {
+        return $this->hasOne(self::class, 'reprogramacion_id');
+    }
+
     public function esReprogramacion(): bool
     {
         return $this->reprogramacion_id !== null;
@@ -112,6 +119,7 @@ class Reserva extends ModelHelper
             self::ESTADO_PAGO_PAGADO => 'pagado',
             self::ESTADO_PAGO_PENDIENTE => 'pendiente',
             self::ESTADO_PAGO_CANCELADO => 'cancelado',
+            self::ESTADO_PAGO_REPROGRAMADO => 'reprogramado',
             self::ESTADO_PAGO_REEMBOLSADO => 'reembolsado',
             self::ESTADO_PAGO_FALLIDO => 'fallido',
             default => 'desconocido',
@@ -191,6 +199,8 @@ class Reserva extends ModelHelper
             ->with([
                 'pasajes.reserva',
                 'cupon.configuracionCupon',
+                'reservaOriginal',
+                'reprogramado',
             ])
             ->findOrFail($reservaId);
     }

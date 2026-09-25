@@ -185,7 +185,11 @@ class CuponService
     {
         if ($campana->modalidad === ConfiguracionCupon::MODALIDAD_PRIMERA_COMPRA) {
             $tieneCompra = Reserva::where('usuario_id', $reserva->usuario_id)->whereKeyNot($reserva->id)
-                ->whereIn('estado_pago', [Reserva::ESTADO_PAGO_PAGADO, Reserva::ESTADO_PAGO_REEMBOLSADO])->exists();
+                ->whereIn('estado_pago', [
+                    Reserva::ESTADO_PAGO_PAGADO,
+                    Reserva::ESTADO_PAGO_REPROGRAMADO,
+                    Reserva::ESTADO_PAGO_REEMBOLSADO,
+                ])->exists();
             $this->exigir(! $tieneCompra, 'cupon', 'Este cupón solo aplica a la primera compra.');
         }
 

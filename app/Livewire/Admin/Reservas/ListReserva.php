@@ -79,7 +79,7 @@ class ListReserva extends Component
             'status' => $this->status,
             'date_from' => $this->date_from,
             'date_to' => $this->date_to,
-        ])->with('cupon')->withCount('pasajes');
+        ])->with(['cupon', 'reservaOriginal'])->withCount('pasajes');
 
         return Excel::download(
             new ReservasExport($this->applySort($query)),

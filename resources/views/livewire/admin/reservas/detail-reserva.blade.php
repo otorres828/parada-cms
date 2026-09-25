@@ -45,7 +45,8 @@
 
                 <div class="card">
 
-                    <x-reservas.description :reserva="$reserva" :can-view-campaign="$canViewCampaign" :can-view-passengers="$canViewPassengers" />
+                    <x-reservas.description :reserva="$reserva" :can-view-campaign="$canViewCampaign"
+                        :can-view-passengers="$canViewPassengers" :can-view-reservation="$canViewReservation" />
 
                 </div>
 

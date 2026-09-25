@@ -71,6 +71,7 @@
                 <option value="{{ \App\Models\Reserva::ESTADO_PAGO_PAGADO }}">Pagadas</option>
                 <option value="{{ \App\Models\Reserva::ESTADO_PAGO_PENDIENTE }}">Pendientes</option>
                 <option value="{{ \App\Models\Reserva::ESTADO_PAGO_CANCELADO }}">Canceladas</option>
+                <option value="{{ \App\Models\Reserva::ESTADO_PAGO_REPROGRAMADO }}">Reprogramadas</option>
             </select>
 
         </div>

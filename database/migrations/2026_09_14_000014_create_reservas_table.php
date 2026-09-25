@@ -19,7 +19,7 @@ return new class extends Migration
             $table->decimal('descuento_aplicado', 12, 2);
             $table->decimal('tasa_servicio', 12, 2);
             $table->decimal('monto_total', 12, 2);
-            $table->enum('estado_pago', [1, 2, 3, 4, 5, 6])->default(1);
+            $table->enum('estado_pago', [1, 2, 3, 4, 5, 6, 7])->default(1);
             $table->dateTime('fecha_compra');
             $table->dateTime('fecha_expiracion')->nullable();
             $table->json('comentarios_auditoria')->nullable();

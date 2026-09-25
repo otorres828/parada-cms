@@ -25,6 +25,7 @@ class ReservasExport extends DefaultValueBinder implements FromQuery, WithCustom
         return [
             'ID reserva',
             'Referencia',
+            'Reprogramación',
             'Fecha de reserva',
             'Cliente',
             'Correo del cliente',
@@ -49,6 +50,7 @@ class ReservasExport extends DefaultValueBinder implements FromQuery, WithCustom
         return [
             $reserva->id,
             $reserva->codigo_referencia,
+            $reserva->reservaOriginal?->codigo_referencia,
             $reserva->fecha_compra?->format('d/m/Y H:i'),
             $reserva->usuario?->name,
             $reserva->usuario?->email,

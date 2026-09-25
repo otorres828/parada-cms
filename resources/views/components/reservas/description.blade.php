@@ -2,7 +2,7 @@
     DESCRIPCIÓN DE RESERVA | Presenta ruta, cliente, cupón, importes y estado de pago.
 --}}
 
-@props(['reserva', 'canViewCampaign', 'canViewPassengers'])
+@props(['reserva', 'canViewCampaign', 'canViewPassengers', 'canViewReservation'])
 
 <div class="card-body">
 
@@ -94,7 +94,31 @@
 
         <dt class="col-sm-4">Estado</dt>
         <dd class="col-sm-8">
-            <x-list.status-reserva :status="$reserva->estado_pago" />
+            @if ($reserva->estado_pago === \App\Models\Reserva::ESTADO_PAGO_REPROGRAMADO && $reserva->reprogramado)
+                <span class="badge text-bg-primary">Cancelada por reprogramación</span>
+
+                @if ($canViewReservation)
+                    <a class="ms-1" href="{{ route('admin.reservas.detail', $reserva->reprogramado->id) }}"
+                        wire:navigate>
+                        #{{ $reserva->reprogramado->id }}
+                    </a>
+                @else
+                    <span class="ms-1">#{{ $reserva->reprogramado->id }}</span>
+                @endif
+            @elseif ($reserva->reprogramacion_id)
+                <span class="badge text-bg-success">Pagada por reprogramación</span>
+
+                @if ($canViewReservation)
+                    <a class="ms-1" href="{{ route('admin.reservas.detail', $reserva->reprogramacion_id) }}"
+                        wire:navigate>
+                        #{{ $reserva->reprogramacion_id }}
+                    </a>
+                @else
+                    <span class="ms-1">#{{ $reserva->reprogramacion_id }}</span>
+                @endif
+            @else
+                <x-list.status-reserva :status="$reserva->estado_pago" />
+            @endif
         </dd>
     </dl>
 

@@ -40,13 +40,13 @@ class ReservaService
                     ->findOrFail($reprogramacionId);
 
                 self::exigir(
-                    $reservaOriginal->estado_pago === Reserva::ESTADO_PAGO_CANCELADO,
+                    $reservaOriginal->estado_pago === Reserva::ESTADO_PAGO_PAGADO,
                     'reprogramacion_id',
-                    'La reserva original debe estar cancelada antes de reprogramarla.',
+                    'Solo se pueden reprogramar reservas pagadas.',
                 );
 
                 self::exigir(
-                    ! $reservaOriginal->reservasReprogramadas()->exists(),
+                    ! $reservaOriginal->reprogramado()->exists(),
                     'reprogramacion_id',
                     'Esta reserva ya fue reprogramada.',
                 );
@@ -81,6 +81,13 @@ class ReservaService
                 'fecha_compra' => now(),
                 'fecha_expiracion' => now()->addMinutes(self::MINUTOS_BLOQUEO),
             ]);
+
+            if ($reservaOriginal) {
+                $reservaOriginal->update([
+                    'estado_pago' => Reserva::ESTADO_PAGO_REPROGRAMADO,
+                    'fecha_expiracion' => null,
+                ]);
+            }
 
             return self::detalle($reserva);
         }, 3);

@@ -77,6 +77,7 @@ class Dashboard extends Component
             Reserva::ESTADO_PAGO_NUEVO => ['label' => 'Nuevas', 'color' => 'info'],
             Reserva::ESTADO_PAGO_FALLIDO => ['label' => 'Fallidas', 'color' => 'danger'],
             Reserva::ESTADO_PAGO_CANCELADO => ['label' => 'Canceladas', 'color' => 'secondary'],
+            Reserva::ESTADO_PAGO_REPROGRAMADO => ['label' => 'Reprogramadas', 'color' => 'primary'],
             Reserva::ESTADO_PAGO_REEMBOLSADO => ['label' => 'Reembolsadas', 'color' => 'primary'],
         ];
         $conteos = Reserva::statusCountsForDashboard($filtros);

@@ -8,6 +8,7 @@
         \App\Models\Reserva::ESTADO_PAGO_PAGADO => 'success',
         \App\Models\Reserva::ESTADO_PAGO_PENDIENTE => 'warning',
         \App\Models\Reserva::ESTADO_PAGO_CANCELADO => 'secondary',
+        \App\Models\Reserva::ESTADO_PAGO_REPROGRAMADO => 'primary',
         \App\Models\Reserva::ESTADO_PAGO_REEMBOLSADO => 'secondary',
         \App\Models\Reserva::ESTADO_PAGO_FALLIDO => 'danger',
         default => 'secondary',
