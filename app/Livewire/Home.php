@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use App\Models\SolicitudEmpresa;
+use App\Support\ActionRateLimiter;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
 
@@ -39,6 +40,8 @@ class Home extends Component
 
             return;
         }
+
+        ActionRateLimiter::validarRateLimit();
 
         $datos = $this->validate([
             'nombre' => 'required|string|max:255',
