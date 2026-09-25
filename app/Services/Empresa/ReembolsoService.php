@@ -1,26 +1,26 @@
 <?php
 
-namespace App\Services\Admin;
+namespace App\Services\Empresa;
 
 use App\Models\Empresa;
 use App\Models\PagoReserva;
 use App\Models\Reembolso;
 use App\Models\Reserva;
+use App\Services\Admin\Audit;
 use App\Services\CuponService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 
-class Finance
+class ReembolsoService
 {
     private static function fail(string $message): never
     {
         throw ValidationException::withMessages(['monto' => $message]);
     }
 
-    public static function refund(array $data): Reembolso
+    public static function crear(array $data): Reembolso
     {
-        Access::authorize('reembolsos', 'add');
         Validator::make($data, [
             'pago_reserva_id' => 'required|integer|exists:pagos_reservas,id',
             'motivo' => 'required|string|min:10|max:2000',
@@ -51,15 +51,13 @@ class Finance
         });
     }
 
-    public static function review(string $module, int $id, string $decision, string $comment, ?string $reference, ?string $proof): void
+    public static function revisar(int $id, string $decision, string $comment, ?string $reference, ?string $proof): void
     {
-        Access::authorize($module, 'review');
-        abort_unless($module === 'reembolsos', 403);
         if (! in_array($decision, ['aprobado', 'rechazado', 'pagado'], true)) {
             self::fail('Resolución inválida.');
         }
 
-        DB::transaction(function () use ($id, $decision, $comment, $reference, $proof, $module) {
+        DB::transaction(function () use ($id, $decision, $comment, $reference, $proof) {
             $record = Reembolso::with('pagoReserva.reserva')->whereKey($id)->lockForUpdate()->firstOrFail();
             $allowed = $record->estatus === 'pendiente' ? ['aprobado', 'rechazado'] : ($record->estatus === 'aprobado' ? ['pagado', 'rechazado'] : []);
             if (! in_array($decision, $allowed, true)) {
@@ -86,7 +84,7 @@ class Finance
             $record->revisado_por = auth('admin')->id();
             $record->fecha_resolucion = now();
             $record->save();
-            Audit::record($module.'.'.$decision, $record, ['comentario' => $comment]);
+            Audit::record('reembolsos.' . $decision, $record, ['comentario' => $comment]);
         });
     }
 }

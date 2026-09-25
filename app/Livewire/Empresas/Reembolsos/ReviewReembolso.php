@@ -4,7 +4,7 @@ namespace App\Livewire\Empresas\Reembolsos;
 
 use App\Models\Reembolso;
 use App\Services\Admin\Access;
-use App\Services\Admin\Finance;
+use App\Services\Empresa\ReembolsoService;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\ValidationException;
 use Livewire\Attributes\Layout;
@@ -53,7 +53,13 @@ class ReviewReembolso extends Component
         ]);
         $path = $this->storeProof();
         try {
-            Finance::review('reembolsos', $this->reembolso_id, $this->decision, $this->comentario, $this->referencia ?: null, $path);
+            ReembolsoService::revisar(
+                $this->reembolso_id,
+                $this->decision,
+                $this->comentario,
+                $this->referencia ?: null,
+                $path,
+            );
         } catch (\Throwable $e) {
             if ($path) {
                 Storage::disk('local')->delete($path);

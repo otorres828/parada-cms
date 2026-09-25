@@ -5,7 +5,7 @@ namespace App\Livewire\Empresas\Reembolsos;
 use App\Models\PagoReserva;
 use App\Models\Reembolso;
 use App\Services\Admin\Access;
-use App\Services\Admin\Finance;
+use App\Services\Empresa\ReembolsoService;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Locked;
 use Livewire\Component;
@@ -49,7 +49,7 @@ class SaveReembolso extends Component
     {
         Access::authorize('reembolsos', $this->reembolso_id ? 'edit' : 'add');
         $data = $this->validateForm();
-        $reembolso = Finance::refund($data);
+        $reembolso = ReembolsoService::crear($data);
         session()->flash('admin_success', 'Registro guardado correctamente.');
 
         return $this->redirect(route('empresas.reembolsos.list'), navigate: true);

@@ -232,7 +232,19 @@ class CuponService
     private function auditar(Reserva $reserva, string $evento, ?ConfiguracionCupon $campana, Cupon $cupon, float $descuento): void
     {
         $auditoria = $reserva->comentarios_auditoria ?? [];
-        $auditoria['cupones'][] = ['evento' => $evento, 'fecha' => now()->toIso8601String(), 'cupon_id' => $cupon->id, 'configuracion_cupon_id' => $campana?->id, 'codigo' => $cupon->codigo, 'tipo_cupon' => $campana?->tipo_cupon, 'tipo_descuento' => $campana?->tipo_descuento, 'aplica_en' => $campana?->aplica_en, 'modalidad' => $campana?->modalidad, 'valor' => $campana?->monto_descuento, 'descuento_aplicado' => number_format($descuento, 2, '.', '')];
+        $auditoria['cupones'][] = [
+            'evento' => $evento, 
+            'fecha' => now()->toIso8601String(), 
+            'cupon_id' => $cupon->id,
+            'configuracion_cupon_id' => $campana?->id, 
+            'codigo' => $cupon->codigo, 
+            'tipo_cupon' => $campana?->tipo_cupon, 
+            'tipo_descuento' => $campana?->tipo_descuento, 
+            'aplica_en' => $campana?->aplica_en, 
+            'modalidad' => $campana?->modalidad, 
+            'valor' => $campana?->monto_descuento, 
+            'descuento_aplicado' => number_format($descuento, 2, '.', '')
+        ];
         $reserva->comentarios_auditoria = $auditoria;
     }
 
