@@ -24,7 +24,7 @@ class Terminal extends ModelHelper
 
     protected function casts(): array
     {
-        return ['latitud' => 'decimal:7', 'longitud' => 'decimal:7', 'estatus' => 'boolean'];
+        return ['latitud' => 'decimal:7', 'longitud' => 'decimal:7', 'estatus' => 'integer'];
     }
 
     public function estado(): BelongsTo

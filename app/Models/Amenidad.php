@@ -21,7 +21,7 @@ class Amenidad extends ModelHelper
 
     protected function casts(): array
     {
-        return ['estatus' => 'boolean'];
+        return ['estatus' => 'integer'];
     }
 
     public function amenidadAutobus(): HasMany

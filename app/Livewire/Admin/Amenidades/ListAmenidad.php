@@ -66,7 +66,7 @@ class ListAmenidad extends Component
 
             $amenidad = $query->whereKey($id)->lockForUpdate()->firstOrFail();
 
-            $inactive = Amenidad::ESTADO_DELETE;
+            $inactive = Amenidad::ESTADO_INACTIVE;
 
             $amenidad->estatus = (int) $amenidad->estatus === Amenidad::ESTADO_ACTIVE ? $inactive : Amenidad::ESTADO_ACTIVE;
 

@@ -26,7 +26,7 @@ class Autobus extends ModelHelper
 
     protected function casts(): array
     {
-        return ['total_asientos' => 'integer', 'es_plantilla' => 'boolean', 'estatus' => 'boolean'];
+        return ['total_asientos' => 'integer', 'es_plantilla' => 'boolean', 'estatus' => 'integer'];
     }
 
     public function empresa(): BelongsTo

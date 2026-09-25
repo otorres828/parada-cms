@@ -32,7 +32,7 @@ class UsuarioEmpresa extends ModelHelper implements Authenticatable, Authorizabl
 
     protected function casts(): array
     {
-        return ['es_admin' => 'boolean', 'estatus' => 'boolean', 'password' => 'hashed'];
+        return ['es_admin' => 'boolean', 'estatus' => 'integer', 'password' => 'hashed'];
     }
 
     public function empresa(): BelongsTo

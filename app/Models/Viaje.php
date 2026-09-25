@@ -25,7 +25,7 @@ class Viaje extends ModelHelper
 
     protected function casts(): array
     {
-        return ['estatus' => 'boolean'];
+        return ['estatus' => 'integer'];
     }
 
     public function empresa(): BelongsTo
