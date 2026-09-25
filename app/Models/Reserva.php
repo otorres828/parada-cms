@@ -27,6 +27,7 @@ class Reserva extends ModelHelper
         'codigo_referencia',
         'monto_pasajes',
         'descuento_aplicado',
+        'exoneracion_tasa_json',
         'tasa_servicio',
         'monto_total',
         'estado_pago',
@@ -52,7 +53,7 @@ class Reserva extends ModelHelper
 
     protected function casts(): array
     {
-        return ['reprogramacion_id' => 'integer', 'estado_pago' => 'integer', 'monto_pasajes' => 'decimal:2', 'descuento_aplicado' => 'decimal:2', 'tasa_servicio' => 'decimal:2', 'monto_total' => 'decimal:2', 'fecha_compra' => 'datetime', 'fecha_pago' => 'datetime', 'fecha_expiracion' => 'datetime', 'comentarios_auditoria' => 'array'];
+        return ['reprogramacion_id' => 'integer', 'estado_pago' => 'integer', 'monto_pasajes' => 'decimal:2', 'descuento_aplicado' => 'decimal:2', 'exoneracion_tasa_json' => 'array', 'tasa_servicio' => 'decimal:2', 'monto_total' => 'decimal:2', 'fecha_compra' => 'datetime', 'fecha_pago' => 'datetime', 'fecha_expiracion' => 'datetime', 'comentarios_auditoria' => 'array'];
     }
 
     public function usuario(): BelongsTo
