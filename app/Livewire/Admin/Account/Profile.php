@@ -35,6 +35,7 @@ class Profile extends Component
 
     public function save(): void
     {
+
         $admin = Admin::findOrFail(auth('admin')->id());
         $rules = [
             'current_password' => 'required|current_password:admin',
