@@ -140,7 +140,11 @@ class Reserva extends ModelHelper
         $status = $filters['status'] ?? $filters['estatus'] ?? $filters['estado_pago'] ?? null;
 
         if ($status !== null && $status !== '') {
-            $query->where('reservas.estado_pago', $status);
+            if($status == self::ESTADO_PAGO_PAGADO){
+                $query->whereIn('reservas.estado_pago', [self::ESTADO_PAGO_PAGADO, self::ESTADO_PAGO_REEMBOLSADO]);
+            }else{
+                $query->where('reservas.estado_pago', $status);
+            }
         }
 
         if (! empty($filters['date_from'])) {
