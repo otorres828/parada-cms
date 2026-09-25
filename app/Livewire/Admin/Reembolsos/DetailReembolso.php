@@ -29,6 +29,7 @@ class DetailReembolso extends Component
     public function downloadProof()
     {
         Access::authorize('reembolsos', 'detail');
+
         $path = $this->findReembolso()->comprobante;
         abort_unless($path && str_starts_with($path, 'comprobantes/') && Storage::disk('local')->exists($path), 404);
 

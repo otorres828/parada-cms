@@ -83,7 +83,7 @@ class ListReserva extends Component
 
         return Excel::download(
             new ReservasExport($this->applySort($query)),
-            'reservas-' . now()->format('Y-m-d-His') . '.xlsx',
+            'reservas-'.now()->format('Y-m-d-His').'.xlsx',
         );
     }
 

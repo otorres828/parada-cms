@@ -70,9 +70,10 @@ class CompaniesReport extends Component
             'date_to' => 'required|date_format:Y-m-d|after_or_equal:date_from',
             'per_page' => 'integer|in:10,25,50,100',
         ]);
+
         return Excel::download(
             new CompaniesReportExport($this->query()),
-            'reporte-empresas-' . $this->date_from . '-' . $this->date_to . '.xlsx',
+            'reporte-empresas-'.$this->date_from.'-'.$this->date_to.'.xlsx',
         );
     }
 }

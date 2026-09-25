@@ -74,6 +74,7 @@ class ListPasaje extends Component
     {
         Access::authorize('pasajes', 'list');
         Access::authorize('pasajes', 'detail');
+
         $query = Pasaje::searchAdmin($this->search, [
             'empresa_id' => $this->empresa_id,
             'estado_pago' => $this->status,

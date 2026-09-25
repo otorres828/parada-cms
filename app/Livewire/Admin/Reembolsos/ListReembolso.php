@@ -86,7 +86,7 @@ class ListReembolso extends Component
 
         return Excel::download(
             new ReembolsosExport($this->applySort($query)),
-            'reembolsos-' . now()->format('Y-m-d-His') . '.xlsx',
+            'reembolsos-'.now()->format('Y-m-d-His').'.xlsx',
         );
     }
 

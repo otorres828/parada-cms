@@ -10,6 +10,7 @@ class Access
     public static function allows(string $module, string $action): bool
     {
         $admin = Admin::find(auth('admin')->id());
+
         return $admin?->hasPermission($module, $action) ?? false;
     }
 
