@@ -23,6 +23,11 @@ return Application::configure(basePath: dirname(__DIR__))
         },
     )
     ->withMiddleware(function (Middleware $middleware): void {
+        // Aplica el limitador global de navegación a las rutas web; las solicitudes que no sean GET quedan excluidas por el limitador.
+        $middleware->web(append: [
+            'throttle:web-get'
+        ]);
+
         $middleware->group('check.permisos', [
             CheckPermission::class,
         ]);
@@ -31,7 +36,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->redirectTo(
             guests: function (Request $request) {
 
-            if ($request->is('admin') || $request->is('admin/*')) {
+                if ($request->is('admin') || $request->is('admin/*')) {
                     return route('admin.login');
                 }
 
@@ -40,7 +45,7 @@ return Application::configure(basePath: dirname(__DIR__))
         );
 
         $middleware->alias([
-            'auth.site' =>RedirectIfUnauthenticated::class,
+            'auth.site' => RedirectIfUnauthenticated::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
