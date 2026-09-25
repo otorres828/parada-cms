@@ -25,7 +25,7 @@ class TasaServicio extends ModelHelper
 
     protected function casts(): array
     {
-        return ['tipo_servicio' => 'integer', 'monto_minimo' => 'decimal:2', 'monto_maximo' => 'decimal:2', 'cantidad' => 'decimal:2', 'estatus' => 'boolean'];
+        return ['tipo_servicio' => 'integer', 'monto_minimo' => 'decimal:2', 'monto_maximo' => 'decimal:2', 'cantidad' => 'decimal:2', 'estatus' => 'integer'];
     }
 
     public static function searchAdmin(string $search = '', array $filters = []): Builder

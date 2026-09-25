@@ -50,7 +50,7 @@
                 aria-label="Filtrar por estado">
                 <option value="">Todos los estados</option>
                 <option value="1">Activo</option>
-                <option value="0">Inactivo</option>
+                <option value="2">Inactivo</option>
             </select>
 
         </x-slot:group>
