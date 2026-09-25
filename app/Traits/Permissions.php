@@ -3,7 +3,6 @@
 namespace App\Traits;
 
 use App\Models\Admin;
-use App\Services\Admin\Access;
 use Illuminate\Support\Facades\Auth;
 
 trait Permissions
@@ -24,9 +23,6 @@ trait Permissions
 
     public function checkPermissions(string $module, array $permissions = []): void
     {
-
-        Access::authorize($module, 'list');
-        
         $admin = Admin::find(Auth::guard('admin')->id());
 
         $checks = [];
