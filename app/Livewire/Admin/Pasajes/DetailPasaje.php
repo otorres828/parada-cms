@@ -39,6 +39,6 @@ class DetailPasaje extends Component
 
     protected function findPasaje(): Pasaje
     {
-        return Pasaje::searchAdmin()->with([0 => 'reserva.cupon.configuracionCupon', 1 => 'viajero'])->findOrFail($this->pasaje_id);
+        return Pasaje::searchAdmin()->with([0 => 'reserva.cupon.configuracionCupon', 1 => 'reserva.tipoCambio', 2 => 'viajero'])->findOrFail($this->pasaje_id);
     }
 }

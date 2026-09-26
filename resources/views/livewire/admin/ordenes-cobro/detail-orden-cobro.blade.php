@@ -50,7 +50,7 @@
                         <dt class="col-sm-5">Reservas incluidas</dt>
                         <dd class="col-sm-7">{{ $orden->cantidad_reservas }}</dd>
                         <dt class="col-sm-5">Total</dt>
-                        <dd class="col-sm-7 fw-bold">{{ number_format((float) $orden->total, 2) }}</dd>
+                        <dd class="col-sm-7 fw-bold"><x-money.dual :usd="$orden->total" :bs="$conversionBs['total_bs']" /></dd>
                     </dl>
                 </div>
             </div>
@@ -138,7 +138,10 @@
                             <td>{{ $reserva['reserva_id'] }}</td>
                             <td>{{ $reserva['codigo_referencia'] }}</td>
                             <td>{{ $reserva['fecha_pago'] ? \Carbon\Carbon::parse($reserva['fecha_pago'])->format('d/m/Y H:i') : '—' }}</td>
-                            <td class="text-end">{{ number_format((float) $reserva['tasa_servicio'], 2) }}</td>
+                            <td class="text-end">
+                                <x-money.dual :usd="$reserva['tasa_servicio']"
+                                    :bs="$conversionBs['reservas_bs'][$reserva['reserva_id']] ?? null" />
+                            </td>
                         </tr>
                     @endforeach
                 </tbody>

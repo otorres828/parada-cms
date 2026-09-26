@@ -14,7 +14,10 @@ use PhpOffice\PhpSpreadsheet\Cell\DefaultValueBinder;
 
 class ReservasOrdenCobroExport extends DefaultValueBinder implements FromCollection, WithCustomValueBinder, WithHeadings, WithMapping
 {
-    public function __construct(private array $reservas) {}
+    public function __construct(
+        private array $reservas,
+        private array $conversionesBs = [],
+    ) {}
 
     public function collection(): Collection
     {
@@ -28,6 +31,7 @@ class ReservasOrdenCobroExport extends DefaultValueBinder implements FromCollect
             'Código de referencia',
             'Fecha de pago',
             'Tasa de servicio',
+            'Tasa de servicio Bs',
         ];
     }
 
@@ -38,6 +42,9 @@ class ReservasOrdenCobroExport extends DefaultValueBinder implements FromCollect
             $reserva['codigo_referencia'] ?? null,
             ! empty($reserva['fecha_pago']) ? Carbon::parse($reserva['fecha_pago'])->format('d/m/Y H:i') : null,
             (float) ($reserva['tasa_servicio'] ?? 0),
+            isset($this->conversionesBs[$reserva['reserva_id'] ?? 0])
+                ? (float) $this->conversionesBs[$reserva['reserva_id']]
+                : null,
         ];
     }
 

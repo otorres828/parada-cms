@@ -17,7 +17,7 @@
         </dd>
         <dt class="col-sm-4">Monto</dt>
         <dd class="col-sm-8">
-            {{ number_format($reembolso->monto ?? 0, 2) }}
+            <x-money.dual :usd="$reembolso->monto" :bs="$reembolso->calcularMontoBs()" />
         </dd>
         <dt class="col-sm-4">Estado</dt>
         <dd class="col-sm-8">

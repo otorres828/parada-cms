@@ -144,6 +144,8 @@ class Programacion extends ModelHelper
                     ],
                     'tasa_servicio',
                 );
+
+            self::withBolivaresTotals($query);
         }
 
         return $query;
@@ -151,7 +153,7 @@ class Programacion extends ModelHelper
 
     public static function searchDetailViajes(int $viaje_id): Builder
     {
-        return self::searchAdmin()
+        $query = self::searchAdmin()
             ->where('viaje_id', $viaje_id)
             ->withCount(['pasajes as pasajes_vendidos' => fn ($q) => $q->where('reservas.estado_pago', Reserva::ESTADO_PAGO_PAGADO)])
             ->withCount(['pasajes as pasajes_pendientes' => fn ($q) => $q->where('reservas.estado_pago', Reserva::ESTADO_PAGO_PENDIENTE)])
@@ -173,8 +175,11 @@ class Programacion extends ModelHelper
                     },
                 ],
                 'tasa_servicio',
-            )
-            ->orderByDesc('fecha_salida')
+            );
+
+        self::withBolivaresTotals($query);
+
+        return $query->orderByDesc('fecha_salida')
             ->orderByDesc('hora_salida');
     }
 
@@ -197,5 +202,23 @@ class Programacion extends ModelHelper
             ->whereKey($programacionId)
             ->lockForUpdate()
             ->firstOrFail();
+    }
+
+    private static function withBolivaresTotals(Builder $query): Builder
+    {
+        return $query->addSelect([
+            'ventas_total_bs' => Pasaje::query()
+                ->selectRaw('COALESCE(SUM(pasajes.subtotal * tipos_cambios.valor_usd), 0)')
+                ->join('reservas', 'reservas.id', '=', 'pasajes.reserva_id')
+                ->join('tipos_cambios', 'tipos_cambios.id', '=', 'reservas.tipos_cambios_id')
+                ->whereColumn('reservas.programacion_id', 'programaciones.id')
+                ->where('reservas.estado_pago', Reserva::ESTADO_PAGO_PAGADO),
+            'tasas_servicio_total_bs' => Pasaje::query()
+                ->selectRaw('COALESCE(SUM(pasajes.tasa_servicio * tipos_cambios.valor_usd), 0)')
+                ->join('reservas', 'reservas.id', '=', 'pasajes.reserva_id')
+                ->join('tipos_cambios', 'tipos_cambios.id', '=', 'reservas.tipos_cambios_id')
+                ->whereColumn('reservas.programacion_id', 'programaciones.id')
+                ->where('reservas.estado_pago', Reserva::ESTADO_PAGO_PAGADO),
+        ]);
     }
 }

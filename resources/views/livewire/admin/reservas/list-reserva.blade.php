@@ -181,7 +181,7 @@
                     </td>
 
                     <td>
-                        {{ number_format($reserva->monto_total ?? 0, 2) }}
+                        <x-money.dual :usd="$reserva->monto_total" :bs="$reserva->calcularMontoBs($reserva->monto_total)" />
                     </td>
 
                     <td>
@@ -245,5 +245,4 @@
         }));
     </script>
 @endscript
-
 

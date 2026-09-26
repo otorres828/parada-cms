@@ -100,7 +100,7 @@
                     <td>{{ $orden->empresa->nombre }}</td>
                     <td>{{ $orden->periodo_desde->format('d/m/Y') }} — {{ $orden->periodo_hasta->format('d/m/Y') }}</td>
                     <td>{{ $orden->cantidad_reservas }}</td>
-                    <td>{{ number_format((float) $orden->total, 2) }}</td>
+                    <td><x-money.dual :usd="$orden->total" :bs="data_get($conversionesBs, $orden->id . '.total_bs')" /></td>
                     <td>{{ $orden->fecha_vencimiento->format('d/m/Y H:i') }}</td>
                     <td>
                         <span @class([

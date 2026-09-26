@@ -50,7 +50,7 @@
                 </td>
 
                 <td>
-                    {{ number_format($salida->tasas_servicio_total ?? 0, 2) }}
+                    <x-money.dual :usd="$salida->tasas_servicio_total" :bs="$salida->tasas_servicio_total_bs" />
                 </td>
 
             </tr>

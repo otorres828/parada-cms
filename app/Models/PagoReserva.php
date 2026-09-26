@@ -27,6 +27,11 @@ class PagoReserva extends ModelHelper
         return $this->belongsTo(Reserva::class, 'reserva_id');
     }
 
+    public function calcularMontoBs(string|int|float|null $monto): ?string
+    {
+        return $this->reserva?->calcularMontoBs($monto);
+    }
+
     public function reembolsos(): HasMany
     {
         return $this->hasMany(Reembolso::class, 'pago_reserva_id');
@@ -36,6 +41,7 @@ class PagoReserva extends ModelHelper
     {
         $query = self::query()->with([
             'reserva.programacion.viaje.empresa',
+            'reserva.tipoCambio',
             'datoBancario',
         ]);
 

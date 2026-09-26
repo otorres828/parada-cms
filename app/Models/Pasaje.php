@@ -48,6 +48,11 @@ class Pasaje extends ModelHelper
         return $this->belongsTo(Viajero::class, 'viajero_id');
     }
 
+    public function calcularMontoBs(string|int|float|null $monto): ?string
+    {
+        return $this->reserva?->calcularMontoBs($monto);
+    }
+
     public function getTipoServicioAttribute(): ?int
     {
         $value = $this->servicio('tipo_servicio');
@@ -97,7 +102,7 @@ class Pasaje extends ModelHelper
 
     public static function searchAdmin(string $search = '', array $filters = []): Builder
     {
-        $query = self::query()->with(['reserva.origenTerminal', 'reserva.destinoTerminal', 'reserva.programacion', 'viajero']);
+        $query = self::query()->with(['reserva.origenTerminal', 'reserva.destinoTerminal', 'reserva.programacion', 'reserva.tipoCambio', 'viajero']);
 
         if ($search !== '') {
             $query->where(function ($query) use ($search) {

@@ -75,7 +75,8 @@
 
                         @if ($tramoPreciosRecientes->isNotEmpty())
                             <div class="table-responsive">
-                                <x-viajes.tramo-precios-table :tramo-precios="$tramoPreciosRecientes" />
+                                <x-viajes.tramo-precios-table :tramo-precios="$tramoPreciosRecientes"
+                                    :tipo-cambio="$tipoCambioVigente" />
                             </div>
                         @else
                             <div class="text-body-secondary py-3 text-center">

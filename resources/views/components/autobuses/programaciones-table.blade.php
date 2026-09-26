@@ -2,7 +2,7 @@
     TABLA DE PROGRAMACIONES DEL AUTOBÚS | Presenta las salidas y sus resultados comerciales.
 --}}
 
-@props(['programaciones', 'canViewPassengers'])
+@props(['programaciones', 'canViewPassengers', 'tipoCambio' => null])
 
 <table class="table align-middle mb-0">
 
@@ -60,7 +60,8 @@
                 </td>
 
                 <td>
-                    {{ number_format($salida->tramoPrecios->first()?->precio ?? 0, 2) }}
+                    @php($precio = $salida->tramoPrecios->first()?->precio ?? 0)
+                    <x-money.dual :usd="$precio" :bs="\App\Support\ConversorMoneda::aBolivares($precio, $tipoCambio)" />
                 </td>
 
                 <td>
@@ -72,11 +73,11 @@
                 </td>
 
                 <td>
-                    {{ number_format($salida->ventas_total ?? 0, 2) }}
+                    <x-money.dual :usd="$salida->ventas_total" :bs="$salida->ventas_total_bs" />
                 </td>
 
                 <td>
-                    {{ number_format($salida->tasas_servicio_total ?? 0, 2) }}
+                    <x-money.dual :usd="$salida->tasas_servicio_total" :bs="$salida->tasas_servicio_total_bs" />
                 </td>
 
             </tr>

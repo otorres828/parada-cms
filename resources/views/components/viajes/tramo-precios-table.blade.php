@@ -2,7 +2,7 @@
     TABLA DE PRECIOS POR TRAMO | Renderiza la matriz O&D configurada para la salida más reciente.
 --}}
 
-@props(['tramoPrecios'])
+@props(['tramoPrecios', 'tipoCambio' => null])
 
 <table class="table table-sm align-middle mb-0">
     <thead>
@@ -21,7 +21,8 @@
                     <span
                         class="fw-semibold">{{ $tp->destinoTerminal?->nombre }}</span>
                 </td>
-                <td class="text-end text-success fw-bold"> {{ number_format($tp->precio, 2) }}
+                <td class="text-end text-success fw-bold">
+                    <x-money.dual :usd="$tp->precio" :bs="$tp->calcularMontoBs($tipoCambio)" />
                 </td>
                 <td class="text-center">
                     @if ($tp->asientos_maximos_permitidos)

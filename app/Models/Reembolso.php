@@ -52,9 +52,14 @@ class Reembolso extends ModelHelper
         return $this->belongsTo(Admin::class, 'revisado_por');
     }
 
+    public function calcularMontoBs(string|int|float|null $monto = null): ?string
+    {
+        return $this->pagoReserva?->calcularMontoBs($monto ?? $this->monto);
+    }
+
     public static function searchAdmin(string $search = '', array $filters = []): Builder
     {
-        $query = self::query()->with([0 => 'empresa', 1 => 'pagoReserva.reserva', 2 => 'admin', 3 => 'revisor']);
+        $query = self::query()->with([0 => 'empresa', 1 => 'pagoReserva.reserva.tipoCambio', 2 => 'admin', 3 => 'revisor']);
 
         if ($search !== '') {
             $query->where(function ($query) use ($search) {

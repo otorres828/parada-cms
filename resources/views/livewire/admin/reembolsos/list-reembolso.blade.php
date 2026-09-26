@@ -169,7 +169,7 @@
                     </td>
 
                     <td>
-                        {{ number_format($reembolso->monto ?? 0, 2) }}
+                        <x-money.dual :usd="$reembolso->monto" :bs="$reembolso->calcularMontoBs()" />
                     </td>
 
                     <td>

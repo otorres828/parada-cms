@@ -7,6 +7,7 @@ use App\Models\OrdenCobro;
 use App\Services\Admin\Access;
 use App\Services\Admin\Audit;
 use App\Services\OrdenCobroService;
+use App\Support\ConversorMoneda;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Locked;
@@ -35,8 +36,11 @@ class DetailOrdenCobro extends Component
 
     public function render()
     {
+        $orden = OrdenCobro::findAdminDetail($this->orden_cobro_id);
+
         return view('livewire.admin.ordenes-cobro.detail-orden-cobro', [
-            'orden' => OrdenCobro::findAdminDetail($this->orden_cobro_id),
+            'orden' => $orden,
+            'conversionBs' => ConversorMoneda::ordenes([$orden])[$orden->id],
         ]);
     }
 
@@ -77,7 +81,10 @@ class DetailOrdenCobro extends Component
         $orden = OrdenCobro::findAdminDetail($this->orden_cobro_id);
 
         return Excel::download(
-            new ReservasOrdenCobroExport($orden->reservas_incluidas ?? []),
+            new ReservasOrdenCobroExport(
+                $orden->reservas_incluidas ?? [],
+                ConversorMoneda::ordenes([$orden])[$orden->id]['reservas_bs'],
+            ),
             'reservas-'.$orden->codigo.'-'.now()->format('Y-m-d-His').'.xlsx',
         );
     }

@@ -3,6 +3,7 @@
 namespace App\Livewire\Admin\Viajes;
 
 use App\Models\Programacion;
+use App\Models\TipoCambio;
 use App\Models\Viaje;
 use App\Services\Admin\Access;
 use App\Traits\Listing;
@@ -59,6 +60,7 @@ class DetailViaje extends Component
 
         return view('livewire.admin.viajes.detail-viaje', [
             'programaciones' => $programaciones,
+            'tipoCambioVigente' => TipoCambio::vigente(),
         ]);
     }
 

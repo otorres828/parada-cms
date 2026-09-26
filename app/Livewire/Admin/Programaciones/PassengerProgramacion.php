@@ -5,6 +5,7 @@ namespace App\Livewire\Admin\Programaciones;
 use App\Models\Pasaje;
 use App\Models\Programacion;
 use App\Models\Reserva;
+use App\Models\TipoCambio;
 use App\Models\ViajeTramo;
 use App\Services\Admin\Access;
 use Illuminate\Database\Eloquent\Collection;
@@ -61,8 +62,9 @@ class PassengerProgramacion extends Component
         return view('livewire.admin.programaciones.passenger-programacion', [
             'disponibilidadTramos' => $disponibilidad[$this->programacion_id],
             'capacidad' => max(0, min((int) $this->programacion->asientos_totales, (int) $this->programacion->autobus?->total_asientos)),
-            'pasajesPagados' => ['cantidad' => $pasajesPagados->count(), 'monto' => $pasajesPagados->sum('total'), 'tasas' => $pasajesPagados->sum('tasa_servicio')],
-            'pasajesPendientes' => ['cantidad' => $pasajesPendientes->count(), 'monto' => $pasajesPendientes->sum('total'), 'tasas' => $pasajesPendientes->sum('tasa_servicio')],
+            'pasajesPagados' => $this->resumenPasajes($pasajesPagados),
+            'pasajesPendientes' => $this->resumenPasajes($pasajesPendientes),
+            'tipoCambioVigente' => TipoCambio::vigente(),
         ]);
     }
 
@@ -80,5 +82,22 @@ class PassengerProgramacion extends Component
                 'autobus.amenidades',
             ])
             ->findOrFail($this->programacion_id);
+    }
+
+    private function resumenPasajes(Collection $pasajes): array
+    {
+        return [
+            'cantidad' => $pasajes->count(),
+            'monto' => $pasajes->sum('total'),
+            'monto_bs' => $pasajes->reduce(
+                fn (string $total, Pasaje $pasaje) => bcadd($total, $pasaje->calcularMontoBs($pasaje->total) ?? '0', 2),
+                '0.00',
+            ),
+            'tasas' => $pasajes->sum('tasa_servicio'),
+            'tasas_bs' => $pasajes->reduce(
+                fn (string $total, Pasaje $pasaje) => bcadd($total, $pasaje->calcularMontoBs($pasaje->tasa_servicio) ?? '0', 2),
+                '0.00',
+            ),
+        ];
     }
 }

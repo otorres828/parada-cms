@@ -63,7 +63,8 @@
 
         <div class="table-responsive">
 
-            <x-autobuses.programaciones-table :programaciones="$programaciones" :can-view-passengers="$canViewPassengers" />
+            <x-autobuses.programaciones-table :programaciones="$programaciones" :can-view-passengers="$canViewPassengers"
+                :tipo-cambio="$tipoCambioVigente" />
 
             {{ $programaciones->links() }}
 

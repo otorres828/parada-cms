@@ -38,6 +38,6 @@ class DetailReembolso extends Component
 
     protected function findReembolso(): Reembolso
     {
-        return Reembolso::searchAdmin()->with([0 => 'empresa', 1 => 'pagoReserva.reserva', 2 => 'admin', 3 => 'revisor'])->findOrFail($this->reembolso_id);
+        return Reembolso::searchAdmin()->with([0 => 'empresa', 1 => 'pagoReserva.reserva.tipoCambio', 2 => 'admin', 3 => 'revisor'])->findOrFail($this->reembolso_id);
     }
 }

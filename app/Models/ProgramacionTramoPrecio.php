@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Support\ConversorMoneda;
 use App\Traits\TraitGeneral;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -40,5 +41,10 @@ class ProgramacionTramoPrecio extends ModelHelper
     public function destinoTerminal(): BelongsTo
     {
         return $this->belongsTo(Terminal::class, 'destino_terminal_id');
+    }
+
+    public function calcularMontoBs(?TipoCambio $tipoCambio = null): ?string
+    {
+        return ConversorMoneda::aBolivares($this->precio, $tipoCambio ?? TipoCambio::vigente());
     }
 }

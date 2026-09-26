@@ -65,23 +65,23 @@
                 </td>
 
                 <td class="text-end">
-                    {{ number_format($ticket->precio_base, 2) }}
+                    <x-money.dual :usd="$ticket->precio_base" :bs="$ticket->calcularMontoBs($ticket->precio_base)" />
                 </td>
 
                 <td class="text-end">
-                    {{ number_format($ticket->descuento, 2) }}
+                    <x-money.dual :usd="$ticket->descuento" :bs="$ticket->calcularMontoBs($ticket->descuento)" />
                 </td>
 
                 <td class="text-end">
-                    {{ number_format($ticket->subtotal, 2) }}
+                    <x-money.dual :usd="$ticket->subtotal" :bs="$ticket->calcularMontoBs($ticket->subtotal)" />
                 </td>
 
                 <td class="text-end">
-                    {{ number_format($ticket->tasa_servicio, 2) }}
+                    <x-money.dual :usd="$ticket->tasa_servicio" :bs="$ticket->calcularMontoBs($ticket->tasa_servicio)" />
                 </td>
 
                 <td class="text-end">
-                    {{ number_format($ticket->total, 2) }}
+                    <x-money.dual :usd="$ticket->total" :bs="$ticket->calcularMontoBs($ticket->total)" />
                 </td>
 
                 <td class="text-center">

@@ -6,6 +6,7 @@ use App\Exports\OrdenesCobroExport;
 use App\Models\Empresa;
 use App\Models\OrdenCobro;
 use App\Services\Admin\Access;
+use App\Support\ConversorMoneda;
 use App\Traits\Listing;
 use App\Traits\Permissions;
 use App\Traits\TraitGeneral;
@@ -61,6 +62,7 @@ class ListOrdenCobro extends Component
 
         return view('livewire.admin.ordenes-cobro.list-orden-cobro', [
             'ordenes' => $ordenes,
+            'conversionesBs' => ConversorMoneda::ordenes($ordenes->getCollection()),
             'empresas' => Empresa::searchAdmin()->orderBy('nombre')->get(['id', 'nombre']),
         ]);
     }

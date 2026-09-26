@@ -67,22 +67,23 @@
 
         <dt class="col-sm-4">Subtotal</dt>
         <dd class="col-sm-8">
-            {{ number_format($reserva->monto_pasajes ?? 0, 2) }}
+            <x-money.dual :usd="$reserva->monto_pasajes" :bs="$reserva->calcularMontoBs($reserva->monto_pasajes)" />
         </dd>
 
         <dt class="col-sm-4">Descuento</dt>
         <dd class="col-sm-8">
-            {{ number_format($reserva->descuento_aplicado ?? 0, 2) }}
+            <x-money.dual :usd="$reserva->descuento_aplicado" :bs="$reserva->calcularMontoBs($reserva->descuento_aplicado)" />
         </dd>
 
         <dt class="col-sm-4">Total</dt>
         <dd class="col-sm-8">
-            {{ number_format(($reserva->monto_pasajes ?? 0) - ($reserva->descuento_aplicado ?? 0), 2) }}
+            @php($totalSinTasa = bcsub($reserva->monto_pasajes ?? '0', $reserva->descuento_aplicado ?? '0', 2))
+            <x-money.dual :usd="$totalSinTasa" :bs="$reserva->calcularMontoBs($totalSinTasa)" />
         </dd>
 
         <dt class="col-sm-4">Tasa de servicio</dt>
         <dd class="col-sm-8">
-            {{ number_format($reserva->tasa_servicio ?? 0, 2) }}
+            <x-money.dual :usd="$reserva->tasa_servicio" :bs="$reserva->calcularMontoBs($reserva->tasa_servicio)" />
         </dd>
 
         @if ($reserva->exoneracion_tasa_json !== null)
@@ -94,18 +95,13 @@
 
         <dt class="col-sm-4">Total + tasa de servicio</dt>
         <dd class="col-sm-8 fw-semibold">
-            {{ number_format($reserva->monto_total ?? 0, 2) }}
+            <x-money.dual :usd="$reserva->monto_total" :bs="$reserva->monto_total_bolivares" />
         </dd>
 
         @if ($reserva->tipoCambio)
-            <dt class="col-sm-4">Total en bolívares</dt>
-            <dd class="col-sm-8 fw-semibold">
-                Bs. {{ number_format($reserva->monto_total_bolivares, 2, ',', '.') }}
-            </dd>
-
             <dt class="col-sm-4">Tipo de cambio aplicado</dt>
             <dd class="col-sm-8 text-body-secondary">
-                1 USD = Bs. {{ number_format($reserva->tipoCambio->valor_usd, 2, ',', '.') }}
+                $1.00 / Bs. {{ number_format($reserva->tipoCambio->valor_usd, 2, ',', '.') }}
                 ({{ $reserva->tipoCambio->timestamp?->format('d/m/Y H:i') }})
             </dd>
         @endif

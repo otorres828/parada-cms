@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Support\ConversorMoneda;
 use App\Traits\TraitGeneral;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -99,11 +100,12 @@ class Reserva extends ModelHelper
 
     public function getMontoTotalBolivaresAttribute(): ?string
     {
-        if (! $this->tipoCambio || $this->monto_total === null) {
-            return null;
-        }
+        return $this->calcularMontoBs($this->monto_total);
+    }
 
-        return bcmul($this->monto_total, $this->tipoCambio->valor_usd, 2);
+    public function calcularMontoBs(string|int|float|null $monto): ?string
+    {
+        return ConversorMoneda::aBolivares($monto, $this->tipoCambio);
     }
 
     public function reservasReprogramadas(): HasMany
@@ -195,7 +197,7 @@ class Reserva extends ModelHelper
 
     public static function searchAdmin(string $search = '', array $filters = []): Builder
     {
-        $query = self::query()->with(['usuario', 'programacion.viaje.empresa', 'pasajes.viajero', 'origenTerminal', 'destinoTerminal']);
+        $query = self::query()->with(['usuario', 'programacion.viaje.empresa', 'pasajes.viajero', 'origenTerminal', 'destinoTerminal', 'tipoCambio']);
 
         if ($search !== '') {
             $query->where(function ($query) use ($search) {
@@ -235,7 +237,7 @@ class Reserva extends ModelHelper
 
     public static function searchDetailClient(int $user_id): Builder
     {
-        return self::query()->with([0 => 'programacion.viaje.empresa', 1 => 'pasajes.viajero'])
+        return self::query()->with([0 => 'programacion.viaje.empresa', 1 => 'pasajes.viajero', 2 => 'tipoCambio'])
             ->where('usuario_id', $user_id)
             ->whereIn('estado_pago', [self::ESTADO_PAGO_PAGADO, self::ESTADO_PAGO_PENDIENTE])
             ->orderByDesc('fecha_compra');
@@ -244,11 +246,12 @@ class Reserva extends ModelHelper
     public static function salesReport(string $dateFrom, string $dateTo): Builder
     {
         return self::query()
-            ->where('estado_pago', self::ESTADO_PAGO_PAGADO)
-            ->whereDate('fecha_compra', '>=', self::date($dateFrom))
-            ->whereDate('fecha_compra', '<=', self::date($dateTo))
-            ->selectRaw('DATE(fecha_compra) as fecha, COUNT(*) as cantidad, SUM(monto_total) as total, SUM(tasa_servicio) as tasas')
-            ->groupByRaw('DATE(fecha_compra)')
+            ->join('tipos_cambios', 'tipos_cambios.id', '=', 'reservas.tipos_cambios_id')
+            ->where('reservas.estado_pago', self::ESTADO_PAGO_PAGADO)
+            ->whereDate('reservas.fecha_compra', '>=', self::date($dateFrom))
+            ->whereDate('reservas.fecha_compra', '<=', self::date($dateTo))
+            ->selectRaw('DATE(reservas.fecha_compra) as fecha, COUNT(*) as cantidad, SUM(reservas.monto_total) as total, SUM(reservas.monto_total * tipos_cambios.valor_usd) as total_bs, SUM(reservas.tasa_servicio) as tasas, SUM(reservas.tasa_servicio * tipos_cambios.valor_usd) as tasas_bs')
+            ->groupByRaw('DATE(reservas.fecha_compra)')
             ->orderByDesc('fecha');
     }
 
@@ -261,7 +264,8 @@ class Reserva extends ModelHelper
             ->join('programaciones', 'programaciones.id', '=', 'reservas.programacion_id')
             ->join('viajes', 'viajes.id', '=', 'programaciones.viaje_id')
             ->join('empresas', 'empresas.id', '=', 'viajes.empresa_id')
-            ->selectRaw('empresas.id, empresas.nombre, COUNT(*) as cantidad, SUM(reservas.monto_total) as total, SUM(reservas.tasa_servicio) as tasas')
+            ->join('tipos_cambios', 'tipos_cambios.id', '=', 'reservas.tipos_cambios_id')
+            ->selectRaw('empresas.id, empresas.nombre, COUNT(*) as cantidad, SUM(reservas.monto_total) as total, SUM(reservas.monto_total * tipos_cambios.valor_usd) as total_bs, SUM(reservas.tasa_servicio) as tasas, SUM(reservas.tasa_servicio * tipos_cambios.valor_usd) as tasas_bs')
             ->groupBy('empresas.id', 'empresas.nombre')
             ->orderByDesc('total');
     }

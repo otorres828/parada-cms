@@ -185,23 +185,23 @@
                     </td>
 
                     <td>
-                        {{ number_format($pasaje->precio_base, 2) }}
+                        <x-money.dual :usd="$pasaje->precio_base" :bs="$pasaje->calcularMontoBs($pasaje->precio_base)" />
                     </td>
 
                     <td>
-                        {{ number_format($pasaje->descuento, 2) }}
+                        <x-money.dual :usd="$pasaje->descuento" :bs="$pasaje->calcularMontoBs($pasaje->descuento)" />
                     </td>
 
                     <td>
-                        {{ number_format($pasaje->subtotal, 2) }}
+                        <x-money.dual :usd="$pasaje->subtotal" :bs="$pasaje->calcularMontoBs($pasaje->subtotal)" />
                     </td>
 
                     <td>
-                        {{ number_format($pasaje->tasa_servicio, 2) }}
+                        <x-money.dual :usd="$pasaje->tasa_servicio" :bs="$pasaje->calcularMontoBs($pasaje->tasa_servicio)" />
                     </td>
 
                     <td>
-                        {{ number_format($pasaje->total, 2) }}
+                        <x-money.dual :usd="$pasaje->total" :bs="$pasaje->calcularMontoBs($pasaje->total)" />
                     </td>
 
                     <td>

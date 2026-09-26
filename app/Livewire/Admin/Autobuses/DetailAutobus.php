@@ -4,6 +4,7 @@ namespace App\Livewire\Admin\Autobuses;
 
 use App\Models\Autobus;
 use App\Models\Programacion;
+use App\Models\TipoCambio;
 use App\Services\Admin\Access;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Locked;
@@ -47,6 +48,7 @@ class DetailAutobus extends Component
 
         return view('livewire.admin.autobuses.detail-autobus', [
             'programaciones' => $programaciones,
+            'tipoCambioVigente' => TipoCambio::vigente(),
         ]);
     }
 

@@ -91,23 +91,23 @@
 
         <dt class="col-sm-4">Precio</dt>
 
-        <dd class="col-sm-8">{{ number_format($pasaje->precio_base, 2) }}</dd>
+        <dd class="col-sm-8"><x-money.dual :usd="$pasaje->precio_base" :bs="$pasaje->calcularMontoBs($pasaje->precio_base)" /></dd>
 
         <dt class="col-sm-4">Descuento</dt>
 
-        <dd class="col-sm-8">{{ number_format($pasaje->descuento, 2) }}</dd>
+        <dd class="col-sm-8"><x-money.dual :usd="$pasaje->descuento" :bs="$pasaje->calcularMontoBs($pasaje->descuento)" /></dd>
 
         <dt class="col-sm-4">Subtotal</dt>
 
-        <dd class="col-sm-8">{{ number_format($pasaje->subtotal, 2) }}</dd>
+        <dd class="col-sm-8"><x-money.dual :usd="$pasaje->subtotal" :bs="$pasaje->calcularMontoBs($pasaje->subtotal)" /></dd>
 
         <dt class="col-sm-4">Tasa de servicio</dt>
 
-        <dd class="col-sm-8">{{ number_format($pasaje->tasa_servicio, 2) }}</dd>
+        <dd class="col-sm-8"><x-money.dual :usd="$pasaje->tasa_servicio" :bs="$pasaje->calcularMontoBs($pasaje->tasa_servicio)" /></dd>
 
         <dt class="col-sm-4">Total</dt>
 
-        <dd class="col-sm-8">{{ number_format($pasaje->total, 2) }}</dd>
+        <dd class="col-sm-8"><x-money.dual :usd="$pasaje->total" :bs="$pasaje->calcularMontoBs($pasaje->total)" /></dd>
 
         <dt class="col-sm-4">Pago</dt>
 

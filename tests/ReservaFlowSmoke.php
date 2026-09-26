@@ -7,6 +7,7 @@ use App\Models\DatoBancario;
 use App\Models\Empresa;
 use App\Models\Estado;
 use App\Models\Programacion;
+use App\Models\OrdenCobro;
 use App\Models\ProgramacionTramoPrecio;
 use App\Models\Reserva;
 use App\Models\TasaServicio;
@@ -18,6 +19,7 @@ use App\Services\CuponService;
 use App\Services\Empresa\ReembolsoService;
 use App\Services\PagoReservaService;
 use App\Services\ReservaService;
+use App\Support\ConversorMoneda;
 use Illuminate\Contracts\Console\Kernel;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Artisan;
@@ -81,6 +83,19 @@ $check($r->pago()->count() === 1);
 $reject(fn () => PagoReservaService::confirmarPago($r->id, '99.00'), ValidationException::class);
 $r = PagoReservaService::confirmarPago($r->id, '10.00');
 $check($r->estado_pago === Reserva::ESTADO_PAGO_PAGADO);
+$ticketPagado = $r->pasajes()->with('reserva.tipoCambio')->firstOrFail();
+$check($ticketPagado->calcularMontoBs($ticketPagado->total) === bcmul($ticketPagado->total, $tipoCambio->valor_usd, 2));
+$resumenProgramacion = Programacion::searchAdmin('', ['historial_ventas' => true])->findOrFail($programacion->id);
+$check(bccomp((string) $resumenProgramacion->ventas_total_bs, bcmul($resumenProgramacion->ventas_total, $tipoCambio->valor_usd, 2), 2) === 0);
+$ordenPrueba = new OrdenCobro([
+    'reservas_incluidas' => [[
+        'reserva_id' => $r->id,
+        'tasa_servicio' => (float) $r->tasa_servicio,
+    ]],
+]);
+$ordenPrueba->id = 999;
+$conversionOrden = ConversorMoneda::ordenes([$ordenPrueba])[999];
+$check($conversionOrden['total_bs'] === $r->calcularMontoBs($r->tasa_servicio));
 $reject(fn () => ReservaService::cancelarReserva($cliente, $r->id), ValidationException::class);
 $vac = ReservaService::aplicarReserva($otro, $tarifa->id);
 $vac = ReservaService::agregarPasajero($otro, $vac->id, $pasajero);
