@@ -54,7 +54,6 @@ class ReservaService
 
             Terminal::validarSalida($programacion, $tarifa->origen_terminal_id, $terminales);
 
-            ProgramacionTramoPrecio::exigir(bccomp($tarifa->precio, '0', 2) >= 0, 'tarifa', 'La tarifa no puede ser negativa.');
 
             $disponibilidad = Pasaje::disponibilidad($programacion, $tarifa, $terminales);
 
@@ -117,12 +116,13 @@ class ReservaService
 
             $terminales = Terminal::obtenerSecuenciaRuta($programacion);
             Terminal::validarSalida($programacion, $tarifa->origen_terminal_id, $terminales);
-            ProgramacionTramoPrecio::exigir(bccomp($tarifa->precio, '0', 2) >= 0, 'tarifa', 'La tarifa no puede ser negativa.');
+
             $disponibilidad = Pasaje::disponibilidad(
                 $programacion,
                 $tarifa,
                 $terminales,
             );
+            
             Pasaje::exigir(
                 $disponibilidad['cupo_tramo'] > 0 && $disponibilidad['asientos'] !== [],
                 'pasajero',
@@ -161,7 +161,7 @@ class ReservaService
 
             if (! $reserva->pasajes()->exists()) {
                 if ($reserva->cupon_id !== null) {
-                    app(CuponService::class)->removerCupon($reserva);
+                    app(CuponService::class)->removerCupon($reserva, reservaBloqueada: true);
                     $reserva->refresh();
                 }
 

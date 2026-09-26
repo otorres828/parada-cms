@@ -49,3 +49,11 @@ Se conservan conReserva, el recálculo compartido, la cotización inicial, las v
 `tests/ReservaFlowSmoke.php` ejecuta las migraciones exclusivamente en SQLite en memoria. Comprueba cliente seleccionado sin dependencia de sesión, propiedad, cupo, recálculo del cupón al agregar/retirar pasajeros, cotización vacía, pago repetido, importe incorrecto, cancelación de pagadas, salida inactiva, expiración y conservación del histórico al reembolsar.
 
 Ejecutar con PHP 8.3+, BCMath y PDO SQLite: `php tests/ReservaFlowSmoke.php`.
+
+## Bloqueo único de reserva
+
+`conReserva` adquiere el bloqueo de la reserva que entrega a su callback. El recálculo y la liberación interna de cupones usan esa misma instancia y transacción, sin volver a bloquearla. La tarea de expiración también bloquea antes de liberar el cupón.
+
+`aplicarCupon` y `removerCupon` conservan su bloqueo para llamadas independientes. Su argumento interno `reservaBloqueada: true` se usa exclusivamente cuando el llamador ya mantiene bloqueada esa reserva en una transacción; nunca procede de una petición del navegador. No se infiere que exista un bloqueo solo porque haya una transacción abierta.
+
+Los bloqueos de programación, cupón, campaña y reserva original de una reprogramación protegen registros diferentes y se conservan.

@@ -1,11 +1,5 @@
 <?php
 
-require __DIR__.'/../vendor/autoload.php';
-$app = require __DIR__.'/../bootstrap/app.php';
-$app->make(Kernel::class)->bootstrap();
-config(['database.default' => 'sqlite', 'database.connections.sqlite.database' => ':memory:', 'cache.default' => 'array', 'session.driver' => 'array']);
-DB::purge('sqlite');
-Artisan::call('migrate', ['--force' => true]);
 use App\Models\Admin;
 use App\Models\Autobus;
 use App\Models\ConfiguracionCupon;
@@ -28,6 +22,13 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
+
+require __DIR__.'/../vendor/autoload.php';
+$app = require __DIR__.'/../bootstrap/app.php';
+$app->make(Kernel::class)->bootstrap();
+config(['database.default' => 'sqlite', 'database.connections.sqlite.database' => ':memory:', 'cache.default' => 'array', 'session.driver' => 'array']);
+DB::purge('sqlite');
+Artisan::call('migrate', ['--force' => true]);
 
 $check = function ($condition) {
     if (! $condition) {
@@ -99,3 +100,21 @@ ReembolsoService::revisar($reembolso->id, 'pagado', 'Pagado', 'REEMBOLSO', 'comp
 $check($r->fresh()->estado_pago === Reserva::ESTADO_PAGO_REEMBOLSADO);
 $check($r->fresh()->only(array_keys($antes)) === $antes);
 echo "OK: reembolso conserva cupón, tasas e importes históricos.\n";
+
+// Rutas de cupón que reciben una reserva ya bloqueada por conReserva.
+$nueva = ReservaService::aplicarReserva($otro, $tarifa->id);
+$nueva = ReservaService::agregarPasajero($otro, $nueva->id, $pasajero);
+$nueva = app(CuponService::class)->aplicarCupon($nueva, 'TEST');
+$nueva = ReservaService::removerPasajero($otro, $nueva->id, $nueva->pasajes->first()->id);
+$check($nueva->cupon_id === null && $nueva->monto_total === '11.00');
+$nueva = ReservaService::agregarPasajero($otro, $nueva->id, $pasajero);
+app(CuponService::class)->aplicarCupon($nueva, 'TEST');
+$nueva = ReservaService::cancelarReserva($otro, $nueva->id);
+$check($nueva->cupon_id === null && $nueva->estado_pago === Reserva::ESTADO_PAGO_CANCELADO);
+$nueva = ReservaService::aplicarReserva($otro, $tarifa->id);
+$nueva = ReservaService::agregarPasajero($otro, $nueva->id, $pasajero);
+app(CuponService::class)->aplicarCupon($nueva, 'TEST');
+PagoReservaService::pasarAPendiente($otro, $nueva->id, $banco->id, 'REF-FALLIDA', now()->toDateTimeString());
+$nueva = PagoReservaService::marcarPagoFallido($nueva->id);
+$check($nueva->cupon_id === null && $nueva->estado_pago === Reserva::ESTADO_PAGO_FALLIDO);
+echo "OK: liberación de cupón al retirar último pasajero, cancelar y rechazar pago.\n";

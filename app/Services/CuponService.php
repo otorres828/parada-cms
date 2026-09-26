@@ -36,10 +36,13 @@ class CuponService
         }, 3);
     }
 
-    public function aplicarCupon(Reserva $reserva, string $codigo): Reserva
+    // reservaBloqueada solo se usa dentro de la transacción que ya bloqueó esta reserva.
+    public function aplicarCupon(Reserva $reserva, string $codigo, bool $reservaBloqueada = false): Reserva
     {
-        return DB::transaction(function () use ($reserva, $codigo) {
-            $reserva = Reserva::with(['programacion.viaje', 'usuario'])->whereKey($reserva->id)->lockForUpdate()->firstOrFail();
+        return DB::transaction(function () use ($reserva, $codigo, $reservaBloqueada) {
+            if (! $reservaBloqueada) {
+                $reserva = Reserva::with(['programacion.viaje', 'usuario'])->whereKey($reserva->id)->lockForUpdate()->firstOrFail();
+            }
             $reserva->validarEditable();
             $pasajes = $reserva->pasajes()->orderBy('id')->get();
             Pasaje::exigir($pasajes->isNotEmpty(), 'cupon', 'Agrega al menos un pasajero antes de aplicar el cupón.');
@@ -115,10 +118,12 @@ class CuponService
         }, 3);
     }
 
-    public function removerCupon(Reserva $reserva): Reserva
+    public function removerCupon(Reserva $reserva, bool $reservaBloqueada = false): Reserva
     {
-        return DB::transaction(function () use ($reserva) {
-            $reserva = Reserva::whereKey($reserva->id)->lockForUpdate()->firstOrFail();
+        return DB::transaction(function () use ($reserva, $reservaBloqueada) {
+            if (! $reservaBloqueada) {
+                $reserva = Reserva::whereKey($reserva->id)->lockForUpdate()->firstOrFail();
+            }
             $reserva->validarEditable();
             $this->liberar($reserva);
 
@@ -126,31 +131,26 @@ class CuponService
         }, 3);
     }
 
+    // Uso interno: ReservaService entrega la reserva bloqueada dentro de conReserva.
     public function recalcularCupon(Reserva $reserva): Reserva
     {
-        return DB::transaction(function () use ($reserva) {
-            $reserva = Reserva::whereKey($reserva->id)->lockForUpdate()->firstOrFail();
+        if ($reserva->cupon_id === null) {
+            return $reserva;
+        }
 
-            if ($reserva->cupon_id === null) {
-                return $reserva;
-            }
+        $cupon = Cupon::findOrFail($reserva->cupon_id);
+        $codigo = $cupon->codigo;
 
-            $cupon = Cupon::findOrFail($reserva->cupon_id);
-            $codigo = $cupon->codigo;
+        $reserva->validarEditable();
+        $this->liberar($reserva);
 
-            $reserva->validarEditable();
-            $this->liberar($reserva);
-
-            return $this->aplicarCupon($reserva, $codigo);
-        }, 3);
+        return $this->aplicarCupon($reserva, $codigo, reservaBloqueada: true);
     }
 
+    // Uso interno: el servicio o comando llamador mantiene la reserva bloqueada.
     public function cancelarYLiberarCupon(Reserva $reserva): void
     {
-        DB::transaction(function () use ($reserva) {
-            $reserva = Reserva::whereKey($reserva->id)->lockForUpdate()->firstOrFail();
-            $this->liberar($reserva);
-        }, 3);
+        $this->liberar($reserva);
     }
 
     public function validarCuponAplicado(Reserva $reserva): void
