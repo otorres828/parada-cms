@@ -48,16 +48,6 @@ class Pasaje extends ModelHelper
         return $this->belongsTo(Viajero::class, 'viajero_id');
     }
 
-    public static function validarPasajeros(Reserva $reserva): void
-    {
-        self::exigir(
-            $reserva->pasajes()->exists()
-                && ! $reserva->pasajes()->whereNull('viajero_id')->exists(),
-            'pasajeros',
-            'Completa los pasajeros antes de continuar al pago.',
-        );
-    }
-
     public function getTipoServicioAttribute(): ?int
     {
         $value = $this->servicio('tipo_servicio');

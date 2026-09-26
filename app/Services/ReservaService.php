@@ -130,7 +130,7 @@ class ReservaService
 
             $datosViajero = $datos;
             $datosViajero['usuario_id'] = $reserva->usuario_id;
-            
+
             $viajero = Viajero::create($datosViajero);
 
             $reserva->pasajes()->create([
@@ -176,7 +176,6 @@ class ReservaService
     {
         return self::conReserva($cliente, $reservaId, function ($reserva) {
             $reserva->validarEditable();
-            Pasaje::validarPasajeros($reserva);
             app(CuponService::class)->validarCuponAplicado($reserva);
 
             return TasasServicioService::calcularTasasReserva($reserva)->detalle();

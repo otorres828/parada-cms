@@ -59,10 +59,11 @@ class PagoReservaService
             );
 
             $reserva->validarEditable();
-            $programacion = Programacion::bloquear($reserva->programacion_id);
+            Programacion::bloquear($reserva->programacion_id);
             $reserva->validarVigente();
-            Pasaje::validarPasajeros($reserva);
+
             app(CuponService::class)->validarCuponAplicado($reserva);
+
             PagoReserva::exigir(
                 ! PagoReserva::where('referencia_pago', $referenciaPago)->exists(),
                 'referenciaPago',
@@ -122,8 +123,9 @@ class PagoReservaService
                 'reserva',
                 'La reserva no tiene un pago pendiente.',
             );
-            Pasaje::validarPasajeros($reserva);
+            
             app(CuponService::class)->validarCuponAplicado($reserva);
+
             $reserva->update([
                 'estado_pago' => Reserva::ESTADO_PAGO_PAGADO,
                 'fecha_pago' => now(),

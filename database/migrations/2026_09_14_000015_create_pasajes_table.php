@@ -11,7 +11,7 @@ return new class extends Migration
         Schema::create('pasajes', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('reserva_id');
-            $table->unsignedBigInteger('viajero_id')->nullable();
+            $table->unsignedBigInteger('viajero_id');
             $table->unsignedInteger('numero_asiento')->nullable();
             $table->decimal('precio_base', 12, 2);
             $table->decimal('descuento', 12, 2);
