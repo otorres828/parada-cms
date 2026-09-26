@@ -123,6 +123,5 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
-    'revertir_pelea_minutes' => env('REVERTIR_PELEA_MINUTES', 30)
 
 ];
