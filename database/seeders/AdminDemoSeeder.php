@@ -71,18 +71,19 @@ class AdminDemoSeeder extends Seeder
     public function run(): void
     {
         TipoCambio::query()->firstOrCreate([], [
-            'valor_usd' => '500.00',
-            'valor_eur' => '590.00',
+            'valor_usd' => '855.66',
+            'valor_eur' => '972.64',
             'valor' => '1.00',
             'timestamp' => now(),
         ]);
 
         $amenidades = $this->crearAmenidades();
         $terminales = $this->crearTerminales();
+        
         $empresas = [
-            ['nombre' => 'Expresos del Orinoco', 'rif' => 'J-40111222-1', 'email' => 'operaciones@expresosorinoco.test'],
-            ['nombre' => 'Líneas Andinas', 'rif' => 'J-40222333-2', 'email' => 'operaciones@lineasandinas.test'],
-            ['nombre' => 'Transporte Costa Azul', 'rif' => 'J-40333444-3', 'email' => 'operaciones@costazul.test'],
+            ['nombre' => 'Expresos del Orinoco', 'rif' => 'J-40111222-1', 'email' => 'olivertorres1997@gmail.com@gmail.com'],
+            ['nombre' => 'Líneas Andinas', 'rif' => 'J-40222333-2', 'email' => 'olivertorres1997+1@gmail.com@gmail.com'],
+            ['nombre' => 'Transporte Costa Azul', 'rif' => 'J-40333444-3', 'email' => 'olivertorres1997+2@gmail.com@gmail.com'],
         ];
 
         foreach ($empresas as $empresaIndice => $datosEmpresa) {
