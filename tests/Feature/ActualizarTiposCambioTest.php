@@ -15,8 +15,8 @@ class ActualizarTiposCambioTest extends TestCase
     {
         Http::fake([
             config('services.bcv.endpoint') => Http::response([
-                'USD' => 500.4606,
-                'EUR' => 589.27233807,
+                'USD' => 500.4699,
+                'EUR' => 589.2799,
                 'date' => '2026-09-26',
             ]),
         ]);

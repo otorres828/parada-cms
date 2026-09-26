@@ -21,8 +21,8 @@ Artisan::call('migrate', ['--force' => true]);
 
 Http::fakeSequence()
     ->push([
-        'USD' => 500.4606,
-        'EUR' => 589.27233807,
+        'USD' => 500.4699,
+        'EUR' => 589.2799,
     ])
     ->push(['USD' => 500.4606]);
 
