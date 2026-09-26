@@ -97,6 +97,19 @@
             {{ number_format($reserva->monto_total ?? 0, 2) }}
         </dd>
 
+        @if ($reserva->tipoCambio)
+            <dt class="col-sm-4">Total en bolívares</dt>
+            <dd class="col-sm-8 fw-semibold">
+                Bs. {{ number_format($reserva->monto_total_bolivares, 2, ',', '.') }}
+            </dd>
+
+            <dt class="col-sm-4">Tipo de cambio aplicado</dt>
+            <dd class="col-sm-8 text-body-secondary">
+                1 USD = Bs. {{ number_format($reserva->tipoCambio->valor_usd, 2, ',', '.') }}
+                ({{ $reserva->tipoCambio->timestamp?->format('d/m/Y H:i') }})
+            </dd>
+        @endif
+
         <hr class="col-12 my-3">
 
         <dt class="col-sm-4">Estado</dt>

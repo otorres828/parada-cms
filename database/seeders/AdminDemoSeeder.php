@@ -12,6 +12,7 @@ use App\Models\Programacion;
 use App\Models\ProgramacionTramoPrecio;
 use App\Models\Reserva;
 use App\Models\Terminal;
+use App\Models\TipoCambio;
 use App\Models\User;
 use App\Models\UsuarioEmpresa;
 use App\Models\Viaje;
@@ -69,6 +70,13 @@ class AdminDemoSeeder extends Seeder
 
     public function run(): void
     {
+        TipoCambio::query()->firstOrCreate([], [
+            'valor_usd' => '500.00',
+            'valor_eur' => '590.00',
+            'valor' => '1.00',
+            'timestamp' => now(),
+        ]);
+
         $amenidades = $this->crearAmenidades();
         $terminales = $this->crearTerminales();
         $empresas = [

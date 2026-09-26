@@ -8,6 +8,7 @@ use App\Models\ProgramacionTramoPrecio;
 use App\Models\Reserva;
 use App\Models\TasaServicio;
 use App\Models\Terminal;
+use App\Models\TipoCambio;
 use App\Models\User;
 use App\Models\Viajero;
 use Closure;
@@ -59,6 +60,13 @@ class ReservaService
 
             $exoneracionTasa = TasasServicioService::obtenerExoneracionTasa($programacion, $reservaOriginal);
 
+            $tipoCambio = TipoCambio::vigente();
+            Reserva::exigir(
+                $tipoCambio !== null,
+                'tipo_cambio',
+                'No hay una tasa de cambio disponible. Intenta nuevamente más tarde.',
+            );
+
             $tasa = $exoneracionTasa === null
                 ? TasaServicio::paraPrecio($tarifa->precio)->calcular($tarifa->precio)
                 : '0.00';
@@ -70,6 +78,7 @@ class ReservaService
                 'destino_terminal_id' => $tarifa->destino_terminal_id,
                 'programacion_tramo_precio_id' => $tarifa->id,
                 'reprogramacion_id' => $reservaOriginal?->id,
+                'tipos_cambios_id' => $tipoCambio->id,
                 'codigo_referencia' => (string) Str::ulid(),
                 'monto_pasajes' => $tarifa->precio,
                 'descuento_aplicado' => '0.00',

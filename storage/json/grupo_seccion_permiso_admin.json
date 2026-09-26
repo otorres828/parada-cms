@@ -163,7 +163,9 @@
       {"name": "Reportes", "url": "reportes", "status": 1,
         "permissions": [
           {"name": "Listar Ventas", "url": "list-sales", "status": 1},
-          {"name": "Listar Empresas", "url": "list-companies", "status": 1}
+          {"name": "Listar Empresas", "url": "list-companies", "status": 1},
+          {"name": "Listar Tasas de Cambio", "url": "list-exchange-rates", "status": 1},
+          {"name": "Actualizar Tasas de Cambio", "url": "update-exchange-rates", "status": 1}
         ]
       }
     ]

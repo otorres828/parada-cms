@@ -54,6 +54,7 @@ class CheckPermission
         'admin.reembolsos.list' => ['reembolsos', 'list'],
         'admin.reembolsos.detail' => ['reembolsos', 'detail'],
         'admin.reportes.companies' => ['reportes', 'list-companies'],
+        'admin.reportes.exchange-rates' => ['reportes', 'list-exchange-rates'],
         'admin.reportes.sales' => ['reportes', 'list-sales'],
         'admin.reservas.list' => ['reservas', 'list'],
         'admin.reservas.detail' => ['reservas', 'detail'],

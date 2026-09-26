@@ -174,7 +174,7 @@
     ])
 @endif
 
-@if ($salesReportes or $companiesReportes)
+@if ($salesReportes or $companiesReportes or $exchangeRatesReport)
     @include('components.layout.sidebar-li', [
         'menu' => 'Reportes',
         'icon' => 'nav-icon bi bi-bar-chart',
@@ -190,6 +190,12 @@
                 'route' => route('admin.reportes.companies'),
                 'name' => 'Empresas',
                 'active' => request()->routeIs('admin.reportes.companies') ? 'active' : '',
+            ],
+            [
+                'existe' => $exchangeRatesReport ?? false,
+                'route' => route('admin.reportes.exchange-rates'),
+                'name' => 'Tasas de cambio',
+                'active' => request()->routeIs('admin.reportes.exchange-rates') ? 'active' : '',
             ],
         ],
     ])

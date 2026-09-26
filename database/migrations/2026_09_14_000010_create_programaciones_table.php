@@ -15,7 +15,6 @@ return new class extends Migration
             $table->date('fecha_salida');
             $table->time('hora_salida');
             $table->unsignedInteger('asientos_totales');
-            $table->decimal('precio_pasaje', 12, 2);
             $table->unsignedTinyInteger('estatus')->default(1);
             $table->timestamps();
             $table->foreign('viaje_id')->references('id')->on('viajes')->onUpdate('cascade')->onDelete('cascade');

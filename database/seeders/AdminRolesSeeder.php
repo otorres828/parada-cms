@@ -28,7 +28,7 @@ class AdminRolesSeeder extends Seeder
                     'reservas' => ['list', 'detail'],
                     'pasajes' => ['list', 'detail'],
                     'reembolsos' => ['list', 'detail'],
-                    'reportes' => ['list-sales', 'list-companies'],
+                    'reportes' => ['list-sales', 'list-companies', 'list-exchange-rates', 'update-exchange-rates'],
                 ],
             ],
             'ventas' => [

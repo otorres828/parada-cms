@@ -24,6 +24,7 @@ class Reserva extends ModelHelper
         'programacion_tramo_precio_id',
         'cupon_id',
         'reprogramacion_id',
+        'tipos_cambios_id',
         'codigo_referencia',
         'monto_pasajes',
         'descuento_aplicado',
@@ -91,6 +92,20 @@ class Reserva extends ModelHelper
         return $this->belongsTo(self::class, 'reprogramacion_id');
     }
 
+    public function tipoCambio(): BelongsTo
+    {
+        return $this->belongsTo(TipoCambio::class, 'tipos_cambios_id');
+    }
+
+    public function getMontoTotalBolivaresAttribute(): ?string
+    {
+        if (! $this->tipoCambio || $this->monto_total === null) {
+            return null;
+        }
+
+        return bcmul($this->monto_total, $this->tipoCambio->valor_usd, 2);
+    }
+
     public function reservasReprogramadas(): HasMany
     {
         return $this->hasMany(self::class, 'reprogramacion_id');
@@ -133,6 +148,7 @@ class Reserva extends ModelHelper
             'pasajes.viajero',
             'origenTerminal',
             'destinoTerminal',
+            'tipoCambio',
         ]);
     }
 
@@ -258,6 +274,7 @@ class Reserva extends ModelHelper
                 'cupon.configuracionCupon',
                 'reservaOriginal',
                 'reprogramado',
+                'tipoCambio',
             ])
             ->findOrFail($reservaId);
     }

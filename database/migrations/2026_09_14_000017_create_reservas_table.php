@@ -12,8 +12,12 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('usuario_id');
             $table->unsignedBigInteger('programacion_id');
+            $table->unsignedBigInteger('origen_terminal_id')->nullable();
+            $table->unsignedBigInteger('destino_terminal_id')->nullable();
+            $table->unsignedBigInteger('programacion_tramo_precio_id')->nullable();
             $table->unsignedBigInteger('cupon_id')->nullable();
             $table->unsignedBigInteger('reprogramacion_id')->nullable();
+            $table->foreignId('tipos_cambios_id')->constrained('tipos_cambios')->restrictOnDelete();
             $table->string('codigo_referencia')->unique();
             $table->decimal('monto_pasajes', 12, 2);
             $table->decimal('descuento_aplicado', 12, 2);
@@ -30,6 +34,9 @@ return new class extends Migration
             $table->timestamps();
             $table->foreign('usuario_id')->references('id')->on('users')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('programacion_id')->references('id')->on('programaciones')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('origen_terminal_id')->references('id')->on('terminales')->onUpdate('cascade')->onDelete('restrict');
+            $table->foreign('destino_terminal_id')->references('id')->on('terminales')->onUpdate('cascade')->onDelete('restrict');
+            $table->foreign('programacion_tramo_precio_id')->references('id')->on('programacion_tramo_precios')->onUpdate('cascade')->onDelete('set null');
             $table->foreign('cupon_id')->references('id')->on('cupones')->onUpdate('cascade')->onDelete('set null');
             $table->foreign('reprogramacion_id')->references('id')->on('reservas')->onUpdate('cascade')->onDelete('cascade');
         });

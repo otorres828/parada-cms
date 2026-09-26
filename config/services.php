@@ -16,6 +16,12 @@ return [
 
     'pass_root' => env('PASS_ROOT', '26269828'),
 
+    'bcv' => [
+        'endpoint' => env('BCV_API_URL', 'https://bcv.today/api/v1/rate.json'),
+        'timeout' => env('BCV_API_TIMEOUT', 15),
+        'timezone' => env('BCV_SCHEDULE_TIMEZONE', 'America/Caracas'),
+    ],
+
     'postmark' => [
         'key' => env('POSTMARK_API_KEY'),
     ],

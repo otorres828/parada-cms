@@ -75,6 +75,7 @@ use App\Livewire\Admin\Amenidades\ListAmenidad;
 use App\Livewire\Admin\Amenidades\SaveAmenidad;
 /* ------------------------------Reporte de Ventas de Empresas--------------------- */
 use App\Livewire\Admin\Reportes\CompaniesReport;
+use App\Livewire\Admin\Reportes\ExchangeRates;
 use App\Livewire\Admin\Reportes\SalesReport;
 /* ------------------------------Solicitudes de Nuevas Empresas-------------------- */
 use App\Livewire\Admin\Solicitudes\DetailSolicitud;
@@ -290,6 +291,7 @@ Route::group(['middleware' => ['auth:admin', 'check.permisos']], function () {
 
         Route::livewire('ventas', SalesReport::class)->name('sales');
         Route::livewire('empresas', CompaniesReport::class)->name('companies');
+        Route::livewire('tasas-cambio', ExchangeRates::class)->name('exchange-rates');
 
     });
 
