@@ -233,7 +233,6 @@ class Pasaje extends ModelHelper
             'autobus',
         ])->findOrFail($tarifa->programacion_id);
         $terminales = Terminal::obtenerSecuenciaRuta($programacion);
-        Terminal::validarSalida($programacion, $tarifa->origen_terminal_id, $terminales);
 
         return self::disponibilidad($programacion, $tarifa, $terminales);
     }

@@ -52,8 +52,6 @@ class ReservaService
 
             $terminales = Terminal::obtenerSecuenciaRuta($programacion);
 
-            Terminal::validarSalida($programacion, $tarifa->origen_terminal_id, $terminales);
-
 
             $disponibilidad = Pasaje::disponibilidad($programacion, $tarifa, $terminales);
 
@@ -115,23 +113,24 @@ class ReservaService
                 ->findOrFail($reserva->programacion_tramo_precio_id);
 
             $terminales = Terminal::obtenerSecuenciaRuta($programacion);
-            Terminal::validarSalida($programacion, $tarifa->origen_terminal_id, $terminales);
 
             $disponibilidad = Pasaje::disponibilidad(
                 $programacion,
                 $tarifa,
                 $terminales,
             );
-            
+
             Pasaje::exigir(
                 $disponibilidad['cupo_tramo'] > 0 && $disponibilidad['asientos'] !== [],
                 'pasajero',
                 'No quedan puestos disponibles para este trayecto.',
             );
+
             $numeroAsiento = (int) $disponibilidad['asientos'][0];
 
             $datosViajero = $datos;
             $datosViajero['usuario_id'] = $reserva->usuario_id;
+            
             $viajero = Viajero::create($datosViajero);
 
             $reserva->pasajes()->create([

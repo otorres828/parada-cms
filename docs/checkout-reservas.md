@@ -17,7 +17,7 @@ Los servicios reciben al cliente de la compra, no al operador autenticado. No co
 3. `ReservaService::agregarPasajero($cliente, $reservaId, $datos)` asigna automáticamente el primer asiento libre. `removerPasajero($cliente, $reservaId, $pasajeId)` libera ese asiento. Ambas recalculan descuentos y tasas; retirar el último recupera la cotización provisional.
 4. Opcionalmente, `CuponService::aplicarCupon($reserva, $codigo)` o `removerCupon($reserva)`. Son métodos de instancia. Después se prepara el resumen para obtener las tasas actualizadas.
 5. `ReservaService::prepararResumen($cliente, $reservaId)` valida pasajeros y cupón, calcula tasas y devuelve el detalle.
-6. `PagoReservaService::pasarAPendiente($cliente, $reservaId, $metodoPagoId, $referenciaPago, $fechaPago, $comprobante)` registra el pago reportado. El comprobante es opcional. Revalida salida y vencimiento bajo bloqueo de programación; elimina la expiración. Repetir con el mismo método y referencia no crea otro pago.
+6. `PagoReservaService::pasarAPendiente($cliente, $reservaId, $metodoPagoId, $referenciaPago, $fechaPago, $comprobante)` registra el pago reportado. El comprobante es opcional. Revalida vencimiento bajo bloqueo de programación; elimina la expiración. Repetir con el mismo método y referencia no crea otro pago.
 7. Backend autorizado: `PagoReservaService::confirmarPago($reservaId, $montoConfirmado, 'USD')` después de verificar el pago, o `marcarPagoFallido($reservaId)` ante rechazo definitivo. Una confirmación repetida conserva el resultado.
 8. `ReservaService::cancelarReserva($cliente, $reservaId)` admite nuevas y canceladas, nunca pendientes o pagadas.
 
@@ -46,7 +46,7 @@ Se conservan conReserva, el recálculo compartido, la cotización inicial, las v
 
 ## Verificación
 
-`tests/ReservaFlowSmoke.php` ejecuta las migraciones exclusivamente en SQLite en memoria. Comprueba cliente seleccionado sin dependencia de sesión, propiedad, cupo, recálculo del cupón al agregar/retirar pasajeros, cotización vacía, pago repetido, importe incorrecto, cancelación de pagadas, salida inactiva, expiración y conservación del histórico al reembolsar.
+`tests/ReservaFlowSmoke.php` ejecuta las migraciones exclusivamente en SQLite en memoria. Comprueba cliente seleccionado sin dependencia de sesión, propiedad, cupo, recálculo del cupón al agregar/retirar pasajeros, cotización vacía, pago repetido, importe incorrecto, cancelación de pagadas, expiración y conservación del histórico al reembolsar.
 
 Ejecutar con PHP 8.3+, BCMath y PDO SQLite: `php tests/ReservaFlowSmoke.php`.
 
@@ -57,3 +57,7 @@ Ejecutar con PHP 8.3+, BCMath y PDO SQLite: `php tests/ReservaFlowSmoke.php`.
 `aplicarCupon` y `removerCupon` conservan su bloqueo para llamadas independientes. Su argumento interno `reservaBloqueada: true` se usa exclusivamente cuando el llamador ya mantiene bloqueada esa reserva en una transacción; nunca procede de una petición del navegador. No se infiere que exista un bloqueo solo porque haya una transacción abierta.
 
 Los bloqueos de programación, cupón, campaña y reserva original de una reprogramación protegen registros diferentes y se conservan.
+
+## Selección de programaciones
+
+El sitio debe ofrecer únicamente programaciones habilitadas para venta hasta dos horas antes de la salida del bus. Esta selección corresponde al consumidor del servicio. Se eliminó Terminal::validarSalida y sus llamadas; el servicio no vuelve a comprobar la hora ni la habilitación de la salida. El filtro de dos horas no se implementó en este cambio.

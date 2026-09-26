@@ -7,7 +7,6 @@ use App\Models\PagoReserva;
 use App\Models\Pasaje;
 use App\Models\Programacion;
 use App\Models\Reserva;
-use App\Models\Terminal;
 use App\Models\User;
 use Closure;
 use Illuminate\Support\Facades\DB;
@@ -62,7 +61,6 @@ class PagoReservaService
             $reserva->validarEditable();
             $programacion = Programacion::bloquear($reserva->programacion_id);
             $reserva->validarVigente();
-            Terminal::validarSalida($programacion, $reserva->origen_terminal_id, Terminal::obtenerSecuenciaRuta($programacion));
             Pasaje::validarPasajeros($reserva);
             app(CuponService::class)->validarCuponAplicado($reserva);
             PagoReserva::exigir(

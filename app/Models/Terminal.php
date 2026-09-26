@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use App\Traits\TraitGeneral;
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -124,39 +123,4 @@ class Terminal extends ModelHelper
         return [$inicio, $fin];
     }
 
-    public static function validarSalida(Programacion $programacion, int $origen, array $terminales): void
-    {
-        self::exigir(
-            $programacion->estatus === Programacion::ESTADO_PROGRAMADO
-                && $programacion->viaje->estatus
-                && $programacion->viaje->empresa?->estatus
-                && ! $programacion->viaje->empresa?->estaBloqueadaPorCobranza()
-                && $programacion->autobus?->estatus
-                && ! $programacion->autobus->es_plantilla
-                && (int) $programacion->autobus->empresa_id === (int) $programacion->viaje->empresa_id,
-            'programacion',
-            'La salida no está habilitada para venta.',
-        );
-
-        $posicion = array_search($origen, $terminales, true);
-        self::exigir($posicion !== false, 'trayecto', 'El origen no pertenece a la ruta.');
-
-        $salida = Carbon::parse($programacion->fecha_salida->format('Y-m-d').' '.$programacion->hora_salida);
-
-        foreach ($programacion->viaje->tramos->take($posicion) as $tramo) {
-            self::exigir(
-                $tramo->duracion_estimada !== null,
-                'programacion',
-                'Falta la duración para calcular el embarque intermedio.',
-            );
-            [$horas, $minutos, $segundos] = array_map('intval', explode(':', $tramo->duracion_estimada));
-            $salida->addSeconds($horas * 3600 + $minutos * 60 + $segundos);
-        }
-
-        self::exigir(
-            $salida->isFuture(),
-            'programacion',
-            'La hora estimada de salida desde este terminal ya pasó.',
-        );
-    }
 }
