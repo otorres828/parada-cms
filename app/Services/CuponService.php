@@ -48,7 +48,7 @@ class CuponService
         return DB::transaction(function () use ($reserva, $codigo) {
             $reserva = Reserva::with(['programacion.viaje', 'usuario'])->whereKey($reserva->id)->lockForUpdate()->firstOrFail();
             $this->validarReservaEditable($reserva);
-            $pasajes = $reserva->pasajes()->orderBy('id')->lockForUpdate()->get();
+            $pasajes = $reserva->pasajes()->orderBy('id')->get();
             $this->exigir($pasajes->isNotEmpty(), 'cupon', 'Agrega al menos un pasajero antes de aplicar el cupón.');
 
             $codigo = strtoupper(trim($codigo));
@@ -133,6 +133,20 @@ class CuponService
         }, 3);
     }
 
+    public function recalcularCupon(Reserva $reserva): Reserva
+    {
+        if ($reserva->cupon_id === null) {
+            return $reserva;
+        }
+
+        $cupon = Cupon::findOrFail($reserva->cupon_id);
+        $codigo = $cupon->codigo;
+
+        $this->removerCupon($reserva);
+
+        return $this->aplicarCupon($reserva->fresh(), $codigo);
+    }
+
     public function cancelarYLiberarCupon(Reserva $reserva): void
     {
         DB::transaction(function () use ($reserva) {
@@ -147,7 +161,7 @@ class CuponService
             return;
         }
 
-        $cupon = Cupon::with('configuracionCupon')->whereKey($reserva->cupon_id)->lockForUpdate()->first();
+        $cupon = Cupon::with('configuracionCupon')->find($reserva->cupon_id);
         $this->exigir($cupon && $cupon->redimido && (int) $cupon->usuario_id === (int) $reserva->usuario_id, 'cupon', 'El cupón aplicado ya no está disponible.');
         $this->exigir($cupon->configuracionCupon !== null, 'cupon', 'La campaña del cupón no existe.');
     }
@@ -169,7 +183,7 @@ class CuponService
         $this->exigir($campana !== null, 'cupon', 'El cupón no existe.');
         $this->exigir($campana->estatus === 1 && $campana->fecha_inicio->lte(now()) && $campana->fecha_fin->gte(now()), 'cupon', 'La campaña no está vigente.');
         $this->exigir($campana->empresa_id === null || (int) $campana->empresa_id === $empresaId, 'cupon', 'El cupón corresponde a otra empresa.');
-        $usados = Cupon::where('configuracion_cupon_id', $campana->id)->where('redimido', true)->lockForUpdate()->count();
+        $usados = Cupon::where('configuracion_cupon_id', $campana->id)->where('redimido', true)->count();
         $this->exigir($usados < $campana->cantidad_generar, 'cupon', 'El cupón alcanzó su límite de usos.');
 
         if ($campana->tipo_cupon === ConfiguracionCupon::TIPO_RANDOM) {
@@ -213,7 +227,7 @@ class CuponService
         }
 
         $base = 0.0;
-        foreach ($reserva->pasajes()->lockForUpdate()->get() as $pasaje) {
+        foreach ($reserva->pasajes()->get() as $pasaje) {
             $precio = round((float) $pasaje->precio_base, 2);
             $pasaje->update(['descuento' => '0.00', 'subtotal' => number_format($precio, 2, '.', ''), 'tasa_servicio' => '0.00', 'total' => number_format($precio, 2, '.', ''), 'servicio_json' => null]);
             $base = round($base + $precio, 2);
@@ -233,17 +247,17 @@ class CuponService
     {
         $auditoria = $reserva->comentarios_auditoria ?? [];
         $auditoria['cupones'][] = [
-            'evento' => $evento, 
-            'fecha' => now()->toIso8601String(), 
+            'evento' => $evento,
+            'fecha' => now()->toIso8601String(),
             'cupon_id' => $cupon->id,
-            'configuracion_cupon_id' => $campana?->id, 
-            'codigo' => $cupon->codigo, 
-            'tipo_cupon' => $campana?->tipo_cupon, 
-            'tipo_descuento' => $campana?->tipo_descuento, 
-            'aplica_en' => $campana?->aplica_en, 
-            'modalidad' => $campana?->modalidad, 
-            'valor' => $campana?->monto_descuento, 
-            'descuento_aplicado' => number_format($descuento, 2, '.', '')
+            'configuracion_cupon_id' => $campana?->id,
+            'codigo' => $cupon->codigo,
+            'tipo_cupon' => $campana?->tipo_cupon,
+            'tipo_descuento' => $campana?->tipo_descuento,
+            'aplica_en' => $campana?->aplica_en,
+            'modalidad' => $campana?->modalidad,
+            'valor' => $campana?->monto_descuento,
+            'descuento_aplicado' => number_format($descuento, 2, '.', ''),
         ];
         $reserva->comentarios_auditoria = $auditoria;
     }

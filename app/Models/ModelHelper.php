@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Filesystem\FilesystemAdapter;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\ValidationException;
 
 class ModelHelper extends Model
 {
@@ -18,6 +19,13 @@ class ModelHelper extends Model
     const ESTADO_INACTIVE = 2;
 
     const ESTADO_FINALIZADO = 3;
+
+    public static function exigir(bool $condicion, string $campo, string $mensaje): void
+    {
+        if (! $condicion) {
+            throw ValidationException::withMessages([$campo => $mensaje]);
+        }
+    }
 
     // Queries
 

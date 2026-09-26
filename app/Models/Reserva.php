@@ -238,6 +238,19 @@ class Reserva extends ModelHelper
             ->pluck('cantidad', 'estado_pago');
     }
 
+    public static function reservasQueBloqueanAsientos(): Builder
+    {
+        return self::query()->where(function ($query) {
+            $query->whereIn('estado_pago', [
+                self::ESTADO_PAGO_PAGADO,
+                self::ESTADO_PAGO_PENDIENTE,
+            ])->orWhere(function ($query) {
+                $query->where('estado_pago', self::ESTADO_PAGO_NUEVO)
+                    ->where('fecha_expiracion', '>', now());
+            });
+        });
+    }
+
     public function pago(): HasOne
     {
         return $this->hasOne(PagoReserva::class, 'reserva_id');

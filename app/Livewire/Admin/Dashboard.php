@@ -7,7 +7,6 @@ use App\Models\Pasaje;
 use App\Models\Programacion;
 use App\Models\Reserva;
 use App\Services\Admin\Access;
-use App\Services\ReservaService;
 use Carbon\Carbon;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
@@ -96,7 +95,7 @@ class Dashboard extends Component
             'totalReservas' => $totalReservas,
             'desde' => $desde,
             'hasta' => $hasta,
-            'disponibilidadTramos' => ReservaService::consultarDisponibilidadPorTramos($proximasSalidas),
+            'disponibilidadTramos' => Pasaje::disponibilidadPorTramos($proximasSalidas),
         ]);
     }
 

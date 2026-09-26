@@ -6,7 +6,6 @@ use App\Models\Pasaje;
 use App\Models\Programacion;
 use App\Models\Reserva;
 use App\Services\Admin\Access;
-use App\Services\ReservaService;
 use Illuminate\Database\Eloquent\Collection;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Locked;
@@ -50,7 +49,7 @@ class PassengerProgramacion extends Component
     {
         $this->programacion = $this->findProgramacion();
         $this->tickets = Pasaje::getTickets($this->programacion_id);
-        $disponibilidad = ReservaService::consultarDisponibilidadPorTramos(new Collection([$this->programacion]));
+        $disponibilidad = Pasaje::disponibilidadPorTramos(new Collection([$this->programacion]));
         $pasajesPagados = $this->tickets->filter(function ($ticket) {
             return $ticket->reserva?->estado_pago === Reserva::ESTADO_PAGO_PAGADO;
         });

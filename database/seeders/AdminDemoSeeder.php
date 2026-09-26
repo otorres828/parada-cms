@@ -16,6 +16,7 @@ use App\Models\User;
 use App\Models\UsuarioEmpresa;
 use App\Models\Viaje;
 use App\Models\ViajeTramo;
+use App\Services\CuponService;
 use App\Services\ReservaService;
 use Carbon\Carbon;
 use Illuminate\Database\Seeder;
@@ -424,7 +425,7 @@ class AdminDemoSeeder extends Seeder
                     $reserva = ReservaService::aplicarReserva($cliente, $tarifa->id);
                     $reserva->update(['codigo_referencia' => $referencia]);
 
-                    ReservaService::registrarPasajeros($cliente, $reserva->id, [[
+                    ReservaService::agregarPasajero($cliente, $reserva->id, [
                         'numero_asiento' => $asiento,
                         'nombre' => $cliente->name,
                         'apellido' => $cliente->lastname,
@@ -432,9 +433,12 @@ class AdminDemoSeeder extends Seeder
                         'documento_identidad' => 'V-'.(10000000 + $secuenciaGlobal),
                         'fecha_nacimiento' => Carbon::create(1980 + ($asiento % 20), (($asiento - 1) % 12) + 1, (($asiento - 1) % 27) + 1)->toDateString(),
                         'tipo_pasajero' => 'adulto',
-                    ]]);
+                    ]);
 
-                    ReservaService::aplicarCupon($cliente, $reserva->id, 'PRIMERA-'.($empresaIndice + 1));
+                    app(CuponService::class)->aplicarCupon(
+                        $reserva->fresh(),
+                        'PRIMERA-'.($empresaIndice + 1),
+                    );
                     $reserva = ReservaService::prepararResumen($cliente, $reserva->id);
                     $reserva = ReservaService::pasarAPendiente(
                         $cliente,
