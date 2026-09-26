@@ -7,6 +7,7 @@ use App\Exports\ReservasExport;
 use App\Models\OrdenCobro;
 use App\Models\Pasaje;
 use App\Models\Reserva;
+use App\Support\ConversorMoneda;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -28,13 +29,14 @@ class OrdenCobroNotification extends Notification implements ShouldQueue
     public function toMail(object $notifiable): MailMessage
     {
         $orden = OrdenCobro::findOrFail($this->ordenCobroId);
+        $totalBs = ConversorMoneda::ordenes([$orden])[$orden->id]['total_bs'];
 
         $mensaje = (new MailMessage)
             ->subject($this->asunto($orden))
             ->greeting('Hola, '.$orden->empresa->nombre)
             ->line($this->mensaje($orden))
             ->line('Período: '.$orden->periodo_desde->format('d/m/Y').' al '.$orden->periodo_hasta->format('d/m/Y'))
-            ->line('Total: '.$orden->total)
+            ->line('Total: $'.number_format($orden->total, 2, '.', ',').' / Bs. '.number_format($totalBs, 2, ',', '.'))
             ->line('Vencimiento: '.$orden->fecha_vencimiento->format('d/m/Y H:i'));
 
         if ($this->tipo !== 'emitida') {

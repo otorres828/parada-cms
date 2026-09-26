@@ -56,7 +56,7 @@
         </div>
 
     </form>
-    <p class="text-body-secondary">Reservas con estado actual pagado, agrupadas por fecha de compra. Importes en.
+    <p class="text-body-secondary">Reservas con estado actual pagado, agrupadas por fecha de compra. Importes en USD y Bs según la tasa histórica de cada reserva.
     </p>
 
     <x-list.table>
@@ -88,11 +88,11 @@
                     </td>
 
                     <td>
-                        {{ number_format($row->total ?? 0, 2) }}
+                        <x-money.dual :usd="$row->total" :bs="$row->total_bs" />
                     </td>
 
                     <td>
-                        {{ number_format($row->tasas ?? 0, 2) }}
+                        <x-money.dual :usd="$row->tasas" :bs="$row->tasas_bs" />
                     </td>
 
             </tr>@empty

@@ -25,8 +25,10 @@ class CompaniesReportExport extends DefaultValueBinder implements FromQuery, Wit
         return [
             'Empresa',
             'Reservas pagadas',
-            'Ventas',
-            'Tasas de servicio',
+            'Ventas USD',
+            'Ventas Bs',
+            'Tasas de servicio USD',
+            'Tasas de servicio Bs',
         ];
     }
 
@@ -36,7 +38,9 @@ class CompaniesReportExport extends DefaultValueBinder implements FromQuery, Wit
             $row->nombre,
             (int) $row->cantidad,
             (float) $row->total,
+            (float) $row->total_bs,
             (float) $row->tasas,
+            (float) $row->tasas_bs,
         ];
     }
 

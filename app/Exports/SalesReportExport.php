@@ -21,8 +21,10 @@ class SalesReportExport implements FromQuery, WithHeadings, WithMapping
         return [
             'Fecha',
             'Reservas pagadas',
-            'Ventas',
-            'Tasas de servicio',
+            'Ventas USD',
+            'Ventas Bs',
+            'Tasas de servicio USD',
+            'Tasas de servicio Bs',
         ];
     }
 
@@ -32,7 +34,9 @@ class SalesReportExport implements FromQuery, WithHeadings, WithMapping
             $row->fecha,
             (int) $row->cantidad,
             (float) $row->total,
+            (float) $row->total_bs,
             (float) $row->tasas,
+            (float) $row->tasas_bs,
         ];
     }
 }
