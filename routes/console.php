@@ -11,7 +11,7 @@ Artisan::command('inspire', function () {
     $this->comment(Inspiring::quote());
 })->purpose('Display an inspiring quote');
 
-Schedule::command('reservas:cancelar-expiradas')->hourly()->withoutOverlapping();
+Schedule::command('reservas:cancelar-expiradas')->everyMinute()->withoutOverlapping();
 Schedule::job(new GenerarOrdenesCobroJob)->hourly()->withoutOverlapping()->onOneServer();
 Schedule::job(new RecordarVencimientoOrdenCobroJob)->hourly()->withoutOverlapping()->onOneServer();
 Schedule::job(new SuspenderEmpresasMorosasJob)->hourly()->withoutOverlapping()->onOneServer();

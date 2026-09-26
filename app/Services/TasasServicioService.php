@@ -32,7 +32,7 @@ class TasasServicioService
     // La reserva llega bloqueada por ReservaService; aquí solo se recalculan sus importes.
     public static function calcularTasasReserva(Reserva $reserva): Reserva
     {
-        if (! in_array($reserva->estado_pago, [Reserva::ESTADO_PAGO_NUEVO, Reserva::ESTADO_PAGO_PENDIENTE], true) || $reserva->pago()->exists()) {
+        if ($reserva->estado_pago !== Reserva::ESTADO_PAGO_NUEVO || $reserva->pago()->exists()) {
             throw ValidationException::withMessages([
                 'reserva' => 'No se pueden recalcular tasas de una reserva cobrada o cerrada.',
             ]);

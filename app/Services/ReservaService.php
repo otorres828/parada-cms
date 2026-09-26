@@ -39,15 +39,16 @@ class ReservaService
                 );
 
                 Reserva::exigir(
-                    ! $reservaOriginal->reprogramado()->exists(),
+                    ! $reservaOriginal->tieneReprogramacionActiva(),
                     'reprogramacion_id',
-                    'Esta reserva ya fue reprogramada.',
+                    'Esta reserva ya tiene una reprogramación activa.',
                 );
             }
 
-            $referencia = ProgramacionTramoPrecio::findOrFail($tarifaId);
-            $programacion = Programacion::bloquear($referencia->programacion_id);
-            $tarifa = ProgramacionTramoPrecio::where('programacion_id', $programacion->id)->lockForUpdate()->findOrFail($tarifaId);
+            $tarifa = ProgramacionTramoPrecio::findOrFail($tarifaId);
+            $programacion = Programacion::query()
+                ->with(['viaje.tramos', 'viaje.empresa', 'autobus'])
+                ->findOrFail($tarifa->programacion_id);
             $terminales = Terminal::obtenerSecuenciaRuta($programacion);
             Terminal::validarSalida($programacion, $tarifa->origen_terminal_id, $terminales);
             Terminal::obtenerIntervalo($terminales, $tarifa->origen_terminal_id, $tarifa->destino_terminal_id);
@@ -77,13 +78,6 @@ class ReservaService
                 'fecha_expiracion' => now()->addMinutes(self::MINUTOS_BLOQUEO),
             ]);
 
-            if ($reservaOriginal) {
-                $reservaOriginal->update([
-                    'estado_pago' => Reserva::ESTADO_PAGO_REPROGRAMADO,
-                    'fecha_expiracion' => null,
-                ]);
-            }
-
             return $reserva->detalle();
         }, 3);
     }
@@ -92,7 +86,6 @@ class ReservaService
     public static function agregarPasajero(User $cliente, int $reservaId, array $pasajero): Reserva
     {
         $datos = Validator::make($pasajero, [
-            'numero_asiento' => ['required', 'integer', 'min:1'],
             'nombre' => ['required', 'string', 'max:255'],
             'apellido' => ['required', 'string', 'max:255'],
             'tipo_documento' => ['required_with:documento_identidad', 'nullable', 'integer', 'in:1,2,3,4'],
@@ -100,7 +93,6 @@ class ReservaService
             'fecha_nacimiento' => ['required', 'date_format:Y-m-d', 'before_or_equal:today'],
             'tipo_pasajero' => ['required', 'in:adulto,nino,infante'],
         ])->validate();
-        $datos['numero_asiento'] = (int) $datos['numero_asiento'];
 
         return self::conReserva($cliente, $reservaId, function ($reserva) use ($datos) {
             $reserva->validarEditable();
@@ -114,28 +106,17 @@ class ReservaService
             $terminales = Terminal::obtenerSecuenciaRuta($programacion);
             Terminal::validarSalida($programacion, $tarifa->origen_terminal_id, $terminales);
             ProgramacionTramoPrecio::exigir(bccomp($tarifa->precio, '0', 2) >= 0, 'tarifa', 'La tarifa no puede ser negativa.');
-            Pasaje::exigir(
-                ! $reserva->pasajes()->where('numero_asiento', $datos['numero_asiento'])->exists(),
-                'numero_asiento',
-                'El asiento ya está registrado en esta reserva.',
-            );
-
             $disponibilidad = Pasaje::disponibilidad(
                 $programacion,
                 $tarifa,
                 $terminales,
-                $reserva->id,
             );
             Pasaje::exigir(
-                in_array($datos['numero_asiento'], $disponibilidad['asientos'], true),
-                'numero_asiento',
-                'El asiento ya no está disponible para este trayecto.',
+                $disponibilidad['cupo_tramo'] > 0 && $disponibilidad['asientos'] !== [],
+                'pasajero',
+                'No quedan puestos disponibles para este trayecto.',
             );
-            Pasaje::exigir(
-                $reserva->pasajes()->count() < $disponibilidad['cupo_tramo'],
-                'numero_asiento',
-                'La reserva alcanzó el cupo de venta permitido para este trayecto.',
-            );
+            $numeroAsiento = (int) $disponibilidad['asientos'][0];
 
             $datosViajero = array_intersect_key($datos, array_flip([
                 'nombre',
@@ -150,7 +131,7 @@ class ReservaService
 
             $reserva->pasajes()->create([
                 'viajero_id' => $viajero->id,
-                'numero_asiento' => $datos['numero_asiento'],
+                'numero_asiento' => $numeroAsiento,
                 'precio_base' => $tarifa->precio,
                 'descuento' => '0.00',
                 'subtotal' => $tarifa->precio,
@@ -202,7 +183,10 @@ class ReservaService
     {
         return self::conReserva($cliente, $reservaId, function ($reserva) {
             Reserva::exigir(in_array($reserva->estado_pago, [Reserva::ESTADO_PAGO_NUEVO, Reserva::ESTADO_PAGO_CANCELADO], true), 'reserva', 'Un pago pendiente debe resolverse antes de cancelar la reserva.');
-            $reserva->update(['estado_pago' => Reserva::ESTADO_PAGO_CANCELADO]);
+            $reserva->update([
+                'estado_pago' => Reserva::ESTADO_PAGO_CANCELADO,
+                'fecha_expiracion' => null,
+            ]);
             app(CuponService::class)->cancelarYLiberarCupon($reserva);
 
             return $reserva->refresh()->detalle();

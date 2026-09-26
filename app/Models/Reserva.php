@@ -106,6 +106,21 @@ class Reserva extends ModelHelper
         return $this->reprogramacion_id !== null;
     }
 
+    public function tieneReprogramacionActiva(): bool
+    {
+        return $this->reservasReprogramadas()
+            ->where(function ($query) {
+                $query->whereIn('estado_pago', [
+                    self::ESTADO_PAGO_PENDIENTE,
+                    self::ESTADO_PAGO_PAGADO,
+                ])->orWhere(function ($query) {
+                    $query->where('estado_pago', self::ESTADO_PAGO_NUEVO)
+                        ->where('fecha_expiracion', '>', now());
+                });
+            })
+            ->exists();
+    }
+
     public function pasajes(): HasMany
     {
         return $this->hasMany(Pasaje::class, 'reserva_id');

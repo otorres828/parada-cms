@@ -427,7 +427,6 @@ class AdminDemoSeeder extends Seeder
                     $reserva->update(['codigo_referencia' => $referencia]);
 
                     ReservaService::agregarPasajero($cliente, $reserva->id, [
-                        'numero_asiento' => $asiento,
                         'nombre' => $cliente->name,
                         'apellido' => $cliente->lastname,
                         'tipo_documento' => 1,

@@ -47,7 +47,7 @@ class CuponService
     {
         return DB::transaction(function () use ($reserva, $codigo) {
             $reserva = Reserva::with(['programacion.viaje', 'usuario'])->whereKey($reserva->id)->lockForUpdate()->firstOrFail();
-            $this->validarReservaEditable($reserva);
+            $reserva->validarEditable();
             $pasajes = $reserva->pasajes()->orderBy('id')->get();
             Pasaje::exigir($pasajes->isNotEmpty(), 'cupon', 'Agrega al menos un pasajero antes de aplicar el cupón.');
 
@@ -126,7 +126,7 @@ class CuponService
     {
         return DB::transaction(function () use ($reserva) {
             $reserva = Reserva::whereKey($reserva->id)->lockForUpdate()->firstOrFail();
-            $this->validarReservaEditable($reserva);
+            $reserva->validarEditable();
             $this->liberar($reserva);
 
             return $reserva->fresh(['pasajes']);
@@ -135,16 +135,20 @@ class CuponService
 
     public function recalcularCupon(Reserva $reserva): Reserva
     {
-        if ($reserva->cupon_id === null) {
-            return $reserva;
-        }
+        return DB::transaction(function () use ($reserva) {
+            $reserva = Reserva::whereKey($reserva->id)->lockForUpdate()->firstOrFail();
 
-        $cupon = Cupon::findOrFail($reserva->cupon_id);
-        $codigo = $cupon->codigo;
+            if ($reserva->cupon_id === null) {
+                return $reserva;
+            }
 
-        $this->removerCupon($reserva);
+            $cupon = Cupon::findOrFail($reserva->cupon_id);
+            $codigo = $cupon->codigo;
 
-        return $this->aplicarCupon($reserva->fresh(), $codigo);
+            $this->removerCupon($reserva);
+
+            return $this->aplicarCupon($reserva->fresh(), $codigo);
+        }, 3);
     }
 
     public function cancelarYLiberarCupon(Reserva $reserva): void
@@ -262,8 +266,4 @@ class CuponService
         $reserva->comentarios_auditoria = $auditoria;
     }
 
-    private function validarReservaEditable(Reserva $reserva): void
-    {
-        Reserva::exigir($reserva->estado_pago === Reserva::ESTADO_PAGO_NUEVO && $reserva->fecha_expiracion?->isFuture() && ! $reserva->pago()->exists(), 'reserva', 'Solo se puede modificar el cupón de una reserva nueva y vigente.');
-    }
 }

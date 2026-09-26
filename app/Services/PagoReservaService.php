@@ -22,10 +22,11 @@ class PagoReservaService
         string $fechaPago,
         ?string $comprobante = null,
     ): Reserva {
-        Validator::make(compact('metodoPagoId', 'referenciaPago', 'fechaPago'), [
+        Validator::make(compact('metodoPagoId', 'referenciaPago', 'fechaPago', 'comprobante'), [
             'metodoPagoId' => ['required', 'integer', 'exists:datos_bancarios,id'],
             'referenciaPago' => ['required', 'string', 'max:255'],
             'fechaPago' => ['required', 'date', 'before_or_equal:now'],
+            'comprobante' => ['nullable', 'string', 'max:255'],
         ], [], [
             'metodoPagoId' => 'Método de pago',
             'referenciaPago' => 'Referencia de pago',
@@ -34,17 +35,6 @@ class PagoReservaService
 
         return self::conReserva($cliente, $reservaId, function ($reserva) use ($metodoPagoId, $referenciaPago, $fechaPago, $comprobante) {
             $reserva->validarVigente();
-
-            $datoBancario = DatoBancario::query()
-                ->whereKey($metodoPagoId)
-                ->where('estatus', DatoBancario::ACTIVO)
-                ->first();
-
-            DatoBancario::exigir(
-                $datoBancario !== null,
-                'metodoPagoId',
-                'El método de pago no está activo.',
-            );
 
             if ($reserva->estado_pago === Reserva::ESTADO_PAGO_PENDIENTE) {
                 $pago = $reserva->pago()->first();
@@ -57,6 +47,17 @@ class PagoReservaService
 
                 return $reserva->detalle();
             }
+
+            $datoBancario = DatoBancario::query()
+                ->whereKey($metodoPagoId)
+                ->where('estatus', DatoBancario::ACTIVO)
+                ->first();
+
+            DatoBancario::exigir(
+                $datoBancario !== null,
+                'metodoPagoId',
+                'El método de pago no está activo.',
+            );
 
             $reserva->validarEditable();
             Pasaje::validarPasajeros($reserva);
@@ -98,8 +99,15 @@ class PagoReservaService
         ])->validate();
 
         return self::conReserva(null, $reservaId, function ($reserva) use ($montoConfirmado) {
+            $pago = $reserva->pago()->first();
+            PagoReserva::exigir(
+                $pago !== null,
+                'pago',
+                'La reserva no tiene un pago registrado.',
+            );
             Reserva::exigir(
-                bccomp($reserva->monto_total, $montoConfirmado, 2) === 0,
+                bccomp($reserva->monto_total, $montoConfirmado, 2) === 0
+                    && bccomp($pago->total, $montoConfirmado, 2) === 0,
                 'pago',
                 'El cobro no coincide con el total de la reserva.',
             );
@@ -121,6 +129,21 @@ class PagoReservaService
                 'fecha_pago' => now(),
             ]);
 
+            if ($reserva->esReprogramacion()) {
+                $reservaOriginal = Reserva::query()
+                    ->lockForUpdate()
+                    ->findOrFail($reserva->reprogramacion_id);
+                Reserva::exigir(
+                    $reservaOriginal->estado_pago === Reserva::ESTADO_PAGO_PAGADO,
+                    'reprogramacion',
+                    'La reserva original ya no puede ser reprogramada.',
+                );
+                $reservaOriginal->update([
+                    'estado_pago' => Reserva::ESTADO_PAGO_REPROGRAMADO,
+                    'fecha_expiracion' => null,
+                ]);
+            }
+
             return $reserva->detalle();
         });
     }
@@ -137,6 +160,7 @@ class PagoReservaService
                 'No se puede marcar este pago como fallido.',
             );
             $reserva->update(['estado_pago' => Reserva::ESTADO_PAGO_FALLIDO]);
+            app(CuponService::class)->cancelarYLiberarCupon($reserva);
 
             return $reserva->detalle();
         });
