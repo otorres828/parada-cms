@@ -111,6 +111,39 @@ class Reserva extends ModelHelper
         return $this->hasMany(Pasaje::class, 'reserva_id');
     }
 
+    public function detalle(): self
+    {
+        return $this->load([
+            'pasajes',
+            'pasajes.viajero',
+            'origenTerminal',
+            'destinoTerminal',
+        ]);
+    }
+
+    public function validarVigente(): void
+    {
+        if ($this->estado_pago !== self::ESTADO_PAGO_NUEVO) {
+            return;
+        }
+
+        self::exigir(
+            $this->fecha_expiracion !== null && $this->fecha_expiracion->isFuture(),
+            'reserva',
+            'La reserva venció. Selecciona nuevamente los asientos.',
+        );
+    }
+
+    public function validarEditable(): void
+    {
+        $this->validarVigente();
+        self::exigir(
+            $this->estado_pago === self::ESTADO_PAGO_NUEVO && ! $this->pago()->exists(),
+            'reserva',
+            'Solo se puede editar una reserva nueva y sin cobros registrados.',
+        );
+    }
+
     public function getStatusPago(): string
     {
         // Limpiamos el valor quitando espacios y forzando a entero

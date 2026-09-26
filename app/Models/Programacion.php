@@ -189,4 +189,13 @@ class Programacion extends ModelHelper
             ->orderBy('hora_salida')
             ->orderBy('id');
     }
+
+    public static function bloquear(int $programacionId): self
+    {
+        return self::query()
+            ->with(['viaje.tramos', 'viaje.empresa', 'autobus'])
+            ->whereKey($programacionId)
+            ->lockForUpdate()
+            ->firstOrFail();
+    }
 }

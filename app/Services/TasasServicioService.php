@@ -2,12 +2,33 @@
 
 namespace App\Services;
 
+use App\Models\ExoneracionTasaServicio;
+use App\Models\Programacion;
 use App\Models\Reserva;
 use App\Models\TasaServicio;
 use Illuminate\Validation\ValidationException;
 
 class TasasServicioService
 {
+    public static function obtenerExoneracionTasa(
+        Programacion $programacion,
+        ?Reserva $reservaOriginal = null,
+    ): ?array {
+        if ($reservaOriginal !== null) {
+            return [
+                'exoneracion_id' => null,
+                'fecha_desde' => null,
+                'fecha_hasta' => null,
+                'motivo' => 'Reprogramación de la reserva '.$reservaOriginal->codigo_referencia,
+            ];
+        }
+
+        $empresaId = (int) $programacion->viaje->empresa_id;
+        $exoneracion = ExoneracionTasaServicio::vigenteParaEmpresa($empresaId);
+
+        return $exoneracion?->snapshot();
+    }
+
     // La reserva llega bloqueada por ReservaService; aquí solo se recalculan sus importes.
     public static function calcularTasasReserva(Reserva $reserva): Reserva
     {

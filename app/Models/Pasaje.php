@@ -48,6 +48,16 @@ class Pasaje extends ModelHelper
         return $this->belongsTo(Viajero::class, 'viajero_id');
     }
 
+    public static function validarPasajeros(Reserva $reserva): void
+    {
+        self::exigir(
+            $reserva->pasajes()->exists()
+                && ! $reserva->pasajes()->whereNull('viajero_id')->exists(),
+            'pasajeros',
+            'Completa los pasajeros antes de continuar al pago.',
+        );
+    }
+
     public function getTipoServicioAttribute(): ?int
     {
         $value = $this->servicio('tipo_servicio');
@@ -226,46 +236,5 @@ class Pasaje extends ModelHelper
         Terminal::validarSalida($programacion, $tarifa->origen_terminal_id, $terminales);
 
         return self::disponibilidad($programacion, $tarifa, $terminales);
-    }
-
-    public static function disponibilidadPorTramos(Collection $programaciones): array
-    {
-        if ($programaciones->isEmpty()) {
-            return [];
-        }
-
-        $programaciones->loadMissing([
-            'viaje.tramos',
-            'autobus',
-            'tramoPrecios.origenTerminal',
-            'tramoPrecios.destinoTerminal',
-        ]);
-
-        $reservas = Reserva::reservasQueBloqueanAsientos()
-            ->whereIn('programacion_id', $programaciones->modelKeys())
-            ->with('pasajes')
-            ->get()
-            ->groupBy('programacion_id');
-        $resultado = [];
-
-        foreach ($programaciones as $programacion) {
-            $terminales = Terminal::obtenerSecuenciaRuta($programacion);
-            $resultado[$programacion->id] = [];
-
-            foreach ($programacion->tramoPrecios as $tarifa) {
-                $resultado[$programacion->id][$tarifa->id] = self::disponibilidad(
-                    $programacion,
-                    $tarifa,
-                    $terminales,
-                    null,
-                    $reservas->get($programacion->id, new Collection),
-                ) + [
-                    'origen' => $tarifa->origenTerminal?->nombre ?? '—',
-                    'destino' => $tarifa->destinoTerminal?->nombre ?? '—',
-                ];
-            }
-        }
-
-        return $resultado;
     }
 }

@@ -4,10 +4,10 @@ namespace App\Services;
 
 use App\Models\ConfiguracionCupon;
 use App\Models\Cupon;
+use App\Models\Pasaje;
 use App\Models\Reserva;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Validation\ValidationException;
 
 class CuponService
 {
@@ -20,7 +20,7 @@ class CuponService
                 return;
             }
 
-            $this->exigir(! $configuracionCupon->cupones()->exists(), 'cupones', 'Los cupones aleatorios de esta campaña ya fueron generados.');
+            ConfiguracionCupon::exigir(! $configuracionCupon->cupones()->exists(), 'cupones', 'Los cupones aleatorios de esta campaña ya fueron generados.');
 
             for ($i = 0; $i < $configuracionCupon->cantidad_generar; $i++) {
                 do {
@@ -49,7 +49,7 @@ class CuponService
             $reserva = Reserva::with(['programacion.viaje', 'usuario'])->whereKey($reserva->id)->lockForUpdate()->firstOrFail();
             $this->validarReservaEditable($reserva);
             $pasajes = $reserva->pasajes()->orderBy('id')->get();
-            $this->exigir($pasajes->isNotEmpty(), 'cupon', 'Agrega al menos un pasajero antes de aplicar el cupón.');
+            Pasaje::exigir($pasajes->isNotEmpty(), 'cupon', 'Agrega al menos un pasajero antes de aplicar el cupón.');
 
             $codigo = strtoupper(trim($codigo));
             if ($reserva->cupon_id) {
@@ -162,8 +162,8 @@ class CuponService
         }
 
         $cupon = Cupon::with('configuracionCupon')->find($reserva->cupon_id);
-        $this->exigir($cupon && $cupon->redimido && (int) $cupon->usuario_id === (int) $reserva->usuario_id, 'cupon', 'El cupón aplicado ya no está disponible.');
-        $this->exigir($cupon->configuracionCupon !== null, 'cupon', 'La campaña del cupón no existe.');
+        Cupon::exigir($cupon && $cupon->redimido && (int) $cupon->usuario_id === (int) $reserva->usuario_id, 'cupon', 'El cupón aplicado ya no está disponible.');
+        ConfiguracionCupon::exigir($cupon->configuracionCupon !== null, 'cupon', 'La campaña del cupón no existe.');
     }
 
     private function buscarDisponible(string $codigo, int $empresaId): array
@@ -180,16 +180,16 @@ class CuponService
             : ConfiguracionCupon::where('tipo_cupon', ConfiguracionCupon::TIPO_PERSONALIZADO)
                 ->whereRaw('UPPER(codigo_personalizado) = ?', [$codigo])->lockForUpdate()->first();
 
-        $this->exigir($campana !== null, 'cupon', 'El cupón no existe.');
-        $this->exigir($campana->estatus === 1 && $campana->fecha_inicio->lte(now()) && $campana->fecha_fin->gte(now()), 'cupon', 'La campaña no está vigente.');
-        $this->exigir($campana->empresa_id === null || (int) $campana->empresa_id === $empresaId, 'cupon', 'El cupón corresponde a otra empresa.');
+        Cupon::exigir($campana !== null, 'cupon', 'El cupón no existe.');
+        ConfiguracionCupon::exigir($campana->estatus === 1 && $campana->fecha_inicio->lte(now()) && $campana->fecha_fin->gte(now()), 'cupon', 'La campaña no está vigente.');
+        ConfiguracionCupon::exigir($campana->empresa_id === null || (int) $campana->empresa_id === $empresaId, 'cupon', 'El cupón corresponde a otra empresa.');
         $usados = Cupon::where('configuracion_cupon_id', $campana->id)->where('redimido', true)->count();
-        $this->exigir($usados < $campana->cantidad_generar, 'cupon', 'El cupón alcanzó su límite de usos.');
+        ConfiguracionCupon::exigir($usados < $campana->cantidad_generar, 'cupon', 'El cupón alcanzó su límite de usos.');
 
         if ($campana->tipo_cupon === ConfiguracionCupon::TIPO_RANDOM) {
-            $this->exigir($cupon !== null && ! $cupon->redimido && $cupon->usuario_id === null, 'cupon', 'El cupón ya no está disponible.');
+            Cupon::exigir($cupon !== null && ! $cupon->redimido && $cupon->usuario_id === null, 'cupon', 'El cupón ya no está disponible.');
         } else {
-            $this->exigir($cupon === null, 'cupon', 'El cupón ya está en uso.');
+            Cupon::exigir($cupon === null, 'cupon', 'El cupón ya está en uso.');
         }
 
         return ['campana' => $campana, 'cupon' => $cupon];
@@ -204,11 +204,11 @@ class CuponService
                     Reserva::ESTADO_PAGO_REPROGRAMADO,
                     Reserva::ESTADO_PAGO_REEMBOLSADO,
                 ])->exists();
-            $this->exigir(! $tieneCompra, 'cupon', 'Este cupón solo aplica a la primera compra.');
+            ConfiguracionCupon::exigir(! $tieneCompra, 'cupon', 'Este cupón solo aplica a la primera compra.');
         }
 
         if ($campana->modalidad === ConfiguracionCupon::MODALIDAD_USUARIO_NUEVO) {
-            $this->exigir($reserva->usuario && Carbon::parse($reserva->usuario->created_at)->gte($campana->fecha_inicio), 'cupon', 'Este cupón solo aplica a usuarios nuevos de la campaña.');
+            ConfiguracionCupon::exigir($reserva->usuario && Carbon::parse($reserva->usuario->created_at)->gte($campana->fecha_inicio), 'cupon', 'Este cupón solo aplica a usuarios nuevos de la campaña.');
         }
     }
 
@@ -264,13 +264,6 @@ class CuponService
 
     private function validarReservaEditable(Reserva $reserva): void
     {
-        $this->exigir($reserva->estado_pago === Reserva::ESTADO_PAGO_NUEVO && $reserva->fecha_expiracion?->isFuture() && ! $reserva->pago()->exists(), 'reserva', 'Solo se puede modificar el cupón de una reserva nueva y vigente.');
-    }
-
-    private function exigir(bool $condicion, string $campo, string $mensaje): void
-    {
-        if (! $condicion) {
-            throw ValidationException::withMessages([$campo => $mensaje]);
-        }
+        Reserva::exigir($reserva->estado_pago === Reserva::ESTADO_PAGO_NUEVO && $reserva->fecha_expiracion?->isFuture() && ! $reserva->pago()->exists(), 'reserva', 'Solo se puede modificar el cupón de una reserva nueva y vigente.');
     }
 }

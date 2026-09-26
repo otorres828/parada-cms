@@ -5,6 +5,7 @@ namespace App\Livewire\Admin\Programaciones;
 use App\Models\Pasaje;
 use App\Models\Programacion;
 use App\Models\Reserva;
+use App\Models\ViajeTramo;
 use App\Services\Admin\Access;
 use Illuminate\Database\Eloquent\Collection;
 use Livewire\Attributes\Layout;
@@ -49,7 +50,7 @@ class PassengerProgramacion extends Component
     {
         $this->programacion = $this->findProgramacion();
         $this->tickets = Pasaje::getTickets($this->programacion_id);
-        $disponibilidad = Pasaje::disponibilidadPorTramos(new Collection([$this->programacion]));
+        $disponibilidad = ViajeTramo::disponibilidadPorTramos(new Collection([$this->programacion]));
         $pasajesPagados = $this->tickets->filter(function ($ticket) {
             return $ticket->reserva?->estado_pago === Reserva::ESTADO_PAGO_PAGADO;
         });

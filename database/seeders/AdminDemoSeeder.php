@@ -17,6 +17,7 @@ use App\Models\UsuarioEmpresa;
 use App\Models\Viaje;
 use App\Models\ViajeTramo;
 use App\Services\CuponService;
+use App\Services\PagoReservaService;
 use App\Services\ReservaService;
 use Carbon\Carbon;
 use Illuminate\Database\Seeder;
@@ -394,7 +395,7 @@ class AdminDemoSeeder extends Seeder
             if ($existente?->estado_pago === Reserva::ESTADO_PAGO_PENDIENTE) {
                 try {
                     Carbon::setTestNow($fechaCompra);
-                    $existente = ReservaService::confirmarPago($existente->id, $existente->monto_total);
+                    $existente = PagoReservaService::confirmarPago($existente->id, $existente->monto_total);
                     $this->actualizarAbordaje($existente, $esHistorica, $asiento);
                 } finally {
                     Carbon::setTestNow($relojAnterior);
@@ -440,14 +441,14 @@ class AdminDemoSeeder extends Seeder
                         'PRIMERA-'.($empresaIndice + 1),
                     );
                     $reserva = ReservaService::prepararResumen($cliente, $reserva->id);
-                    $reserva = ReservaService::pasarAPendiente(
+                    $reserva = PagoReservaService::pasarAPendiente(
                         $cliente,
                         $reserva->id,
                         $datoBancario->id,
                         sprintf('PAGO-%02d-%02d-%03d', $empresaIndice + 1, $programacionIndice + 1, $asiento),
                         $fechaCompra->toDateTimeString(),
                     );
-                    $reserva = ReservaService::confirmarPago($reserva->id, $reserva->monto_total);
+                    $reserva = PagoReservaService::confirmarPago($reserva->id, $reserva->monto_total);
                     $this->actualizarAbordaje($reserva, $esHistorica, $asiento);
                 }, 5);
             } finally {

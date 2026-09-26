@@ -159,5 +159,4 @@ class Terminal extends ModelHelper
             'La hora estimada de salida desde este terminal ya pasó.',
         );
     }
-
 }
