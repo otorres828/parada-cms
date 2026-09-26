@@ -152,6 +152,7 @@ class Reserva extends ModelHelper
     public function validarEditable(): void
     {
         $this->validarVigente();
+        
         self::exigir(
             $this->estado_pago === self::ESTADO_PAGO_NUEVO && ! $this->pago()->exists(),
             'reserva',

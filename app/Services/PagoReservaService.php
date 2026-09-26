@@ -5,7 +5,9 @@ namespace App\Services;
 use App\Models\DatoBancario;
 use App\Models\PagoReserva;
 use App\Models\Pasaje;
+use App\Models\Programacion;
 use App\Models\Reserva;
+use App\Models\Terminal;
 use App\Models\User;
 use Closure;
 use Illuminate\Support\Facades\DB;
@@ -23,7 +25,7 @@ class PagoReservaService
         ?string $comprobante = null,
     ): Reserva {
         Validator::make(compact('metodoPagoId', 'referenciaPago', 'fechaPago', 'comprobante'), [
-            'metodoPagoId' => ['required', 'integer', 'exists:datos_bancarios,id'],
+            'metodoPagoId' => ['required', 'integer'],
             'referenciaPago' => ['required', 'string', 'max:255'],
             'fechaPago' => ['required', 'date', 'before_or_equal:now'],
             'comprobante' => ['nullable', 'string', 'max:255'],
@@ -34,8 +36,6 @@ class PagoReservaService
         ])->validate();
 
         return self::conReserva($cliente, $reservaId, function ($reserva) use ($metodoPagoId, $referenciaPago, $fechaPago, $comprobante) {
-            $reserva->validarVigente();
-
             if ($reserva->estado_pago === Reserva::ESTADO_PAGO_PENDIENTE) {
                 $pago = $reserva->pago()->first();
                 PagoReserva::exigir(
@@ -60,6 +60,9 @@ class PagoReservaService
             );
 
             $reserva->validarEditable();
+            $programacion = Programacion::bloquear($reserva->programacion_id);
+            $reserva->validarVigente();
+            Terminal::validarSalida($programacion, $reserva->origen_terminal_id, Terminal::obtenerSecuenciaRuta($programacion));
             Pasaje::validarPasajeros($reserva);
             app(CuponService::class)->validarCuponAplicado($reserva);
             PagoReserva::exigir(
@@ -116,7 +119,6 @@ class PagoReservaService
                 return $reserva->detalle();
             }
 
-            $reserva->validarVigente();
             Reserva::exigir(
                 $reserva->estado_pago === Reserva::ESTADO_PAGO_PENDIENTE,
                 'reserva',

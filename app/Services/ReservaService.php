@@ -49,13 +49,19 @@ class ReservaService
             $programacion = Programacion::query()
                 ->with(['viaje.tramos', 'viaje.empresa', 'autobus'])
                 ->findOrFail($tarifa->programacion_id);
+
             $terminales = Terminal::obtenerSecuenciaRuta($programacion);
+
             Terminal::validarSalida($programacion, $tarifa->origen_terminal_id, $terminales);
-            Terminal::obtenerIntervalo($terminales, $tarifa->origen_terminal_id, $tarifa->destino_terminal_id);
+
             ProgramacionTramoPrecio::exigir(bccomp($tarifa->precio, '0', 2) >= 0, 'tarifa', 'La tarifa no puede ser negativa.');
+
             $disponibilidad = Pasaje::disponibilidad($programacion, $tarifa, $terminales);
+
             Pasaje::exigir($disponibilidad['cupo_tramo'] > 0, 'tarifa', 'No hay cupo disponible para este trayecto.');
+
             $exoneracionTasa = TasasServicioService::obtenerExoneracionTasa($programacion, $reservaOriginal);
+
             $tasa = $exoneracionTasa === null
                 ? TasaServicio::paraPrecio($tarifa->precio)->calcular($tarifa->precio)
                 : '0.00';
@@ -79,7 +85,9 @@ class ReservaService
             ]);
 
             return $reserva->detalle();
+
         }, 3);
+
     }
 
     // 2. Agrega un pasajero y recalcula el cupón y los importes de la reserva.
@@ -95,14 +103,18 @@ class ReservaService
         ])->validate();
 
         return self::conReserva($cliente, $reservaId, function ($reserva) use ($datos) {
+
             $reserva->validarEditable();
 
             $programacion = Programacion::bloquear($reserva->programacion_id);
+            $reserva->validarVigente();
+
             $tarifa = ProgramacionTramoPrecio::query()
                 ->where('programacion_id', $programacion->id)
                 ->where('origen_terminal_id', $reserva->origen_terminal_id)
                 ->where('destino_terminal_id', $reserva->destino_terminal_id)
                 ->findOrFail($reserva->programacion_tramo_precio_id);
+
             $terminales = Terminal::obtenerSecuenciaRuta($programacion);
             Terminal::validarSalida($programacion, $tarifa->origen_terminal_id, $terminales);
             ProgramacionTramoPrecio::exigir(bccomp($tarifa->precio, '0', 2) >= 0, 'tarifa', 'La tarifa no puede ser negativa.');
@@ -118,14 +130,7 @@ class ReservaService
             );
             $numeroAsiento = (int) $disponibilidad['asientos'][0];
 
-            $datosViajero = array_intersect_key($datos, array_flip([
-                'nombre',
-                'apellido',
-                'tipo_documento',
-                'documento_identidad',
-                'fecha_nacimiento',
-                'tipo_pasajero',
-            ]));
+            $datosViajero = $datos;
             $datosViajero['usuario_id'] = $reserva->usuario_id;
             $viajero = Viajero::create($datosViajero);
 
@@ -173,7 +178,7 @@ class ReservaService
         return self::conReserva($cliente, $reservaId, function ($reserva) {
             $reserva->validarEditable();
             Pasaje::validarPasajeros($reserva);
-            self::validarCuponReserva($reserva);
+            app(CuponService::class)->validarCuponAplicado($reserva);
 
             return TasasServicioService::calcularTasasReserva($reserva)->detalle();
         });
@@ -231,10 +236,5 @@ class ReservaService
         ]);
 
         return $reserva->detalle();
-    }
-
-    private static function validarCuponReserva(Reserva $reserva): void
-    {
-        app(CuponService::class)->validarCuponAplicado($reserva);
     }
 }

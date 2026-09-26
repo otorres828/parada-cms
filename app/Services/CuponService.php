@@ -36,13 +36,6 @@ class CuponService
         }, 3);
     }
 
-    public function validarExistenciaYDisponibilidad(string $codigo, int $empresaId): array
-    {
-        return DB::transaction(function () use ($codigo, $empresaId) {
-            return $this->buscarDisponible($codigo, $empresaId);
-        }, 3);
-    }
-
     public function aplicarCupon(Reserva $reserva, string $codigo): Reserva
     {
         return DB::transaction(function () use ($reserva, $codigo) {
@@ -145,9 +138,10 @@ class CuponService
             $cupon = Cupon::findOrFail($reserva->cupon_id);
             $codigo = $cupon->codigo;
 
-            $this->removerCupon($reserva);
+            $reserva->validarEditable();
+            $this->liberar($reserva);
 
-            return $this->aplicarCupon($reserva->fresh(), $codigo);
+            return $this->aplicarCupon($reserva, $codigo);
         }, 3);
     }
 
@@ -265,5 +259,4 @@ class CuponService
         ];
         $reserva->comentarios_auditoria = $auditoria;
     }
-
 }
