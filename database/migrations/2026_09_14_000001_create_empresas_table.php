@@ -15,6 +15,7 @@ return new class extends Migration
             $table->string('rif');
             $table->string('telefono');
             $table->string('email');
+            $table->text('politicas')->nullable();
             $table->unsignedTinyInteger('tipo_contrato')->default(1);
             $table->unsignedTinyInteger('dia_corte')->nullable();
             $table->unsignedTinyInteger('dia_vencimiento')->nullable();

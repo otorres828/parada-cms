@@ -16,6 +16,16 @@ class CheckPermission
     ];
 
     private const ROUTE_PERMISSIONS = [
+        'admin.preguntas-frecuentes.list' => ['preguntas-frecuentes', 'list'],
+        'admin.preguntas-frecuentes.add' => ['preguntas-frecuentes', 'add'],
+        'admin.preguntas-frecuentes.edit' => ['preguntas-frecuentes', 'edit'],
+        'admin.centro-ayuda.list' => ['centro-ayuda', 'list'],
+        'admin.centro-ayuda.detail' => ['centro-ayuda', 'detail'],
+        'admin.legales.sobre-nosotros.edit' => ['sobre-nosotros', 'edit'],
+        'admin.legales.politicas-privacidad.edit' => ['politicas-privacidad', 'edit'],
+        'admin.legales.politicas-cookies.edit' => ['politicas-cookies', 'edit'],
+        'admin.legales.terminos-condiciones.edit' => ['terminos-condiciones', 'edit'],
+        'admin.empresas.politicas' => ['empresas', 'detail'],
         'admin.admins.list' => ['admins', 'list'],
         'admin.admins.edit' => ['admins', 'edit'],
         'admin.admins.add' => ['admins', 'add'],
@@ -42,8 +52,8 @@ class CheckPermission
         'admin.empresas.users.detail' => ['empresas.users', 'detail'],
         'admin.empresas.users.edit' => ['empresas.users', 'edit'],
         'admin.empresas.users.permissions' => ['empresas.users', 'permissions'],
-        'admin.legales.list' => ['legales', 'list'],
-        'admin.legales.detail' => ['legales', 'detail'],
+        'admin.legales.documentos.list' => ['legales', 'list'],
+        'admin.legales.documentos.detail' => ['legales', 'detail'],
         'admin.legales.file' => ['legales', 'file'],
         'admin.ordenes-cobro.list' => ['ordenes-cobro', 'list'],
         'admin.ordenes-cobro.detail' => ['ordenes-cobro', 'detail'],

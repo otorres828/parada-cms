@@ -72,7 +72,7 @@
 
                         @if ($canDetail)
                             <a class="btn btn-outline-primary mt-auto align-self-start"
-                                href="{{ route('admin.legales.detail', $empresa->id) }}" wire:navigate><i
+                                href="{{ route('admin.legales.documentos.detail', $empresa->id) }}" wire:navigate><i
                                     class="bi bi-folder2-open me-1"></i>Ver documentos</a>
                         @endif
 

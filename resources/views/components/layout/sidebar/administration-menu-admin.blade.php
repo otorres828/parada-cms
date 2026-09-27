@@ -63,16 +63,40 @@
     ])
 @endif
 
-@if ($listLegales)
+@if ($listLegales or $editSobreNosotros or $editPrivacidad or $editCookies or $editTerminos)
     @include('components.layout.sidebar-li', [
         'menu' => 'Legales',
         'icon' => 'nav-icon bi bi-file-earmark-text',
         'list' => [
             [
                 'existe' => $listLegales,
-                'route' => route('admin.legales.list'),
+                'route' => route('admin.legales.documentos.list'),
                 'name' => 'Legales',
                 'active' => request()->routeIs('admin.legales.*') ? 'active' : '',
+            ],
+            [
+                'existe' => $editSobreNosotros,
+                'route' => route('admin.legales.sobre-nosotros.edit'),
+                'name' => 'Sobre nosotros',
+                'active' => request()->routeIs('admin.legales.sobre-nosotros.*') ? 'active' : '',
+            ],
+            [
+                'existe' => $editPrivacidad,
+                'route' => route('admin.legales.politicas-privacidad.edit'),
+                'name' => 'Políticas de privacidad',
+                'active' => request()->routeIs('admin.legales.politicas-privacidad.*') ? 'active' : '',
+            ],
+            [
+                'existe' => $editCookies,
+                'route' => route('admin.legales.politicas-cookies.edit'),
+                'name' => 'Políticas de cookies',
+                'active' => request()->routeIs('admin.legales.politicas-cookies.*') ? 'active' : '',
+            ],
+            [
+                'existe' => $editTerminos,
+                'route' => route('admin.legales.terminos-condiciones.edit'),
+                'name' => 'Términos y condiciones',
+                'active' => request()->routeIs('admin.legales.terminos-condiciones.*') ? 'active' : '',
             ],
         ],
     ])
@@ -153,7 +177,7 @@
     ])
 @endif
 
-@if ($listTerminales or $listAmenidades)
+@if ($listTerminales or $listAmenidades or $listPreguntas)
     @include('components.layout.sidebar-li', [
         'menu' => 'Catálogos',
         'icon' => 'nav-icon bi bi-collection',
@@ -169,6 +193,12 @@
                 'route' => route('admin.amenidades.list'),
                 'name' => 'Amenidades',
                 'active' => request()->routeIs('admin.amenidades.*') ? 'active' : '',
+            ],
+            [
+                'existe' => $listPreguntas,
+                'route' => route('admin.preguntas-frecuentes.list'),
+                'name' => 'Preguntas frecuentes',
+                'active' => request()->routeIs('admin.preguntas-frecuentes.*') ? 'active' : '',
             ],
         ],
     ])
@@ -201,7 +231,7 @@
     ])
 @endif
 
-@if ($listSolicitudes)
+@if ($listSolicitudes or $listCentroAyuda)
     @include('components.layout.sidebar-li', [
         'menu' => 'Soporte',
         'icon' => 'nav-icon bi bi-headset',
@@ -209,8 +239,14 @@
             [
                 'existe' => $listSolicitudes ?? false,
                 'route' => route('admin.solicitudes.list'),
-                'name' => 'Solicitudes',
+                'name' => 'Contacto',
                 'active' => request()->routeIs('admin.solicitudes.*') ? 'active' : '',
+            ],
+            [
+                'existe' => $listCentroAyuda,
+                'route' => route('admin.centro-ayuda.list'),
+                'name' => 'Centro de ayuda',
+                'active' => request()->routeIs('admin.centro-ayuda.*') ? 'active' : '',
             ],
         ],
     ])

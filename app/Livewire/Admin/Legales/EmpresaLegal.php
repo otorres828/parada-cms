@@ -125,7 +125,7 @@ class EmpresaLegal extends Component
         }
 
         session()->flash('admin_success', 'Documento guardado correctamente.');
-        $this->redirect(route('admin.legales.list'), navigate: true);
+        $this->redirect(route('admin.legales.documentos.list'), navigate: true);
 
     }
 

@@ -45,6 +45,10 @@
 
                     <x-empresas.description :empresa="$empresa" />
 
+                    <div class="px-3 pb-3">
+                        <a href="{{ route('admin.empresas.politicas', $empresa->id) }}" wire:navigate>Ver políticas de embarque y desembarque</a>
+                    </div>
+
                     @if ($canListUser)
                         <div class="card-footer bg-transparent d-flex justify-content-end py-3">
 

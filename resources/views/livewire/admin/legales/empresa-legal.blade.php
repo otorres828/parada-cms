@@ -27,7 +27,7 @@
 
         <x-slot:button>
 
-            <x-form.cancel-button :link="route('admin.legales.list')">
+            <x-form.cancel-button :link="route('admin.legales.documentos.list')">
                 Volver a empresas
             </x-form.cancel-button>
 

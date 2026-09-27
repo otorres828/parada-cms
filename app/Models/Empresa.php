@@ -27,6 +27,7 @@ class Empresa extends ModelHelper
         'rif',
         'telefono',
         'email',
+        'politicas',
         'tipo_contrato',
         'dia_corte',
         'dia_vencimiento',

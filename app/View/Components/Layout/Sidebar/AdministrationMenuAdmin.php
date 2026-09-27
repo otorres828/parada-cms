@@ -55,6 +55,18 @@ class AdministrationMenuAdmin extends Component
 
     public bool $listSolicitudes = false;
 
+    public bool $listPreguntas = false;
+
+    public bool $listCentroAyuda = false;
+
+    public bool $editSobreNosotros = false;
+
+    public bool $editPrivacidad = false;
+
+    public bool $editCookies = false;
+
+    public bool $editTerminos = false;
+
     public bool $profileAccount = false;
 
     public bool $passwordAccount = false;
@@ -85,14 +97,20 @@ class AdministrationMenuAdmin extends Component
             'listcupones' => ['cupones', 'list'],
             'listTerminales' => ['terminales', 'list'],
             'listAmenidades' => ['amenidades', 'list'],
+            'listPreguntas' => ['preguntas-frecuentes', 'list'],
             'salesReportes' => ['reportes', 'list-sales'],
             'companiesReportes' => ['reportes', 'list-companies'],
             'exchangeRatesReport' => ['reportes', 'list-exchange-rates'],
             'listLegales' => ['legales', 'list'],
+            'editSobreNosotros' => ['sobre-nosotros', 'edit'],
+            'editPrivacidad' => ['politicas-privacidad', 'edit'],
+            'editCookies' => ['politicas-cookies', 'edit'],
+            'editTerminos' => ['terminos-condiciones', 'edit'],
             'listTasasServicio' => ['tasas-servicio', 'list'],
             'listExoneracionesTasaServicio' => ['exoneraciones-tasa-servicio', 'list'],
             'listAuditoria' => ['auditoria', 'list'],
             'listSolicitudes' => ['solicitudes', 'list'],
+            'listCentroAyuda' => ['centro-ayuda', 'list'],
         ]);
 
         foreach ($permissions as $property => $hasPermission) {

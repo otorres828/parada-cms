@@ -42,6 +42,7 @@ use App\Livewire\Admin\Clientes\DetailCliente;
 /* ------------------------------Legales------------------------------------------- */
 use App\Livewire\Admin\Legales\ListLegal;
 use App\Livewire\Admin\Legales\EmpresaLegal;
+use App\Livewire\Admin\Legales\ContenidoPagina;
 /* ------------------------------Rutas de viajes----------------------------------- */
 use App\Livewire\Admin\Viajes\ListViaje;
 use App\Livewire\Admin\Viajes\DetailViaje;
@@ -73,6 +74,9 @@ use App\Livewire\Admin\Terminales\SaveTerminal;
 /* ------------------------------Amenidades---------------------------------------- */
 use App\Livewire\Admin\Amenidades\ListAmenidad;
 use App\Livewire\Admin\Amenidades\SaveAmenidad;
+/* ------------------------------Preguntas frecuentes------------------------------ */
+use App\Livewire\Admin\PreguntasFrecuentes\ListPregunta;
+use App\Livewire\Admin\PreguntasFrecuentes\SavePregunta;
 /* ------------------------------Reporte de Ventas de Empresas--------------------- */
 use App\Livewire\Admin\Reportes\CompaniesReport;
 use App\Livewire\Admin\Reportes\ExchangeRates;
@@ -109,6 +113,13 @@ Route::post('logout', [Login::class, 'logout'])
 Route::group(['middleware' => ['auth:admin', 'check.permisos']], function () {
 
     Route::livewire('dashboard', Dashboard::class)->name('dashboard');
+
+    Route::prefix('centro-ayuda')->name('centro-ayuda.')->group(function () {
+        Route::livewire('/', \App\Livewire\Admin\CentroAyuda\ListTicket::class)->name('list');
+        Route::livewire('detalle/{ticket_id}', \App\Livewire\Admin\CentroAyuda\DetailTicket::class)->whereNumber('ticket_id')->name('detail');
+    });
+
+
 
     /* ----------------------------------------Administradores-------------------------------------- */
 
@@ -158,6 +169,7 @@ Route::group(['middleware' => ['auth:admin', 'check.permisos']], function () {
         Route::livewire('nuevo', SaveEmpresa::class)->name('add');
         Route::livewire('editar/{empresa_id}', SaveEmpresa::class)->whereNumber('empresa_id')->name('edit');
         Route::livewire('detalle/{empresa_id}', DetailEmpresa::class)->whereNumber('empresa_id')->name('detail');
+        Route::livewire('politicas/{empresa_id}', \App\Livewire\Admin\Empresas\PoliticasEmpresa::class)->whereNumber('empresa_id')->name('politicas');
 
     });
 
@@ -186,9 +198,22 @@ Route::group(['middleware' => ['auth:admin', 'check.permisos']], function () {
 
     Route::prefix('legales')->name('legales.')->group(function () {
 
-        Route::livewire('/', ListLegal::class)->name('list');
-        Route::livewire('empresa/{empresa_id}', EmpresaLegal::class)->whereNumber('empresa_id')->name('detail');
-        Route::get('empresa/{empresa_id}/documento/{documento_id}', [DocumentoLegalController::class, 'show'])->whereNumber('empresa_id')->whereNumber('documento_id')->name('file');
+        Route::prefix('documentos')->name('documentos.')->group(function () {
+
+            Route::livewire('/', ListLegal::class)->name('list');
+            Route::livewire('empresa/{empresa_id}', EmpresaLegal::class)->whereNumber('empresa_id')->name('detail');
+            Route::get('empresa/{empresa_id}/documento/{documento_id}', [DocumentoLegalController::class, 'show'])->whereNumber('empresa_id')->whereNumber('documento_id')->name('file');
+
+        });
+
+        Route::livewire('sobre-nosotros', ContenidoPagina::class)->name('sobre-nosotros.edit');
+
+        Route::livewire('politicas-privacidad', ContenidoPagina::class)->name('politicas-privacidad.edit');
+
+        Route::livewire('politicas-cookies', ContenidoPagina::class)->name('politicas-cookies.edit');
+
+        Route::livewire('terminos-condiciones', ContenidoPagina::class)->name('terminos-condiciones.edit');
+
 
     });
 
@@ -266,7 +291,7 @@ Route::group(['middleware' => ['auth:admin', 'check.permisos']], function () {
 
     });
 
-    /* ----------------------------------------Terminales-------------------------------------- */
+    /* ----------------------------------------Terminales----------------------------------------------- */
 
     Route::prefix('terminales')->name('terminales.')->group(function () {
 
@@ -275,7 +300,7 @@ Route::group(['middleware' => ['auth:admin', 'check.permisos']], function () {
         Route::livewire('editar/{terminal_id}', SaveTerminal::class)->whereNumber('terminal_id')->name('edit');
     });
 
-    /* ----------------------------------------Amenidades-------------------------------------- */
+    /* ----------------------------------------Amenidades----------------------------------------------- */
 
     Route::prefix('amenidades')->name('amenidades.')->group(function () {
 
@@ -285,7 +310,16 @@ Route::group(['middleware' => ['auth:admin', 'check.permisos']], function () {
 
     });
 
-    /* ----------------------------------------Reportes-------------------------------------- */
+    /* ----------------------------------------Preguntas frecuentes--------------------------------------- */
+
+        Route::prefix('preguntas-frecuentes')->name('preguntas-frecuentes.')->group(function () {
+        Route::livewire('/', ListPregunta::class)->name('list');
+        Route::livewire('nuevo', SavePregunta::class)->name('add');
+        Route::livewire('editar/{pregunta_id}', SavePregunta::class)->whereNumber('pregunta_id')->name('edit');
+
+    });
+
+    /* ----------------------------------------Reportes--------------------------------------------------- */
 
     Route::prefix('reportes')->name('reportes.')->group(function () {
 
@@ -304,7 +338,16 @@ Route::group(['middleware' => ['auth:admin', 'check.permisos']], function () {
 
     });
 
-    /* ----------------------------------------Mi cuenta-------------------------------------- */
+    /* ----------------------------------------Centro de ayuda------------------------------------------------ */
+    // Route::prefix('centro-ayuda')->name('centro-ayuda.')->group(function () {
+
+    //     Route::livewire('/', \App\Livewire\Admin\CentroAyuda\ListTicket::class)->name('list');
+    //     Route::livewire('detalle/{ticket_id}', \App\Livewire\Admin\CentroAyuda\DetailTicket::class)->whereNumber('ticket_id')->name('detail');
+
+    // });
+
+
+    /* ----------------------------------------Mi cuenta--------------------------------------------------- */
 
     Route::prefix('mi-cuenta')->name('account.')->group(function () {
 
