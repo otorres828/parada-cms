@@ -74,13 +74,10 @@ foreach ([
         $assert(str_contains($html, 'Aire acondicionado'), 'Amenidad no visible');
     }
 }
-// Prueba de migración con registros ya existentes, sin alterar su identidad ni relaciones.
-$migration = require __DIR__.'/../database/migrations/2026_09_27_000001_convert_autobuses_to_transportes.php';
-$count = App\Models\Transporte::count();
-$migration->down();
-$assert(Illuminate\Support\Facades\DB::table('autobuses')->count() === $count, 'Rollback conserva vehículos');
-$migration->up();
-$assert(App\Models\Transporte::count() === $count, 'Migración conserva vehículos');
-$assert(App\Models\Transporte::find($carro->id)->amenidades()->whereKey($amenidad->id)->exists(), 'Migración conserva amenidades');
-$assert($ventas['carro']->fresh()->programacion->transporte_id === $carro->id, 'Migración conserva FK');
-echo "OK: tipos, filtros, reportes, prefijos, órdenes mixtas, pantallas y migración con datos.\n";
+// Las migraciones originales crean directamente el esquema final.
+$assert(Illuminate\Support\Facades\Schema::hasTable('transportes'), 'Tabla transportes');
+$assert(Illuminate\Support\Facades\Schema::hasTable('amenidad_transporte'), 'Tabla amenidades');
+$assert(! Illuminate\Support\Facades\Schema::hasTable('autobuses'), 'No debe existir la tabla antigua');
+$assert(Illuminate\Support\Facades\Schema::hasColumn('programaciones', 'transporte_id'), 'FK transporte');
+$assert(Illuminate\Support\Facades\Schema::hasColumn('empresas', 'tipo_entidad'), 'Tipo entidad');
+echo "OK: tipos, filtros, reportes, prefijos, órdenes mixtas, pantallas y esquema original.\n";
