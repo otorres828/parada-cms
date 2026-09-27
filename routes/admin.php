@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\Admin\DocumentoLegalController;
+use Illuminate\Support\Facades\Route;
+
 /*
 |--------------------------------------------------------------------------
 | Livewire Classes
@@ -30,6 +32,7 @@ use App\Livewire\Admin\Auditoria\DetailAudit;
 use App\Livewire\Admin\Empresas\ListEmpresa;
 use App\Livewire\Admin\Empresas\SaveEmpresa;
 use App\Livewire\Admin\Empresas\DetailEmpresa;
+use App\Livewire\Admin\Empresas\PoliticasEmpresa;
 /* ------------------------------Usuarios Empresas-------------------------------- */
 use App\Livewire\Admin\EmpresaUsers\ListEmpresaUser;
 use App\Livewire\Admin\EmpresaUsers\DetailEmpresaUser;
@@ -84,15 +87,12 @@ use App\Livewire\Admin\Reportes\SalesReport;
 /* ------------------------------Solicitudes de Nuevas Empresas-------------------- */
 use App\Livewire\Admin\Solicitudes\DetailSolicitud;
 use App\Livewire\Admin\Solicitudes\ListSolicitud;
+/* ------------------------------Centro de Ayuda------------------------------------ */
+use App\Livewire\Admin\CentroAyuda\DetailTicket;
+use App\Livewire\Admin\CentroAyuda\ListTicket;
 
-
-
-use Illuminate\Support\Facades\Route;
-
-/* ------------------------------Configuraciones----------------------------------- */
 
 /*
-|--------------------------------------------------------------------------
 | Authentication Routes
 |--------------------------------------------------------------------------
 | bootstrap/app.php aplica el prefijo /admin y el nombre admin.
@@ -114,89 +114,96 @@ Route::group(['middleware' => ['auth:admin', 'check.permisos']], function () {
 
     Route::livewire('dashboard', Dashboard::class)->name('dashboard');
 
-    Route::prefix('centro-ayuda')->name('centro-ayuda.')->group(function () {
-        Route::livewire('/', \App\Livewire\Admin\CentroAyuda\ListTicket::class)->name('list');
-        Route::livewire('detalle/{ticket_id}', \App\Livewire\Admin\CentroAyuda\DetailTicket::class)->whereNumber('ticket_id')->name('detail');
-    });
+    /* --------------------------------------------ADMINISTRACION------------------------------------------------------- */
 
+    Route::prefix('administracion')->group(function(){
 
-
-    /* ----------------------------------------Administradores-------------------------------------- */
-
-    Route::prefix('administradores')->name('admins.')->group(function () {
-
-        Route::livewire('/', ListAdmin::class)->name('list');
-        Route::livewire('nuevo', SaveAdmin::class)->name('add');
-        Route::livewire('editar/{admin_id}', SaveAdmin::class)->whereNumber('admin_id')->name('edit');
-
-    });
-
-    /* ----------------------------------------Tasas de servicio-------------------------------------- */
-
-    Route::prefix('tasas-servicio')->name('tasas-servicio.')->group(function () {
-
-        Route::livewire('/', ListTasaServicio::class)->name('list');
-        Route::livewire('nuevo', SaveTasaServicio::class)->name('add');
-        Route::livewire('editar/{tasa_servicio_id}', SaveTasaServicio::class)->whereNumber('tasa_servicio_id')->name('edit');
-
-    });
-
-    /* ----------------------------------------Exoneraciones de tasa de servicio-------------------------------------- */
-
-    Route::prefix('exoneraciones-tasa-servicio')->name('exoneraciones-tasa-servicio.')->group(function () {
-
-        Route::livewire('/', ListExoneracionTasaServicio::class)->name('list');
-        Route::livewire('nuevo', SaveExoneracionTasaServicio::class)->name('add');
-        Route::livewire('editar/{exoneracion_tasa_servicio_id}', SaveExoneracionTasaServicio::class)
-            ->whereNumber('exoneracion_tasa_servicio_id')->name('edit');
-
-    });
-
-    /* ----------------------------------------Auditoria-------------------------------------- */
-
-    Route::prefix('auditoria')->name('auditoria.')->group(function () {
-
-        Route::livewire('/', ListAudit::class)->name('list');
-        Route::livewire('detalle/{audit_id}', DetailAudit::class)->whereNumber('audit_id')->name('detail');
-
-    });
-
-    /* ----------------------------------------Empresas-------------------------------------- */
-
-    Route::prefix('empresas')->name('empresas.')->group(function () {
-
-        Route::livewire('/', ListEmpresa::class)->name('list');
-        Route::livewire('nuevo', SaveEmpresa::class)->name('add');
-        Route::livewire('editar/{empresa_id}', SaveEmpresa::class)->whereNumber('empresa_id')->name('edit');
-        Route::livewire('detalle/{empresa_id}', DetailEmpresa::class)->whereNumber('empresa_id')->name('detail');
-        Route::livewire('politicas/{empresa_id}', \App\Livewire\Admin\Empresas\PoliticasEmpresa::class)->whereNumber('empresa_id')->name('politicas');
+        /* ----------------------------------------Administradores------------------------------------------------------- */
+    
+        Route::prefix('administradores')->name('admins.')->group(function () {
+    
+            Route::livewire('/', ListAdmin::class)->name('list');
+            Route::livewire('nuevo', SaveAdmin::class)->name('add');
+            Route::livewire('editar/{admin_id}', SaveAdmin::class)->whereNumber('admin_id')->name('edit');
+    
+        });
+    
+        /* ----------------------------------------Tasas de servicio----------------------------------------------------- */
+    
+        Route::prefix('tasas-servicio')->name('tasas-servicio.')->group(function () {
+    
+            Route::livewire('/', ListTasaServicio::class)->name('list');
+            Route::livewire('nuevo', SaveTasaServicio::class)->name('add');
+            Route::livewire('editar/{tasa_servicio_id}', SaveTasaServicio::class)->whereNumber('tasa_servicio_id')->name('edit');
+    
+        });
+    
+        /* ----------------------------------------Exoneraciones de tasa de servicio------------------------------------- */
+    
+        Route::prefix('exoneraciones-tasa-servicio')->name('exoneraciones-tasa-servicio.')->group(function () {
+    
+            Route::livewire('/', ListExoneracionTasaServicio::class)->name('list');
+            Route::livewire('nuevo', SaveExoneracionTasaServicio::class)->name('add');
+            Route::livewire('editar/{exoneracion_tasa_servicio_id}', SaveExoneracionTasaServicio::class)
+                ->whereNumber('exoneracion_tasa_servicio_id')->name('edit');
+    
+        });
+    
+        /* ----------------------------------------Auditoria-------------------------------------- */
+    
+        Route::prefix('auditoria')->name('auditoria.')->group(function () {
+    
+            Route::livewire('/', ListAudit::class)->name('list');
+            Route::livewire('detalle/{audit_id}', DetailAudit::class)->whereNumber('audit_id')->name('detail');
+    
+        });
 
     });
 
-    /* ----------------------------------------Usuarios de empresa-------------------------------------- */
+    /* --------------------------------------------EMPRESAS Y CLIENTES-------------------------------------------------- */
 
-    Route::prefix('empresas/{empresa_id}/usuarios')->name('empresas.users.')->group(function () {
+    Route::prefix('empresas-clientes')->group(function(){
 
-        Route::livewire('/', ListEmpresaUser::class)->whereNumber('empresa_id')->name('list');
-        Route::livewire('editar/{usuario_empresa_id}', SaveEmpresaUser::class)->whereNumber(['empresa_id', 'usuario_empresa_id'])->name('edit');
-        Route::livewire('detalle/{usuario_empresa_id}', DetailEmpresaUser::class)->whereNumber(['empresa_id', 'usuario_empresa_id'])->name('detail');
-        Route::livewire('permisos/{usuario_empresa_id}', PermissionEmpresaUser::class)->whereNumber(['empresa_id', 'usuario_empresa_id'])->name('permissions');
+        /* ----------------------------------------Empresas------------------------------------------------------------- */
+
+        Route::prefix('empresas')->name('empresas.')->group(function () {
+
+            Route::livewire('/', ListEmpresa::class)->name('list');
+            Route::livewire('nuevo', SaveEmpresa::class)->name('add');
+            Route::livewire('editar/{empresa_id}', SaveEmpresa::class)->whereNumber('empresa_id')->name('edit');
+            Route::livewire('detalle/{empresa_id}', DetailEmpresa::class)->whereNumber('empresa_id')->name('detail');
+            Route::livewire('politicas/{empresa_id}', PoliticasEmpresa::class)->whereNumber('empresa_id')->name('politicas');
+
+        });
+
+        /* ----------------------------------------Usuarios de empresa-------------------------------------------------- */
+
+        Route::prefix('empresas/{empresa_id}/usuarios')->name('empresas.users.')->group(function () {
+
+            Route::livewire('/', ListEmpresaUser::class)->whereNumber('empresa_id')->name('list');
+            Route::livewire('editar/{usuario_empresa_id}', SaveEmpresaUser::class)->whereNumber(['empresa_id', 'usuario_empresa_id'])->name('edit');
+            Route::livewire('detalle/{usuario_empresa_id}', DetailEmpresaUser::class)->whereNumber(['empresa_id', 'usuario_empresa_id'])->name('detail');
+            Route::livewire('permisos/{usuario_empresa_id}', PermissionEmpresaUser::class)->whereNumber(['empresa_id', 'usuario_empresa_id'])->name('permissions');
+
+        });
+
+        /* ----------------------------------------Clientes------------------------------------------------------------- */
+
+        Route::prefix('clientes')->name('clientes.')->group(function () {
+
+            Route::livewire('/', ListCliente::class)->name('list');
+            Route::livewire('editar/{user_id}', SaveCliente::class)->whereNumber('user_id')->name('edit');
+            Route::livewire('detalle/{user_id}', DetailCliente::class)->whereNumber('user_id')->name('detail');
+
+        });
 
     });
 
-    /* ----------------------------------------Clientes-------------------------------------- */
-
-    Route::prefix('clientes')->name('clientes.')->group(function () {
-
-        Route::livewire('/', ListCliente::class)->name('list');
-        Route::livewire('editar/{user_id}', SaveCliente::class)->whereNumber('user_id')->name('edit');
-        Route::livewire('detalle/{user_id}', DetailCliente::class)->whereNumber('user_id')->name('detail');
-
-    });
-
-    /* ----------------------------------------Legales-------------------------------------- */
+    /* ---------------------------------------------LEGALES------------------------------------------------------------- */
 
     Route::prefix('legales')->name('legales.')->group(function () {
+
+        /* ---------------------------------------------Documentos------------------------------------------------------ */
 
         Route::prefix('documentos')->name('documentos.')->group(function () {
 
@@ -205,6 +212,8 @@ Route::group(['middleware' => ['auth:admin', 'check.permisos']], function () {
             Route::get('empresa/{empresa_id}/documento/{documento_id}', [DocumentoLegalController::class, 'show'])->whereNumber('empresa_id')->whereNumber('documento_id')->name('file');
 
         });
+
+        /* ---------------------------------------------Contenido de páginas-------------------------------------------- */
 
         Route::livewire('sobre-nosotros', ContenidoPagina::class)
         ->defaults('pagina', 'sobre-nosotros')->name('sobre-nosotros.edit');
@@ -221,109 +230,135 @@ Route::group(['middleware' => ['auth:admin', 'check.permisos']], function () {
 
     });
 
-    /* ----------------------------------------Rutas de viajes: supervision-------------------------------------- */
+    /* ---------------------------------------------OPERACIONES DE VIAJES---------------------------------------------- */
 
-    Route::prefix('viajes')->name('viajes.')->group(function () {
+    Route::prefix('operaciones')->group(function () {
 
-        Route::livewire('/', ListViaje::class)->name('list');
-        Route::livewire('detalle/{viaje_id}', DetailViaje::class)->whereNumber('viaje_id')->name('detail');
+        /* ----------------------------------------Rutas de viajes: supervision-------------------------------------- */
 
-    });
+        Route::prefix('viajes')->name('viajes.')->group(function () {
 
-    /* ----------------------------------------Salidas programadas: supervision-------------------------------------- */
+            Route::livewire('/', ListViaje::class)->name('list');
+            Route::livewire('detalle/{viaje_id}', DetailViaje::class)->whereNumber('viaje_id')->name('detail');
 
-    Route::prefix('programaciones')->name('programaciones.')->group(function () {
+        });
 
-        Route::livewire('/', ListProgramacion::class)->name('list');
-        Route::livewire('pasajeros/{programacion_id}', PassengerProgramacion::class)->whereNumber('programacion_id')->name('passengers');
+        /* ----------------------------------------Salidas programadas: supervision-------------------------------------- */
 
-    });
+        Route::prefix('programaciones')->name('programaciones.')->group(function () {
 
-    /* ----------------------------------------Transportes: supervision-------------------------------------- */
+            Route::livewire('/', ListProgramacion::class)->name('list');
+            Route::livewire('pasajeros/{programacion_id}', PassengerProgramacion::class)->whereNumber('programacion_id')->name('passengers');
 
-    Route::prefix('transportes')->name('transportes.')->group(function () {
+        });
 
-        Route::livewire('/', ListTransporte::class)->name('list');
-        Route::livewire('detalle/{transporte_id}', DetailTransporte::class)->whereNumber('transporte_id')->name('detail');
+        /* ----------------------------------------Transportes: supervision-------------------------------------- */
 
-    });
+        Route::prefix('transportes')->name('transportes.')->group(function () {
 
-    /* ----------------------------------------Reservas y ventas-------------------------------------- */
+            Route::livewire('/', ListTransporte::class)->name('list');
+            Route::livewire('detalle/{transporte_id}', DetailTransporte::class)->whereNumber('transporte_id')->name('detail');
 
-    Route::prefix('reservas')->name('reservas.')->group(function () {
-
-        Route::livewire('/', ListReserva::class)->name('list');
-        Route::livewire('detalle/{reserva_id}', DetailReserva::class)->whereNumber('reserva_id')->name('detail');
+        });
 
     });
 
-    /* ----------------------------------------Pasajes-------------------------------------- */
+    /* ---------------------------------------------FINANZAS----------------------------------------------------------- */
 
-    Route::prefix('pasajes')->name('pasajes.')->group(function () {
+    Route::prefix('finanzas')->group(function () {
 
-        Route::livewire('/', ListPasaje::class)->name('list');
-        Route::livewire('detalle/{pasaje_id}', DetailPasaje::class)->whereNumber('pasaje_id')->name('detail');
+        /* ----------------------------------------Reservas y ventas------------------------------------------------------- */
 
-    });
+        Route::prefix('reservas')->name('reservas.')->group(function () {
 
-    /* ----------------------------------------Reembolsos-------------------------------------- */
+            Route::livewire('/', ListReserva::class)->name('list');
+            Route::livewire('detalle/{reserva_id}', DetailReserva::class)->whereNumber('reserva_id')->name('detail');
 
-    Route::prefix('reembolsos')->name('reembolsos.')->group(function () {
+        });
 
-        Route::livewire('/', ListReembolso::class)->name('list');
-        Route::livewire('detalle/{reembolso_id}', DetailReembolso::class)->whereNumber('reembolso_id')->name('detail');
+        /* ----------------------------------------Pasajes----------------------------------------------------------------- */
 
-    });
+        Route::prefix('pasajes')->name('pasajes.')->group(function () {
 
-    /* ----------------------------------------Órdenes de cobro-------------------------------------- */
+            Route::livewire('/', ListPasaje::class)->name('list');
+            Route::livewire('detalle/{pasaje_id}', DetailPasaje::class)->whereNumber('pasaje_id')->name('detail');
 
-    Route::prefix('ordenes-cobro')->name('ordenes-cobro.')->group(function () {
+        });
 
-        Route::livewire('/', ListOrdenCobro::class)->name('list');
-        Route::livewire('detalle/{orden_cobro_id}', DetailOrdenCobro::class)->whereNumber('orden_cobro_id')->name('detail');
+        /* ----------------------------------------Reembolsos-------------------------------------------------------------- */
 
-    });
+        Route::prefix('reembolsos')->name('reembolsos.')->group(function () {
 
-    /* ----------------------------------------cupones de cupones-------------------------------------- */
+            Route::livewire('/', ListReembolso::class)->name('list');
+            Route::livewire('detalle/{reembolso_id}', DetailReembolso::class)->whereNumber('reembolso_id')->name('detail');
 
-    Route::prefix('cupones')->name('cupones.')->group(function () {
+        });
 
-        Route::livewire('/', ListCampana::class)->name('list');
-        Route::livewire('nuevo', SaveCampana::class)->name('add');
-        Route::livewire('editar/{configuracion_cupon_id}', SaveCampana::class)->whereNumber('configuracion_cupon_id')->name('edit');
-        Route::livewire('detalle/{configuracion_cupon_id}', DetailCampana::class)->whereNumber('configuracion_cupon_id')->name('detail');
+        /* ----------------------------------------Órdenes de cobro-------------------------------------------------------- */
 
-    });
+        Route::prefix('ordenes-cobro')->name('ordenes-cobro.')->group(function () {
 
-    /* ----------------------------------------Terminales----------------------------------------------- */
+            Route::livewire('/', ListOrdenCobro::class)->name('list');
+            Route::livewire('detalle/{orden_cobro_id}', DetailOrdenCobro::class)->whereNumber('orden_cobro_id')->name('detail');
 
-    Route::prefix('terminales')->name('terminales.')->group(function () {
-
-        Route::livewire('/', ListTerminal::class)->name('list');
-        Route::livewire('nuevo', SaveTerminal::class)->name('add');
-        Route::livewire('editar/{terminal_id}', SaveTerminal::class)->whereNumber('terminal_id')->name('edit');
-    });
-
-    /* ----------------------------------------Amenidades----------------------------------------------- */
-
-    Route::prefix('amenidades')->name('amenidades.')->group(function () {
-
-        Route::livewire('/', ListAmenidad::class)->name('list');
-        Route::livewire('nuevo', SaveAmenidad::class)->name('add');
-        Route::livewire('editar/{amenidad_id}', SaveAmenidad::class)->whereNumber('amenidad_id')->name('edit');
+        });
 
     });
 
-    /* ----------------------------------------Preguntas frecuentes--------------------------------------- */
+    /* ---------------------------------------------PROMOCIONES-------------------------------------------------------- */
+
+    Route::prefix('promociones')->group(function () {
+
+        /* ----------------------------------------cupones de cupones-------------------------------------- */
+
+        Route::prefix('cupones')->name('cupones.')->group(function () {
+
+            Route::livewire('/', ListCampana::class)->name('list');
+            Route::livewire('nuevo', SaveCampana::class)->name('add');
+            Route::livewire('editar/{configuracion_cupon_id}', SaveCampana::class)->whereNumber('configuracion_cupon_id')->name('edit');
+            Route::livewire('detalle/{configuracion_cupon_id}', DetailCampana::class)->whereNumber('configuracion_cupon_id')->name('detail');
+
+        });
+
+    });
+
+    /* ---------------------------------------------CATALOGOS---------------------------------------------------------- */
+
+    Route::prefix('catalogos')->group(function () {
+
+        /* ----------------------------------------Terminales----------------------------------------------- */
+
+        Route::prefix('terminales')->name('terminales.')->group(function () {
+
+            Route::livewire('/', ListTerminal::class)->name('list');
+            Route::livewire('nuevo', SaveTerminal::class)->name('add');
+            Route::livewire('editar/{terminal_id}', SaveTerminal::class)->whereNumber('terminal_id')->name('edit');
+        });
+
+        /* ----------------------------------------Amenidades----------------------------------------------- */
+
+        Route::prefix('amenidades')->name('amenidades.')->group(function () {
+
+            Route::livewire('/', ListAmenidad::class)->name('list');
+            Route::livewire('nuevo', SaveAmenidad::class)->name('add');
+            Route::livewire('editar/{amenidad_id}', SaveAmenidad::class)->whereNumber('amenidad_id')->name('edit');
+
+        });
+
+        /* ----------------------------------------Preguntas frecuentes--------------------------------------- */
 
         Route::prefix('preguntas-frecuentes')->name('preguntas-frecuentes.')->group(function () {
-        Route::livewire('/', ListPregunta::class)->name('list');
-        Route::livewire('nuevo', SavePregunta::class)->name('add');
-        Route::livewire('editar/{pregunta_id}', SavePregunta::class)->whereNumber('pregunta_id')->name('edit');
 
+            Route::livewire('/', ListPregunta::class)->name('list');
+            Route::livewire('nuevo', SavePregunta::class)->name('add');
+            Route::livewire('editar/{pregunta_id}', SavePregunta::class)->whereNumber('pregunta_id')->name('edit');
+
+        });
+
+    
     });
 
-    /* ----------------------------------------Reportes--------------------------------------------------- */
+    /* ----------------------------------------Reportes---------------------------------------------------------------- */
 
     Route::prefix('reportes')->name('reportes.')->group(function () {
 
@@ -333,23 +368,29 @@ Route::group(['middleware' => ['auth:admin', 'check.permisos']], function () {
 
     });
 
-    /* ----------------------------------------Solicitudes de empresas-------------------------------------- */
+    /* ---------------------------------------------SOPORTE------------------------------------------------------------ */
 
-    Route::prefix('solicitudes')->name('solicitudes.')->group(function () {
+    Route::prefix('soporte')->group(function () {
 
-        Route::livewire('/', ListSolicitud::class)->name('list');
-        Route::livewire('detalle/{solicitud_id}', DetailSolicitud::class)->whereNumber('solicitud_id')->name('detail');
+        /* ----------------------------------------Solicitudes de empresas--------------------------------------------- */
+
+        Route::prefix('solicitudes')->name('solicitudes.')->group(function () {
+
+            Route::livewire('/', ListSolicitud::class)->name('list');
+            Route::livewire('detalle/{solicitud_id}', DetailSolicitud::class)->whereNumber('solicitud_id')->name('detail');
+
+        });
+
+        /* ----------------------------------------Centro de ayuda------------------------------------------------------ */
+
+        Route::prefix('centro-ayuda')->name('centro-ayuda.')->group(function () {
+
+            Route::livewire('/', ListTicket::class)->name('list');
+            Route::livewire('detalle/{ticket_id}', DetailTicket::class)->whereNumber('ticket_id')->name('detail');
+
+        });
 
     });
-
-    /* ----------------------------------------Centro de ayuda------------------------------------------------ */
-    // Route::prefix('centro-ayuda')->name('centro-ayuda.')->group(function () {
-
-    //     Route::livewire('/', \App\Livewire\Admin\CentroAyuda\ListTicket::class)->name('list');
-    //     Route::livewire('detalle/{ticket_id}', \App\Livewire\Admin\CentroAyuda\DetailTicket::class)->whereNumber('ticket_id')->name('detail');
-
-    // });
-
 
     /* ----------------------------------------Mi cuenta--------------------------------------------------- */
 
