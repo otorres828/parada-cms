@@ -42,7 +42,17 @@
     <form id="saveEmpresaForm" x-ref="form" @submit.prevent="preSave" novalidate>
 
         <x-form.container-sm>
-<div class="mb-3"><x-form.dropdown label="Tipo de entidad" name="tipo_entidad" x-model="$wire.tipo_entidad"><option value="agencia_autobus">Agencia de Autobús</option><option value="conductor_carro">Conductor de carro</option></x-form.dropdown>@error('tipo_entidad') <div class="text-danger small">{{ $message }}</div> @enderror</div>
+            
+            <div class="mb-3">
+                <x-form.dropdown label="Tipo de entidad" name="tipo_entidad" x-model="$wire.tipo_entidad">
+                    <option value="">Seleccionar...</option>
+                    <option value="agencia_autobus">Agencia de Autobús</option>
+                    <option value="conductor_carro">Conductor de carro</option>
+                </x-form.dropdown>@error('tipo_entidad') 
+
+                <div class="text-danger small">{{ $message }}</div> @enderror
+                
+            </div>
 
             <div class="mb-3">
 
