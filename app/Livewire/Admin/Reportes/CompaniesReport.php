@@ -44,7 +44,6 @@ class CompaniesReport extends Component
     {
         return view('livewire.admin.reportes.companies-report', [
             'rows' => $this->query()->paginate($this->per_page),
-            'columns' => $this->columns(),
             'report' => 'companies',
         ]);
     }
@@ -52,11 +51,6 @@ class CompaniesReport extends Component
     public function updated(): void
     {
         $this->resetPage();
-    }
-
-    protected function columns(): array
-    {
-        return ['nombre' => 'Empresa', 'cantidad' => 'Reservas pagadas', 'total' => 'Ventas', 'tasas' => 'Tasa de servicio'];
     }
 
     protected function query()

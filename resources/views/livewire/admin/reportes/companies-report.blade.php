@@ -73,6 +73,8 @@
 
             <tr>
                 <th>Empresa</th>
+                
+                <th>Tipo de entidad</th>
 
                 <th>Reservas pagadas</th>
 
@@ -90,6 +92,9 @@
                     <td>
                         {{ $row->nombre ?? '—' }}
                     </td>
+                    <td>
+                        {{ (new \App\Models\Empresa(['tipo_entidad' => $row->tipo_entidad]))->getTipoEntidad() }}
+                    </td>
 
                     <td>
                         {{ $row->cantidad ?? '—' }}
@@ -106,7 +111,7 @@
             </tr>@empty
 
                 <tr>
-                    <td colspan="4" class="text-center py-5">
+                    <td colspan="5" class="text-center py-5">
                         No hay datos para el período.
                     </td>
 
@@ -169,4 +174,3 @@
         }));
     </script>
 @endscript
-

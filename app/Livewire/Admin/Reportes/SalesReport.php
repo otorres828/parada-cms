@@ -44,7 +44,6 @@ class SalesReport extends Component
     {
         return view('livewire.admin.reportes.sales-report', [
             'rows' => $this->query()->paginate($this->per_page),
-            'columns' => $this->columns(),
             'report' => 'sales',
         ]);
     }
@@ -52,11 +51,6 @@ class SalesReport extends Component
     public function updated(): void
     {
         $this->resetPage();
-    }
-
-    protected function columns(): array
-    {
-        return ['fecha' => 'Fecha', 'cantidad' => 'Reservas pagadas', 'total' => 'Ventas', 'tasas' => 'Tasas'];
     }
 
     protected function query()

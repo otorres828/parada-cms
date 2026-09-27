@@ -271,8 +271,8 @@ class Reserva extends ModelHelper
             ->join('viajes', 'viajes.id', '=', 'programaciones.viaje_id')
             ->join('empresas', 'empresas.id', '=', 'viajes.empresa_id')
             ->join('tipos_cambios', 'tipos_cambios.id', '=', 'reservas.tipos_cambios_id')
-            ->selectRaw('empresas.id, empresas.nombre, COUNT(*) as cantidad, SUM(reservas.monto_total) as total, SUM(reservas.monto_total * tipos_cambios.valor_usd) as total_bs, SUM(reservas.tasa_servicio) as tasas, SUM(reservas.tasa_servicio * tipos_cambios.valor_usd) as tasas_bs')
-            ->groupBy('empresas.id', 'empresas.nombre')
+            ->selectRaw('empresas.id, empresas.nombre, empresas.tipo_entidad, COUNT(*) as cantidad, SUM(reservas.monto_total) as total, SUM(reservas.monto_total * tipos_cambios.valor_usd) as total_bs, SUM(reservas.tasa_servicio) as tasas, SUM(reservas.tasa_servicio * tipos_cambios.valor_usd) as tasas_bs')
+            ->groupBy('empresas.id', 'empresas.nombre', 'empresas.tipo_entidad')
             ->orderByDesc('total');
     }
 

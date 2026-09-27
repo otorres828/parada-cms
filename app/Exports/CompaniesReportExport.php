@@ -24,6 +24,7 @@ class CompaniesReportExport extends DefaultValueBinder implements FromQuery, Wit
     {
         return [
             'Empresa',
+            'Tipo de entidad',
             'Reservas pagadas',
             'Ventas USD',
             'Ventas Bs',
@@ -36,6 +37,7 @@ class CompaniesReportExport extends DefaultValueBinder implements FromQuery, Wit
     {
         return [
             $row->nombre,
+            (new \App\Models\Empresa(['tipo_entidad' => $row->tipo_entidad]))->getTipoEntidad(),
             (int) $row->cantidad,
             (float) $row->total,
             (float) $row->total_bs,
