@@ -73,7 +73,8 @@
           {"name": "Listar empresas", "url": "list", "status": 1},
           {"name": "Consultar documentos", "url": "detail", "status": 1},
           {"name": "Subir documentos", "url": "add", "status": 1},
-          {"name": "Ver y descargar archivos", "url": "file", "status": 1}
+          {"name": "Ver y descargar archivos", "url": "file", "status": 1},
+          {"name": "Eliminar documentos", "url": "delete", "status": 1}
         ]
       }
     ]

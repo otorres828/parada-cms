@@ -138,6 +138,40 @@ class EmpresaDocumento extends Component
 
     }
 
+    public function deleteDocumento(int $documentoId): void
+    {
+        Access::authorize('legales', 'delete');
+
+        DB::transaction(function () use ($documentoId) {
+            $documento = DocumentoLegal::query()
+                ->where('empresa_id', $this->empresa_id)
+                ->lockForUpdate()
+                ->findOrFail($documentoId);
+
+            if (Storage::disk('local')->exists($documento->archivo)) {
+                $eliminado = Storage::disk('local')->delete($documento->archivo);
+
+                if (! $eliminado) {
+                    throw ValidationException::withMessages([
+                        'archivo' => 'No se pudo eliminar el archivo del documento.',
+                    ]);
+                }
+            }
+
+            Audit::record('legal.eliminado', $documento, [
+                'empresa_id' => $this->empresa_id,
+                'tipo' => $documento->tipo,
+                'titulo' => $documento->titulo,
+                'archivo' => $documento->archivo,
+            ]);
+
+            $documento->delete();
+        });
+
+        $this->resetPage();
+        $this->dispatch('successEventList', message: 'Documento eliminado correctamente.');
+    }
+
     public function updated($property): void
     {
         if (in_array($property, ['search', 'tipo_filtro', 'per_page'])) {

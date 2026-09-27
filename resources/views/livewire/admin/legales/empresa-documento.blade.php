@@ -11,6 +11,7 @@
     - <x-form.dropdown />: Selector con etiqueta para las opciones del formulario.
     - <x-list.button-group />: Agrupación de los botones de acción de una fila.
     - <x-list.view-button />: Enlace para consultar el detalle del registro.
+    - <x-list.delete-button />: Botón para eliminar definitivamente un documento.
     - <x-layout.loader.fullpage />: Indicador de carga durante las operaciones de Livewire.
     --------------------------------------------------------------------------
 --}}
@@ -269,6 +270,11 @@
                                                 class="bi bi-download"></i></a>
                                     @endif
 
+                                    @if ($canDelete)
+                                        <x-list.delete-button x-data
+                                            @click="$dispatch('confirmDeletion', { id: {{ $documento->id }} })" />
+                                    @endif
+
                                 </x-list.button-group>
 
                             </td>
@@ -296,7 +302,7 @@
         {{ $documentos->links() }}
     </div>
 
-    <x-layout.loader.fullpage wire:loading.delay.short wire:target="save" />
+    <x-layout.loader.fullpage wire:loading.delay.short wire:target="save,deleteDocumento" />
 
 </div>
 
@@ -314,6 +320,22 @@
                         if (this.$refs.archivo) this.$refs.archivo.value = '';
                         this.validator?.refresh();
                     })];
+
+                this.confirmDeletion = event => {
+                    Swal.fire({
+                        title: '¿Estás seguro de eliminar este documento?',
+                        text: 'El archivo y su registro se eliminarán definitivamente.',
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonText: 'Sí, eliminar',
+                        cancelButtonText: 'Cancelar',
+                    }).then(result => {
+                        if (result.isConfirmed) this.$wire.deleteDocumento(event.detail.id);
+                    });
+                };
+
+                window.addEventListener('confirmDeletion', this.confirmDeletion);
+
                 this.$nextTick(() => {
                     if (!this.$refs.form) return;
                     this.validator = new JustValidate(this.$refs.form, {
@@ -347,6 +369,7 @@
             destroy() {
                 this.validator?.destroy();
                 this.cleanups?.forEach(cleanup => cleanup());
+                window.removeEventListener('confirmDeletion', this.confirmDeletion);
             }
         }));
     </script>

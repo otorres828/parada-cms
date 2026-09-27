@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Storage;
 
 $app->instance('env', 'testing');
 Storage::fake('public');
+Storage::fake('local');
 Artisan::call('db:seed', ['--class' => Database\Seeders\GroupSectionPermissionAdminSeeder::class, '--force' => true]);
 
 foreach (ContenidoSitio::PAGINAS as $pagina => $titulo) {
@@ -44,6 +45,24 @@ $politicasHtml = (string) Livewire\Livewire::mount(
     ['empresa_id' => $empresa->id],
 );
 $assert(str_contains($politicasHtml, 'Llegar con antelación.'), 'Políticas visibles');
+
+$rutaDocumento = 'legales/'.$empresa->id.'/contrato-prueba.pdf';
+Storage::disk('local')->put($rutaDocumento, 'contenido de prueba');
+$documento = App\Models\DocumentoLegal::create([
+    'empresa_id' => $empresa->id,
+    'admin_id' => $admin->id,
+    'titulo' => 'Contrato de prueba',
+    'tipo' => 'contrato',
+    'archivo' => $rutaDocumento,
+    'nombre_original' => 'contrato-prueba.pdf',
+    'mime' => 'application/pdf',
+    'tamano' => 19,
+]);
+$expediente = new App\Livewire\Admin\Legales\EmpresaDocumento;
+$expediente->mount($empresa->id);
+$expediente->deleteDocumento($documento->id);
+$assert(! App\Models\DocumentoLegal::whereKey($documento->id)->exists(), 'Eliminar registro documental');
+$assert(! Storage::disk('local')->exists($rutaDocumento), 'Eliminar archivo documental');
 
 foreach ([
     App\Livewire\Admin\PreguntasFrecuentes\ListPregunta::class => [],
