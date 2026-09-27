@@ -5,6 +5,8 @@
 
     Componentes reutilizables utilizados:
     - <x-list.heading />: Cabecera de la página.
+    - <x-form.cancel-button />: Regresa al listado de documentos legales.
+    - <x-form.rich-text-editor />: Editor TinyMCE sincronizado con Livewire.
     - <x-layout.error />: Resumen de errores de validación.
     - <x-layout.loader.fullpage />: Indicador global de carga.
     --------------------------------------------------------------------------
@@ -15,7 +17,19 @@
 <div x-data="contenidoPagina">
 
     <x-list.heading>
-        <x-slot:title>{{ $titulo }}</x-slot:title>
+
+        <x-slot:title>
+            {{ $titulo }}
+        </x-slot:title>
+
+        <x-slot:button>
+
+            <x-form.cancel-button :link="route('admin.legales.documentos.list')">
+                Volver
+            </x-form.cancel-button>
+
+        </x-slot:button>
+
     </x-list.heading>
 
     <x-layout.error />
@@ -24,17 +38,12 @@
 
         <div class="col-xl-8">
 
-            <form wire:submit="save" class="card card-body">
+            <form wire:submit="save">
 
-                <label for="contenido-pagina" class="form-label">
-                    Contenido de la página
-                </label>
-
-                <textarea id="contenido-pagina" class="form-control mb-2" rows="20" wire:model="contenido"
-                    required></textarea>
+                <x-form.rich-text-editor id="contenido-pagina" model="contenido" />
 
                 <div class="form-text mb-3">
-                    Escribe el texto con los párrafos que se mostrarán en el sitio.
+                    Utiliza el editor para aplicar títulos, listas, enlaces, tablas y formato al contenido público.
                 </div>
 
                 <div>

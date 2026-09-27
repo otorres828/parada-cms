@@ -72,7 +72,7 @@
                 'existe' => $listLegales,
                 'route' => route('admin.legales.documentos.list'),
                 'name' => 'Legales',
-                'active' => request()->routeIs('admin.legales.*') ? 'active' : '',
+                'active' => request()->routeIs('admin.legales.documentos.*') ? 'active' : '',
             ],
             [
                 'existe' => $editSobreNosotros,
