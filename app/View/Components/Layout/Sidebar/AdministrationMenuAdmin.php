@@ -57,8 +57,6 @@ class AdministrationMenuAdmin extends Component
 
     public bool $listPreguntas = false;
 
-    public bool $listCentroAyuda = false;
-
     public bool $editSobreNosotros = false;
 
     public bool $editPrivacidad = false;
@@ -110,7 +108,6 @@ class AdministrationMenuAdmin extends Component
             'listExoneracionesTasaServicio' => ['exoneraciones-tasa-servicio', 'list'],
             'listAuditoria' => ['auditoria', 'list'],
             'listSolicitudes' => ['solicitudes', 'list'],
-            'listCentroAyuda' => ['centro-ayuda', 'list'],
         ]);
 
         foreach ($permissions as $property => $hasPermission) {

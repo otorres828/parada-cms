@@ -41,16 +41,9 @@
 
             <div class="col-md-6">
 
-                <div class="card card-body">
+                <div class="card ">
 
-                    <dl class="row mb-0">
-                        <dt class="col-sm-4">Empresa</dt>
-                        <dd class="col-sm-8">{{ $empresa->nombre }}</dd>
-                        <dt class="col-sm-4">RIF</dt>
-                        <dd class="col-sm-8">{{ $empresa->rif }}</dd>
-                        <dt class="col-sm-4">Correo</dt>
-                        <dd class="col-sm-8 text-break">{{ $empresa->email }}</dd>
-                    </dl>
+                    <x-empresas.description :empresa="$empresa" />
 
                 </div>
 
@@ -269,9 +262,9 @@
                                 <x-list.button-group>
 
                                     @if ($canFile)
-                                        <x-list.view-button :route="route('admin.legales.file', [$empresa_id, $documento->id])" :target="true" />
+                                        <x-list.view-button :route="route('admin.legales.documentos.file', [$empresa_id, $documento->id])" :target="true" />
                                         <a class="btn btn-outline-secondary"
-                                            href="{{ route('admin.legales.file', [$empresa_id, $documento->id, 'download' => 1]) }}"
+                                            href="{{ route('admin.legales.documentos.file', [$empresa_id, $documento->id, 'download' => 1]) }}"
                                             title="Descargar documento" aria-label="Descargar documento"><i
                                                 class="bi bi-download"></i></a>
                                     @endif

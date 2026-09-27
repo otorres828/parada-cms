@@ -21,8 +21,6 @@ trait Permissions
 
     public bool $canReview = false;
 
-    public bool $canReply = false;
-
     public function checkPermissions(string $module, array $permissions = []): void
     {
         $admin = Admin::find(Auth::guard('admin')->id());

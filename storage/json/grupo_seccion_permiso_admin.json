@@ -193,14 +193,6 @@
   },
   {"id": 10, "name": "Soporte", "url": "soporte", "icon": "bi-headset", "status": 1,
     "sections": [
-      {"name": "Solicitudes de centro de ayuda", "url": "centro-ayuda", "status": 1,
-        "permissions": [
-          {"name": "Listar", "url": "list", "status": 1},
-          {"name": "Ver detalle", "url": "detail", "status": 1},
-          {"name": "Responder", "url": "reply", "status": 1},
-          {"name": "Cambiar estado", "url": "edit", "status": 1}
-        ]
-      },
       {"name": "Solicitudes", "url": "solicitudes", "status": 1,
         "permissions": [
           {"name": "Listar", "url": "list", "status": 1},

@@ -136,9 +136,6 @@ class CheckPermission
         'admin.solicitudes.list' => ['solicitudes', 'list'],
         'admin.solicitudes.detail' => ['solicitudes', 'detail'],
 
-        // Centro de ayuda
-        'admin.centro-ayuda.list' => ['centro-ayuda', 'list'],
-        'admin.centro-ayuda.detail' => ['centro-ayuda', 'detail'],
     ];
 
     /* ----------------------------------------Mi cuenta---------------------------------------- */

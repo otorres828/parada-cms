@@ -235,7 +235,7 @@
     ])
 @endif
 
-@if ($listSolicitudes or $listCentroAyuda)
+@if ($listSolicitudes)
     @include('components.layout.sidebar-li', [
         'menu' => 'Soporte',
         'icon' => 'nav-icon bi bi-headset',
@@ -245,12 +245,6 @@
                 'route' => route('admin.solicitudes.list'),
                 'name' => 'Contacto',
                 'active' => request()->routeIs('admin.solicitudes.*') ? 'active' : '',
-            ],
-            [
-                'existe' => $listCentroAyuda,
-                'route' => route('admin.centro-ayuda.list'),
-                'name' => 'Centro de ayuda',
-                'active' => request()->routeIs('admin.centro-ayuda.*') ? 'active' : '',
             ],
         ],
     ])

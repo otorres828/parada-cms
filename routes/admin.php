@@ -87,11 +87,6 @@ use App\Livewire\Admin\Reportes\SalesReport;
 /* ------------------------------Solicitudes de Nuevas Empresas-------------------- */
 use App\Livewire\Admin\Solicitudes\DetailSolicitud;
 use App\Livewire\Admin\Solicitudes\ListSolicitud;
-/* ------------------------------Centro de Ayuda------------------------------------ */
-use App\Livewire\Admin\CentroAyuda\DetailTicket;
-use App\Livewire\Admin\CentroAyuda\ListTicket;
-
-
 /*
 | Authentication Routes
 |--------------------------------------------------------------------------
@@ -378,15 +373,6 @@ Route::group(['middleware' => ['auth:admin', 'check.permisos']], function () {
 
             Route::livewire('/', ListSolicitud::class)->name('list');
             Route::livewire('detalle/{solicitud_id}', DetailSolicitud::class)->whereNumber('solicitud_id')->name('detail');
-
-        });
-
-        /* ----------------------------------------Centro de ayuda------------------------------------------------------ */
-
-        Route::prefix('centro-ayuda')->name('centro-ayuda.')->group(function () {
-
-            Route::livewire('/', ListTicket::class)->name('list');
-            Route::livewire('detalle/{ticket_id}', DetailTicket::class)->whereNumber('ticket_id')->name('detail');
 
         });
 
