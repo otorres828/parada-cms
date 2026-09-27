@@ -43,8 +43,9 @@ use App\Livewire\Admin\Clientes\ListCliente;
 use App\Livewire\Admin\Clientes\SaveCliente;
 use App\Livewire\Admin\Clientes\DetailCliente;
 /* ------------------------------Legales------------------------------------------- */
-use App\Livewire\Admin\Legales\ListLegal;
-use App\Livewire\Admin\Legales\EmpresaLegal;
+use App\Livewire\Admin\Legales\ListDocumentos;
+use App\Livewire\Admin\Legales\EmpresaDocumento;
+/* ------------------------------Politicas----------------------------------------- */
 use App\Livewire\Admin\Legales\ContenidoPagina;
 /* ------------------------------Rutas de viajes----------------------------------- */
 use App\Livewire\Admin\Viajes\ListViaje;
@@ -202,8 +203,8 @@ Route::group(['middleware' => ['auth:admin', 'check.permisos']], function () {
 
         Route::prefix('documentos')->name('documentos.')->group(function () {
 
-            Route::livewire('/', ListLegal::class)->name('list');
-            Route::livewire('empresa/{empresa_id}', EmpresaLegal::class)->whereNumber('empresa_id')->name('detail');
+            Route::livewire('/', ListDocumentos::class)->name('list');
+            Route::livewire('empresa/{empresa_id}', EmpresaDocumento::class)->whereNumber('empresa_id')->name('detail');
             Route::get('empresa/{empresa_id}/documento/{documento_id}', [DocumentoLegalController::class, 'show'])->whereNumber('empresa_id')->whereNumber('documento_id')->name('file');
 
         });

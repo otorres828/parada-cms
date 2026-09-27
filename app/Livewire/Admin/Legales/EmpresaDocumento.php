@@ -19,7 +19,7 @@ use Livewire\WithFileUploads;
 use Livewire\WithPagination;
 
 #[Layout('layouts.cms')]
-class EmpresaLegal extends Component
+class EmpresaDocumento extends Component
 {
     use Listing, Permissions, WithFileUploads, WithPagination;
 
@@ -73,7 +73,7 @@ class EmpresaLegal extends Component
 
         $documentos = $this->applySort($query)->paginate($this->per_page);
 
-        return view('livewire.admin.legales.empresa-legal', [
+        return view('livewire.admin.legales.empresa-documento', [
             'documentos' => $documentos,
         ]);
     }
@@ -124,8 +124,17 @@ class EmpresaLegal extends Component
             throw $e;
         }
 
-        session()->flash('admin_success', 'Documento guardado correctamente.');
-        $this->redirect(route('admin.legales.documentos.list'), navigate: true);
+        $this->reset([
+            'titulo',
+            'observaciones',
+            'archivo',
+        ]);
+        $this->tipo = 'contrato';
+        $this->resetValidation();
+        $this->resetPage();
+
+        $this->dispatch('legalSaved');
+        $this->dispatch('successEventList', message: 'Documento guardado correctamente.');
 
     }
 

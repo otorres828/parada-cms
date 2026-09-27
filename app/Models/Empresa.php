@@ -162,6 +162,14 @@ class Empresa extends ModelHelper
             $query->withCount('documentosLegales');
         }
 
+        if (! empty($filters['tipo_entidad'])) {
+            $query->where('empresas.tipo_entidad', $filters['tipo_entidad']);
+        }
+
+        if (! empty($filters['tipo_contrato'])) {
+            $query->where('empresas.tipo_contrato', $filters['tipo_contrato']);
+        }
+
         return $query;
     }
 

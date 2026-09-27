@@ -45,7 +45,7 @@ class AdministrationMenuAdmin extends Component
 
     public bool $exchangeRatesReport = false;
 
-    public bool $listLegales = false;
+    public bool $listDocumentos = false;
 
     public bool $listTasasServicio = false;
 
@@ -99,7 +99,7 @@ class AdministrationMenuAdmin extends Component
             'salesReportes' => ['reportes', 'list-sales'],
             'companiesReportes' => ['reportes', 'list-companies'],
             'exchangeRatesReport' => ['reportes', 'list-exchange-rates'],
-            'listLegales' => ['legales', 'list'],
+            'listDocumentos' => ['legales', 'list'],
             'editSobreNosotros' => ['sobre-nosotros', 'edit'],
             'editPrivacidad' => ['politicas-privacidad', 'edit'],
             'editCookies' => ['politicas-cookies', 'edit'],

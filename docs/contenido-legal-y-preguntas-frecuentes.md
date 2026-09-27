@@ -3,6 +3,7 @@
 ## Administración
 
 - Catálogos → Preguntas frecuentes: listado, búsqueda, creación, edición, orden, activación y eliminación.
+- Legales → Documentos: expedientes documentales de las empresas.
 - Legales → Sobre nosotros, Políticas de privacidad, Políticas de cookies y Términos y condiciones: un formulario por página.
 - Empresas → editar: políticas opcionales de embarque y desembarque. Su detalle enlaza a la lectura de políticas con el mismo permiso `empresas/detail`.
 

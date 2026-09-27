@@ -1,5 +1,5 @@
 {{--
-    LEGALES — LISTADO
+    DOCUMENTOS — LISTADO DE EMPRESAS
     --------------------------------------------------------------------------
     Muestra las empresas en tarjetas para localizar y abrir sus expedientes documentales.
 
@@ -12,14 +12,14 @@
     --------------------------------------------------------------------------
 --}}
 
-@section('title', 'Legales')
+@section('title', 'Documentos')
 
-<div x-data="listLegal" class="py-3">
+<div x-data="listDocumentos" class="py-3">
 
     <x-list.heading>
 
         <x-slot:title>
-            Legales
+            Documentos
         </x-slot:title>
 
         <x-slot:button>
@@ -44,6 +44,42 @@
         </x-slot:group>
 
     </x-list.actions>
+
+    <div class="row g-3 mb-4">
+
+        <div class="col-md-4">
+
+            <label class="form-label" for="documentos-tipo-entidad">
+                Tipo de entidad
+            </label>
+
+            <select id="documentos-tipo-entidad" class="form-select" wire:model.live="tipo_entidad">
+
+                <option value="">Todos</option>
+                <option value="{{ \App\Models\Empresa::AGENCIA_AUTOBUS }}">Agencia de Autobús</option>
+                <option value="{{ \App\Models\Empresa::CONDUCTOR_CARRO }}">Conductor de carro</option>
+
+            </select>
+
+        </div>
+
+        <div class="col-md-4">
+
+            <label class="form-label" for="documentos-tipo-contrato">
+                Tipo de contrato
+            </label>
+
+            <select id="documentos-tipo-contrato" class="form-select" wire:model.live="tipo_contrato">
+
+                <option value="">Todos</option>
+                <option value="{{ \App\Models\Empresa::CONTRATO_ELLOS_RECIBEN }}">Ellos reciben</option>
+                <option value="{{ \App\Models\Empresa::CONTRATO_NOSOTROS_RECIBIMOS }}">La plataforma recibe</option>
+
+            </select>
+
+        </div>
+
+    </div>
 
     <div class="row g-3 mb-4">
 
@@ -103,7 +139,6 @@
 
 @script
     <script>
-        Alpine.data('listLegal', () => ({}));
+        Alpine.data('listDocumentos', () => ({}));
     </script>
 @endscript
-

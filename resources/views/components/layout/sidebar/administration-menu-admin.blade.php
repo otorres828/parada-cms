@@ -63,15 +63,15 @@
     ])
 @endif
 
-@if ($listLegales or $editSobreNosotros or $editPrivacidad or $editCookies or $editTerminos)
+@if ($listDocumentos or $editSobreNosotros or $editPrivacidad or $editCookies or $editTerminos)
     @include('components.layout.sidebar-li', [
         'menu' => 'Legales',
         'icon' => 'nav-icon bi bi-file-earmark-text',
         'list' => [
             [
-                'existe' => $listLegales,
+                'existe' => $listDocumentos,
                 'route' => route('admin.legales.documentos.list'),
-                'name' => 'Legales',
+                'name' => 'Documentos',
                 'active' => request()->routeIs('admin.legales.documentos.*') ? 'active' : '',
             ],
             [

@@ -17,12 +17,12 @@
 
 @section('title', 'Documentos legales')
 
-<div x-data="empresaLegal" class="py-3">
+<div x-data="empresaDocumento" class="py-3">
 
     <x-list.heading>
 
         <x-slot:title>
-            Legales · {{ $empresa->nombre }}
+            Documentos · {{ $empresa->nombre }}
         </x-slot:title>
 
         <x-slot:button>
@@ -302,7 +302,7 @@
 
 @script
     <script>
-        Alpine.data('empresaLegal', () => ({
+        Alpine.data('empresaDocumento', () => ({
             saving: false,
             uploading: false,
             validator: null,
