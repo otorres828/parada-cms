@@ -206,13 +206,17 @@ Route::group(['middleware' => ['auth:admin', 'check.permisos']], function () {
 
         });
 
-        Route::livewire('sobre-nosotros', ContenidoPagina::class)->name('sobre-nosotros.edit');
+        Route::livewire('sobre-nosotros', ContenidoPagina::class)
+        ->defaults('pagina', 'sobre-nosotros')->name('sobre-nosotros.edit');
 
-        Route::livewire('politicas-privacidad', ContenidoPagina::class)->name('politicas-privacidad.edit');
+        Route::livewire('politicas-privacidad', ContenidoPagina::class)
+        ->defaults('pagina', 'politicas-privacidad')->name('politicas-privacidad.edit');
 
-        Route::livewire('politicas-cookies', ContenidoPagina::class)->name('politicas-cookies.edit');
+        Route::livewire('politicas-cookies', ContenidoPagina::class)
+        ->defaults('pagina', 'politicas-cookies')->name('politicas-cookies.edit');
 
-        Route::livewire('terminos-condiciones', ContenidoPagina::class)->name('terminos-condiciones.edit');
+        Route::livewire('terminos-condiciones', ContenidoPagina::class)
+        ->defaults('pagina', 'terminos-condiciones')->name('terminos-condiciones.edit');
 
 
     });
