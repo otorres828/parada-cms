@@ -1,5 +1,5 @@
 {{--
-    TABLA DE PROGRAMACIONES DEL AUTOBÚS | Presenta las salidas y sus resultados comerciales.
+    TABLA DE PROGRAMACIONES DEL TRANSPORTE | Presenta las salidas y sus resultados comerciales.
 --}}
 
 @props(['programaciones', 'canViewPassengers', 'tipoCambio' => null])

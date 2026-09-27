@@ -27,7 +27,7 @@ class PassengerProgramacion extends Component
 
     public bool $canViajesDetail = false;
 
-    public bool $canAutobusesDetail = false;
+    public bool $canTransportesDetail = false;
 
     public function mount(?int $programacion_id = null): void
     {
@@ -43,7 +43,7 @@ class PassengerProgramacion extends Component
         $this->tickets = Pasaje::getTickets($programacion_id);
         $this->canReservasDetail = Access::allows('reservas', 'detail');
         $this->canViajesDetail = Access::allows('viajes', 'detail');
-        $this->canAutobusesDetail = Access::allows('autobuses', 'detail');
+        $this->canTransportesDetail = Access::allows('transportes', 'detail');
 
     }
 
@@ -61,7 +61,7 @@ class PassengerProgramacion extends Component
 
         return view('livewire.admin.programaciones.passenger-programacion', [
             'disponibilidadTramos' => $disponibilidad[$this->programacion_id],
-            'capacidad' => max(0, min((int) $this->programacion->asientos_totales, (int) $this->programacion->autobus?->total_asientos)),
+            'capacidad' => max(0, min((int) $this->programacion->asientos_totales, (int) $this->programacion->transporte?->total_asientos)),
             'pasajesPagados' => $this->resumenPasajes($pasajesPagados),
             'pasajesPendientes' => $this->resumenPasajes($pasajesPendientes),
             'tipoCambioVigente' => TipoCambio::vigente(),
@@ -79,7 +79,7 @@ class PassengerProgramacion extends Component
                 'viaje.tramos.destinoTerminal',
                 'tramoPrecios.origenTerminal',
                 'tramoPrecios.destinoTerminal',
-                'autobus.amenidades',
+                'transporte.amenidades',
             ])
             ->findOrFail($this->programacion_id);
     }

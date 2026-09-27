@@ -7,6 +7,7 @@
 <div class="card-body">
 
     <dl class="row mb-0">
+        <dt class="col-sm-4">Tipo de entidad</dt><dd class="col-sm-8">{{ $empresa->getTipoEntidad() }}</dd>
         <dt class="col-sm-4">Empresa</dt>
         <dd class="col-sm-8">
             {{ $empresa->nombre ?? '—' }}

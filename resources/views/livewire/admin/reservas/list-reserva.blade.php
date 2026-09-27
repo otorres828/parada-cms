@@ -127,6 +127,7 @@
 
                 <th>Empresa </th>
 
+                <th>Tipo de transporte</th>
                 <th>Origen</th>
 
                 <th>Destino final</th>
@@ -168,6 +169,7 @@
                         {{ $reserva->programacion?->viaje?->empresa?->nombre ?? '—' }}
                     </td>
 
+                    <td>{{ $reserva->programacion?->transporte?->getTipoTransporte() ?? 'No registrado' }}</td>
                     <td>
                         {{ $reserva->origenTerminal?->nombre ?? 'No registrado' }}
                     </td>
@@ -208,7 +210,7 @@
             @empty
 
                 <tr>
-                    <td colspan="10" class="text-center py-5">
+                    <td colspan="11" class="text-center py-5">
                         No se encontraron registros.
                     </td>
 

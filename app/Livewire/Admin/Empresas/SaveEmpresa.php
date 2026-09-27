@@ -17,6 +17,8 @@ class SaveEmpresa extends Component
     #[Locked]
     public ?int $empresa_id = null;
 
+    public string $tipo_entidad = Empresa::AGENCIA_AUTOBUS;
+
     public string $nombre = '';
 
     public string $rif = '';
@@ -63,6 +65,7 @@ class SaveEmpresa extends Component
 
             Access::authorize('empresas', $this->empresa_id ? 'edit' : 'add');
             $empresa = $this->empresa_id ? $this->findEmpresa() : new Empresa;
+            $empresa->tipo_entidad = $data['tipo_entidad'];
             $empresa->nombre = $data['nombre'];
             $empresa->rif = $data['rif'];
             $empresa->telefono = $data['telefono'];
@@ -94,6 +97,7 @@ class SaveEmpresa extends Component
     protected function editar(Empresa $empresa): void
     {
         $this->empresa = $empresa;
+        $this->tipo_entidad = $empresa->tipo_entidad;
         $this->nombre = $empresa->nombre ?? '';
         $this->rif = $empresa->rif ?? '';
         $this->telefono = $empresa->telefono ?? '';
@@ -109,6 +113,7 @@ class SaveEmpresa extends Component
     protected function validateForm(): array
     {
         $validated = $this->validate([
+            'tipo_entidad' => ['required', 'in:agencia_autobus,conductor_carro'],
             'nombre' => ['required', 'string', 'max:255'],
             'rif' => ['required', 'string', 'max:255'],
             'telefono' => ['required', 'string', 'max:255'],
@@ -120,6 +125,7 @@ class SaveEmpresa extends Component
             'hora_vencimiento' => ['required', 'date_format:H:i'],
             'estatus' => ['required', 'in:0,1'],
         ], [], [
+            'tipo_entidad' => 'Tipo de entidad',
             'nombre' => 'Nombre',
             'rif' => 'Identificación fiscal',
             'telefono' => 'Teléfono',

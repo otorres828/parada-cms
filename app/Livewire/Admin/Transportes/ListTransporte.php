@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Livewire\Admin\Autobuses;
+namespace App\Livewire\Admin\Transportes;
 
-use App\Models\Autobus;
+use App\Models\Transporte;
 use App\Models\Empresa;
 use App\Traits\Listing;
 use App\Traits\Permissions;
@@ -12,13 +12,15 @@ use Livewire\Component;
 use Livewire\WithPagination;
 
 #[Layout('layouts.cms')]
-class ListAutobus extends Component
+class ListTransporte extends Component
 {
     use Listing;
     use Permissions;
     use WithPagination;
 
     public string $empresa_id = '';
+
+    public string $tipo_transporte = '';
 
     public string $status = '';
 
@@ -29,35 +31,37 @@ class ListAutobus extends Component
         'search' => ['except' => ''],
         'per_page' => ['except' => 10],
         'status' => ['except' => ''],
+        'tipo_transporte' => ['except' => ''],
     ];
 
     public function mount(): void
     {
         $this->sortColumn = 'id';
         $this->sortDirection = 'desc';
-        $this->checkPermissions('autobuses', ['detail']);
+        $this->checkPermissions('transportes', ['detail']);
         $this->empresas = Empresa::searchAdmin()->orderBy('nombre')->get();
     }
 
     public function render()
     {
-        $query = Autobus::searchAdmin($this->search, [
+        $query = Transporte::searchAdmin($this->search, [
             'empresa_id' => $this->empresa_id,
             'status' => $this->status,
+            'tipo_transporte' => $this->tipo_transporte,
         ]);
 
         $query = $this->applySort($query);
 
-        $autobuses = $query->paginate($this->per_page);
+        $transportes = $query->paginate($this->per_page);
 
-        return view('livewire.admin.autobuses.list-autobus', [
-            'autobuses' => $autobuses,
+        return view('livewire.admin.transportes.list-transporte', [
+            'transportes' => $transportes,
         ]);
     }
 
     public function updated($property): void
     {
-        if (in_array($property, ['empresa_id', 'search', 'status', 'per_page'])) {
+        if (in_array($property, ['empresa_id', 'search', 'status', 'per_page', 'tipo_transporte'])) {
             $this->resetPage();
         }
     }

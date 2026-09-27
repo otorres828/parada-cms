@@ -3,7 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Amenidad;
-use App\Models\Autobus;
+use App\Models\Transporte;
 use App\Models\ConfiguracionCupon;
 use App\Models\DatoBancario;
 use App\Models\Empresa;
@@ -81,9 +81,9 @@ class AdminDemoSeeder extends Seeder
         $terminales = $this->crearTerminales();
         
         $empresas = [
-            ['nombre' => 'Expresos del Orinoco', 'rif' => 'J-40111222-1', 'email' => 'olivertorres1997@gmail.com@gmail.com'],
-            ['nombre' => 'Líneas Andinas', 'rif' => 'J-40222333-2', 'email' => 'olivertorres1997+1@gmail.com@gmail.com'],
-            ['nombre' => 'Transporte Costa Azul', 'rif' => 'J-40333444-3', 'email' => 'olivertorres1997+2@gmail.com@gmail.com'],
+            ['nombre' => 'Expresos del Orinoco', 'rif' => 'J-40111222-1', 'email' => 'olivertorres1997@gmail.com'],
+            ['nombre' => 'Líneas Andinas', 'rif' => 'J-40222333-2', 'email' => 'olivertorres1997+1@gmail.com'],
+            ['nombre' => 'Transporte Costa Azul', 'rif' => 'J-40333444-3', 'email' => 'olivertorres1997+2@gmail.com'],
         ];
 
         foreach ($empresas as $empresaIndice => $datosEmpresa) {
@@ -91,13 +91,13 @@ class AdminDemoSeeder extends Seeder
             $datoBancario = $this->crearDatoBancario($empresa, $empresaIndice);
             $this->crearUsuariosEmpresa($empresa, $empresaIndice);
             $this->crearCampanaPrimeraCompra($empresa, $empresaIndice);
-            $autobuses = $this->crearAutobuses($empresa, $empresaIndice, $amenidades);
+            $transportes = $this->crearTransportes($empresa, $empresaIndice, $amenidades);
             $viajes = $this->crearViajes($empresa, $empresaIndice, $terminales);
             $this->crearProgramacionesYReservas(
                 $empresa,
                 $empresaIndice,
                 $datoBancario,
-                $autobuses,
+                $transportes,
                 $viajes,
                 $terminales,
             );
@@ -113,6 +113,7 @@ class AdminDemoSeeder extends Seeder
             'Aire acondicionado' => 'bi-snow',
             'Cargador USB' => 'bi-usb-plug',
             'Baño' => 'bi-door-open',
+            'Agua' => 'bi-droplet',
         ])->map(function ($icono, $nombre) {
             return Amenidad::updateOrCreate(
                 ['nombre' => $nombre],
@@ -226,12 +227,12 @@ class AdminDemoSeeder extends Seeder
         );
     }
 
-    private function crearAutobuses(Empresa $empresa, int $empresaIndice, $amenidades): array
+    private function crearTransportes(Empresa $empresa, int $empresaIndice, $amenidades): array
     {
-        $autobuses = [];
+        $transportes = [];
 
         foreach ([1, 2] as $numero) {
-            $autobus = Autobus::updateOrCreate(
+            $transporte = Transporte::updateOrCreate(
                 ['placa' => 'BUS-'.($empresaIndice + 1).'-'.$numero],
                 [
                     'empresa_id' => $empresa->id,
@@ -243,11 +244,11 @@ class AdminDemoSeeder extends Seeder
                 ],
             );
 
-            $autobus->amenidades()->sync($amenidades->pluck('id')->all());
-            $autobuses[] = $autobus;
+            $transporte->amenidades()->sync($amenidades->pluck('id')->all());
+            $transportes[] = $transporte;
         }
 
-        return $autobuses;
+        return $transportes;
     }
 
     private function crearViajes(Empresa $empresa, int $empresaIndice, array $terminales): array
@@ -297,7 +298,7 @@ class AdminDemoSeeder extends Seeder
         Empresa $empresa,
         int $empresaIndice,
         DatoBancario $datoBancario,
-        array $autobuses,
+        array $transportes,
         array $viajes,
         array $terminales,
     ): void {
@@ -306,11 +307,11 @@ class AdminDemoSeeder extends Seeder
         foreach (range(0, 9) as $programacionIndice) {
             $fechaSalida = $hoy->copy()->subDays(9 - $programacionIndice);
             $ruta = $viajes[$programacionIndice % count($viajes)];
-            $autobus = $autobuses[$programacionIndice % count($autobuses)];
+            $transporte = $transportes[$programacionIndice % count($transportes)];
             $programacion = Programacion::updateOrCreate(
                 [
                     'viaje_id' => $ruta['modelo']->id,
-                    'autobus_id' => $autobus->id,
+                    'transporte_id' => $transporte->id,
                     'fecha_salida' => $fechaSalida->toDateString(),
                     'hora_salida' => '18:00:00',
                 ],
@@ -394,12 +395,14 @@ class AdminDemoSeeder extends Seeder
 
         foreach (range(1, $ocupacion) as $asiento) {
             $secuenciaGlobal = ($empresaIndice * 1000) + ($programacionIndice * 100) + $asiento;
-            $referencia = sprintf('RES-%02d-%02d-%03d', $empresaIndice + 1, $programacionIndice + 1, $asiento);
+            $referenciaAnterior = sprintf('RES-%02d-%02d-%03d', $empresaIndice + 1, $programacionIndice + 1, $asiento);
+            $prefijo = $programacion->transporte->tipo_transporte === Transporte::CARRO ? 'CA' : 'AU';
+            $referencia = $prefijo.'-'.sprintf('%010X', $secuenciaGlobal);
             $fechaCompra = $programacionIndice % 2 === 0
                 ? $fechaSalida->copy()->subDay()->setTime(16, 0)
                 : $fechaSalida->copy()->setTime(10, 0);
             $relojAnterior = Carbon::getTestNow();
-            $existente = Reserva::where('codigo_referencia', $referencia)->first();
+            $existente = Reserva::whereIn('codigo_referencia', [$referencia, $referenciaAnterior])->first();
 
             if ($existente?->estado_pago === Reserva::ESTADO_PAGO_PENDIENTE) {
                 try {

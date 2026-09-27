@@ -58,7 +58,7 @@ class ReservaService
             }
 
             $programacion = Programacion::query()
-                ->with(['viaje.tramos', 'viaje.empresa', 'autobus'])
+                ->with(['viaje.tramos', 'viaje.empresa', 'transporte'])
                 ->findOrFail($tarifa->programacion_id);
 
             $terminales = Terminal::obtenerSecuenciaRuta($programacion);
@@ -88,6 +88,13 @@ class ReservaService
                 : '0.00';
 
             $reserva ??= new Reserva;
+            $prefijo = $programacion->transporte->tipo_transporte === \App\Models\Transporte::CARRO ? 'CA' : 'AU';
+            if (! preg_match('/^'.$prefijo.'-[A-Z0-9]{10}$/', $reserva->codigo_referencia ?? '')) {
+                do {
+                    $codigo = $prefijo.'-'.strtoupper(Str::random(10));
+                } while (Reserva::where('codigo_referencia', $codigo)->exists());
+                $reserva->codigo_referencia = $codigo;
+            }
             $reserva->fill([
                 'usuario_id' => $cliente->id,
                 'programacion_id' => $programacion->id,
@@ -96,7 +103,7 @@ class ReservaService
                 'programacion_tramo_precio_id' => $tarifa->id,
                 'reprogramacion_id' => $reservaOriginal?->id,
                 'tipos_cambios_id' => $tipoCambio->id,
-                'codigo_referencia' => $reserva->codigo_referencia ?? (string) Str::ulid(),
+                'codigo_referencia' => $reserva->codigo_referencia,
                 'cupon_id' => null,
                 'monto_pasajes' => $tarifa->precio,
                 'descuento_aplicado' => '0.00',

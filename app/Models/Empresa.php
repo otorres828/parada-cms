@@ -10,6 +10,11 @@ class Empresa extends ModelHelper
 {
     use TraitGeneral;
 
+    public const AGENCIA_AUTOBUS = 'agencia_autobus';
+    public const CONDUCTOR_CARRO = 'conductor_carro';
+
+    protected $attributes = ['tipo_entidad' => self::AGENCIA_AUTOBUS];
+
     public const CONTRATO_ELLOS_RECIBEN = 1;
 
     public const CONTRATO_NOSOTROS_RECIBIMOS = 2;
@@ -18,6 +23,7 @@ class Empresa extends ModelHelper
 
     protected $fillable = [
         'nombre',
+        'tipo_entidad',
         'rif',
         'telefono',
         'email',
@@ -46,9 +52,9 @@ class Empresa extends ModelHelper
         return $this->hasMany(UsuarioEmpresa::class, 'empresa_id');
     }
 
-    public function autobuses(): HasMany
+    public function transportes(): HasMany
     {
-        return $this->hasMany(Autobus::class, 'empresa_id');
+        return $this->hasMany(Transporte::class, 'empresa_id');
     }
 
     public function viajes(): HasMany
@@ -87,6 +93,15 @@ class Empresa extends ModelHelper
             self::CONTRATO_ELLOS_RECIBEN => 'La empresa recibe los pagos',
             self::CONTRATO_NOSOTROS_RECIBIMOS => 'La plataforma recibe los pagos',
             default => 'Sin configurar',
+        };
+    }
+
+    public function getTipoEntidad(): string
+    {
+        return match ($this->tipo_entidad) {
+            self::AGENCIA_AUTOBUS => 'Agencia de Autobús',
+            self::CONDUCTOR_CARRO => 'Conductor de carro',
+            default => 'No registrado',
         };
     }
 

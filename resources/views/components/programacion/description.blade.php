@@ -4,7 +4,7 @@
     'pasajesPagados',
     'pasajesPendientes',
     'canViajesDetail',
-    'canAutobusesDetail',
+    'canTransportesDetail',
 ])
 
 <div class="card h-100">
@@ -39,29 +39,29 @@
 
             <hr class="col-12 my-3">
 
-            <dt class="col-sm-4">Autobús</dt>
+            <dt class="col-sm-4">Transporte</dt>
             <dd class="col-sm-8">
-                @if ($canAutobusesDetail && $programacion->autobus_id)
-                    <a href="{{ route('admin.autobuses.detail', $programacion->autobus_id) }}" wire:navigate>
-                        {{ $programacion->autobus?->placa ?? '—' }}
+                @if ($canTransportesDetail && $programacion->transporte_id)
+                    <a href="{{ route('admin.transportes.detail', $programacion->transporte_id) }}" wire:navigate>
+                        {{ $programacion->transporte?->placa ?? '—' }}
                     </a>
                 @else
-                    {{ $programacion->autobus?->placa ?? '—' }}
+                    {{ $programacion->transporte?->placa ?? '—' }}
                 @endif
             </dd>
 
             <dt class="col-sm-4">Modelo</dt>
-            <dd class="col-sm-8">{{ $programacion->autobus?->modelo ?? '—' }}</dd>
+            <dd class="col-sm-8">{{ $programacion->transporte?->modelo ?? '—' }}</dd>
 
             <dt class="col-sm-4">Tipo de asiento</dt>
-            <dd class="col-sm-8">{{ $programacion->autobus?->tipo_asiento ?? '—' }}</dd>
+            <dd class="col-sm-8">{{ $programacion->transporte?->tipo_asiento ?? '—' }}</dd>
 
             <dt class="col-sm-4">Capacidad</dt>
             <dd class="col-sm-8">{{ $capacidad }} asientos</dd>
 
             <dt class="col-sm-4">Amenidades</dt>
             <dd class="col-sm-8">
-                {{ $programacion->autobus?->amenidades->pluck('nombre')->implode(', ') ?: 'Sin amenidades' }}
+                {{ $programacion->transporte?->amenidades->pluck('nombre')->implode(', ') ?: 'Sin amenidades' }}
             </dd>
 
             <hr class="col-12 my-3">

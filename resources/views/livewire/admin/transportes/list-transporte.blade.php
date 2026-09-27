@@ -1,7 +1,7 @@
 {{--
-    AUTOBUSES — LISTADO
+    TRANSPORTES — LISTADO
     --------------------------------------------------------------------------
-    Permite consultar los autobuses de las empresas. Incluye búsqueda, ordenación y paginación.
+    Permite consultar los transportes de las empresas. Incluye búsqueda, ordenación y paginación.
     Ofrece los filtros disponibles en la pantalla. Presenta las acciones de cada registro según
     las autorizaciones del administrador.
 
@@ -18,14 +18,14 @@
     --------------------------------------------------------------------------
 --}}
 
-@section('title', 'Autobuses')
+@section('title', 'Transportes')
 
-<div x-data="listAutobus" class="py-3">
+<div x-data="listTransporte" class="py-3">
 
     <x-list.heading>
 
         <x-slot:title>
-            Autobuses
+            Transportes
         </x-slot:title>
 
     </x-list.heading>
@@ -45,6 +45,14 @@
     </x-list.actions>
 
     <div class="row g-3 mb-3">
+            <div class="col-md-3">
+                <label class="form-label" for="tipo-transporte">Tipo de transporte</label>
+                <select id="tipo-transporte" class="form-select" wire:model.live="tipo_transporte">
+                    <option value="">Todos los transportes</option>
+                    <option value="autobus">Autobús</option>
+                    <option value="carro">Carro</option>
+                </select>
+            </div>
 
         <div class="col-md-3">
 
@@ -66,11 +74,11 @@
 
         <div class="col-md-3">
 
-            <label class="form-label" for="listAutobus-status">
+            <label class="form-label" for="listTransporte-status">
                 Estado
             </label>
 
-            <select id="listAutobus-status" class="form-select" wire:model.live="status">
+            <select id="listTransporte-status" class="form-select" wire:model.live="status">
 
                 <option value="">Todos</option>
                 <option value="1">Activo</option>
@@ -94,6 +102,7 @@
 
                 <th>Empresa </th>
 
+                <th>Tipo de transporte</th>
                 <th>Placa
                     <x-list.sortable-button column="placa" :$sortColumn :$sortDirection />
                 </th>
@@ -118,31 +127,32 @@
 
         <tbody>
 
-            @forelse ($autobuses as $autobus)
-                <tr wire:key="listAutobus-{{ $autobus->id }}">
+            @forelse ($transportes as $transporte)
+                <tr wire:key="listTransporte-{{ $transporte->id }}">
 
                     <td>
-                        {{ $autobus->id }}
+                        {{ $transporte->id }}
                     </td>
 
                     <td>
-                        {{ $autobus->empresa?->nombre ?? '—' }}
+                        {{ $transporte->empresa?->nombre ?? '—' }}
+                    </td>
+
+                    <td>{{ $transporte->getTipoTransporte() }}</td>
+                    <td>
+                        {{ $transporte->placa ?? '—' }}
                     </td>
 
                     <td>
-                        {{ $autobus->placa ?? '—' }}
+                        {{ $transporte->modelo ?? '—' }}
                     </td>
 
                     <td>
-                        {{ $autobus->modelo ?? '—' }}
+                        {{ $transporte->total_asientos ?? '—' }}
                     </td>
 
                     <td>
-                        {{ $autobus->total_asientos ?? '—' }}
-                    </td>
-
-                    <td>
-                        <x-list.status-badge :status="$autobus->estatus" />
+                        <x-list.status-badge :status="$transporte->estatus" />
                     </td>
 
                     <td class="text-end">
@@ -150,7 +160,7 @@
                         <x-list.button-group>
 
                             @if ($canDetail)
-                                <x-list.view-button :route="route('admin.autobuses.detail', ['autobus_id' => $autobus->id])" :target="false" />
+                                <x-list.view-button :route="route('admin.transportes.detail', ['transporte_id' => $transporte->id])" :target="false" />
                             @endif
 
                         </x-list.button-group>
@@ -162,7 +172,7 @@
             @empty
 
                 <tr>
-                    <td colspan="7" class="text-center py-5">
+                    <td colspan="8" class="text-center py-5">
                         No se encontraron registros.
                     </td>
 
@@ -173,7 +183,7 @@
 
     </x-list.table>
 
-    {{ $autobuses->links() }}
+    {{ $transportes->links() }}
 
     <x-layout.loader.fullpage wire:loading.delay.short />
 
@@ -181,7 +191,7 @@
 
 @script
     <script>
-        Alpine.data('listAutobus', () => ({
+        Alpine.data('listTransporte', () => ({
             destroy() {
                 this.toastCleanup?.forEach(cleanup => cleanup());
             },

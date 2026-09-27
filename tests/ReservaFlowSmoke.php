@@ -1,7 +1,7 @@
 <?php
 
 use App\Models\Admin;
-use App\Models\Autobus;
+use App\Models\Transporte;
 use App\Models\ConfiguracionCupon;
 use App\Models\DatoBancario;
 use App\Models\Empresa;
@@ -55,9 +55,9 @@ $terminales = [];
 foreach (['Origen', 'Destino'] as $nombre) {
     $terminales[] = Terminal::create(['estado_id' => $estado->id, 'nombre' => $nombre, 'direccion' => 'Calle', 'latitud' => 0, 'longitud' => 0]);
 }
-$bus = Autobus::create(['empresa_id' => $empresa->id, 'modelo' => 'Bus', 'tipo_asiento' => 'Normal', 'total_asientos' => 2, 'estatus' => 1, 'es_plantilla' => false]);
+$bus = Transporte::create(['empresa_id' => $empresa->id, 'modelo' => 'Bus', 'tipo_asiento' => 'Normal', 'total_asientos' => 2, 'estatus' => 1, 'es_plantilla' => false]);
 $viaje = Viaje::create(['empresa_id' => $empresa->id, 'origen_terminal_id' => $terminales[0]->id, 'destino_terminal_id' => $terminales[1]->id, 'duracion_estimada' => '01:00:00', 'estatus' => 1]);
-$programacion = Programacion::create(['viaje_id' => $viaje->id, 'autobus_id' => $bus->id, 'fecha_salida' => today()->addDay(), 'hora_salida' => '18:00:00', 'asientos_totales' => 2, 'estatus' => 1]);
+$programacion = Programacion::create(['viaje_id' => $viaje->id, 'transporte_id' => $bus->id, 'fecha_salida' => today()->addDay(), 'hora_salida' => '18:00:00', 'asientos_totales' => 2, 'estatus' => 1]);
 $tarifa = ProgramacionTramoPrecio::create(['programacion_id' => $programacion->id, 'origen_terminal_id' => $terminales[0]->id, 'destino_terminal_id' => $terminales[1]->id, 'precio' => '10.00']);
 TasaServicio::create(['monto_minimo' => 0, 'monto_maximo' => null, 'cantidad' => 1, 'tipo_servicio' => 1, 'estatus' => 1]);
 $tipoCambio = TipoCambio::create(['valor_usd' => '500.00000000', 'valor_eur' => '590.00000000', 'valor' => 1]);

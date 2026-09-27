@@ -1,7 +1,7 @@
 {{--
     HOME PÚBLICO — PLATAFORMA PARADA
     --------------------------------------------------------------------------
-    Presenta la solución comercial para agencias de autobuses, resume las herramientas
+    Presenta la solución comercial para agencias de transportes, resume las herramientas
     operativas disponibles y captura solicitudes de empresas interesadas mediante Livewire.
 
     Componentes reutilizables utilizados:
@@ -16,7 +16,7 @@
     --------------------------------------------------------------------------
 --}}
 
-@section('title', 'Parada | Venta digital de pasajes para agencias de autobuses')
+@section('title', 'Parada | Venta digital de pasajes para agencias de transportes')
 
 <div>
 

@@ -48,9 +48,9 @@ use App\Livewire\Admin\Viajes\DetailViaje;
 /* ------------------------------Programaciones------------------------------------ */
 use App\Livewire\Admin\Programaciones\ListProgramacion;
 use App\Livewire\Admin\Programaciones\PassengerProgramacion;
-/* ------------------------------Autobuses----------------------------------------- */
-use App\Livewire\Admin\Autobuses\ListAutobus;
-use App\Livewire\Admin\Autobuses\DetailAutobus;
+/* ------------------------------Transportes----------------------------------------- */
+use App\Livewire\Admin\Transportes\ListTransporte;
+use App\Livewire\Admin\Transportes\DetailTransporte;
 /* ------------------------------Reservas------------------------------------------ */
 use App\Livewire\Admin\Reservas\ListReserva;
 use App\Livewire\Admin\Reservas\DetailReserva;
@@ -210,12 +210,12 @@ Route::group(['middleware' => ['auth:admin', 'check.permisos']], function () {
 
     });
 
-    /* ----------------------------------------Autobuses: supervision-------------------------------------- */
+    /* ----------------------------------------Transportes: supervision-------------------------------------- */
 
-    Route::prefix('autobuses')->name('autobuses.')->group(function () {
+    Route::prefix('transportes')->name('transportes.')->group(function () {
 
-        Route::livewire('/', ListAutobus::class)->name('list');
-        Route::livewire('detalle/{autobus_id}', DetailAutobus::class)->whereNumber('autobus_id')->name('detail');
+        Route::livewire('/', ListTransporte::class)->name('list');
+        Route::livewire('detalle/{transporte_id}', DetailTransporte::class)->whereNumber('transporte_id')->name('detail');
 
     });
 

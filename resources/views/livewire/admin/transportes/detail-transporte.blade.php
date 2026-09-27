@@ -1,35 +1,37 @@
 {{--
-    AUTOBUSES — DETALLE
+    TRANSPORTES — DETALLE
     --------------------------------------------------------------------------
-    Presenta la empresa, placa, modelo, capacidad y estado del autobús. Incluye la tabla de
+    Presenta la empresa, placa, modelo, capacidad y estado del transporte. Incluye la tabla de
     programaciones consultadas, con el precio de la primera tarifa asociada, boletos pagados y
     pendientes, ventas y tasas de servicio.
 
     Componentes reutilizables utilizados:
-    - <x-autobuses.description />: Ficha descriptiva del autobús.
-    - <x-autobuses.programaciones-table />: Historial de programaciones del autobús.
+    - <x-transportes.description />: Ficha descriptiva del transporte.
+    - <x-transportes.programaciones-table />: Historial de programaciones del transporte.
     - <x-form.cancel-button />: Enlace para regresar al listado anterior.
     - <x-layout.loader.fullpage />: Indicador global durante operaciones de Livewire.
     - <x-list.heading />: Cabecera del módulo con título y acciones.
     --------------------------------------------------------------------------
 --}}
 
-@section('title', 'Autobuses')
+@section('title', 'Transportes')
 
-<div x-data="detailAutobus" class="py-3">
+<div x-data="detailTransporte" class="py-3">
 
     <x-list.heading>
 
         <x-slot:title>
-            Programaciones del autobus @if ($autobus_id)
-                <small class="text-body-secondary">#{{ $autobus_id }}</small>
+            Programaciones del transporte @if ($transporte_id)
+                <small class="text-body-secondary">#{{ $transporte_id }}</small>
             @endif
+
+            <span class="badge text-bg-secondary ms-2">{{ $transporte->getTipoTransporte() }}</span>
 
         </x-slot:title>
 
         <x-slot:button>
 
-            <x-form.cancel-button :link="route('admin.autobuses.list')">
+            <x-form.cancel-button :link="route('admin.transportes.list')">
                 Volver al listado
             </x-form.cancel-button>
 
@@ -45,7 +47,7 @@
 
                 <div class="card">
 
-                    <x-autobuses.description :autobus="$autobus" />
+                    <x-transportes.description :transporte="$transporte" />
 
                 </div>
 
@@ -63,7 +65,7 @@
 
         <div class="table-responsive">
 
-            <x-autobuses.programaciones-table :programaciones="$programaciones" :can-view-passengers="$canViewPassengers"
+            <x-transportes.programaciones-table :programaciones="$programaciones" :can-view-passengers="$canViewPassengers"
                 :tipo-cambio="$tipoCambioVigente" />
 
             {{ $programaciones->links() }}
@@ -78,7 +80,7 @@
 
 @script
     <script>
-        Alpine.data('detailAutobus', () => ({
+        Alpine.data('detailTransporte', () => ({
             destroy() {
                 this.toastCleanup?.forEach(cleanup => cleanup());
             },
@@ -96,7 +98,6 @@
         }));
     </script>
 @endscript
-
 
 
 

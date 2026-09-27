@@ -78,7 +78,7 @@
     ])
 @endif
 
-@if ($listViajes or $listProgramaciones or $listAutobuses)
+@if ($listViajes or $listProgramaciones or $listTransportes)
     @include('components.layout.sidebar-li', [
         'menu' => 'Operación de viajes',
         'icon' => 'nav-icon bi bi-bus-front',
@@ -96,10 +96,10 @@
                 'active' => request()->routeIs('admin.programaciones.*') ? 'active' : '',
             ],
             [
-                'existe' => $listAutobuses ?? false,
-                'route' => route('admin.autobuses.list'),
-                'name' => 'Autobuses',
-                'active' => request()->routeIs('admin.autobuses.*') ? 'active' : '',
+                'existe' => $listTransportes ?? false,
+                'route' => route('admin.transportes.list'),
+                'name' => 'Transportes',
+                'active' => request()->routeIs('admin.transportes.*') ? 'active' : '',
             ],
         ],
     ])

@@ -2,7 +2,7 @@
     AMENIDADES — FORMULARIO
     --------------------------------------------------------------------------
     Permite crear o editar una amenidad, definiendo su nombre, icono y estado para el catálogo de
-    comodidades de los autobuses.
+    comodidades de los transportes.
 
     Componentes reutilizables utilizados:
     - <x-list.heading />: Cabecera del módulo con título y acciones.

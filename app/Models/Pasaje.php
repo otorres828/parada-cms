@@ -201,8 +201,8 @@ class Pasaje extends ModelHelper
             }
         }
 
-        $capacidadAutobus = (int) $programacion->autobus?->total_asientos;
-        $capacidad = max(0, min((int) $programacion->asientos_totales, $capacidadAutobus));
+        $capacidadTransporte = (int) $programacion->transporte?->total_asientos;
+        $capacidad = max(0, min((int) $programacion->asientos_totales, $capacidadTransporte));
         $libres = $capacidad > 0 ? array_values(array_diff(range(1, $capacidad), $ocupados)) : [];
         $cantidadOcupados = $capacidad - count($libres);
         $limite = $tarifa->asientos_maximos_permitidos === null
@@ -225,7 +225,7 @@ class Pasaje extends ModelHelper
         $programacion = Programacion::with([
             'viaje.tramos',
             'viaje.empresa',
-            'autobus',
+            'transporte',
         ])->findOrFail($tarifa->programacion_id);
         $terminales = Terminal::obtenerSecuenciaRuta($programacion);
 

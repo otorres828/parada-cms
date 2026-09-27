@@ -4,12 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class AmenidadAutobus extends ModelHelper
+class AmenidadTransporte extends ModelHelper
 {
-    protected $table = 'amenidad_autobus';
+    protected $table = 'amenidad_transporte';
 
     protected $fillable = [
-        'autobus_id',
+        'transporte_id',
         'amenidad_id',
     ];
 
@@ -18,9 +18,9 @@ class AmenidadAutobus extends ModelHelper
         return [];
     }
 
-    public function autobus(): BelongsTo
+    public function transporte(): BelongsTo
     {
-        return $this->belongsTo(Autobus::class, 'autobus_id');
+        return $this->belongsTo(Transporte::class, 'transporte_id');
     }
 
     public function amenidad(): BelongsTo

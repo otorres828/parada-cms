@@ -8,7 +8,7 @@
 
         <div class="contact-copy">
             <span class="section-kicker light">Para agencias</span>
-            <h2>¿Representas una empresa de autobuses?</h2>
+            <h2>¿Representas una empresa de transportes?</h2>
             <p>Conversemos sobre tu operación y cómo comenzar a vender de forma digital. Nuestro equipo te acompañará durante la incorporación.</p>
 
             <div class="contact-benefits">

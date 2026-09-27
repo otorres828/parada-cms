@@ -41,6 +41,8 @@
                         <dd class="col-sm-7">{{ $orden->empresa->nombre }}</dd>
                         <dt class="col-sm-5">Estado</dt>
                         <dd class="col-sm-7">{{ $orden->getEstatusNombre() }}</dd>
+                        <dt class="col-sm-5">Tipos de transporte</dt>
+                        <dd class="col-sm-7">{{ collect($orden->reservas_incluidas ?? [])->pluck('tipo_transporte')->unique()->map(fn ($tipo) => match ($tipo) { 'autobus' => 'Autobús', 'carro' => 'Carro', default => 'No registrado' })->implode(', ') ?: 'No registrado' }}</dd>
                         <dt class="col-sm-5">Período</dt>
                         <dd class="col-sm-7">{{ $orden->periodo_desde->format('d/m/Y H:i') }} — {{ $orden->periodo_hasta->format('d/m/Y H:i') }}</dd>
                         <dt class="col-sm-5">Emisión</dt>
@@ -123,6 +125,7 @@
                     <tr>
                         <th>ID</th>
                         <th>Código</th>
+                        <th>Tipo de transporte</th>
                         <th>Fecha de pago</th>
                         <th class="text-end">Tasa de servicio</th>
                     </tr>
@@ -137,6 +140,7 @@
                         ]))">
                             <td>{{ $reserva['reserva_id'] }}</td>
                             <td>{{ $reserva['codigo_referencia'] }}</td>
+                            <td>{{ match ($reserva['tipo_transporte'] ?? null) { 'autobus' => 'Autobús', 'carro' => 'Carro', default => 'No registrado' } }}</td>
                             <td>{{ $reserva['fecha_pago'] ? \Carbon\Carbon::parse($reserva['fecha_pago'])->format('d/m/Y H:i') : '—' }}</td>
                             <td class="text-end">
                                 <x-money.dual :usd="$reserva['tasa_servicio']"

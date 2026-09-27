@@ -69,6 +69,7 @@ class OrdenCobroService
                     return [
                         'reserva_id' => $reserva->id,
                         'codigo_referencia' => $reserva->codigo_referencia,
+                        'tipo_transporte' => $reserva->programacion?->transporte?->tipo_transporte,
                         'tasa_servicio' => (float) $reserva->tasa_servicio,
                         'fecha_pago' => $reserva->fecha_pago?->toDateTimeString(),
                     ];
@@ -203,7 +204,8 @@ class OrdenCobroService
     private function reservasCobrables(int $empresaId, Carbon $desde, Carbon $hasta)
     {
         return Reserva::query()
-            ->select(['reservas.id', 'reservas.codigo_referencia', 'reservas.tasa_servicio', 'reservas.fecha_pago'])
+            ->select(['reservas.id', 'reservas.programacion_id', 'reservas.codigo_referencia', 'reservas.tasa_servicio', 'reservas.fecha_pago'])
+            ->with('programacion.transporte')
             ->whereHas('programacion.viaje', function ($query) use ($empresaId) {
                 $query->where('empresa_id', $empresaId);
             })

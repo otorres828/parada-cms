@@ -29,6 +29,7 @@ class ReservasOrdenCobroExport extends DefaultValueBinder implements FromCollect
         return [
             'ID reserva',
             'Código de referencia',
+            'Tipo de transporte',
             'Fecha de pago',
             'Tasa de servicio',
             'Tasa de servicio Bs',
@@ -40,6 +41,7 @@ class ReservasOrdenCobroExport extends DefaultValueBinder implements FromCollect
         return [
             $reserva['reserva_id'] ?? null,
             $reserva['codigo_referencia'] ?? null,
+            match ($reserva['tipo_transporte'] ?? null) { 'autobus' => 'Autobús', 'carro' => 'Carro', default => 'No registrado' },
             ! empty($reserva['fecha_pago']) ? Carbon::parse($reserva['fecha_pago'])->format('d/m/Y H:i') : null,
             (float) ($reserva['tasa_servicio'] ?? 0),
             isset($this->conversionesBs[$reserva['reserva_id'] ?? 0])

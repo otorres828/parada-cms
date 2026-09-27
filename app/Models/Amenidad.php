@@ -24,14 +24,14 @@ class Amenidad extends ModelHelper
         return ['estatus' => 'integer'];
     }
 
-    public function amenidadAutobus(): HasMany
+    public function amenidadTransporte(): HasMany
     {
-        return $this->hasMany(AmenidadAutobus::class, 'amenidad_id');
+        return $this->hasMany(AmenidadTransporte::class, 'amenidad_id');
     }
 
-    public function autobuses(): BelongsToMany
+    public function transportes(): BelongsToMany
     {
-        return $this->belongsToMany(Autobus::class, 'amenidad_autobus', 'amenidad_id', 'autobus_id')->withTimestamps();
+        return $this->belongsToMany(Transporte::class, 'amenidad_transporte', 'amenidad_id', 'transporte_id')->withTimestamps();
     }
 
     public static function searchAdmin(string $search = '', array $filters = []): Builder

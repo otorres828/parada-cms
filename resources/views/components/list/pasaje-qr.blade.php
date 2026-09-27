@@ -30,7 +30,7 @@
                 </div>
             </div>
 
-            <p class="mt-2 text-muted small">Muestre este código al abordar el autobús.</p>
+            <p class="mt-2 text-muted small">Muestre este código al abordar el transporte.</p>
 
         </template>
 

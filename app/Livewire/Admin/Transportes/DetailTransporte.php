@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Livewire\Admin\Autobuses;
+namespace App\Livewire\Admin\Transportes;
 
-use App\Models\Autobus;
+use App\Models\Transporte;
 use App\Models\Programacion;
 use App\Models\TipoCambio;
 use App\Services\Admin\Access;
@@ -12,7 +12,7 @@ use Livewire\Component;
 use Livewire\WithPagination;
 
 #[Layout('layouts.cms')]
-class DetailAutobus extends Component
+class DetailTransporte extends Component
 {
     use WithPagination;
 
@@ -21,16 +21,16 @@ class DetailAutobus extends Component
     protected string $paginationTheme = 'bootstrap';
 
     #[Locked]
-    public ?int $autobus_id = null;
+    public ?int $transporte_id = null;
 
-    public Autobus $autobus;
+    public Transporte $transporte;
 
     public bool $canViewPassengers = false;
 
-    public function mount(?int $autobus_id = null): void
+    public function mount(?int $transporte_id = null): void
     {
-        $this->autobus_id = $autobus_id;
-        $this->autobus = $this->findAutobus();
+        $this->transporte_id = $transporte_id;
+        $this->transporte = $this->findTransporte();
         $this->canViewPassengers = Access::allows('programaciones', 'passengers');
     }
 
@@ -38,7 +38,7 @@ class DetailAutobus extends Component
     {
 
         $programaciones = Programacion::searchAdmin('', [
-            'autobus_id' => $this->autobus_id,
+            'transporte_id' => $this->transporte_id,
             'historial_ventas' => true,
         ])
             ->orderByDesc('fecha_salida')
@@ -46,7 +46,7 @@ class DetailAutobus extends Component
             ->orderByDesc('id')
             ->paginate(max(1, min(100, $this->per_page)));
 
-        return view('livewire.admin.autobuses.detail-autobus', [
+        return view('livewire.admin.transportes.detail-transporte', [
             'programaciones' => $programaciones,
             'tipoCambioVigente' => TipoCambio::vigente(),
         ]);
@@ -57,8 +57,8 @@ class DetailAutobus extends Component
         $this->resetPage();
     }
 
-    protected function findAutobus(): Autobus
+    protected function findTransporte(): Transporte
     {
-        return Autobus::searchAdmin()->with([0 => 'empresa', 1 => 'amenidades'])->findOrFail($this->autobus_id);
+        return Transporte::searchAdmin()->with([0 => 'empresa', 1 => 'amenidades'])->findOrFail($this->transporte_id);
     }
 }

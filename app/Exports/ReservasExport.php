@@ -34,6 +34,7 @@ class ReservasExport extends DefaultValueBinder implements FromQuery, WithCustom
         $valores = [
             'id' => $reserva->id,
             'referencia' => $reserva->codigo_referencia,
+            'tipo_transporte' => $reserva->programacion?->transporte?->getTipoTransporte(),
             'reprogramacion' => $reserva->reservaOriginal?->codigo_referencia,
             'fecha_reserva' => $reserva->fecha_compra?->format('d/m/Y H:i'),
             'cliente' => $reserva->usuario?->name,
@@ -77,6 +78,7 @@ class ReservasExport extends DefaultValueBinder implements FromQuery, WithCustom
         return [
             'id' => 'ID reserva',
             'referencia' => 'Referencia',
+            'tipo_transporte' => 'Tipo de transporte',
             'reprogramacion' => 'Reprogramación',
             'fecha_reserva' => 'Fecha de reserva',
             'cliente' => 'Cliente',

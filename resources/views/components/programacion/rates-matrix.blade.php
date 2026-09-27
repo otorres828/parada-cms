@@ -48,7 +48,7 @@
             </div>
             <p class="small text-body-secondary mt-3 mb-0">
                 Ocupados: asientos de reservas pagadas, pendientes y nuevas sin vencer que coinciden con este tramo.
-                Disponibles = tope de asientos menos ocupados; sin tope se usa la capacidad del autobús.
+                Disponibles = tope de asientos menos ocupados; sin tope se usa la capacidad del transporte.
             </p>
         @else
             <div class="text-body-secondary py-3 text-center">

@@ -29,6 +29,14 @@
     <form x-ref="form" @submit.prevent="preSave" novalidate>
 
         <div class="row g-3 mb-3 align-items-end">
+            <div class="col-md-3">
+                <label class="form-label" for="tipo-transporte">Tipo de transporte</label>
+                <select id="tipo-transporte" class="form-select" wire:model.live="tipo_transporte">
+                    <option value="">Todos los transportes</option>
+                    <option value="autobus">Autobús</option>
+                    <option value="carro">Carro</option>
+                </select>
+            </div>
 
             <div class="col-md-6 col-xl-2">
 

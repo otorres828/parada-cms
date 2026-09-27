@@ -88,7 +88,7 @@
           {"name": "Ver pasajeros", "url": "passengers", "status": 1}
         ]
       },
-      {"name": "Autobuses", "url": "autobuses", "status": 1,
+      {"name": "Transportes", "url": "transportes", "status": 1,
         "permissions": [
           {"name": "Listar", "url": "list", "status": 1},
           {"name": "Ver detalle", "url": "detail", "status": 1}

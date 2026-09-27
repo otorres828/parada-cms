@@ -197,7 +197,7 @@ class Reserva extends ModelHelper
 
     public static function searchAdmin(string $search = '', array $filters = []): Builder
     {
-        $query = self::query()->with(['usuario', 'programacion.viaje.empresa', 'pasajes.viajero', 'origenTerminal', 'destinoTerminal', 'tipoCambio']);
+        $query = self::query()->with(['usuario', 'programacion.viaje.empresa', 'programacion.transporte', 'pasajes.viajero', 'origenTerminal', 'destinoTerminal', 'tipoCambio']);
 
         if ($search !== '') {
             $query->where(function ($query) use ($search) {
@@ -243,9 +243,10 @@ class Reserva extends ModelHelper
             ->orderByDesc('fecha_compra');
     }
 
-    public static function salesReport(string $dateFrom, string $dateTo): Builder
+    public static function salesReport(string $dateFrom, string $dateTo, string $tipoTransporte = ''): Builder
     {
         return self::query()
+            ->when($tipoTransporte !== '', fn ($query) => $query->whereHas('programacion.transporte', fn ($transporte) => $transporte->where('tipo_transporte', $tipoTransporte)))
             ->join('tipos_cambios', 'tipos_cambios.id', '=', 'reservas.tipos_cambios_id')
             ->where('reservas.estado_pago', self::ESTADO_PAGO_PAGADO)
             ->whereDate('reservas.fecha_compra', '>=', self::date($dateFrom))
@@ -255,9 +256,10 @@ class Reserva extends ModelHelper
             ->orderByDesc('fecha');
     }
 
-    public static function companiesReport(string $dateFrom, string $dateTo): Builder
+    public static function companiesReport(string $dateFrom, string $dateTo, string $tipoTransporte = ''): Builder
     {
         return self::query()
+            ->when($tipoTransporte !== '', fn ($query) => $query->whereHas('programacion.transporte', fn ($transporte) => $transporte->where('tipo_transporte', $tipoTransporte)))
             ->where('reservas.estado_pago', self::ESTADO_PAGO_PAGADO)
             ->whereDate('reservas.fecha_compra', '>=', self::date($dateFrom))
             ->whereDate('reservas.fecha_compra', '<=', self::date($dateTo))

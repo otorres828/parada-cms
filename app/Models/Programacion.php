@@ -24,7 +24,7 @@ class Programacion extends ModelHelper
 
     protected $fillable = [
         'viaje_id',
-        'autobus_id',
+        'transporte_id',
         'fecha_salida',
         'hora_salida',
         'asientos_totales',
@@ -41,9 +41,9 @@ class Programacion extends ModelHelper
         return $this->belongsTo(Viaje::class, 'viaje_id');
     }
 
-    public function autobus(): BelongsTo
+    public function transporte(): BelongsTo
     {
-        return $this->belongsTo(Autobus::class, 'autobus_id');
+        return $this->belongsTo(Transporte::class, 'transporte_id');
     }
 
     public function tramoPrecios(): HasMany
@@ -99,8 +99,8 @@ class Programacion extends ModelHelper
             });
         }
 
-        if (isset($filters['autobus_id']) && $filters['autobus_id'] !== '') {
-            $query->where('programaciones.autobus_id', $filters['autobus_id']);
+        if (isset($filters['transporte_id']) && $filters['transporte_id'] !== '') {
+            $query->where('programaciones.transporte_id', $filters['transporte_id']);
         }
 
         if (isset($filters['empresa_id']) && $filters['empresa_id'] !== '') {
@@ -198,7 +198,7 @@ class Programacion extends ModelHelper
     public static function bloquear(int $programacionId): self
     {
         return self::query()
-            ->with(['viaje.tramos', 'viaje.empresa', 'autobus'])
+            ->with(['viaje.tramos', 'viaje.empresa', 'transporte'])
             ->whereKey($programacionId)
             ->lockForUpdate()
             ->firstOrFail();

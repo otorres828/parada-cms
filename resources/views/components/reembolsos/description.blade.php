@@ -7,6 +7,7 @@
 <div class="card-body">
 
     <dl class="row mb-0">
+        <dt class="col-sm-4">Tipo de transporte</dt><dd class="col-sm-8">{{ $reembolso->pagoReserva?->reserva?->programacion?->transporte?->getTipoTransporte() ?? 'No registrado' }}</dd>
         <dt class="col-sm-4">Pago</dt>
         <dd class="col-sm-8">
             {{ $reembolso->pagoReserva?->referencia_pago ?? '—' }}

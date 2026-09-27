@@ -23,7 +23,7 @@ class AdministrationMenuAdmin extends Component
 
     public bool $listProgramaciones = false;
 
-    public bool $listAutobuses = false;
+    public bool $listTransportes = false;
 
     public bool $listReservas = false;
 
@@ -77,7 +77,7 @@ class AdministrationMenuAdmin extends Component
             'listUsers' => ['clientes', 'list'],
             'listViajes' => ['viajes', 'list'],
             'listProgramaciones' => ['programaciones', 'list'],
-            'listAutobuses' => ['autobuses', 'list'],
+            'listTransportes' => ['transportes', 'list'],
             'listReservas' => ['reservas', 'list'],
             'listPasajes' => ['pasajes', 'list'],
             'listReembolsos' => ['reembolsos', 'list'],

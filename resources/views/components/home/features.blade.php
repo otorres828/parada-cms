@@ -30,7 +30,7 @@
                 <div class="feature-icon coral"><i class="bi bi-bus-front"></i></div>
                 <span class="feature-number">02</span>
                 <h3>Administra tu flota</h3>
-                <p>Registra autobuses, distribución de asientos y amenidades. Asigna cada unidad a sus próximas salidas.</p>
+                <p>Registra transportes, distribución de asientos y amenidades. Asigna cada unidad a sus próximas salidas.</p>
             </article>
 
             <article class="feature-card">

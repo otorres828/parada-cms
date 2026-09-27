@@ -41,7 +41,7 @@ class AdminRolesSeeder extends Seeder
                     'reembolsos' => ['list', 'detail'],
                     'viajes' => ['list', 'detail'],
                     'programaciones' => ['list', 'passengers'],
-                    'autobuses' => ['list', 'detail'],
+                    'transportes' => ['list', 'detail'],
                     'cupones' => ['list', 'detail'],
                 ],
             ],

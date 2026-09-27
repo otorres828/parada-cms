@@ -21,7 +21,7 @@
             <div class="col-md-6">
                 <x-programacion.description :programacion="$programacion" :capacidad="$capacidad"
                     :pasajes-pagados="$pasajesPagados" :pasajes-pendientes="$pasajesPendientes"
-                    :can-viajes-detail="$canViajesDetail" :can-autobuses-detail="$canAutobusesDetail" />
+                    :can-viajes-detail="$canViajesDetail" :can-transportes-detail="$canTransportesDetail" />
             </div>
 
             <div class="col-md-6">

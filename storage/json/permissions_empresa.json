@@ -93,7 +93,7 @@
         },
         "values": {
             "section_id": 3,
-            "name": "Consultar Autobuses",
+            "name": "Consultar Transportes",
             "url": "list",
             "status": 1
         }
@@ -104,7 +104,7 @@
         },
         "values": {
             "section_id": 3,
-            "name": "Crear Autobuses",
+            "name": "Crear Transportes",
             "url": "add",
             "status": 1
         }
@@ -115,7 +115,7 @@
         },
         "values": {
             "section_id": 3,
-            "name": "Editar Autobuses",
+            "name": "Editar Transportes",
             "url": "edit",
             "status": 1
         }
@@ -126,7 +126,7 @@
         },
         "values": {
             "section_id": 3,
-            "name": "Ver detalle Autobuses",
+            "name": "Ver detalle Transportes",
             "url": "detail",
             "status": 1
         }

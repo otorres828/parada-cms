@@ -75,6 +75,7 @@
                     <x-list.sortable-button column="nombre" :$sortColumn :$sortDirection />
                 </th>
 
+                <th>Tipo de entidad</th>
                 <th>Identificación
                     <x-list.sortable-button column="rif" :$sortColumn :$sortDirection />
                 </th>
@@ -104,6 +105,7 @@
                         {{ $empresa->nombre ?? '—' }}
                     </td>
 
+                    <td>{{ $empresa->getTipoEntidad() }}</td>
                     <td>
                         {{ $empresa->rif ?? '—' }}
                     </td>
@@ -142,7 +144,7 @@
             @empty
 
                 <tr>
-                    <td colspan="6" class="text-center py-5">
+                    <td colspan="7" class="text-center py-5">
                         No se encontraron registros.
                     </td>
 

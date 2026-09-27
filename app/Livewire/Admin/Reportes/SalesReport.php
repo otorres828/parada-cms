@@ -19,6 +19,8 @@ class SalesReport extends Component
 
     protected string $paginationTheme = 'bootstrap';
 
+    public string $tipo_transporte = '';
+
     public string $date_from = '';
 
     public string $date_to = '';
@@ -26,6 +28,7 @@ class SalesReport extends Component
     public int $per_page = 25;
 
     protected array $queryString = [
+        'tipo_transporte' => ['except' => ''],
         'date_from' => ['except' => ''],
         'date_to' => ['except' => ''],
         'per_page' => ['except' => 25],
@@ -58,7 +61,7 @@ class SalesReport extends Component
 
     protected function query()
     {
-        return Reserva::salesReport($this->date_from, $this->date_to);
+        return Reserva::salesReport($this->date_from, $this->date_to, $this->tipo_transporte);
     }
 
     public function export()
@@ -66,6 +69,7 @@ class SalesReport extends Component
         Access::authorize('reportes', 'list-sales');
 
         $this->validate([
+            'tipo_transporte' => 'nullable|in:autobus,carro',
             'date_from' => 'required|date_format:Y-m-d',
             'date_to' => 'required|date_format:Y-m-d|after_or_equal:date_from',
             'per_page' => 'integer|in:10,25,50,100',

@@ -50,7 +50,7 @@ class ViajeTramo extends ModelHelper
 
         $programaciones->loadMissing([
             'viaje.tramos',
-            'autobus',
+            'transporte',
             'tramoPrecios.origenTerminal',
             'tramoPrecios.destinoTerminal',
         ]);
