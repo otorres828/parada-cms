@@ -68,7 +68,7 @@
       {"name": "Políticas de privacidad", "url": "politicas-privacidad", "status": 1, "permissions": [{"name": "Editar contenido", "url": "edit", "status": 1}]},
       {"name": "Políticas de cookies", "url": "politicas-cookies", "status": 1, "permissions": [{"name": "Editar contenido", "url": "edit", "status": 1}]},
       {"name": "Términos y condiciones", "url": "terminos-condiciones", "status": 1, "permissions": [{"name": "Editar contenido", "url": "edit", "status": 1}]},
-      {"name": "Legales", "url": "legales", "status": 1,
+      {"name": "Documentos", "url": "legales", "status": 1,
         "permissions": [
           {"name": "Listar empresas", "url": "list", "status": 1},
           {"name": "Consultar documentos", "url": "detail", "status": 1},
