@@ -79,24 +79,28 @@
                 'route' => route('admin.legales.sobre-nosotros.edit'),
                 'name' => 'Sobre nosotros',
                 'active' => request()->routeIs('admin.legales.sobre-nosotros.*') ? 'active' : '',
+                'navigate' => false,
             ],
             [
                 'existe' => $editPrivacidad,
                 'route' => route('admin.legales.politicas-privacidad.edit'),
                 'name' => 'Políticas de privacidad',
                 'active' => request()->routeIs('admin.legales.politicas-privacidad.*') ? 'active' : '',
+                'navigate' => false,
             ],
             [
                 'existe' => $editCookies,
                 'route' => route('admin.legales.politicas-cookies.edit'),
                 'name' => 'Políticas de cookies',
                 'active' => request()->routeIs('admin.legales.politicas-cookies.*') ? 'active' : '',
+                'navigate' => false,
             ],
             [
                 'existe' => $editTerminos,
                 'route' => route('admin.legales.terminos-condiciones.edit'),
                 'name' => 'Términos y condiciones',
                 'active' => request()->routeIs('admin.legales.terminos-condiciones.*') ? 'active' : '',
+                'navigate' => false,
             ],
         ],
     ])

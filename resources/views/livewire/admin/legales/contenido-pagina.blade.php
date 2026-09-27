@@ -40,7 +40,7 @@
 
             <form wire:submit="save">
 
-                <x-form.rich-text-editor id="contenido-pagina" model="contenido" />
+                <x-form.rich-text-editor id="contenido-{{ $pagina }}" model="contenido" />
 
                 <div class="form-text mb-3">
                     Utiliza el editor para aplicar títulos, listas, enlaces, tablas y formato al contenido público.

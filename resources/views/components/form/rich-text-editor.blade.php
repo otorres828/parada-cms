@@ -35,13 +35,22 @@
             height: config.height,
             editor: null,
             resizeHandler: null,
+            destroyed: false,
 
             async init() {
                 try {
                     await this.loadTinyMce();
+
+                    if (this.destroyed) return;
+
                     await this.$nextTick();
+
+                    if (this.destroyed || ! this.$refs.editor?.isConnected) return;
+
                     await this.initializeEditor();
                 } catch (error) {
+                    if (this.destroyed) return;
+
                     console.error('No fue posible inicializar TinyMCE:', error);
                     this.$store.toast.info('No fue posible cargar el editor de texto.');
                 }
@@ -67,6 +76,18 @@
             async initializeEditor() {
                 const element = this.$refs.editor;
 
+                if (! element?.isConnected) return;
+
+                const previousEditor = element.id ? tinymce.get(element.id) : null;
+
+                if (previousEditor) {
+                    try {
+                        previousEditor.remove();
+                    } catch (error) {
+                        tinymce.EditorManager.remove(previousEditor);
+                    }
+                }
+
                 await tinymce.init({
                     target: element,
                     license_key: 'gpl',
@@ -81,6 +102,12 @@
                         this.editor = editor;
 
                         editor.on('init', () => {
+                            if (this.destroyed || ! element.isConnected) {
+                                editor.remove();
+
+                                return;
+                            }
+
                             editor.setContent(this.content || '');
 
                             this.resizeHandler = () => {
@@ -104,11 +131,16 @@
             },
 
             destroy() {
+                this.destroyed = true;
+
                 if (this.resizeHandler) {
                     window.removeEventListener('resize', this.resizeHandler);
                 }
 
-                this.editor?.remove();
+                if (this.editor && ! this.editor.removed) {
+                    this.editor.remove();
+                }
+
                 this.editor = null;
             },
 

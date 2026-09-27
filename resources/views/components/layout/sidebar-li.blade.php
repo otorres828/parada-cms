@@ -38,7 +38,8 @@
 
                     <li class="nav-item">
 
-                        <a href="{{ $item['route'] }}" class="nav-link  {{ $item['active'] }}" wire:navigate>
+                        <a href="{{ $item['route'] }}" class="nav-link  {{ $item['active'] }}"
+                            @if ($item['navigate'] ?? true) wire:navigate @endif>
 
                             <p>{{ $item['name'] }}</p>
 
