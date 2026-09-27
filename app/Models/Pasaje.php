@@ -205,8 +205,7 @@ class Pasaje extends ModelHelper
             }
         }
 
-        $capacidadTransporte = (int) $programacion->transporte?->total_asientos;
-        $capacidad = max(0, min((int) $programacion->asientos_totales, $capacidadTransporte));
+        $capacidad = (int) $programacion->asientos_totales;
         $libres = $capacidad > 0 ? array_values(array_diff(range(1, $capacidad), $ocupados)) : [];
         $cantidadOcupados = $capacidad - count($libres);
         $limite = $tarifa->asientos_maximos_permitidos === null
