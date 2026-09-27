@@ -54,7 +54,26 @@ $carro->update(['tipo_transporte'=>'carro']);
 // Renderiza pantallas Livewire y los detalles con los modelos reales.
 $admin->update(['level'=>App\Models\Admin::ROOT, 'status'=>1]);
 auth('admin')->setUser($admin->fresh());
+foreach (['', 'carro', 'autobus'] as $tipo) {
+    $dashboard = new App\Livewire\Admin\Dashboard;
+    $dashboard->date_from = today()->toDateString();
+    $dashboard->date_to = today()->toDateString();
+    $dashboard->tipo_transporte = $tipo;
+    $data = $dashboard->render()->getData();
+    $salidasEsperadas = App\Models\Programacion::upcomingForDashboard(today()->toDateString(), today()->addDays(6)->toDateString())
+        ->get()->filter(fn ($salida) => $tipo === '' || $salida->transporte->tipo_transporte === $tipo);
+    $assert($data['metrics']['salidas'] === $salidasEsperadas->count(), 'Dashboard contador de salidas '.$tipo);
+    $assert($data['proximasSalidas']->modelKeys() === $salidasEsperadas->take(5)->values()->modelKeys(), 'Dashboard próximas salidas '.$tipo);
+    $filters = ['date_from' => $dashboard->date_from, 'date_to' => $dashboard->date_to];
+    $expected = App\Models\Reserva::searchAdmin('', $filters)->get()
+        ->filter(fn ($reserva) => $tipo === '' || $reserva->programacion->transporte->tipo_transporte === $tipo);
+    $assert($data['totalReservas'] === $expected->count(), 'Dashboard conteos '.$tipo);
+    $assert($data['ultimasReservas']->every(fn ($reserva) => $expected->contains('id', $reserva->id)), 'Dashboard reservas '.$tipo);
+    $paid = $expected->where('estado_pago', App\Models\Reserva::ESTADO_PAGO_PAGADO);
+    $assert($data['metrics']['pasajes'] === App\Models\Pasaje::whereIn('reserva_id', $paid->modelKeys())->count(), 'Dashboard pasajes '.$tipo);
+}
 foreach ([
+    App\Livewire\Admin\Dashboard::class => [],
     App\Livewire\Admin\Transportes\ListTransporte::class => [],
     App\Livewire\Admin\Transportes\DetailTransporte::class => ['transporte_id'=>$carro->id],
     App\Livewire\Admin\Empresas\SaveEmpresa::class => ['empresa_id'=>$empresa->id],
@@ -69,7 +88,11 @@ foreach ([
 ] as $component => $params) {
     $html = (string) Livewire\Livewire::mount($component, $params);
     $assert(strlen($html) > 100, 'Render '.$component);
-    $assert(str_contains($html, 'Tipo de') || str_contains($html, 'Tipos de'), 'Etiqueta de tipo ausente en '.$component);
+    if ($component === App\Livewire\Admin\Dashboard::class) {
+        $assert(str_contains($html, 'wire:model.live="tipo_transporte"'), 'Filtro de transporte del dashboard');
+    } else {
+        $assert(str_contains($html, 'Tipo de') || str_contains($html, 'Tipos de'), 'Etiqueta de tipo ausente en '.$component);
+    }
     if ($component === App\Livewire\Admin\Transportes\DetailTransporte::class) {
         $assert(str_contains($html, 'Aire acondicionado'), 'Amenidad no visible');
     }

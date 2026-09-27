@@ -120,6 +120,10 @@ class Pasaje extends ModelHelper
             $query->where('pasajes.reserva_id', $filters['reserva_id']);
         }
 
+        if (! empty($filters['tipo_transporte'])) {
+            $query->whereHas('reserva.programacion.transporte', fn ($transporte) => $transporte->where('tipo_transporte', $filters['tipo_transporte']));
+        }
+
         if (! empty($filters['empresa_id']) || ! empty($filters['date_from']) || ! empty($filters['date_to'])
             || (isset($filters['estado_pago']) && $filters['estado_pago'] !== '')) {
             $query->whereHas('reserva', function ($query) use ($filters) {

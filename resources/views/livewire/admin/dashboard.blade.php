@@ -52,6 +52,15 @@
             <div class="row g-2 align-items-end ms-auto">
 
                 <div class="col-12 col-sm-auto">
+                    <label for="dashboard-transporte" class="form-label small text-body-secondary mb-1">Transporte</label>
+                    <select id="dashboard-transporte" class="form-select form-select-sm" wire:model.live="tipo_transporte">
+                        <option value="">Todos</option>
+                        <option value="autobus">Autobuses</option>
+                        <option value="carro">Carros</option>
+                    </select>
+                </div>
+
+                <div class="col-12 col-sm-auto">
 
                     <label for="dashboard-periodo" class="form-label small text-body-secondary mb-1">
                         Período
@@ -244,12 +253,11 @@
 
     <div class="card border-0 shadow-sm mb-4">
 
-        <div
-            class="card-header bg-transparent border-0 px-4 pt-4 d-flex flex-wrap align-items-center justify-content-between gap-2">
-
-            <h2 class="h5 fw-bold mb-0">Reservas recientes del período</h2>
-            <a href="{{ route('admin.reservas.list') }}" class="small" wire:navigate>Ver todas las reservas</a>
-
+        <div class="card-header bg-transparent border-0 px-4 pt-4">
+            <div class="d-flex flex-wrap align-items-center justify-content-between gap-2">
+                <h2 class="h5 fw-bold mb-0">Reservas recientes del período</h2>
+                <a href="{{ route('admin.reservas.list') }}" class="small ms-auto" wire:navigate>Ver todas las reservas</a>
+            </div>
         </div>
 
         <div class="card-body px-0">
@@ -335,19 +343,13 @@
 
     <div class="card border-0 shadow-sm mb-4">
 
-        <div
-            class="card-header bg-transparent border-0 px-4 pt-4 d-flex flex-wrap align-items-center justify-content-between gap-2">
-
-            <div>
-
-                <h2 class="h5 fw-bold mb-1">Próximas salidas</h2>
-                <p class="small text-body-secondary mb-0">Desde ahora y durante los próximos 7 días. Solo empresas y
-                    rutas activas.</p>
-
+        <div class="card-header bg-transparent border-0 px-4 pt-4">
+            <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-1">
+                <h2 class="h5 fw-bold mb-0">Próximas salidas</h2>
+                <a href="{{ route('admin.programaciones.list') }}" class="small ms-auto" wire:navigate>Ver programaciones</a>
             </div>
-
-            <a href="{{ route('admin.programaciones.list') }}" class="small" wire:navigate>Ver programaciones</a>
-
+            <p class="small text-body-secondary mb-0">Desde ahora y durante los próximos 7 días. Solo empresas y
+                rutas activas.</p>
         </div>
 
         <div class="card-body px-0">

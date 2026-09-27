@@ -152,7 +152,9 @@
         <tbody>
 
             @forelse ($reservas as $reserva)
+            
                 <tr wire:key="listReserva-{{ $reserva->id }}">
+
                     <td>
                         {{ $reserva->id }}
                     </td>
@@ -170,6 +172,7 @@
                     </td>
 
                     <td>{{ $reserva->programacion?->transporte?->getTipoTransporte() ?? 'No registrado' }}</td>
+
                     <td>
                         {{ $reserva->origenTerminal?->nombre ?? 'No registrado' }}
                     </td>

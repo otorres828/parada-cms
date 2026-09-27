@@ -208,6 +208,10 @@ class Reserva extends ModelHelper
 
         $status = $filters['status'] ?? $filters['estatus'] ?? $filters['estado_pago'] ?? null;
 
+        if (! empty($filters['tipo_transporte'])) {
+            $query->whereHas('programacion.transporte', fn ($transporte) => $transporte->where('tipo_transporte', $filters['tipo_transporte']));
+        }
+
         if ($status !== null && $status !== '') {
             if ($status == self::ESTADO_PAGO_PAGADO) {
                 // Si el estado es "pagado", incluimos también los estados "reembolsado" y "reprogramado"

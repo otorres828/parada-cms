@@ -23,10 +23,13 @@ class Dashboard extends Component
 
     public string $date_to = '';
 
+    public string $tipo_transporte = '';
+
     protected array $queryString = [
         'periodo' => ['except' => 'mes'],
         'date_from' => ['except' => ''],
         'date_to' => ['except' => ''],
+        'tipo_transporte' => ['except' => ''],
     ];
 
     public function mount(): void
@@ -47,6 +50,7 @@ class Dashboard extends Component
         }
 
         $filtros = [
+            'tipo_transporte' => $this->tipo_transporte,
             'date_from' => $desde->toDateString(),
             'date_to' => $hasta->toDateString(),
         ];
@@ -56,7 +60,10 @@ class Dashboard extends Component
         $salidas = Programacion::upcomingForDashboard(
             $ahora->toDateString(),
             $ahora->copy()->addDays(6)->toDateString(),
-        );
+        )->when($this->tipo_transporte !== '', fn ($query) => $query->whereHas(
+            'transporte',
+            fn ($transporte) => $transporte->where('tipo_transporte', $this->tipo_transporte),
+        ));
         $metrics = [
             'ventas' => $resumen->ventas,
             'tasas' => $resumen->tasas,
