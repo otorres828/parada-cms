@@ -132,3 +132,26 @@ PagoReservaService::pasarAPendiente($otro, $nueva->id, $banco->id, 'REF-FALLIDA'
 $nueva = PagoReservaService::marcarPagoFallido($nueva->id);
 $check($nueva->cupon_id === null && $nueva->estado_pago === Reserva::ESTADO_PAGO_FALLIDO);
 echo "OK: liberación de cupón al retirar último pasajero, cancelar y rechazar pago.\n";
+
+// Continuar reutiliza la NUEVA, incluso vencida, y libera sus propios asientos.
+$reinicio = ReservaService::aplicarReserva($otro, $tarifa->id);
+$reinicio = ReservaService::agregarPasajero($otro, $reinicio->id, $pasajero);
+$reinicio = ReservaService::agregarPasajero($otro, $reinicio->id, $pasajero);
+$reinicio = app(CuponService::class)->aplicarCupon($reinicio, 'TEST');
+$codigoAnterior = $reinicio->codigo_referencia;
+$viajeroId = $reinicio->pasajes->first()->viajero_id;
+$cantidadAntes = Reserva::count();
+// Un error posterior a la limpieza debe restaurar pasajeros y cupón.
+$tarifa->update(['asientos_maximos_permitidos' => 0]);
+$reject(fn () => ReservaService::aplicarReserva($otro, $tarifa->id), ValidationException::class);
+$check($reinicio->fresh()->pasajes()->count() === 2 && $reinicio->fresh()->cupon_id !== null);
+$tarifa->update(['asientos_maximos_permitidos' => 2]);
+$reiniciado = ReservaService::aplicarReserva($otro, $tarifa->id);
+$check($reiniciado->id === $reinicio->id && Reserva::count() === $cantidadAntes);
+$check($reiniciado->codigo_referencia === $codigoAnterior && $reiniciado->pasajes->isEmpty());
+$check($reiniciado->cupon_id === null && $reiniciado->descuento_aplicado === '0.00');
+$check($reiniciado->monto_total === '11.00' && $reiniciado->fecha_expiracion->isFuture());
+$check(App\Models\Viajero::whereKey($viajeroId)->exists());
+$reiniciado->update(['fecha_expiracion' => now()->subMinute()]);
+$check(ReservaService::aplicarReserva($otro, $tarifa->id)->id === $reinicio->id);
+echo "OK: reinicio de reserva nueva, cupón, asientos propios, vencimiento y rollback.\n";

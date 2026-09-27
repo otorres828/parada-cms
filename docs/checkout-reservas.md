@@ -61,3 +61,9 @@ Los bloqueos de programación, cupón, campaña y reserva original de una reprog
 ## Selección de programaciones
 
 El sitio debe ofrecer únicamente programaciones habilitadas para venta hasta dos horas antes de la salida del bus. Esta selección corresponde al consumidor del servicio. Se eliminó Terminal::validarSalida y sus llamadas; el servicio no vuelve a comprobar la hora ni la habilitación de la salida. El filtro de dos horas no se implementó en este cambio.
+
+## Reiniciar al continuar
+
+`aplicarReserva` reutiliza la reserva NUEVA más reciente del cliente para la programación seleccionada, siempre que no tenga pago registrado; incluye reservas nuevas vencidas. Conserva ID, referencia y auditoría. Libera el cupón, elimina los pasajes y actualiza trayecto, tarifa, tipo de cambio, exoneración, importes, fecha de compra y vencimiento de 20 minutos. Los registros de viajeros se conservan como historial del cliente. Si no existe una reserva reutilizable, crea una. Las reservas pendientes, pagadas y de otros clientes o programaciones no se reinician.
+
+La limpieza y la cotización ocurren en la misma transacción: un error revierte todo. La disponibilidad se consulta después de retirar los pasajes anteriores para que no bloqueen el reinicio. Una reprogramación puede reutilizar su propia reserva nueva sin considerarla otra reprogramación activa. La serialización de solicitudes simultáneas sigue correspondiendo al backend llamador.

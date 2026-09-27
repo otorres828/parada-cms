@@ -20,10 +20,18 @@ class ReservaService
 {
     public const MINUTOS_BLOQUEO = 20;
 
-    // 1. Al continuar desde el itinerario, crea solo la reserva NUEVA con la cotización de un pasaje.
+    // 1. Crea o reinicia la reserva NUEVA del cliente para esta programación.
     public static function aplicarReserva(User $cliente, int $tarifaId, ?int $reprogramacionId = null): Reserva
     {
         return DB::transaction(function () use ($cliente, $tarifaId, $reprogramacionId) {
+
+            $tarifa = ProgramacionTramoPrecio::findOrFail($tarifaId);
+            $reserva = Reserva::where('usuario_id', $cliente->id)
+                ->where('programacion_id', $tarifa->programacion_id)
+                ->where('estado_pago', Reserva::ESTADO_PAGO_NUEVO)
+                ->whereDoesntHave('pago')
+                ->orderByDesc('id')
+                ->first();
 
             $reservaOriginal = null;
 
@@ -40,19 +48,27 @@ class ReservaService
                 );
 
                 Reserva::exigir(
-                    ! $reservaOriginal->tieneReprogramacionActiva(),
+                    ! Reserva::reservasQueBloqueanAsientos()
+                        ->where('reprogramacion_id', $reservaOriginal->id)
+                        ->when($reserva !== null, fn ($query) => $query->whereKeyNot($reserva->id))
+                        ->exists(),
                     'reprogramacion_id',
                     'Esta reserva ya tiene una reprogramación activa.',
                 );
             }
 
-            $tarifa = ProgramacionTramoPrecio::findOrFail($tarifaId);
             $programacion = Programacion::query()
                 ->with(['viaje.tramos', 'viaje.empresa', 'autobus'])
                 ->findOrFail($tarifa->programacion_id);
 
             $terminales = Terminal::obtenerSecuenciaRuta($programacion);
 
+            if ($reserva !== null) {
+                if ($reserva->cupon_id !== null) {
+                    app(CuponService::class)->cancelarYLiberarCupon($reserva);
+                }
+                $reserva->pasajes()->delete();
+            }
 
             $disponibilidad = Pasaje::disponibilidad($programacion, $tarifa, $terminales);
 
@@ -71,7 +87,8 @@ class ReservaService
                 ? TasaServicio::paraPrecio($tarifa->precio)->calcular($tarifa->precio)
                 : '0.00';
 
-            $reserva = Reserva::create([
+            $reserva ??= new Reserva;
+            $reserva->fill([
                 'usuario_id' => $cliente->id,
                 'programacion_id' => $programacion->id,
                 'origen_terminal_id' => $tarifa->origen_terminal_id,
@@ -79,7 +96,8 @@ class ReservaService
                 'programacion_tramo_precio_id' => $tarifa->id,
                 'reprogramacion_id' => $reservaOriginal?->id,
                 'tipos_cambios_id' => $tipoCambio->id,
-                'codigo_referencia' => (string) Str::ulid(),
+                'codigo_referencia' => $reserva->codigo_referencia ?? (string) Str::ulid(),
+                'cupon_id' => null,
                 'monto_pasajes' => $tarifa->precio,
                 'descuento_aplicado' => '0.00',
                 'exoneracion_tasa_json' => $exoneracionTasa,
@@ -87,8 +105,10 @@ class ReservaService
                 'monto_total' => bcadd($tarifa->precio, $tasa, 2),
                 'estado_pago' => Reserva::ESTADO_PAGO_NUEVO,
                 'fecha_compra' => now(),
+                'fecha_pago' => null,
                 'fecha_expiracion' => now()->addMinutes(self::MINUTOS_BLOQUEO),
             ]);
+            $reserva->save();
 
             return $reserva->detalle();
 
