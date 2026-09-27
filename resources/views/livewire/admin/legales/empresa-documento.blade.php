@@ -160,39 +160,38 @@
 
     <div class="card">
 
-        <div class="card-header d-flex align-items-center justify-content-between flex-wrap gap-3">
-            <span>Documentos de la empresa</span>
+        <div class="card-header d-flex flex-column flex-lg-row align-items-lg-center justify-content-between gap-3">
+            <span class="fw-semibold text-nowrap">
+                Documentos de la empresa
+            </span>
 
-            <div style="width:320px;max-width:100%">
+            <div class="d-flex flex-column flex-sm-row gap-2 ms-lg-auto w-100" style="max-width: 680px;">
 
-                <label class="visually-hidden" for="legal-search">
-                    Buscar documentos
-                </label>
-                <input id="legal-search" type="search" class="form-control" placeholder="Buscar documentos"
-                    wire:model.live.debounce.500ms="search">
-            </div>
+                <div class="flex-fill">
 
-        </div>
-
-        <div class="card-body">
-
-            <div class="row">
-
-                <div class="col-md-4">
-
-                    <label class="form-label" for="legal-tipo">
+                    <label class="visually-hidden" for="legal-tipo">
                         Tipo de documento
                     </label>
 
                     <select id="legal-tipo" class="form-select" wire:model.live="tipo_filtro">
 
-                        <option value="">Todos</option>
+                        <option value="">Todos los tipos</option>
 
                         @foreach ($tipos as $value => $label)
                             <option value="{{ $value }}">{{ $label }}</option>
                         @endforeach
 
                     </select>
+
+                </div>
+
+                <div class="flex-fill">
+
+                    <label class="visually-hidden" for="legal-search">
+                        Buscar documentos
+                    </label>
+                    <input id="legal-search" type="search" class="form-control" placeholder="Buscar documentos"
+                        wire:model.live.debounce.500ms="search">
 
                 </div>
 
@@ -302,7 +301,7 @@
         {{ $documentos->links() }}
     </div>
 
-    <x-layout.loader.fullpage wire:loading.delay.short wire:target="save,deleteDocumento" />
+    <x-layout.loader.fullpage wire:loading.delay.short wire:target="save,deleteDocumento,tipo_filtro" />
 
 </div>
 
