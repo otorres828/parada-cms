@@ -10,11 +10,6 @@ use Symfony\Component\HttpFoundation\Response;
 
 class CheckPermission
 {
-    private const ROUTES_WITHOUT_PERMISSION = [
-        'admin.account.profile',
-        'admin.account.password',
-    ];
-
     private const ROUTE_PERMISSIONS = [
         /* ----------------------------------------Dashboard---------------------------------------- */
         'admin.dashboard' => ['dashboard', 'list'],
@@ -144,6 +139,12 @@ class CheckPermission
         // Centro de ayuda
         'admin.centro-ayuda.list' => ['centro-ayuda', 'list'],
         'admin.centro-ayuda.detail' => ['centro-ayuda', 'detail'],
+    ];
+
+    /* ----------------------------------------Mi cuenta---------------------------------------- */
+    private const ROUTES_WITHOUT_PERMISSION = [
+        'admin.account.profile',
+        'admin.account.password',
     ];
 
     public function handle(Request $request, Closure $next): Response
