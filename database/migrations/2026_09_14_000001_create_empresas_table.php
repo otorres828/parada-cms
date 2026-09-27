@@ -11,6 +11,7 @@ return new class extends Migration
         Schema::create('empresas', function (Blueprint $table) {
             $table->id();
             $table->string('nombre');
+            $table->string('tipo_entidad', 20)->default('agencia_autobus');
             $table->string('rif');
             $table->string('telefono');
             $table->string('email');

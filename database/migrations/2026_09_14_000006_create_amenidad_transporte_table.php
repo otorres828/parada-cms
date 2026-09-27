@@ -8,19 +8,19 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('amenidad_autobus', function (Blueprint $table) {
+        Schema::create('amenidad_transporte', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('autobus_id');
+            $table->unsignedBigInteger('transporte_id');
             $table->unsignedBigInteger('amenidad_id');
             $table->timestamps();
-            $table->foreign('autobus_id')->references('id')->on('autobuses')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('transporte_id')->references('id')->on('transportes')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('amenidad_id')->references('id')->on('amenidades')->onUpdate('cascade')->onDelete('cascade');
-            $table->unique(['autobus_id', 'amenidad_id']);
+            $table->unique(['transporte_id', 'amenidad_id']);
         });
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('amenidad_autobus');
+        Schema::dropIfExists('amenidad_transporte');
     }
 };
