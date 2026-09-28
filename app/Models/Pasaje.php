@@ -170,8 +170,16 @@ class Pasaje extends ModelHelper
                     });
                 }
 
-                if (isset($filters['estado_pago']) && $filters['estado_pago'] !== '') {
-                    $query->where('reservas.estado_pago', $filters['estado_pago']);
+                $status = $filters['status'] ?? $filters['estatus'] ?? $filters['estado_pago'] ?? null;
+
+                if ($status !== null && $status !== '') {
+                    if ($status == Reserva::ESTADO_PAGO_PAGADO) {
+                        // Si el estado es "pagado", incluimos también los estados "reembolsado" y "reprogramado"
+                        // Esto se debe a que la tasa de servicio es no reembolsable, por lo que se considera que la reserva ha sido pagada en términos de la plataforma.
+                        $query->whereIn('reservas.estado_pago', [Reserva::ESTADO_PAGO_PAGADO, Reserva::ESTADO_PAGO_REEMBOLSADO, Reserva::ESTADO_PAGO_REPROGRAMADO]);
+                    } else {
+                        $query->where('reservas.estado_pago', $status);
+                    }
                 }
             });
         }

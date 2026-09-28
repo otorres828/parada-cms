@@ -67,11 +67,13 @@
             </label>
 
             <select id="filtro-estado-pago" class="form-select" wire:model.live="status">
-                <option value="">Todos los estados</option>
-                <option value="{{ \App\Models\Reserva::ESTADO_PAGO_PAGADO }}">Pagadas</option>
-                <option value="{{ \App\Models\Reserva::ESTADO_PAGO_PENDIENTE }}">Pendientes</option>
-                <option value="{{ \App\Models\Reserva::ESTADO_PAGO_CANCELADO }}">Canceladas</option>
-                <option value="{{ \App\Models\Reserva::ESTADO_PAGO_REPROGRAMADO }}">Reprogramadas</option>
+                <option value="">Todos</option>
+                <option value="{{ \App\Models\Reserva::ESTADO_PAGO_PAGADO }}">Pagada y Reembolsado</option>
+                <option value="{{ \App\Models\Reserva::ESTADO_PAGO_PENDIENTE }}">Pendiente</option>
+                <option value="{{ \App\Models\Reserva::ESTADO_PAGO_CANCELADO }}">Cancelada</option>
+                <option value="{{ \App\Models\Reserva::ESTADO_PAGO_REPROGRAMADO }}">Reprogramada</option>
+                <option value="{{ \App\Models\Reserva::ESTADO_PAGO_REEMBOLSADO }}">Reembolsada</option>
+
             </select>
 
         </div>
