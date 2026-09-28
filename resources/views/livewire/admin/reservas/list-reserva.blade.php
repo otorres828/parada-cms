@@ -127,10 +127,9 @@
 
                 <th>Empresa </th>
 
-                <th>Tipo de transporte</th>
-                <th>Origen</th>
+                <th>Transporte</th>
 
-                <th>Destino final</th>
+                <th>Ruta</th>
 
                 <th>Fecha
                     <x-list.sortable-button column="fecha_compra" :$sortColumn :$sortDirection />
@@ -174,11 +173,7 @@
                     <td>{{ $reserva->programacion?->transporte?->getTipoTransporte() ?? 'No registrado' }}</td>
 
                     <td>
-                        {{ $reserva->origenTerminal?->nombre ?? 'No registrado' }}
-                    </td>
-
-                    <td>
-                        {{ $reserva->destinoTerminal?->nombre ?? 'No registrado' }}
+                        {{ $reserva->origenTerminal?->nombre ?? 'No registrado' }} -  {{ $reserva->destinoTerminal?->nombre ?? 'No registrado' }}
                     </td>
 
                     <td>
