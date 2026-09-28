@@ -79,6 +79,32 @@
       }
     ]
   },
+  {"id": 7, "name": "Catálogos", "url": "catalogos", "icon": "bi-collection", "status": 1,
+    "sections": [
+      {"name": "Preguntas frecuentes", "url": "preguntas-frecuentes", "status": 1,
+        "permissions": [
+          {"name": "Listar", "url": "list", "status": 1},
+          {"name": "Agregar", "url": "add", "status": 1},
+          {"name": "Editar", "url": "edit", "status": 1},
+          {"name": "Eliminar", "url": "delete", "status": 1}
+        ]
+      },
+      {"name": "Terminales", "url": "terminales", "status": 1,
+        "permissions": [
+          {"name": "Listar", "url": "list", "status": 1},
+          {"name": "Agregar", "url": "add", "status": 1},
+          {"name": "Editar", "url": "edit", "status": 1}
+        ]
+      },
+      {"name": "Amenidades", "url": "amenidades", "status": 1,
+        "permissions": [
+          {"name": "Listar", "url": "list", "status": 1},
+          {"name": "Agregar", "url": "add", "status": 1},
+          {"name": "Editar", "url": "edit", "status": 1}
+        ]
+      }
+    ]
+  },
   {"id": 4, "name": "Operación de viajes", "url": "operacion", "icon": "bi-bus-front", "status": 1,
     "sections": [
       {"name": "Rutas de viaje", "url": "viajes", "status": 1,
@@ -141,32 +167,6 @@
           {"name":"Ver detalle","url":"detail","status":1},
           {"name":"Agregar","url":"add","status":1},
           {"name":"Editar","url":"edit","status":1}
-        ]
-      }
-    ]
-  },
-  {"id": 7, "name": "Catálogos", "url": "catalogos", "icon": "bi-collection", "status": 1,
-    "sections": [
-      {"name": "Preguntas frecuentes", "url": "preguntas-frecuentes", "status": 1,
-        "permissions": [
-          {"name": "Listar", "url": "list", "status": 1},
-          {"name": "Agregar", "url": "add", "status": 1},
-          {"name": "Editar", "url": "edit", "status": 1},
-          {"name": "Eliminar", "url": "delete", "status": 1}
-        ]
-      },
-      {"name": "Terminales", "url": "terminales", "status": 1,
-        "permissions": [
-          {"name": "Listar", "url": "list", "status": 1},
-          {"name": "Agregar", "url": "add", "status": 1},
-          {"name": "Editar", "url": "edit", "status": 1}
-        ]
-      },
-      {"name": "Amenidades", "url": "amenidades", "status": 1,
-        "permissions": [
-          {"name": "Listar", "url": "list", "status": 1},
-          {"name": "Agregar", "url": "add", "status": 1},
-          {"name": "Editar", "url": "edit", "status": 1}
         ]
       }
     ]

@@ -228,6 +228,50 @@ Route::group(['middleware' => ['auth:admin', 'check.permisos']], function () {
 
     });
 
+    /* ---------------------------------------------CATALOGOS---------------------------------------------------------- */
+
+    Route::prefix('catalogos')->group(function () {
+
+        /* ----------------------------------------Terminales----------------------------------------------- */
+
+        Route::prefix('terminales')->name('terminales.')->group(function () {
+
+            Route::livewire('/', ListTerminal::class)->name('list');
+            Route::livewire('nuevo', SaveTerminal::class)->name('add');
+            Route::livewire('editar/{terminal_id}', SaveTerminal::class)->whereNumber('terminal_id')->name('edit');
+        });
+
+        /* ----------------------------------------Amenidades----------------------------------------------- */
+
+        Route::prefix('amenidades')->name('amenidades.')->group(function () {
+
+            Route::livewire('/', ListAmenidad::class)->name('list');
+            Route::livewire('nuevo', SaveAmenidad::class)->name('add');
+            Route::livewire('editar/{amenidad_id}', SaveAmenidad::class)->whereNumber('amenidad_id')->name('edit');
+
+        });
+
+        /* ----------------------------------------Preguntas frecuentes--------------------------------------- */
+
+        Route::prefix('preguntas-frecuentes')->name('preguntas-frecuentes.')->group(function () {
+
+            Route::livewire('/', ListPregunta::class)->name('list');
+            Route::livewire('nuevo', SavePregunta::class)->name('add');
+            Route::livewire('editar/{pregunta_id}', SavePregunta::class)->whereNumber('pregunta_id')->name('edit');
+
+            Route::prefix('categorias')->name('categorias.')->group(function () {
+
+                Route::livewire('/', ListCategoria::class)->name('list');
+                Route::livewire('nueva', SaveCategoria::class)->name('add');
+                Route::livewire('editar/{categoria_id}', SaveCategoria::class)->whereNumber('categoria_id')->name('edit');
+
+            });
+
+        });
+
+    
+    });
+
     /* ---------------------------------------------OPERACIONES DE VIAJES---------------------------------------------- */
 
     Route::prefix('operaciones')->group(function () {
@@ -318,50 +362,6 @@ Route::group(['middleware' => ['auth:admin', 'check.permisos']], function () {
 
         });
 
-    });
-
-    /* ---------------------------------------------CATALOGOS---------------------------------------------------------- */
-
-    Route::prefix('catalogos')->group(function () {
-
-        /* ----------------------------------------Terminales----------------------------------------------- */
-
-        Route::prefix('terminales')->name('terminales.')->group(function () {
-
-            Route::livewire('/', ListTerminal::class)->name('list');
-            Route::livewire('nuevo', SaveTerminal::class)->name('add');
-            Route::livewire('editar/{terminal_id}', SaveTerminal::class)->whereNumber('terminal_id')->name('edit');
-        });
-
-        /* ----------------------------------------Amenidades----------------------------------------------- */
-
-        Route::prefix('amenidades')->name('amenidades.')->group(function () {
-
-            Route::livewire('/', ListAmenidad::class)->name('list');
-            Route::livewire('nuevo', SaveAmenidad::class)->name('add');
-            Route::livewire('editar/{amenidad_id}', SaveAmenidad::class)->whereNumber('amenidad_id')->name('edit');
-
-        });
-
-        /* ----------------------------------------Preguntas frecuentes--------------------------------------- */
-
-        Route::prefix('preguntas-frecuentes')->name('preguntas-frecuentes.')->group(function () {
-
-            Route::livewire('/', ListPregunta::class)->name('list');
-            Route::livewire('nuevo', SavePregunta::class)->name('add');
-            Route::livewire('editar/{pregunta_id}', SavePregunta::class)->whereNumber('pregunta_id')->name('edit');
-
-            Route::prefix('categorias')->name('categorias.')->group(function () {
-
-                Route::livewire('/', ListCategoria::class)->name('list');
-                Route::livewire('nueva', SaveCategoria::class)->name('add');
-                Route::livewire('editar/{categoria_id}', SaveCategoria::class)->whereNumber('categoria_id')->name('edit');
-
-            });
-
-        });
-
-    
     });
 
     /* ----------------------------------------------REPORTES----------------------------------------------------------- */

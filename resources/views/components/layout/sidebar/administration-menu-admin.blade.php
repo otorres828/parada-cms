@@ -106,6 +106,33 @@
     ])
 @endif
 
+@if ($listTerminales or $listAmenidades or $listPreguntas)
+    @include('components.layout.sidebar-li', [
+        'menu' => 'Catálogos',
+        'icon' => 'nav-icon bi bi-collection',
+        'list' => [
+            [
+                'existe' => $listTerminales ?? false,
+                'route' => route('admin.terminales.list'),
+                'name' => 'Terminales',
+                'active' => request()->routeIs('admin.terminales.*') ? 'active' : '',
+            ],
+            [
+                'existe' => $listAmenidades ?? false,
+                'route' => route('admin.amenidades.list'),
+                'name' => 'Amenidades',
+                'active' => request()->routeIs('admin.amenidades.*') ? 'active' : '',
+            ],
+            [
+                'existe' => $listPreguntas,
+                'route' => route('admin.preguntas-frecuentes.list'),
+                'name' => 'Preguntas frecuentes',
+                'active' => request()->routeIs('admin.preguntas-frecuentes.*') ? 'active' : '',
+            ],
+        ],
+    ])
+@endif
+
 @if ($listViajes or $listProgramaciones or $listTransportes)
     @include('components.layout.sidebar-li', [
         'menu' => 'Operación de viajes',
@@ -176,33 +203,6 @@
                 'route' => route('admin.cupones.list'),
                 'name' => 'Cupones',
                 'active' => request()->routeIs('admin.cupones.*') ? 'active' : '',
-            ],
-        ],
-    ])
-@endif
-
-@if ($listTerminales or $listAmenidades or $listPreguntas)
-    @include('components.layout.sidebar-li', [
-        'menu' => 'Catálogos',
-        'icon' => 'nav-icon bi bi-collection',
-        'list' => [
-            [
-                'existe' => $listTerminales ?? false,
-                'route' => route('admin.terminales.list'),
-                'name' => 'Terminales',
-                'active' => request()->routeIs('admin.terminales.*') ? 'active' : '',
-            ],
-            [
-                'existe' => $listAmenidades ?? false,
-                'route' => route('admin.amenidades.list'),
-                'name' => 'Amenidades',
-                'active' => request()->routeIs('admin.amenidades.*') ? 'active' : '',
-            ],
-            [
-                'existe' => $listPreguntas,
-                'route' => route('admin.preguntas-frecuentes.list'),
-                'name' => 'Preguntas frecuentes',
-                'active' => request()->routeIs('admin.preguntas-frecuentes.*') ? 'active' : '',
             ],
         ],
     ])

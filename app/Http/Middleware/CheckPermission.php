@@ -68,6 +68,26 @@ class CheckPermission
         'admin.legales.politicas-cookies.edit' => ['politicas-cookies', 'edit'],
         'admin.legales.terminos-condiciones.edit' => ['terminos-condiciones', 'edit'],
 
+        /* ----------------------------------------Catálogos---------------------------------------- */
+
+        // Terminales
+        'admin.terminales.list' => ['terminales', 'list'],
+        'admin.terminales.add' => ['terminales', 'add'],
+        'admin.terminales.edit' => ['terminales', 'edit'],
+
+        // Amenidades
+        'admin.amenidades.list' => ['amenidades', 'list'],
+        'admin.amenidades.add' => ['amenidades', 'add'],
+        'admin.amenidades.edit' => ['amenidades', 'edit'],
+
+        // Preguntas frecuentes
+        'admin.preguntas-frecuentes.list' => ['preguntas-frecuentes', 'list'],
+        'admin.preguntas-frecuentes.add' => ['preguntas-frecuentes', 'add'],
+        'admin.preguntas-frecuentes.edit' => ['preguntas-frecuentes', 'edit'],
+        'admin.preguntas-frecuentes.categorias.list' => ['preguntas-frecuentes', 'list'],
+        'admin.preguntas-frecuentes.categorias.add' => ['preguntas-frecuentes', 'add'],
+        'admin.preguntas-frecuentes.categorias.edit' => ['preguntas-frecuentes', 'edit'],
+
         /* ----------------------------------------Operación de viajes------------------------------ */
 
         // Rutas de viajes
@@ -107,26 +127,6 @@ class CheckPermission
         'admin.cupones.add' => ['cupones', 'add'],
         'admin.cupones.edit' => ['cupones', 'edit'],
         'admin.cupones.detail' => ['cupones', 'detail'],
-
-        /* ----------------------------------------Catálogos---------------------------------------- */
-
-        // Terminales
-        'admin.terminales.list' => ['terminales', 'list'],
-        'admin.terminales.add' => ['terminales', 'add'],
-        'admin.terminales.edit' => ['terminales', 'edit'],
-
-        // Amenidades
-        'admin.amenidades.list' => ['amenidades', 'list'],
-        'admin.amenidades.add' => ['amenidades', 'add'],
-        'admin.amenidades.edit' => ['amenidades', 'edit'],
-
-        // Preguntas frecuentes
-        'admin.preguntas-frecuentes.list' => ['preguntas-frecuentes', 'list'],
-        'admin.preguntas-frecuentes.add' => ['preguntas-frecuentes', 'add'],
-        'admin.preguntas-frecuentes.edit' => ['preguntas-frecuentes', 'edit'],
-        'admin.preguntas-frecuentes.categorias.list' => ['preguntas-frecuentes', 'list'],
-        'admin.preguntas-frecuentes.categorias.add' => ['preguntas-frecuentes', 'add'],
-        'admin.preguntas-frecuentes.categorias.edit' => ['preguntas-frecuentes', 'edit'],
 
         /* ----------------------------------------Reportes----------------------------------------- */
         'admin.reportes.sales' => ['reportes', 'list-sales'],
