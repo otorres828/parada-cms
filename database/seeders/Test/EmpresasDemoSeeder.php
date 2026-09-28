@@ -59,8 +59,8 @@ class EmpresasDemoSeeder extends Seeder
                 'tipo_contrato' => $numero % 2 === 0
                     ? Empresa::CONTRATO_NOSOTROS_RECIBIMOS
                     : Empresa::CONTRATO_ELLOS_RECIBEN,
-                'dia_corte' => $numero % 2 === 0 ? null : 5,
-                'dia_vencimiento' => $numero % 2 === 0 ? null : 7,
+                'dia_corte' => 7,
+                'dia_vencimiento' => 5,
                 'hora_corte' => '00:00:00',
                 'hora_vencimiento' => '23:59:59',
                 'bloqueada_por_cobranza_at' => null,

@@ -12,6 +12,7 @@ class AdminDemoSeeder extends Seeder
             CatalogosDemoSeeder::class,
             EmpresasDemoSeeder::class,
             OperacionHistoricaDemoSeeder::class,
+            OrdenesCobroDemoSeeder::class,
         ]);
     }
 }
