@@ -2,11 +2,13 @@
 
 namespace App\Livewire\Admin\PreguntasFrecuentes;
 
+use App\Models\CategoriaPreguntaFrecuente;
 use App\Models\PreguntaFrecuente;
 use App\Services\Admin\Access;
 use App\Services\Admin\Audit;
 use App\Traits\Listing;
 use App\Traits\Permissions;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
@@ -19,11 +21,19 @@ class ListPregunta extends Component
     use Permissions;
     use WithPagination;
 
+    public string $categoria_id = '';
+
+    public string $destacada = '';
+
     public string $estatus = '';
+
+    public Collection $categorias;
 
     protected array $queryString = [
         'search' => ['except' => ''],
         'per_page' => ['except' => 10],
+        'categoria_id' => ['except' => ''],
+        'destacada' => ['except' => ''],
         'estatus' => ['except' => ''],
     ];
 
@@ -32,11 +42,17 @@ class ListPregunta extends Component
         $this->sortColumn = 'orden';
         $this->sortDirection = 'asc';
         $this->checkPermissions('preguntas-frecuentes');
+        $this->categorias = CategoriaPreguntaFrecuente::searchAdmin()
+            ->orderBy('orden')
+            ->orderBy('nombre')
+            ->get();
     }
 
     public function render()
     {
         $query = PreguntaFrecuente::searchAdmin($this->search, [
+            'categoria_id' => $this->categoria_id,
+            'destacada' => $this->destacada,
             'estatus' => $this->estatus,
         ]);
 
@@ -49,7 +65,7 @@ class ListPregunta extends Component
 
     public function updated(string $property): void
     {
-        if (in_array($property, ['search', 'estatus', 'per_page'], true)) {
+        if (in_array($property, ['search', 'categoria_id', 'destacada', 'estatus', 'per_page'], true)) {
             $this->resetPage();
         }
     }

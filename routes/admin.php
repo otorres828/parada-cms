@@ -79,7 +79,9 @@ use App\Livewire\Admin\Terminales\SaveTerminal;
 use App\Livewire\Admin\Amenidades\ListAmenidad;
 use App\Livewire\Admin\Amenidades\SaveAmenidad;
 /* ------------------------------Preguntas frecuentes------------------------------ */
+use App\Livewire\Admin\PreguntasFrecuentes\ListCategoria;
 use App\Livewire\Admin\PreguntasFrecuentes\ListPregunta;
+use App\Livewire\Admin\PreguntasFrecuentes\SaveCategoria;
 use App\Livewire\Admin\PreguntasFrecuentes\SavePregunta;
 /* ------------------------------Reporte de Ventas de Empresas--------------------- */
 use App\Livewire\Admin\Reportes\CompaniesReport;
@@ -348,6 +350,14 @@ Route::group(['middleware' => ['auth:admin', 'check.permisos']], function () {
             Route::livewire('/', ListPregunta::class)->name('list');
             Route::livewire('nuevo', SavePregunta::class)->name('add');
             Route::livewire('editar/{pregunta_id}', SavePregunta::class)->whereNumber('pregunta_id')->name('edit');
+
+            Route::prefix('categorias')->name('categorias.')->group(function () {
+
+                Route::livewire('/', ListCategoria::class)->name('list');
+                Route::livewire('nueva', SaveCategoria::class)->name('add');
+                Route::livewire('editar/{categoria_id}', SaveCategoria::class)->whereNumber('categoria_id')->name('edit');
+
+            });
 
         });
 

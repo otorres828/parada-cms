@@ -124,6 +124,9 @@ class CheckPermission
         'admin.preguntas-frecuentes.list' => ['preguntas-frecuentes', 'list'],
         'admin.preguntas-frecuentes.add' => ['preguntas-frecuentes', 'add'],
         'admin.preguntas-frecuentes.edit' => ['preguntas-frecuentes', 'edit'],
+        'admin.preguntas-frecuentes.categorias.list' => ['preguntas-frecuentes', 'list'],
+        'admin.preguntas-frecuentes.categorias.add' => ['preguntas-frecuentes', 'add'],
+        'admin.preguntas-frecuentes.categorias.edit' => ['preguntas-frecuentes', 'edit'],
 
         /* ----------------------------------------Reportes----------------------------------------- */
         'admin.reportes.sales' => ['reportes', 'list-sales'],

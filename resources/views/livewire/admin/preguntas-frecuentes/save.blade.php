@@ -1,13 +1,15 @@
 {{--
-    PREGUNTAS FRECUENTES — FORMULARIO
+    PREGUNTAS FRECUENTES — FORMULARIO DEL CENTRO DE AYUDA
     --------------------------------------------------------------------------
-    Permite crear o editar una pregunta, su respuesta, orden de presentación y estado.
+    Permite crear o editar el contenido público de una pregunta frecuente, incluyendo
+    categoría, URL, resumen, respuesta enriquecida, palabras clave, destacado y orden.
 
     Componentes reutilizables utilizados:
     - <x-list.heading />: Cabecera del formulario.
     - <x-form.cancel-button />: Regresa al listado.
-    - <x-form.container-sm />: Limita el ancho del formulario.
-    - <x-form.text-input />: Campo reutilizable para pregunta y orden.
+    - <x-form.text-input />: Campos reutilizables de texto y orden.
+    - <x-form.dropdown />: Selectores de categoría y estado.
+    - <x-form.rich-text-editor />: Editor TinyMCE sincronizado con Livewire.
     - <x-layout.error />: Resumen de errores del servidor.
     - <x-layout.loader.fullpage />: Indicador global de carga.
     --------------------------------------------------------------------------
@@ -18,7 +20,6 @@
 <div x-data="savePregunta" class="py-3">
 
     <x-list.heading>
-
         <x-slot:title>
             {{ $pregunta_id ? 'Editar pregunta' : 'Nueva pregunta' }}
         </x-slot:title>
@@ -28,58 +29,89 @@
                 Volver al listado
             </x-form.cancel-button>
         </x-slot:button>
-
     </x-list.heading>
 
     <x-layout.error />
 
+    @if ($categorias->isEmpty())
+        <div class="alert alert-info" role="alert">
+            Debe registrar una categoría activa antes de crear preguntas frecuentes.
+            <a href="{{ route('admin.preguntas-frecuentes.categorias.add') }}" wire:navigate>
+                Crear categoría
+            </a>
+        </div>
+    @endif
+
     <form x-ref="form" @submit.prevent="preSave" novalidate>
 
-        <x-form.container-sm>
+        <div class="row g-3">
+            <div class="col-md-6">
+                <x-form.dropdown label="Categoría" name="categoria_pregunta_frecuente_id"
+                    x-model="$wire.categoria_pregunta_frecuente_id">
+                    <option value="">Seleccione</option>
+                    @foreach ($categorias as $categoria)
+                        <option value="{{ $categoria->id }}">{{ $categoria->nombre }}</option>
+                    @endforeach
+                </x-form.dropdown>
+            </div>
 
-            <div class="mb-3">
+            <div class="col-md-6">
                 <x-form.text-input name="pregunta" x-model="$wire.pregunta">
-                    Pregunta
+                    Pregunta o título del artículo
                 </x-form.text-input>
-                @error('pregunta')
-                    <div class="text-danger small">{{ $message }}</div>
-                @enderror
             </div>
 
-            <div class="mb-3">
-                <label for="respuesta" class="form-label">Respuesta</label>
-                <textarea id="respuesta" name="respuesta" class="form-control" rows="8" maxlength="15000"
-                    x-model="$wire.respuesta"></textarea>
-                @error('respuesta')
-                    <div class="text-danger small">{{ $message }}</div>
-                @enderror
+            <div class="col-md-6">
+                <x-form.text-input name="slug" x-model="$wire.slug">
+                    Slug público (opcional)
+                </x-form.text-input>
+                <div class="form-text">Si lo deja vacío, se genera a partir de la pregunta.</div>
             </div>
 
-            <div class="mb-3">
+            <div class="col-md-6">
+                <x-form.text-input name="palabras_clave" x-model="$wire.palabras_clave">
+                    Palabras clave
+                </x-form.text-input>
+                <div class="form-text">Separe los términos de búsqueda con comas.</div>
+            </div>
+
+            <div class="col-12">
+                <label for="resumen" class="form-label">Resumen</label>
+                <textarea id="resumen" name="resumen" class="form-control" rows="3" maxlength="500"
+                    x-model="$wire.resumen"></textarea>
+                <div class="form-text">Este texto aparece en el listado público de la categoría.</div>
+            </div>
+
+            <div class="col-12">
+                <label class="form-label" for="respuesta-{{ $pregunta_id ?? 'nuevo' }}">Respuesta</label>
+                <x-form.rich-text-editor id="respuesta-{{ $pregunta_id ?? 'nuevo' }}" model="respuesta" />
+            </div>
+
+            <div class="col-md-4">
                 <x-form.text-input type="number" name="orden" min="0" max="99999" x-model="$wire.orden">
                     Orden de presentación
                 </x-form.text-input>
-                @error('orden')
-                    <div class="text-danger small">{{ $message }}</div>
-                @enderror
             </div>
 
-            <div class="mb-3">
+            <div class="col-md-4">
                 <x-form.dropdown label="Estado" name="estatus" x-model="$wire.estatus">
                     <option value="1">Activo</option>
                     <option value="2">Inactivo</option>
                 </x-form.dropdown>
-
-                @error('estatus')
-                    <div class="text-danger small">{{ $message }}</div>
-                @enderror
             </div>
 
-        </x-form.container-sm>
+            <div class="col-md-4 d-flex align-items-end pb-2">
+                <div class="form-check">
+                    <input id="destacada" class="form-check-input" type="checkbox" x-model="$wire.destacada">
+                    <label class="form-check-label" for="destacada">Mostrar en artículos populares</label>
+                </div>
+            </div>
+        </div>
 
         <hr>
 
-        <button class="btn btn-primary" type="submit" :disabled="saving" wire:loading.attr="disabled">
+        <button class="btn btn-primary" type="submit" :disabled="saving || {{ $categorias->isEmpty() ? 'true' : 'false' }}"
+            wire:loading.attr="disabled">
             Guardar
         </button>
 
@@ -101,6 +133,10 @@
                         errorFieldCssClass: ['is-invalid'],
                         successFieldCssClass: ['is-valid'],
                     });
+                    this.validator.addField('[name="categoria_pregunta_frecuente_id"]', [{
+                        rule: 'required',
+                        errorMessage: 'Selecciona la categoría',
+                    }]);
                     this.validator.addField('[name="pregunta"]', [{
                         rule: 'required',
                         errorMessage: 'Ingresa la pregunta',
@@ -109,13 +145,13 @@
                         value: 255,
                         errorMessage: 'Máximo 255 caracteres',
                     }]);
-                    this.validator.addField('[name="respuesta"]', [{
+                    this.validator.addField('[name="resumen"]', [{
                         rule: 'required',
-                        errorMessage: 'Ingresa la respuesta',
+                        errorMessage: 'Ingresa el resumen',
                     }, {
                         rule: 'maxLength',
-                        value: 15000,
-                        errorMessage: 'Máximo 15000 caracteres',
+                        value: 500,
+                        errorMessage: 'Máximo 500 caracteres',
                     }]);
                     this.validator.addField('[name="orden"]', [{
                         rule: 'required',
@@ -132,6 +168,12 @@
             },
             async preSave() {
                 if (this.saving || ! this.validator || ! await this.validator.revalidate()) return;
+
+                if (! this.$wire.respuesta || ! this.$wire.respuesta.replace(/<[^>]*>/g, '').trim()) {
+                    this.$store.toast.info('Ingresa la respuesta.');
+                    return;
+                }
+
                 this.saving = true;
                 try {
                     await this.$wire.save();

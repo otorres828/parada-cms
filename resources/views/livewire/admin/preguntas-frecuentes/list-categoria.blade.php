@@ -1,39 +1,36 @@
 {{--
-    PREGUNTAS FRECUENTES — LISTADO
+    CATEGORÍAS DEL CENTRO DE AYUDA — LISTADO
     --------------------------------------------------------------------------
-    Administra las preguntas y artículos breves publicados en el centro de ayuda. Permite
-    buscar, filtrar por categoría, destacado y estado, ordenar y gestionar cada registro.
+    Administra las categorías que agrupan las preguntas frecuentes del sitio público.
+    Permite buscar, filtrar, ordenar, cambiar el estado y eliminar categorías vacías.
 
     Componentes reutilizables utilizados:
-    - <x-list.heading />: Cabecera del módulo.
-    - <x-list.actions />: Contenedor del buscador, filtro y acción de registro.
-    - <x-list.search-input />: Buscador reactivo.
-    - <x-list.table />: Contenedor reutilizable para la tabla.
-    - <x-list.sortable-button />: Control de ordenación.
+    - <x-list.heading />: Cabecera y regreso al listado de preguntas.
+    - <x-list.actions />: Buscador, filtro y acción de registro.
+    - <x-list.table />: Tabla del listado.
     - <x-list.status-badge />: Estado visual del registro.
     - <x-list.button-group />: Agrupación de acciones.
-    - <x-list.status-button />: Activa o desactiva la pregunta.
+    - <x-list.status-button />: Activa o desactiva la categoría.
     - <x-list.edit-button />: Enlace de edición.
-    - <x-list.delete-button />: Elimina el registro.
+    - <x-list.delete-button />: Elimina lógicamente una categoría vacía.
     - <x-layout.loader.fullpage />: Indicador global de carga.
     --------------------------------------------------------------------------
 --}}
 
-@section('title', 'Preguntas frecuentes')
+@section('title', 'Categorías del centro de ayuda')
 
-<div x-data="listPregunta" class="py-3">
+<div x-data="listCategoriaPregunta" class="py-3">
 
     <x-list.heading>
 
         <x-slot:title>
-            Preguntas frecuentes
+            Categorías del centro de ayuda
         </x-slot:title>
 
         <x-slot:button>
-            <a class="btn btn-outline-secondary" href="{{ route('admin.preguntas-frecuentes.categorias.list') }}"
-                wire:navigate>
-                <i class="bi bi-folder" aria-hidden="true"></i> Categorías
-            </a>
+            <x-form.cancel-button :link="route('admin.preguntas-frecuentes.list')">
+                Volver a preguntas
+            </x-form.cancel-button>
         </x-slot:button>
 
     </x-list.heading>
@@ -45,21 +42,6 @@
         </x-slot:search>
 
         <x-slot:group>
-            <select class="form-select" style="width: 240px;" wire:model.live="categoria_id"
-                aria-label="Filtrar por categoría">
-                <option value="">Todas las categorías</option>
-                @foreach ($categorias as $categoria)
-                    <option value="{{ $categoria->id }}">{{ $categoria->nombre }}</option>
-                @endforeach
-            </select>
-
-            <select class="form-select" style="width: 200px;" wire:model.live="destacada"
-                aria-label="Filtrar por destacado">
-                <option value="">Todas</option>
-                <option value="1">Destacadas</option>
-                <option value="0">No destacadas</option>
-            </select>
-
             <select class="form-select" style="width: 240px;" wire:model.live="estatus"
                 aria-label="Filtrar por estado">
                 <option value="">Todos los estados</option>
@@ -70,8 +52,8 @@
 
         @if ($canAdd)
             <x-slot:button>
-                <x-list.add-button :route="route('admin.preguntas-frecuentes.add')">
-                    Nueva pregunta
+                <x-list.add-button :route="route('admin.preguntas-frecuentes.categorias.add')">
+                    Nueva categoría
                 </x-list.add-button>
             </x-slot:button>
         @endif
@@ -84,34 +66,54 @@
             <tr>
                 <th>
                     Orden
-                    <x-list.sortable-button column="orden" :$sortColumn :$sortDirection />
                 </th>
+
                 <th>
-                    Pregunta
-                    <x-list.sortable-button column="pregunta" :$sortColumn :$sortDirection />
+                    Categoría
                 </th>
-                <th>Categoría</th>
-                <th>Destacada</th>
-                <th>Estado</th>
+
+                <th>
+                    Slug
+                </th>
+
+                <th>
+                    Preguntas
+                </th>
+
+                <th>
+                    Destacada
+                </th>
+
+                <th>
+                    Estado
+                </th>
+
                 <th></th>
             </tr>
         </thead>
 
         <tbody>
-            @forelse ($preguntas as $pregunta)
+            @forelse ($categorias as $categoria)
 
-                <tr wire:key="pregunta-{{ $pregunta->id }}">
+                <tr wire:key="categoria-pregunta-{{ $categoria->id }}">
 
-                    <td>{{ $pregunta->orden }}</td>
-
-                    <td>{{ $pregunta->pregunta }}</td>
-
-                    <td>{{ $pregunta->categoria?->nombre ?? 'Sin categoría' }}</td>
-
-                    <td>{{ $pregunta->destacada ? 'Sí' : 'No' }}</td>
+                    <td>{{ $categoria->orden }}</td>
 
                     <td>
-                        <x-list.status-badge :status="$pregunta->estatus" />
+                        @if ($categoria->icono)
+                            <i class="bi {{ $categoria->icono }} me-2" aria-hidden="true"></i>
+                        @endif
+                        {{ $categoria->nombre }}
+                    </td>
+
+                    <td>{{ $categoria->slug }}</td>
+
+                    <td>{{ $categoria->preguntas_count }}</td>
+
+                    <td>{{ $categoria->destacada ? 'Sí' : 'No' }}</td>
+
+                    <td>
+                        <x-list.status-badge :status="$categoria->estatus" />
                     </td>
 
                     <td class="text-end">
@@ -119,14 +121,14 @@
                         <x-list.button-group>
 
                             @if ($canEdit)
-                                <x-list.status-button wire:click="changeStatus({{ $pregunta->id }})"
-                                    :status="$pregunta->estatus" />
-                                <x-list.edit-button :route="route('admin.preguntas-frecuentes.edit', $pregunta->id)" />
+                                <x-list.status-button wire:click="changeStatus({{ $categoria->id }})"
+                                    :status="$categoria->estatus" />
+                                <x-list.edit-button :route="route('admin.preguntas-frecuentes.categorias.edit', $categoria->id)" />
                             @endif
 
                             @if ($canDelete)
                                 <x-list.delete-button x-data
-                                    @click="$dispatch('confirmDeletion', { id: {{ $pregunta->id }}, type: 'single' })" />
+                                    @click="$dispatch('confirmDeletion', { id: {{ $categoria->id }} })" />
                             @endif
 
                         </x-list.button-group>
@@ -134,19 +136,22 @@
                     </td>
 
                 </tr>
-                
+
             @empty
+
                 <tr>
-                    <td colspan="6" class="text-center py-5">
-                        No se encontraron preguntas frecuentes.
+                    <td colspan="7" class="text-center py-5">
+                        No se encontraron categorías.
                     </td>
                 </tr>
+                
             @endforelse
+
         </tbody>
 
     </x-list.table>
 
-    {{ $preguntas->links() }}
+    {{ $categorias->links() }}
 
     <x-layout.loader.fullpage wire:loading.delay.short />
 
@@ -154,7 +159,7 @@
 
 @script
     <script>
-        Alpine.data('listPregunta', () => ({
+        Alpine.data('listCategoriaPregunta', () => ({
             init() {
                 this.toastCleanup = [
                     Livewire.on('successEventList', data => this.$store.toast.success(data.message)),
@@ -168,13 +173,14 @@
 
                 this.confirmDeletion = event => {
                     Swal.fire({
-                        title: '¿Estás seguro de eliminar esta pregunta?',
+                        title: '¿Estás seguro de eliminar esta categoría?',
+                        text: 'Solo puede eliminarse si no contiene preguntas.',
                         icon: 'warning',
                         showCancelButton: true,
                         confirmButtonText: 'Sí, eliminar',
                         cancelButtonText: 'Cancelar',
                     }).then(result => {
-                        if (result.isConfirmed) this.$wire.deletePregunta(event.detail.id);
+                        if (result.isConfirmed) this.$wire.deleteCategoria(event.detail.id);
                     });
                 };
 
