@@ -18,13 +18,13 @@
 
     <div class="container-fluid px-0 mb-4">
         <div class="row g-3">
-            <div class="col-md-6">
+            <div class="col-md-5">
                 <x-programacion.description :programacion="$programacion" :capacidad="$capacidad"
                     :pasajes-pagados="$pasajesPagados" :pasajes-pendientes="$pasajesPendientes"
                     :can-viajes-detail="$canViajesDetail" :can-transportes-detail="$canTransportesDetail" />
             </div>
 
-            <div class="col-md-6">
+            <div class="col-md-7">
                 <x-programacion.rates-matrix :programacion="$programacion"
                     :disponibilidad-tramos="$disponibilidadTramos" :tipo-cambio="$tipoCambioVigente" />
             </div>
