@@ -55,39 +55,6 @@ class CheckPermission
         'admin.clientes.edit' => ['clientes', 'edit'],
         'admin.clientes.detail' => ['clientes', 'detail'],
 
-        /* ----------------------------------------Legales------------------------------------------ */
-
-        // Documentos
-        'admin.legales.documentos.list' => ['legales', 'list'],
-        'admin.legales.documentos.detail' => ['legales', 'detail'],
-        'admin.legales.documentos.file' => ['legales', 'file'],
-
-        // Contenido de páginas
-        'admin.legales.sobre-nosotros.edit' => ['sobre-nosotros', 'edit'],
-        'admin.legales.politicas-privacidad.edit' => ['politicas-privacidad', 'edit'],
-        'admin.legales.politicas-cookies.edit' => ['politicas-cookies', 'edit'],
-        'admin.legales.terminos-condiciones.edit' => ['terminos-condiciones', 'edit'],
-
-        /* ----------------------------------------Catálogos---------------------------------------- */
-
-        // Terminales
-        'admin.terminales.list' => ['terminales', 'list'],
-        'admin.terminales.add' => ['terminales', 'add'],
-        'admin.terminales.edit' => ['terminales', 'edit'],
-
-        // Amenidades
-        'admin.amenidades.list' => ['amenidades', 'list'],
-        'admin.amenidades.add' => ['amenidades', 'add'],
-        'admin.amenidades.edit' => ['amenidades', 'edit'],
-
-        // Preguntas frecuentes
-        'admin.preguntas-frecuentes.list' => ['preguntas-frecuentes', 'list'],
-        'admin.preguntas-frecuentes.add' => ['preguntas-frecuentes', 'add'],
-        'admin.preguntas-frecuentes.edit' => ['preguntas-frecuentes', 'edit'],
-        'admin.preguntas-frecuentes.categorias.list' => ['preguntas-frecuentes', 'list'],
-        'admin.preguntas-frecuentes.categorias.add' => ['preguntas-frecuentes', 'add'],
-        'admin.preguntas-frecuentes.categorias.edit' => ['preguntas-frecuentes', 'edit'],
-
         /* ----------------------------------------Operación de viajes------------------------------ */
 
         // Rutas de viajes
@@ -132,6 +99,39 @@ class CheckPermission
         'admin.reportes.sales' => ['reportes', 'list-sales'],
         'admin.reportes.companies' => ['reportes', 'list-companies'],
         'admin.reportes.exchange-rates' => ['reportes', 'list-exchange-rates'],
+
+        /* ----------------------------------------Legales------------------------------------------ */
+
+        // Documentos
+        'admin.legales.documentos.list' => ['legales', 'list'],
+        'admin.legales.documentos.detail' => ['legales', 'detail'],
+        'admin.legales.documentos.file' => ['legales', 'file'],
+
+        // Contenido de páginas
+        'admin.legales.sobre-nosotros.edit' => ['sobre-nosotros', 'edit'],
+        'admin.legales.politicas-privacidad.edit' => ['politicas-privacidad', 'edit'],
+        'admin.legales.politicas-cookies.edit' => ['politicas-cookies', 'edit'],
+        'admin.legales.terminos-condiciones.edit' => ['terminos-condiciones', 'edit'],
+
+        /* ----------------------------------------Catálogos---------------------------------------- */
+
+        // Terminales
+        'admin.terminales.list' => ['terminales', 'list'],
+        'admin.terminales.add' => ['terminales', 'add'],
+        'admin.terminales.edit' => ['terminales', 'edit'],
+
+        // Amenidades
+        'admin.amenidades.list' => ['amenidades', 'list'],
+        'admin.amenidades.add' => ['amenidades', 'add'],
+        'admin.amenidades.edit' => ['amenidades', 'edit'],
+
+        // Preguntas frecuentes
+        'admin.preguntas-frecuentes.list' => ['preguntas-frecuentes', 'list'],
+        'admin.preguntas-frecuentes.add' => ['preguntas-frecuentes', 'add'],
+        'admin.preguntas-frecuentes.edit' => ['preguntas-frecuentes', 'edit'],
+        'admin.preguntas-frecuentes.categorias.list' => ['preguntas-frecuentes', 'list'],
+        'admin.preguntas-frecuentes.categorias.add' => ['preguntas-frecuentes', 'add'],
+        'admin.preguntas-frecuentes.categorias.edit' => ['preguntas-frecuentes', 'edit'],
 
         /* ----------------------------------------Soporte------------------------------------------ */
 

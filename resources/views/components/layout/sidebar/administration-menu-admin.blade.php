@@ -40,8 +40,6 @@
     ])
 @endif
 
-
-
 @if ($listEmpresas or $listUsers)
     @include('components.layout.sidebar-li', [
         'menu' => 'Empresas y clientes',
@@ -58,76 +56,6 @@
                 'route' => route('admin.clientes.list'),
                 'name' => 'Clientes',
                 'active' => request()->routeIs('admin.clientes.*') ? 'active' : '',
-            ],
-        ],
-    ])
-@endif
-
-@if ($listDocumentos or $editSobreNosotros or $editPrivacidad or $editCookies or $editTerminos)
-    @include('components.layout.sidebar-li', [
-        'menu' => 'Legales',
-        'icon' => 'nav-icon bi bi-file-earmark-text',
-        'list' => [
-            [
-                'existe' => $listDocumentos,
-                'route' => route('admin.legales.documentos.list'),
-                'name' => 'Documentos',
-                'active' => request()->routeIs('admin.legales.documentos.*') ? 'active' : '',
-            ],
-            [
-                'existe' => $editSobreNosotros,
-                'route' => route('admin.legales.sobre-nosotros.edit'),
-                'name' => 'Sobre nosotros',
-                'active' => request()->routeIs('admin.legales.sobre-nosotros.*') ? 'active' : '',
-                'navigate' => false,
-            ],
-            [
-                'existe' => $editPrivacidad,
-                'route' => route('admin.legales.politicas-privacidad.edit'),
-                'name' => 'Políticas de privacidad',
-                'active' => request()->routeIs('admin.legales.politicas-privacidad.*') ? 'active' : '',
-                'navigate' => false,
-            ],
-            [
-                'existe' => $editCookies,
-                'route' => route('admin.legales.politicas-cookies.edit'),
-                'name' => 'Políticas de cookies',
-                'active' => request()->routeIs('admin.legales.politicas-cookies.*') ? 'active' : '',
-                'navigate' => false,
-            ],
-            [
-                'existe' => $editTerminos,
-                'route' => route('admin.legales.terminos-condiciones.edit'),
-                'name' => 'Términos y condiciones',
-                'active' => request()->routeIs('admin.legales.terminos-condiciones.*') ? 'active' : '',
-                'navigate' => false,
-            ],
-        ],
-    ])
-@endif
-
-@if ($listTerminales or $listAmenidades or $listPreguntas)
-    @include('components.layout.sidebar-li', [
-        'menu' => 'Catálogos',
-        'icon' => 'nav-icon bi bi-collection',
-        'list' => [
-            [
-                'existe' => $listTerminales ?? false,
-                'route' => route('admin.terminales.list'),
-                'name' => 'Terminales',
-                'active' => request()->routeIs('admin.terminales.*') ? 'active' : '',
-            ],
-            [
-                'existe' => $listAmenidades ?? false,
-                'route' => route('admin.amenidades.list'),
-                'name' => 'Amenidades',
-                'active' => request()->routeIs('admin.amenidades.*') ? 'active' : '',
-            ],
-            [
-                'existe' => $listPreguntas,
-                'route' => route('admin.preguntas-frecuentes.list'),
-                'name' => 'Preguntas frecuentes',
-                'active' => request()->routeIs('admin.preguntas-frecuentes.*') ? 'active' : '',
             ],
         ],
     ])
@@ -230,6 +158,76 @@
                 'route' => route('admin.reportes.exchange-rates'),
                 'name' => 'Tasas de cambio',
                 'active' => request()->routeIs('admin.reportes.exchange-rates') ? 'active' : '',
+            ],
+        ],
+    ])
+@endif
+
+@if ($listDocumentos or $editSobreNosotros or $editPrivacidad or $editCookies or $editTerminos)
+    @include('components.layout.sidebar-li', [
+        'menu' => 'Legales',
+        'icon' => 'nav-icon bi bi-file-earmark-text',
+        'list' => [
+            [
+                'existe' => $listDocumentos,
+                'route' => route('admin.legales.documentos.list'),
+                'name' => 'Documentos',
+                'active' => request()->routeIs('admin.legales.documentos.*') ? 'active' : '',
+            ],
+            [
+                'existe' => $editSobreNosotros,
+                'route' => route('admin.legales.sobre-nosotros.edit'),
+                'name' => 'Sobre nosotros',
+                'active' => request()->routeIs('admin.legales.sobre-nosotros.*') ? 'active' : '',
+                'navigate' => false,
+            ],
+            [
+                'existe' => $editPrivacidad,
+                'route' => route('admin.legales.politicas-privacidad.edit'),
+                'name' => 'Políticas de privacidad',
+                'active' => request()->routeIs('admin.legales.politicas-privacidad.*') ? 'active' : '',
+                'navigate' => false,
+            ],
+            [
+                'existe' => $editCookies,
+                'route' => route('admin.legales.politicas-cookies.edit'),
+                'name' => 'Políticas de cookies',
+                'active' => request()->routeIs('admin.legales.politicas-cookies.*') ? 'active' : '',
+                'navigate' => false,
+            ],
+            [
+                'existe' => $editTerminos,
+                'route' => route('admin.legales.terminos-condiciones.edit'),
+                'name' => 'Términos y condiciones',
+                'active' => request()->routeIs('admin.legales.terminos-condiciones.*') ? 'active' : '',
+                'navigate' => false,
+            ],
+        ],
+    ])
+@endif
+
+@if ($listTerminales or $listAmenidades or $listPreguntas)
+    @include('components.layout.sidebar-li', [
+        'menu' => 'Catálogos',
+        'icon' => 'nav-icon bi bi-collection',
+        'list' => [
+            [
+                'existe' => $listTerminales ?? false,
+                'route' => route('admin.terminales.list'),
+                'name' => 'Terminales',
+                'active' => request()->routeIs('admin.terminales.*') ? 'active' : '',
+            ],
+            [
+                'existe' => $listAmenidades ?? false,
+                'route' => route('admin.amenidades.list'),
+                'name' => 'Amenidades',
+                'active' => request()->routeIs('admin.amenidades.*') ? 'active' : '',
+            ],
+            [
+                'existe' => $listPreguntas,
+                'route' => route('admin.preguntas-frecuentes.list'),
+                'name' => 'Preguntas frecuentes',
+                'active' => request()->routeIs('admin.preguntas-frecuentes.*') ? 'active' : '',
             ],
         ],
     ])

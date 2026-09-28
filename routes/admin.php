@@ -9,20 +9,20 @@ use Illuminate\Support\Facades\Route;
 |--------------------------------------------------------------------------
 */
 
-/* ------------------------------Autenticacion----------------------------------- */
-use App\Livewire\Admin\Account\Password;
+/* ------------------------------Autenticacion------------------------------------ */
 use App\Livewire\Admin\Auth\Login;
-/* ------------------------------Dashboard--------------------------------------- */
+/* ------------------------------Dashboard---------------------------------------- */
 use App\Livewire\Admin\Dashboard;
-/* ------------------------------Perfil------------------------------------------ */
+/* ------------------------------Perfil------------------------------------------- */
 use App\Livewire\Admin\Account\Profile;
+use App\Livewire\Admin\Account\Password;
 /* ------------------------------Administradores---------------------------------- */
 use App\Livewire\Admin\Admins\ListAdmin;
 use App\Livewire\Admin\Admins\SaveAdmin;
 /* ------------------------------Tasa de Servicio--------------------------------- */
 use App\Livewire\Admin\TasasServicio\ListTasaServicio;
 use App\Livewire\Admin\TasasServicio\SaveTasaServicio;
-/* ------------------------------Exoneracion de tasas de servicio ----------------- */
+/* ------------------------------Exoneracion de tasas de servicio ---------------- */
 use App\Livewire\Admin\ExoneracionesTasaServicio\ListExoneracionTasaServicio;
 use App\Livewire\Admin\ExoneracionesTasaServicio\SaveExoneracionTasaServicio;
 /* ------------------------------Auditoria---------------------------------------- */
@@ -38,40 +38,44 @@ use App\Livewire\Admin\EmpresaUsers\ListEmpresaUser;
 use App\Livewire\Admin\EmpresaUsers\DetailEmpresaUser;
 use App\Livewire\Admin\EmpresaUsers\PermissionEmpresaUser;
 use App\Livewire\Admin\EmpresaUsers\SaveEmpresaUser;
-/* ------------------------------Clientes------------------------------------ ----- */
+/* ------------------------------Clientes----------------------------------------- */
 use App\Livewire\Admin\Clientes\ListCliente;
 use App\Livewire\Admin\Clientes\SaveCliente;
 use App\Livewire\Admin\Clientes\DetailCliente;
-/* ------------------------------Legales------------------------------------------- */
+/* ------------------------------Legales------------------------------------------ */
 use App\Livewire\Admin\Legales\ListDocumentos;
 use App\Livewire\Admin\Legales\EmpresaDocumento;
-/* ------------------------------Politicas----------------------------------------- */
-use App\Livewire\Admin\Legales\ContenidoPagina;
-/* ------------------------------Rutas de viajes----------------------------------- */
+/* ------------------------------Rutas de viajes---------------------------------- */
 use App\Livewire\Admin\Viajes\ListViaje;
 use App\Livewire\Admin\Viajes\DetailViaje;
-/* ------------------------------Programaciones------------------------------------ */
+/* ------------------------------Programaciones----------------------------------- */
 use App\Livewire\Admin\Programaciones\ListProgramacion;
 use App\Livewire\Admin\Programaciones\PassengerProgramacion;
-/* ------------------------------Transportes----------------------------------------- */
+/* ------------------------------Transportes-------------------------------------- */
 use App\Livewire\Admin\Transportes\ListTransporte;
 use App\Livewire\Admin\Transportes\DetailTransporte;
-/* ------------------------------Reservas------------------------------------------ */
+/* ------------------------------Reservas----------------------------------------- */
 use App\Livewire\Admin\Reservas\ListReserva;
 use App\Livewire\Admin\Reservas\DetailReserva;
-/* ------------------------------Pasajes------------------------------------------- */
+/* ------------------------------Pasajes------------------------------------------ */
 use App\Livewire\Admin\Pasajes\ListPasaje;
 use App\Livewire\Admin\Pasajes\DetailPasaje;
-/* ------------------------------Reembolsos---------------------------------------- */
+/* ------------------------------Reembolsos--------------------------------------- */
 use App\Livewire\Admin\Reembolsos\ListReembolso;
 use App\Livewire\Admin\Reembolsos\DetailReembolso;
-/* ------------------------------Ordenes de Cobro----------------------------------- */
+/* ------------------------------Ordenes de Cobro--------------------------------- */
 use App\Livewire\Admin\OrdenesCobro\ListOrdenCobro;
 use App\Livewire\Admin\OrdenesCobro\DetailOrdenCobro;
-/* ------------------------------Cupones------------------------------------------- */
+/* ------------------------------Cupones------------------------------------------ */
 use App\Livewire\Admin\Cupones\ListCampana;
 use App\Livewire\Admin\Cupones\SaveCampana;
 use App\Livewire\Admin\Cupones\DetailCampana;
+/* ------------------------------Reporte de Ventas de Empresas-------------------- */
+use App\Livewire\Admin\Reportes\CompaniesReport;
+use App\Livewire\Admin\Reportes\SalesReport;
+use App\Livewire\Admin\Reportes\ExchangeRates;
+/* ------------------------------Politicas----------------------------------------- */
+use App\Livewire\Admin\Legales\ContenidoPagina;
 /* ------------------------------Terminales---------------------------------------- */
 use App\Livewire\Admin\Terminales\ListTerminal;
 use App\Livewire\Admin\Terminales\SaveTerminal;
@@ -83,10 +87,7 @@ use App\Livewire\Admin\PreguntasFrecuentes\ListCategoria;
 use App\Livewire\Admin\PreguntasFrecuentes\ListPregunta;
 use App\Livewire\Admin\PreguntasFrecuentes\SaveCategoria;
 use App\Livewire\Admin\PreguntasFrecuentes\SavePregunta;
-/* ------------------------------Reporte de Ventas de Empresas--------------------- */
-use App\Livewire\Admin\Reportes\CompaniesReport;
-use App\Livewire\Admin\Reportes\ExchangeRates;
-use App\Livewire\Admin\Reportes\SalesReport;
+
 /* ------------------------------Solicitudes de Nuevas Empresas-------------------- */
 use App\Livewire\Admin\Solicitudes\DetailSolicitud;
 use App\Livewire\Admin\Solicitudes\ListSolicitud;
@@ -197,81 +198,6 @@ Route::group(['middleware' => ['auth:admin', 'check.permisos']], function () {
 
     });
 
-    /* ---------------------------------------------LEGALES------------------------------------------------------------- */
-
-    Route::prefix('legales')->name('legales.')->group(function () {
-
-        /* ---------------------------------------------Documentos------------------------------------------------------ */
-
-        Route::prefix('documentos')->name('documentos.')->group(function () {
-
-            Route::livewire('/', ListDocumentos::class)->name('list');
-            Route::livewire('empresa/{empresa_id}', EmpresaDocumento::class)->whereNumber('empresa_id')->name('detail');
-            Route::get('empresa/{empresa_id}/documento/{documento_id}', [DocumentoLegalController::class, 'show'])->whereNumber('empresa_id')->whereNumber('documento_id')->name('file');
-
-        });
-
-        /* ---------------------------------------------Contenido de páginas-------------------------------------------- */
-
-        Route::livewire('sobre-nosotros', ContenidoPagina::class)
-        ->defaults('pagina', 'sobre-nosotros')->name('sobre-nosotros.edit');
-
-        Route::livewire('politicas-privacidad', ContenidoPagina::class)
-        ->defaults('pagina', 'politicas-privacidad')->name('politicas-privacidad.edit');
-
-        Route::livewire('politicas-cookies', ContenidoPagina::class)
-        ->defaults('pagina', 'politicas-cookies')->name('politicas-cookies.edit');
-
-        Route::livewire('terminos-condiciones', ContenidoPagina::class)
-        ->defaults('pagina', 'terminos-condiciones')->name('terminos-condiciones.edit');
-
-
-    });
-
-    /* ---------------------------------------------CATALOGOS---------------------------------------------------------- */
-
-    Route::prefix('catalogos')->group(function () {
-
-        /* ----------------------------------------Terminales----------------------------------------------- */
-
-        Route::prefix('terminales')->name('terminales.')->group(function () {
-
-            Route::livewire('/', ListTerminal::class)->name('list');
-            Route::livewire('nuevo', SaveTerminal::class)->name('add');
-            Route::livewire('editar/{terminal_id}', SaveTerminal::class)->whereNumber('terminal_id')->name('edit');
-        });
-
-        /* ----------------------------------------Amenidades----------------------------------------------- */
-
-        Route::prefix('amenidades')->name('amenidades.')->group(function () {
-
-            Route::livewire('/', ListAmenidad::class)->name('list');
-            Route::livewire('nuevo', SaveAmenidad::class)->name('add');
-            Route::livewire('editar/{amenidad_id}', SaveAmenidad::class)->whereNumber('amenidad_id')->name('edit');
-
-        });
-
-        /* ----------------------------------------Preguntas frecuentes--------------------------------------- */
-
-        Route::prefix('preguntas-frecuentes')->name('preguntas-frecuentes.')->group(function () {
-
-            Route::livewire('/', ListPregunta::class)->name('list');
-            Route::livewire('nuevo', SavePregunta::class)->name('add');
-            Route::livewire('editar/{pregunta_id}', SavePregunta::class)->whereNumber('pregunta_id')->name('edit');
-
-            Route::prefix('categorias')->name('categorias.')->group(function () {
-
-                Route::livewire('/', ListCategoria::class)->name('list');
-                Route::livewire('nueva', SaveCategoria::class)->name('add');
-                Route::livewire('editar/{categoria_id}', SaveCategoria::class)->whereNumber('categoria_id')->name('edit');
-
-            });
-
-        });
-
-    
-    });
-
     /* ---------------------------------------------OPERACIONES DE VIAJES---------------------------------------------- */
 
     Route::prefix('operaciones')->group(function () {
@@ -372,6 +298,81 @@ Route::group(['middleware' => ['auth:admin', 'check.permisos']], function () {
         Route::livewire('empresas', CompaniesReport::class)->name('companies');
         Route::livewire('tasas-cambio', ExchangeRates::class)->name('exchange-rates');
 
+    });
+
+    /* ---------------------------------------------LEGALES------------------------------------------------------------- */
+
+    Route::prefix('legales')->name('legales.')->group(function () {
+
+        /* ---------------------------------------------Documentos------------------------------------------------------ */
+
+        Route::prefix('documentos')->name('documentos.')->group(function () {
+
+            Route::livewire('/', ListDocumentos::class)->name('list');
+            Route::livewire('empresa/{empresa_id}', EmpresaDocumento::class)->whereNumber('empresa_id')->name('detail');
+            Route::get('empresa/{empresa_id}/documento/{documento_id}', [DocumentoLegalController::class, 'show'])->whereNumber('empresa_id')->whereNumber('documento_id')->name('file');
+
+        });
+
+        /* ---------------------------------------------Contenido de páginas-------------------------------------------- */
+
+        Route::livewire('sobre-nosotros', ContenidoPagina::class)
+        ->defaults('pagina', 'sobre-nosotros')->name('sobre-nosotros.edit');
+
+        Route::livewire('politicas-privacidad', ContenidoPagina::class)
+        ->defaults('pagina', 'politicas-privacidad')->name('politicas-privacidad.edit');
+
+        Route::livewire('politicas-cookies', ContenidoPagina::class)
+        ->defaults('pagina', 'politicas-cookies')->name('politicas-cookies.edit');
+
+        Route::livewire('terminos-condiciones', ContenidoPagina::class)
+        ->defaults('pagina', 'terminos-condiciones')->name('terminos-condiciones.edit');
+
+
+    });
+
+    /* ---------------------------------------------CATALOGOS---------------------------------------------------------- */
+
+    Route::prefix('catalogos')->group(function () {
+
+        /* ----------------------------------------Terminales----------------------------------------------- */
+
+        Route::prefix('terminales')->name('terminales.')->group(function () {
+
+            Route::livewire('/', ListTerminal::class)->name('list');
+            Route::livewire('nuevo', SaveTerminal::class)->name('add');
+            Route::livewire('editar/{terminal_id}', SaveTerminal::class)->whereNumber('terminal_id')->name('edit');
+        });
+
+        /* ----------------------------------------Amenidades----------------------------------------------- */
+
+        Route::prefix('amenidades')->name('amenidades.')->group(function () {
+
+            Route::livewire('/', ListAmenidad::class)->name('list');
+            Route::livewire('nuevo', SaveAmenidad::class)->name('add');
+            Route::livewire('editar/{amenidad_id}', SaveAmenidad::class)->whereNumber('amenidad_id')->name('edit');
+
+        });
+
+        /* ----------------------------------------Preguntas frecuentes--------------------------------------- */
+
+        Route::prefix('preguntas-frecuentes')->name('preguntas-frecuentes.')->group(function () {
+
+            Route::livewire('/', ListPregunta::class)->name('list');
+            Route::livewire('nuevo', SavePregunta::class)->name('add');
+            Route::livewire('editar/{pregunta_id}', SavePregunta::class)->whereNumber('pregunta_id')->name('edit');
+
+            Route::prefix('categorias')->name('categorias.')->group(function () {
+
+                Route::livewire('/', ListCategoria::class)->name('list');
+                Route::livewire('nueva', SaveCategoria::class)->name('add');
+                Route::livewire('editar/{categoria_id}', SaveCategoria::class)->whereNumber('categoria_id')->name('edit');
+
+            });
+
+        });
+
+    
     });
 
     /* ---------------------------------------------SOPORTE------------------------------------------------------------ */
