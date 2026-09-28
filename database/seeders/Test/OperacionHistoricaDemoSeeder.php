@@ -196,7 +196,7 @@ class OperacionHistoricaDemoSeeder extends Seeder
         $reservaId = $this->siguiente('reserva');
         $pagoId = $this->siguiente('pago');
         $fechaCompra = $fechaSalida->subDay()->setTime(16, 0);
-        $tasaUnitaria = (float) TasaServicio::query()->where('estatus', 1)->value('monto') ?? "1.25";
+        $tasaUnitaria = (float) (TasaServicio::query()->where('estatus', 1)->value('cantidad') ?? '1.25');
         $subtotal = round((float) $precio * $cantidadPasajes, 2);
         $tasaTotal = round($tasaUnitaria * $cantidadPasajes, 2);
         $total = round($subtotal + $tasaTotal, 2);
