@@ -175,7 +175,7 @@
                     <td>{{ $reserva->programacion?->transporte?->getTipoTransporte() ?? 'No registrado' }}</td>
 
                     <td>
-                        {{ $reserva->pasajes_count }}
+                        {{ $reserva->pasajes->count() }}
                     </td>
 
                     <td>

@@ -42,7 +42,7 @@ class ReservasExport extends DefaultValueBinder implements FromQuery, WithCustom
             'empresa' => $reserva->programacion?->viaje?->empresa?->nombre,
             'origen' => $reserva->origenTerminal?->nombre,
             'destino' => $reserva->destinoTerminal?->nombre,
-            'cantidad_pasajes' => $reserva->pasajes_count,
+            'cantidad_pasajes' => $reserva->pasajes->count(),
             'subtotal' => (float) $reserva->monto_pasajes,
             'subtotal_bs' => (float) $reserva->calcularMontoBs($reserva->monto_pasajes),
             'descuento' => (float) $reserva->descuento_aplicado,

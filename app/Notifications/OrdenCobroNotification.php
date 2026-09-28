@@ -58,7 +58,6 @@ class OrdenCobroNotification extends Notification implements ShouldQueue
 
         $consultaReservas = Reserva::searchAdmin()
             ->with(['cupon', 'reservaOriginal'])
-            ->withCount('pasajes')
             ->whereKey($reservaIds)
             ->orderBy('reservas.id');
 

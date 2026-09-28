@@ -201,11 +201,11 @@ class Reserva extends ModelHelper
                 'usuario',
                 'programacion.viaje.empresa',
                 'programacion.transporte',
+                'pasajes',
                 'origenTerminal',
                 'destinoTerminal',
                 'tipoCambio',
-            ])
-            ->withCount('pasajes');
+            ]);
 
         if ($search !== '') {
             $query->where(function ($query) use ($search) {
@@ -307,7 +307,6 @@ class Reserva extends ModelHelper
     public static function latestForDashboard(array $filters, int $limit = 6): Collection
     {
         return self::searchAdmin('', $filters)
-            ->withCount('pasajes')
             ->orderByDesc('fecha_compra')
             ->orderByDesc('id')
             ->limit($limit)

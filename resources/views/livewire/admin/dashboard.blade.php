@@ -307,7 +307,7 @@
                                 </td>
 
                                 <td class="text-center">
-                                    {{ $reserva->pasajes_count }}
+                                    {{ $reserva->pasajes->count() }}
                                 </td>
 
                                 <td class="text-end text-nowrap">
