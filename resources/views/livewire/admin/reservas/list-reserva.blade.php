@@ -173,7 +173,7 @@
                     <td>{{ $reserva->programacion?->transporte?->getTipoTransporte() ?? 'No registrado' }}</td>
 
                     <td>
-                        {{ $reserva->origenTerminal?->nombre ?? 'No registrado' }} -  {{ $reserva->destinoTerminal?->nombre ?? 'No registrado' }}
+                        {{ $reserva->origenTerminal?->nombre ?? 'No registrado' }} →  {{ $reserva->destinoTerminal?->nombre ?? 'No registrado' }}
                     </td>
 
                     <td>

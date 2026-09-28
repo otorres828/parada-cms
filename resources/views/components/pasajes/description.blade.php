@@ -12,7 +12,7 @@
         <dt class="col-sm-4">Ruta</dt>
 
         <dd class="col-sm-8">
-            {{ $pasaje->reserva?->origenTerminal?->nombre ?? 'No registrado' }} -                                 {{ $pasaje->reserva?->destinoTerminal?->nombre ?? 'No registrado' }}
+            {{ $pasaje->reserva?->origenTerminal?->nombre ?? 'No registrado' }} → {{ $pasaje->reserva?->destinoTerminal?->nombre ?? 'No registrado' }}
         </dd>
 
         <dt class="col-sm-4">Reserva</dt>
@@ -36,8 +36,7 @@
         <dt class="col-sm-4">Horario de salida</dt>
 
         <dd class="col-sm-8">
-            {{ $pasaje->reserva?->programacion?->fecha_salida?->format('d/m/Y') ?? '—' }}                                 {{ $pasaje->reserva?->programacion?->hora_salida ? substr($pasaje->reserva->programacion->hora_salida, 0, 5) : '—' }}
-
+            {{ $pasaje->reserva?->programacion?->fecha_salida?->format('d/m/Y') ?? '—' }} {{ $pasaje->reserva?->programacion?->hora_salida ? substr($pasaje->reserva->programacion->hora_salida, 0, 5) : '—' }}
         </dd>
 
         <hr class="col-12 my-3">

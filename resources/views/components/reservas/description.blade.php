@@ -16,7 +16,7 @@
         <dt class="col-sm-4">Ruta</dt>
 
         <dd class="col-sm-8">
-            {{ $reserva?->origenTerminal?->nombre ?? 'No registrado' }} - {{ $reserva?->destinoTerminal?->nombre ?? 'No registrado' }}
+            {{ $reserva?->origenTerminal?->nombre ?? 'No registrado' }} → {{ $reserva?->destinoTerminal?->nombre ?? 'No registrado' }}
         </dd>
 
         <dt class="col-sm-4">Programación</dt>
