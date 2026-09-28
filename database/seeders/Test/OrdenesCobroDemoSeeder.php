@@ -67,11 +67,14 @@ class OrdenesCobroDemoSeeder extends Seeder
             }
 
             $primeraFecha = CarbonImmutable::parse($reservasEmpresa->first()->fecha_pago);
-            $ultimoCorte = CarbonImmutable::parse($reservasEmpresa->last()->fecha_pago)
-                ->nextOrSame(CarbonImmutable::SUNDAY)
+            $ultimaFecha = CarbonImmutable::parse($reservasEmpresa->last()->fecha_pago);
+            $ultimoCorte = $ultimaFecha
+                ->addDays((7 - $ultimaFecha->dayOfWeekIso) % 7)
                 ->startOfDay();
 
-            $periodoDesde = $primeraFecha->previousOrSame(CarbonImmutable::SUNDAY)->startOfDay();
+            $periodoDesde = $primeraFecha
+                ->subDays($primeraFecha->dayOfWeekIso % 7)
+                ->startOfDay();
 
             for ($fechaCorte = $periodoDesde->addWeek(); $fechaCorte->lessThanOrEqualTo($ultimoCorte); $fechaCorte = $fechaCorte->addWeek()) {
                 $periodoHasta = $fechaCorte->subSecond();
@@ -84,7 +87,8 @@ class OrdenesCobroDemoSeeder extends Seeder
                 if ($reservasPeriodo->isNotEmpty()) {
                     $fechaEmision = $fechaCorte;
                     $fechaVencimiento = $fechaEmision->next(CarbonImmutable::FRIDAY)->endOfDay();
-                    $aprobada = $fechaVencimiento->isBefore($hasta);
+                    $esOrdenSemanaActual = $fechaCorte->equalTo($ultimoCorte);
+                    $aprobada = ! $esOrdenSemanaActual;
                     $codigo = 'OC-'.$fechaEmision->format('Y').'-'.str_pad((string) $siguienteId, 6, '0', STR_PAD_LEFT);
 
                     $ordenes[] = [
