@@ -14,9 +14,9 @@ use Illuminate\Database\Seeder;
 
 class EmpresasDemoSeeder extends Seeder
 {
-    public const TOTAL_AGENCIAS = 50;
+    public const TOTAL_AGENCIAS = 25;
 
-    public const TOTAL_CONDUCTORES = 100;
+    public const TOTAL_CONDUCTORES = 25;
 
     public function run(): void
     {

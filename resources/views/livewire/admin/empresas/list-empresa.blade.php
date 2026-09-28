@@ -43,6 +43,13 @@
 
         <x-slot:group>
 
+            <select id="listEmpresa-tipo-entidad" class="form-select" style="width: 240px;"
+                wire:model.live="tipo_entidad" aria-label="Filtrar por tipo de entidad">
+                <option value="">Todos los tipos</option>
+                <option value="{{ \App\Models\Empresa::AGENCIA_AUTOBUS }}">Agencias de autobuses</option>
+                <option value="{{ \App\Models\Empresa::CONDUCTOR_CARRO }}">Conductores de carros</option>
+            </select>
+
             <select id="listEmpresa-status" class="form-select" style="width: 240px;" wire:model.live="status"
                 aria-label="Filtrar por estado">
                 <option value="">Todos los estados</option>
@@ -190,4 +197,3 @@
         }));
     </script>
 @endscript
-

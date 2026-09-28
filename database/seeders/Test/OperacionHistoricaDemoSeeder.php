@@ -15,9 +15,9 @@ use Illuminate\Support\Facades\DB;
 
 class OperacionHistoricaDemoSeeder extends Seeder
 {
-    private const PASAJES_POR_AUTOBUS = 15;
+    private const PASAJES_POR_AUTOBUS = 10;
 
-    private const PASAJES_POR_CARRO = 3;
+    private const PASAJES_POR_CARRO = 2;
 
     private const TAMANO_LOTE_PROGRAMACIONES = 200;
 

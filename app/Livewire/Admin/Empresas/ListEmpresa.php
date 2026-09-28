@@ -19,11 +19,14 @@ class ListEmpresa extends Component
     use Permissions;
     use WithPagination;
 
+    public string $tipo_entidad = '';
+
     public string $status = '';
 
     protected array $queryString = [
         'search' => ['except' => ''],
         'per_page' => ['except' => 10],
+        'tipo_entidad' => ['except' => ''],
         'status' => ['except' => ''],
     ];
 
@@ -37,6 +40,7 @@ class ListEmpresa extends Component
     public function render()
     {
         $query = Empresa::searchAdmin($this->search, [
+            'tipo_entidad' => $this->tipo_entidad,
             'status' => $this->status,
         ]);
 
@@ -51,7 +55,7 @@ class ListEmpresa extends Component
 
     public function updated($property): void
     {
-        if (in_array($property, ['search', 'status', 'per_page'])) {
+        if (in_array($property, ['search', 'tipo_entidad', 'status', 'per_page'])) {
             $this->resetPage();
         }
     }
