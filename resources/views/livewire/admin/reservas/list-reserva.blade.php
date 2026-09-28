@@ -129,6 +129,8 @@
 
                 <th>Transporte</th>
 
+                <th>Pasajes</th>
+
                 <th>Ruta</th>
 
                 <th>Fecha
@@ -171,6 +173,10 @@
                     </td>
 
                     <td>{{ $reserva->programacion?->transporte?->getTipoTransporte() ?? 'No registrado' }}</td>
+
+                    <td>
+                        {{ $reserva->pasajes_count }}
+                    </td>
 
                     <td>
                         {{ $reserva->origenTerminal?->nombre ?? 'No registrado' }} →  {{ $reserva->destinoTerminal?->nombre ?? 'No registrado' }}
@@ -245,4 +251,3 @@
         }));
     </script>
 @endscript
-

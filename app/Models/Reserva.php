@@ -196,7 +196,16 @@ class Reserva extends ModelHelper
 
     public static function searchAdmin(string $search = '', array $filters = []): Builder
     {
-        $query = self::query()->with(['usuario', 'programacion.viaje.empresa', 'programacion.transporte', 'pasajes', 'origenTerminal', 'destinoTerminal', 'tipoCambio']);
+        $query = self::query()
+            ->with([
+                'usuario',
+                'programacion.viaje.empresa',
+                'programacion.transporte',
+                'origenTerminal',
+                'destinoTerminal',
+                'tipoCambio',
+            ])
+            ->withCount('pasajes');
 
         if ($search !== '') {
             $query->where(function ($query) use ($search) {
