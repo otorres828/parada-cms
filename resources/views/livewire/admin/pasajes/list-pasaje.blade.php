@@ -169,11 +169,11 @@
                         {{ $pasaje->reserva?->fecha_compra?->format('d/m/Y H:i') ?? '—' }}
                     </td>
                     <td>
-                        {{ $pasaje->viajero?->nombre ?? '—' }}
+                        {{ $pasaje->viajero_nombre_completo ?: '—' }}
                     </td>
 
                     <td>
-                        {{ $pasaje->viajero?->documento_identidad ?? '—' }}
+                        {{ $pasaje->viajero_documento ?? '—' }}
                     </td>
 
                     <td>
@@ -262,5 +262,4 @@
         }));
     </script>
 @endscript
-
 

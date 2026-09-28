@@ -44,18 +44,18 @@
 
         <dt class="col-sm-4">Viajero</dt>
 
-        <dd class="col-sm-8">{{ $pasaje->viajero?->nombre ?? '—' }}</dd>
+        <dd class="col-sm-8">{{ $pasaje->viajero_nombre_completo ?: '—' }}</dd>
 
         <dt class="col-sm-4">Documento</dt>
 
         <dd class="col-sm-8">
-            {{ $pasaje->viajero?->documento_identidad ?? '—' }}
+            {{ $pasaje->viajero_documento ?? '—' }}
         </dd>
 
         <dt class="col-sm-4">Fecha de nacimiento</dt>
 
         <dd class="col-sm-8">
-            {{ $pasaje->viajero?->fecha_nacimiento?->format('d/m/Y') ?? '—' }}
+            {{ $pasaje->viajero_fecha_nacimiento?->format('d/m/Y') ?? '—' }}
         </dd>
 
         <dt class="col-sm-4">Asiento</dt>
@@ -133,4 +133,3 @@
     </dl>
 
 </div>
-

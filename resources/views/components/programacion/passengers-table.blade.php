@@ -31,7 +31,7 @@
             </thead>
             <tbody>
                 @forelse ($tickets as $ticket)
-                    <tr data-search="{{ $ticket->viajero?->nombre }} {{ $ticket->viajero?->apellido }} {{ $ticket->viajero?->documento_identidad }} {{ $ticket->numero_asiento }} {{ $ticket->reserva?->origenTerminal?->nombre }} {{ $ticket->reserva?->destinoTerminal?->nombre }}"
+                    <tr data-search="{{ $ticket->viajero_nombre_completo }} {{ $ticket->viajero_documento }} {{ $ticket->numero_asiento }} {{ $ticket->reserva?->origenTerminal?->nombre }} {{ $ticket->reserva?->destinoTerminal?->nombre }}"
                         x-show="matches($el.dataset.search)">
                         <td>
                             @if ($canReservasDetail)
@@ -42,9 +42,9 @@
                                 #{{ $ticket->reserva_id }}
                             @endif
                         </td>
-                        <td>{{ $ticket->viajero?->nombre }} {{ $ticket->viajero?->apellido }}</td>
-                        <td>{{ $ticket->viajero?->documento_identidad }}</td>
-                        <td>{{ $ticket->viajero?->fecha_nacimiento?->format('d/m/Y') ?? '—' }}</td>
+                        <td>{{ $ticket->viajero_nombre_completo }}</td>
+                        <td>{{ $ticket->viajero_documento ?? '—' }}</td>
+                        <td>{{ $ticket->viajero_fecha_nacimiento?->format('d/m/Y') ?? '—' }}</td>
                         <td><span class="badge text-bg-info">Asiento {{ $ticket->numero_asiento ?? 'S/A' }}</span></td>
                         <td>
                             <span class="fw-semibold">{{ $ticket->reserva?->origenTerminal?->nombre ?? 'No registrado' }}</span>

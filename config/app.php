@@ -54,6 +54,8 @@ return [
 
     'url' => env('APP_URL', 'http://localhost'),
 
+    'pii_hash_key' => env('PII_HASH_KEY') ?: env('APP_KEY'),
+
 
     /*
     |--------------------------------------------------------------------------

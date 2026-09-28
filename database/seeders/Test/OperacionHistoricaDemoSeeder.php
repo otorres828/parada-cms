@@ -7,8 +7,10 @@ use App\Models\Programacion;
 use App\Models\Reserva;
 use App\Models\TasaServicio;
 use App\Models\TipoCambio;
+use App\Support\PersonalData;
 use Carbon\CarbonImmutable;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 
 class OperacionHistoricaDemoSeeder extends Seeder
@@ -202,12 +204,14 @@ class OperacionHistoricaDemoSeeder extends Seeder
         $codigo = ($empresa->tipo_entidad === Empresa::CONDUCTOR_CARRO ? 'CA-' : 'AU-')
             .strtoupper(str_pad(dechex($reservaId), 10, '0', STR_PAD_LEFT));
 
+        $telefono = '0414'.str_pad((string) ($usuarioId % 10000000), 7, '0', STR_PAD_LEFT);
         $buffers['users'][] = [
             'id' => $usuarioId,
             'name' => 'Cliente '.str_pad((string) $usuarioId, 6, '0', STR_PAD_LEFT),
             'lastname' => 'Histórico',
             'email' => 'cliente'.$usuarioId.'@pasajeros.test',
-            'telefono' => '0414'.str_pad((string) ($usuarioId % 10000000), 7, '0', STR_PAD_LEFT),
+            'telefono' => Crypt::encryptString($telefono),
+            'telefono_hash' => PersonalData::hashTelefono($telefono),
             'date_birth' => '1990-01-01',
             'sex' => $usuarioId % 2 === 0 ? '2' : '1',
             'password' => null,
@@ -244,6 +248,16 @@ class OperacionHistoricaDemoSeeder extends Seeder
         for ($asiento = 1; $asiento <= $cantidadPasajes; $asiento++) {
             $viajeroId = $this->siguiente('viajero');
             $pasajeId = $this->siguiente('pasaje');
+            $documento = 'V-'.str_pad((string) $viajeroId, 8, '0', STR_PAD_LEFT);
+            $viajeroSnapshot = [
+                'version' => 1,
+                'nombre' => 'Pasajero '.$asiento,
+                'apellido' => 'Reserva '.$reservaId,
+                'tipo_documento' => 1,
+                'documento_identidad' => $documento,
+                'fecha_nacimiento' => (1980 + ($asiento % 20)).'-01-01',
+                'tipo_pasajero' => 'adulto',
+            ];
             $servicioJson = json_encode([
                 'monto_minimo' => (float) $precio <= 20 ? '0.00' : '20.01',
                 'monto_maximo' => (float) $precio <= 20 ? '20.00' : null,
@@ -258,7 +272,8 @@ class OperacionHistoricaDemoSeeder extends Seeder
                 'nombre' => 'Pasajero '.$asiento,
                 'apellido' => 'Reserva '.$reservaId,
                 'tipo_documento' => 1,
-                'documento_identidad' => 'V-'.str_pad((string) $viajeroId, 8, '0', STR_PAD_LEFT),
+                'documento_identidad' => Crypt::encryptString($documento),
+                'documento_identidad_hash' => PersonalData::hashDocumento($documento),
                 'fecha_nacimiento' => (1980 + ($asiento % 20)).'-01-01',
                 'tipo_pasajero' => 'adulto',
                 'estatus' => 1,
@@ -268,7 +283,8 @@ class OperacionHistoricaDemoSeeder extends Seeder
             $buffers['pasajes'][] = [
                 'id' => $pasajeId,
                 'reserva_id' => $reservaId,
-                'viajero_id' => $viajeroId,
+                'viajero' => Crypt::encryptString(json_encode($viajeroSnapshot, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)),
+                'viajero_documento_hash' => PersonalData::hashDocumento($documento),
                 'numero_asiento' => $asiento,
                 'precio_base' => $precio,
                 'descuento' => '0.00',

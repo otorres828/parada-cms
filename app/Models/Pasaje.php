@@ -2,11 +2,13 @@
 
 namespace App\Models;
 
+use App\Support\PersonalData;
 use App\Traits\TraitGeneral;
 use BaconQrCode\Renderer\Image\SvgImageBackEnd;
 use BaconQrCode\Renderer\ImageRenderer;
 use BaconQrCode\Renderer\RendererStyle\RendererStyle;
 use BaconQrCode\Writer;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -18,9 +20,12 @@ class Pasaje extends ModelHelper
 
     protected $table = 'pasajes';
 
+    protected $hidden = ['viajero_documento_hash'];
+
     protected $fillable = [
         'reserva_id',
-        'viajero_id',
+        'viajero',
+        'viajero_documento_hash',
         'numero_asiento',
         'precio_base',
         'descuento',
@@ -35,7 +40,17 @@ class Pasaje extends ModelHelper
 
     protected function casts(): array
     {
-        return ['numero_asiento' => 'integer', 'precio_base' => 'decimal:2', 'descuento' => 'decimal:2', 'subtotal' => 'decimal:2', 'tasa_servicio' => 'decimal:2', 'total' => 'decimal:2', 'servicio_json' => 'array', 'abordado' => 'boolean'];
+        return [
+            'viajero' => 'encrypted:array',
+            'numero_asiento' => 'integer',
+            'precio_base' => 'decimal:2',
+            'descuento' => 'decimal:2',
+            'subtotal' => 'decimal:2',
+            'tasa_servicio' => 'decimal:2',
+            'total' => 'decimal:2',
+            'servicio_json' => 'array',
+            'abordado' => 'boolean',
+        ];
     }
 
     public function reserva(): BelongsTo
@@ -43,9 +58,21 @@ class Pasaje extends ModelHelper
         return $this->belongsTo(Reserva::class, 'reserva_id');
     }
 
-    public function viajero(): BelongsTo
+    public function getViajeroNombreCompletoAttribute(): string
     {
-        return $this->belongsTo(Viajero::class, 'viajero_id');
+        return trim(($this->viajero['nombre'] ?? '').' '.($this->viajero['apellido'] ?? ''));
+    }
+
+    public function getViajeroDocumentoAttribute(): ?string
+    {
+        return $this->viajero['documento_identidad'] ?? null;
+    }
+
+    public function getViajeroFechaNacimientoAttribute(): ?Carbon
+    {
+        $fecha = $this->viajero['fecha_nacimiento'] ?? null;
+
+        return $fecha ? Carbon::parse($fecha) : null;
     }
 
     public function calcularMontoBs(string|int|float|null $monto): ?string
@@ -94,6 +121,10 @@ class Pasaje extends ModelHelper
     protected static function booted(): void
     {
         static::creating(function (Pasaje $pasaje) {
+            $pasaje->viajero_documento_hash = PersonalData::hashDocumento(
+                $pasaje->viajero['documento_identidad'] ?? null,
+            );
+
             if (empty($pasaje->localizador)) {
                 $pasaje->localizador = (string) Str::uuid();
             }
@@ -102,17 +133,15 @@ class Pasaje extends ModelHelper
 
     public static function searchAdmin(string $search = '', array $filters = []): Builder
     {
-        $query = self::query()->with(['reserva.origenTerminal', 'reserva.destinoTerminal', 'reserva.programacion', 'reserva.tipoCambio', 'viajero']);
+        $query = self::query()->with(['reserva.origenTerminal', 'reserva.destinoTerminal', 'reserva.programacion', 'reserva.tipoCambio']);
 
         if ($search !== '') {
             $query->where(function ($query) use ($search) {
                 $query->where('pasajes.id', ctype_digit($search) ? $search : -1);
                 $query->orWhereHas('reserva', function ($query) use ($search) {
                     return $query->where('codigo_referencia', 'like', '%'.$search.'%');
-                })
-                    ->orWhereHas('viajero', function ($query) use ($search) {
-                        return $query->where('nombre', 'like', '%'.$search.'%')->orWhere('documento_identidad', 'like', '%'.$search.'%');
-                    });
+                });
+                $query->orWhere('pasajes.viajero_documento_hash', PersonalData::hashDocumento($search));
             });
         }
 

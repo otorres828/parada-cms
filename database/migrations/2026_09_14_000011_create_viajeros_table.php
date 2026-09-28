@@ -14,7 +14,8 @@ return new class extends Migration
             $table->string('nombre');
             $table->string('apellido');
             $table->enum('tipo_documento', [1, 2, 3, 4])->nullable();
-            $table->string('documento_identidad')->nullable();
+            $table->text('documento_identidad')->nullable();
+            $table->char('documento_identidad_hash', 64)->nullable()->index();
             $table->date('fecha_nacimiento');
             $table->enum('tipo_pasajero', ['adulto', 'nino', 'infante'])->default('adulto');
             $table->enum('estatus', [0, 1, 2])->default(1);

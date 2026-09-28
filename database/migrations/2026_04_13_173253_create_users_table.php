@@ -20,7 +20,10 @@ return new class extends Migration
             $table->string('lastname');
 
             $table->string('email')->unique();
-            $table->string('telefono')->nullable();
+
+            $table->text('telefono')->nullable();
+            
+            $table->char('telefono_hash', 64)->nullable()->index();
 
             $table->date('date_birth')->nullable();
 

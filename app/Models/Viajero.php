@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
+use App\Support\PersonalData;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Viajero extends ModelHelper
 {
@@ -17,12 +17,15 @@ class Viajero extends ModelHelper
 
     protected $table = 'viajeros';
 
+    protected $hidden = ['documento_identidad_hash'];
+
     protected $fillable = [
         'usuario_id',
         'nombre',
         'apellido',
         'tipo_documento',
         'documento_identidad',
+        'documento_identidad_hash',
         'fecha_nacimiento',
         'tipo_pasajero',
         'estatus',
@@ -32,6 +35,7 @@ class Viajero extends ModelHelper
     {
         return [
             'tipo_documento' => 'integer',
+            'documento_identidad' => 'encrypted',
             'fecha_nacimiento' => 'date',
             'estatus' => 'integer',
         ];
@@ -40,11 +44,6 @@ class Viajero extends ModelHelper
     public function usuario(): BelongsTo
     {
         return $this->belongsTo(User::class, 'usuario_id');
-    }
-
-    public function pasajes(): HasMany
-    {
-        return $this->hasMany(Pasaje::class, 'viajero_id');
     }
 
     public function getTipoDocumento(): string
@@ -56,5 +55,14 @@ class Viajero extends ModelHelper
             self::DOCUMENTO_OTRO_DOCUMENTO => 'Otro',
             default => 'Sin documento',
         };
+    }
+
+    protected static function booted(): void
+    {
+        static::saving(function (Viajero $viajero) {
+            if ($viajero->isDirty('documento_identidad')) {
+                $viajero->documento_identidad_hash = PersonalData::hashDocumento($viajero->documento_identidad);
+            }
+        });
     }
 }

@@ -49,15 +49,15 @@
                 </td>
 
                 <td>
-                    {{ $ticket->viajero?->nombre ?? 'Pasajero por completar' }} {{ $ticket->viajero?->apellido }}
+                    {{ $ticket->viajero_nombre_completo ?: 'Pasajero por completar' }}
                 </td>
 
                 <td>
-                    {{ $ticket->viajero?->documento_identidad }}
+                    {{ $ticket->viajero_documento ?? '—' }}
                 </td>
 
                 <td>
-                    {{ $ticket->viajero?->fecha_nacimiento?->format('d/m/Y') ?? '—' }}
+                    {{ $ticket->viajero_fecha_nacimiento?->format('d/m/Y') ?? '—' }}
                 </td>
 
                 <td>
@@ -102,5 +102,4 @@
 
     </tbody>
 </table>
-
 

@@ -170,7 +170,15 @@ class ReservaService
             $viajero = Viajero::create($datosViajero);
 
             $reserva->pasajes()->create([
-                'viajero_id' => $viajero->id,
+                'viajero' => [
+                    'version' => 1,
+                    'nombre' => $viajero->nombre,
+                    'apellido' => $viajero->apellido,
+                    'tipo_documento' => $viajero->tipo_documento,
+                    'documento_identidad' => $viajero->documento_identidad,
+                    'fecha_nacimiento' => $viajero->fecha_nacimiento->toDateString(),
+                    'tipo_pasajero' => $viajero->tipo_pasajero,
+                ],
                 'numero_asiento' => $numeroAsiento,
                 'precio_base' => $tarifa->precio,
                 'descuento' => '0.00',

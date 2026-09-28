@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Support\PersonalData;
 use App\Traits\AuthenticatesModel;
 use App\Traits\TraitGeneral;
 use Carbon\Carbon;
@@ -20,11 +21,15 @@ class User extends ModelHelper implements Authenticatable, Authorizable, CanRese
 
     protected $guarded = ['id'];
 
-    protected $hidden = ['password', 'remember_token'];
+    protected $hidden = ['password', 'remember_token', 'telefono_hash'];
 
     protected function casts(): array
     {
-        return ['password' => 'hashed', 'status' => 'integer'];
+        return [
+            'password' => 'hashed',
+            'telefono' => 'encrypted',
+            'status' => 'integer',
+        ];
     }
 
     public function getNameLastName()
@@ -96,7 +101,7 @@ class User extends ModelHelper implements Authenticatable, Authorizable, CanRese
                 $query->orWhere('users.name', 'like', '%'.$search.'%');
                 $query->orWhere('users.lastname', 'like', '%'.$search.'%');
                 $query->orWhere('users.email', 'like', '%'.$search.'%');
-                $query->orWhere('users.telefono', 'like', '%'.$search.'%');
+                $query->orWhere('users.telefono_hash', PersonalData::hashTelefono($search));
             });
         }
 
@@ -117,5 +122,14 @@ class User extends ModelHelper implements Authenticatable, Authorizable, CanRese
         }
 
         return $query;
+    }
+
+    protected static function booted(): void
+    {
+        static::saving(function (User $user) {
+            if ($user->isDirty('telefono')) {
+                $user->telefono_hash = PersonalData::hashTelefono($user->telefono);
+            }
+        });
     }
 }

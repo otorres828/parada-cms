@@ -8,6 +8,5 @@ class TasaServicioSeeder extends Seeder
     {
         if (TasaServicio::exists()) return;
         TasaServicio::create(['monto_minimo'=>'0.00','monto_maximo'=>'2000.00','cantidad'=>'1.25','estatus'=>1]);
-        // TasaServicio::create(['monto_minimo'=>'20.01','monto_maximo'=>null,'cantidad'=>'1.50','estatus'=>1]);
     }
 }

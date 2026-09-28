@@ -147,7 +147,6 @@ class Reserva extends ModelHelper
     {
         return $this->load([
             'pasajes',
-            'pasajes.viajero',
             'origenTerminal',
             'destinoTerminal',
             'tipoCambio',
@@ -197,7 +196,7 @@ class Reserva extends ModelHelper
 
     public static function searchAdmin(string $search = '', array $filters = []): Builder
     {
-        $query = self::query()->with(['usuario', 'programacion.viaje.empresa', 'programacion.transporte', 'pasajes.viajero', 'origenTerminal', 'destinoTerminal', 'tipoCambio']);
+        $query = self::query()->with(['usuario', 'programacion.viaje.empresa', 'programacion.transporte', 'pasajes', 'origenTerminal', 'destinoTerminal', 'tipoCambio']);
 
         if ($search !== '') {
             $query->where(function ($query) use ($search) {
@@ -241,7 +240,7 @@ class Reserva extends ModelHelper
 
     public static function searchDetailClient(int $user_id): Builder
     {
-        return self::query()->with([0 => 'programacion.viaje.empresa', 1 => 'pasajes.viajero', 2 => 'tipoCambio'])
+        return self::query()->with([0 => 'programacion.viaje.empresa', 1 => 'pasajes', 2 => 'tipoCambio'])
             ->where('usuario_id', $user_id)
             ->whereIn('estado_pago', [self::ESTADO_PAGO_PAGADO, self::ESTADO_PAGO_PENDIENTE])
             ->orderByDesc('fecha_compra');

@@ -100,7 +100,8 @@ erDiagram
         int id PK
         string nombre
         string rif
-        string telefono
+        text telefono
+        string telefono_hash
         string email
         boolean estatus
     }
@@ -140,20 +141,18 @@ erDiagram
     PASAJES {
         int id PK
         int reserva_id FK
-        int viajero_id FK
+        text viajero
+        string viajero_documento_hash
         int numero_asiento
         decimal precio_base
         decimal descuento
-        decimal precio_final
+        decimal subtotal
         decimal tasa_servicio
-        int tipo_servicio
-        decimal valor_servicio
-        decimal base_tasa_servicio
-        decimal tasa_monto_minimo
-        decimal tasa_monto_maximo
+        decimal total
+        json servicio_json
         string localizador UK
         boolean abordado
-        datetime fecha_abordaje
+        time hora_abordaje
     }
     %% UNIQUE PASAJES (reserva_id, numero_asiento)
 
@@ -328,9 +327,12 @@ erDiagram
         int usuario_id FK
         string nombre
         string apellido
-        string documento_identidad
+        int tipo_documento
+        text documento_identidad
+        string documento_identidad_hash
         date fecha_nacimiento
         string tipo_pasajero
+        int estatus
     }
 
     VIAJES {
@@ -353,7 +355,6 @@ erDiagram
     ADMINS |o--o{ DOCUMENTOS_LEGALES : "admin_id"
     EMPRESAS ||--o{ DOCUMENTOS_LEGALES : "empresa_id"
     RESERVAS ||--o| PAGOS_RESERVAS : "reserva_id"
-    VIAJEROS |o--o{ PASAJES : "viajero_id"
     RESERVAS ||--o{ PASAJES : "reserva_id"
     PERMISSIONS_EMPRESA ||--o{ PERMISOS_USUARIOS_EMPRESA : "permiso_id"
     USUARIOS_EMPRESA ||--o{ PERMISOS_USUARIOS_EMPRESA : "usuario_empresa_id"
