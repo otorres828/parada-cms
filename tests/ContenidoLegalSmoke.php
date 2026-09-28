@@ -26,10 +26,23 @@ $reject(
     Symfony\Component\HttpKernel\Exception\HttpException::class,
 );
 
+$categoria = App\Models\CategoriaPreguntaFrecuente::create([
+    'nombre' => 'Reservas',
+    'slug' => 'reservas',
+    'descripcion' => 'Ayuda para reservas.',
+    'icono' => 'bi-ticket-perforated',
+    'destacada' => true,
+    'orden' => 1,
+    'estatus' => App\Models\CategoriaPreguntaFrecuente::ESTADO_ACTIVE,
+]);
+
 $faq = new App\Livewire\Admin\PreguntasFrecuentes\SavePregunta;
 $faq->mount();
+$faq->categoria_pregunta_frecuente_id = $categoria->id;
 $faq->pregunta = '¿Cómo consultar mi reserva?';
-$faq->respuesta = 'Desde tu cuenta.';
+$faq->resumen = 'Consulta una reserva desde tu cuenta.';
+$faq->respuesta = '<p>Desde tu cuenta.</p>';
+$faq->palabras_clave = 'reserva, cuenta';
 $faq->orden = 2;
 $faq->save();
 
@@ -67,6 +80,8 @@ $assert(! Storage::disk('local')->exists($rutaDocumento), 'Eliminar archivo docu
 foreach ([
     App\Livewire\Admin\PreguntasFrecuentes\ListPregunta::class => [],
     App\Livewire\Admin\PreguntasFrecuentes\SavePregunta::class => ['pregunta_id' => $registro->id],
+    App\Livewire\Admin\PreguntasFrecuentes\ListCategoria::class => [],
+    App\Livewire\Admin\PreguntasFrecuentes\SaveCategoria::class => ['categoria_id' => $categoria->id],
     App\Livewire\Admin\Legales\ContenidoPagina::class => ['pagina' => 'sobre-nosotros'],
 ] as $component => $params) {
     $assert(strlen((string) Livewire\Livewire::mount($component, $params)) > 100, 'Render '.$component);

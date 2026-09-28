@@ -345,6 +345,31 @@ erDiagram
         boolean estatus
     }
 
+    CATEGORIAS_PREGUNTAS_FRECUENTES {
+        int id PK
+        string nombre
+        string slug UK
+        text descripcion
+        string icono
+        string imagen
+        boolean destacada
+        int orden
+        int estatus
+    }
+
+    PREGUNTAS_FRECUENTES {
+        int id PK
+        int categoria_pregunta_frecuente_id FK
+        string pregunta
+        string slug UK
+        text resumen
+        longtext respuesta
+        text palabras_clave
+        boolean destacada
+        int orden
+        int estatus
+    }
+
     AMENIDADES ||--o{ AMENIDAD_AUTOBUS : "amenidad_id"
     AUTOBUSES ||--o{ AMENIDAD_AUTOBUS : "autobus_id"
     ADMINS |o--o{ AUDITORIAS : "admin_id"
@@ -388,6 +413,7 @@ erDiagram
     TERMINALES ||--o{ VIAJES : "destino_terminal_id"
     TERMINALES ||--o{ VIAJES : "origen_terminal_id"
     EMPRESAS ||--o{ VIAJES : "empresa_id"
+    CATEGORIAS_PREGUNTAS_FRECUENTES ||--o{ PREGUNTAS_FRECUENTES : "categoria_pregunta_frecuente_id"
 
     %% sessions.authenticatable_id/authenticatable_type: relación polimórfica, sin FK física.
     %% Tasas de servicio: los pasajes conservan una copia histórica de la tasa aplicada, sin FK a tasas_servicio.
