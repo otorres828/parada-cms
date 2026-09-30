@@ -3,7 +3,6 @@
 namespace App\Traits;
 
 use Carbon\Carbon;
-use Illuminate\Validation\ValidationException;
 
 trait TraitGeneral
 {
@@ -37,19 +36,22 @@ trait TraitGeneral
                     $max = Carbon::createFromFormat('!Y-m-d', self::getMaxFilterDate());
 
                     if ($date->lessThan($min) || $date->greaterThan($max)) {
-                        throw ValidationException::withMessages([
-                            $attribute => 'La fecha debe estar entre '.self::getMinFilterDate().' y '.self::getMaxFilterDate().'.',
-                        ]);
+                        return self::getDefaultFilterDate($attribute);
                     }
 
                     return $date->toDateString();
                 }
-            } catch (ValidationException $exception) {
-                throw $exception;
             } catch (\Throwable) {
             }
         }
 
-        throw ValidationException::withMessages([$attribute => 'La fecha no es válida.']);
+        return self::getDefaultFilterDate($attribute);
+    }
+
+    private static function getDefaultFilterDate(string $attribute): string
+    {
+        return $attribute === 'date_to'
+            ? self::getDefaultHasta()
+            : self::getDefaultDesde();
     }
 }
