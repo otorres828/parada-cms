@@ -91,7 +91,7 @@ class Reembolso extends ModelHelper
         }
 
         if (!empty($filters['date_to'])) {
-            $query->whereDate('reembolsos.created_at', '<=', self::date($filters['date_to']));
+            $query->whereDate('reembolsos.created_at', '<=', self::date($filters['date_to'], 'date_to'));
         }
 
         return $query;

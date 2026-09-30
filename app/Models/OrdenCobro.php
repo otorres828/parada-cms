@@ -117,7 +117,7 @@ class OrdenCobro extends ModelHelper
         }
 
         if (! empty($filters['date_to'])) {
-            $query->whereDate('ordenes_cobro.fecha_emision', '<=', self::date($filters['date_to']));
+            $query->whereDate('ordenes_cobro.fecha_emision', '<=', self::date($filters['date_to'], 'date_to'));
         }
 
         return $query;

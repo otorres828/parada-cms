@@ -86,7 +86,7 @@ class ConfiguracionCupon extends ModelHelper
         }
 
         if (! empty($filters['date_to'])) {
-            $query->whereDate('configuracion_cupones.fecha_inicio', '<=', self::date($filters['date_to']));
+            $query->whereDate('configuracion_cupones.fecha_inicio', '<=', self::date($filters['date_to'], 'date_to'));
         }
 
         return $query;

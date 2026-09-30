@@ -59,12 +59,14 @@
 
         <div class="col-md-6 col-xl-2">
             <label class="form-label" for="orden-desde">Desde</label>
-            <input id="orden-desde" class="form-control" type="date" wire:model.live="date_from">
+            <input id="orden-desde" class="form-control" type="date" wire:model.live="date_from"
+                min="{{ $this->getMinFilterDate() }}" max="{{ $this->getMaxFilterDate() }}">
         </div>
 
         <div class="col-md-6 col-xl-2">
             <label class="form-label" for="orden-hasta">Hasta</label>
-            <input id="orden-hasta" class="form-control" type="date" wire:model.live="date_to">
+            <input id="orden-hasta" class="form-control" type="date" wire:model.live="date_to"
+                min="{{ $this->getMinFilterDate() }}" max="{{ $this->getMaxFilterDate() }}">
         </div>
 
         @if ($canDownload)

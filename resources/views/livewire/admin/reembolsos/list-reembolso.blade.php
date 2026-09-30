@@ -87,7 +87,8 @@
             <label class="form-label" for="listReembolso-from">
                 Desde
             </label>
-            <input id="listReembolso-from" type="date" class="form-control" wire:model.live="date_from">
+            <input id="listReembolso-from" type="date" class="form-control" wire:model.live="date_from"
+                min="{{ $this->getMinFilterDate() }}" max="{{ $this->getMaxFilterDate() }}">
         </div>
 
         <div class="col-md-6 col-xl-2">
@@ -95,7 +96,8 @@
             <label class="form-label" for="listReembolso-to">
                 Hasta
             </label>
-            <input id="listReembolso-to" type="date" class="form-control" wire:model.live="date_to">
+            <input id="listReembolso-to" type="date" class="form-control" wire:model.live="date_to"
+                min="{{ $this->getMinFilterDate() }}" max="{{ $this->getMaxFilterDate() }}">
         </div>
 
         @if ($canDownload)
@@ -234,5 +236,4 @@
         }));
     </script>
 @endscript
-
 

@@ -83,7 +83,8 @@
             <label class="form-label" for="listPasaje-from">
                 Desde
             </label>
-            <input id="listPasaje-from" type="date" class="form-control" wire:model.live="date_from">
+            <input id="listPasaje-from" type="date" class="form-control" wire:model.live="date_from"
+                min="{{ $this->getMinFilterDate() }}" max="{{ $this->getMaxFilterDate() }}">
         </div>
 
         <div class="col-md-6 col-xl-2">
@@ -91,7 +92,8 @@
             <label class="form-label" for="listPasaje-to">
                 Hasta
             </label>
-            <input id="listPasaje-to" type="date" class="form-control" wire:model.live="date_to">
+            <input id="listPasaje-to" type="date" class="form-control" wire:model.live="date_to"
+                min="{{ $this->getMinFilterDate() }}" max="{{ $this->getMaxFilterDate() }}">
         </div>
 
         @if ($canDetail)
@@ -264,4 +266,3 @@
         }));
     </script>
 @endscript
-

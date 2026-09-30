@@ -48,7 +48,7 @@ class Auditoria extends ModelHelper
         }
 
         if (!empty($filters['date_to'])) {
-            $query->whereDate('auditorias.created_at', '<=', self::date($filters['date_to']));
+            $query->whereDate('auditorias.created_at', '<=', self::date($filters['date_to'], 'date_to'));
         }
 
         return $query;

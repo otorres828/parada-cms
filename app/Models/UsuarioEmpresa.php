@@ -79,7 +79,7 @@ class UsuarioEmpresa extends ModelHelper implements Authenticatable, Authorizabl
         }
 
         if (! empty($filters['date_to'])) {
-            $query->whereDate('usuarios_empresa.created_at', '<=', self::date($filters['date_to']));
+            $query->whereDate('usuarios_empresa.created_at', '<=', self::date($filters['date_to'], 'date_to'));
         }
 
         return $query;

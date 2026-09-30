@@ -40,7 +40,8 @@
 
             <div class="col-md-6 col-xl-2">
 
-                <x-form.text-input margin="0" type="date" name="date_from" wire:model.live="date_from">
+                <x-form.text-input margin="0" type="date" name="date_from" wire:model.live="date_from"
+                    min="{{ $this->getMinFilterDate() }}" max="{{ $this->getMaxFilterDate() }}">
                     Desde
                 </x-form.text-input>
 
@@ -48,7 +49,8 @@
 
             <div class="col-md-6 col-xl-2">
 
-                <x-form.text-input margin="0" type="date" name="date_to" wire:model.live="date_to">
+                <x-form.text-input margin="0" type="date" name="date_to" wire:model.live="date_to"
+                    min="{{ $this->getMinFilterDate() }}" max="{{ $this->getMaxFilterDate() }}">
                     Hasta
                 </x-form.text-input>
 

@@ -71,7 +71,7 @@ class Terminal extends ModelHelper
         }
 
         if (! empty($filters['date_to'])) {
-            $query->whereDate('terminales.created_at', '<=', self::date($filters['date_to']));
+            $query->whereDate('terminales.created_at', '<=', self::date($filters['date_to'], 'date_to'));
         }
 
         return $query;

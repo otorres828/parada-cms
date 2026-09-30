@@ -118,7 +118,7 @@ class User extends ModelHelper implements Authenticatable, Authorizable, CanRese
         }
 
         if (! empty($filters['date_to'])) {
-            $query->whereDate('users.created_at', '<=', self::date($filters['date_to']));
+            $query->whereDate('users.created_at', '<=', self::date($filters['date_to'], 'date_to'));
         }
 
         return $query;

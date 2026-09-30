@@ -161,7 +161,7 @@ class Pasaje extends ModelHelper
                 }
 
                 if (! empty($filters['date_to'])) {
-                    $query->whereDate('reservas.fecha_compra', '<=', self::date($filters['date_to']));
+                    $query->whereDate('reservas.fecha_compra', '<=', self::date($filters['date_to'], 'date_to'));
                 }
 
                 if (! empty($filters['empresa_id'])) {

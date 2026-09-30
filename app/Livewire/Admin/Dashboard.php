@@ -8,6 +8,7 @@ use App\Models\Programacion;
 use App\Models\Reserva;
 use App\Models\ViajeTramo;
 use App\Services\Admin\Access;
+use App\Traits\TraitGeneral;
 use Carbon\Carbon;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
@@ -17,6 +18,8 @@ use Livewire\Component;
 #[Title('Resumen de la plataforma')]
 class Dashboard extends Component
 {
+    use TraitGeneral;
+
     public string $periodo = 'mes';
 
     public string $date_from = '';
@@ -42,8 +45,8 @@ class Dashboard extends Component
     public function render()
     {
         $ahora = Carbon::now();
-        $desde = $this->parseDate($this->date_from, $ahora->copy()->startOfMonth());
-        $hasta = $this->parseDate($this->date_to, $ahora)->endOfDay();
+        $desde = $this->parseDate($this->date_from, $ahora->copy()->startOfMonth(), 'date_from');
+        $hasta = $this->parseDate($this->date_to, $ahora, 'date_to')->endOfDay();
 
         if ($desde->greaterThan($hasta)) {
             $desde = $hasta->copy()->startOfDay();
@@ -145,11 +148,13 @@ class Dashboard extends Component
         $this->date_to = $ahora->toDateString();
     }
 
-    private function parseDate(string $date, Carbon $fallback): Carbon
+    private function parseDate(string $date, Carbon $fallback, string $attribute): Carbon
     {
         try {
-            return Carbon::createFromFormat('Y-m-d', $date)->startOfDay();
+            return Carbon::createFromFormat('Y-m-d', self::date($date, $attribute))->startOfDay();
         } catch (\Throwable) {
+            $this->addError($attribute, 'La fecha indicada no es válida o está fuera del rango permitido.');
+
             return $fallback;
         }
     }

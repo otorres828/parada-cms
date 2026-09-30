@@ -235,7 +235,7 @@ class Reserva extends ModelHelper
         }
 
         if (! empty($filters['date_to'])) {
-            $query->whereDate('reservas.fecha_compra', '<=', self::date($filters['date_to']));
+            $query->whereDate('reservas.fecha_compra', '<=', self::date($filters['date_to'], 'date_to'));
         }
 
         if (! empty($filters['empresa_id'])) {
@@ -262,7 +262,7 @@ class Reserva extends ModelHelper
             ->join('tipos_cambios', 'tipos_cambios.id', '=', 'reservas.tipos_cambios_id')
             ->where('reservas.estado_pago', self::ESTADO_PAGO_PAGADO)
             ->whereDate('reservas.fecha_compra', '>=', self::date($dateFrom))
-            ->whereDate('reservas.fecha_compra', '<=', self::date($dateTo))
+            ->whereDate('reservas.fecha_compra', '<=', self::date($dateTo, 'date_to'))
             ->selectRaw('DATE(reservas.fecha_compra) as fecha, COUNT(*) as cantidad, SUM(reservas.monto_total) as total, SUM(reservas.monto_total * tipos_cambios.valor_usd) as total_bs, SUM(reservas.tasa_servicio) as tasas, SUM(reservas.tasa_servicio * tipos_cambios.valor_usd) as tasas_bs')
             ->groupByRaw('DATE(reservas.fecha_compra)')
             ->orderByDesc('fecha');
@@ -274,7 +274,7 @@ class Reserva extends ModelHelper
             ->when($tipoTransporte !== '', fn ($query) => $query->whereHas('programacion.transporte', fn ($transporte) => $transporte->where('tipo_transporte', $tipoTransporte)))
             ->where('reservas.estado_pago', self::ESTADO_PAGO_PAGADO)
             ->whereDate('reservas.fecha_compra', '>=', self::date($dateFrom))
-            ->whereDate('reservas.fecha_compra', '<=', self::date($dateTo))
+            ->whereDate('reservas.fecha_compra', '<=', self::date($dateTo, 'date_to'))
             ->join('programaciones', 'programaciones.id', '=', 'reservas.programacion_id')
             ->join('viajes', 'viajes.id', '=', 'programaciones.viaje_id')
             ->join('empresas', 'empresas.id', '=', 'viajes.empresa_id')

@@ -51,7 +51,8 @@
             <label class="form-label" for="listAudit-from">
                 Desde
             </label>
-            <input id="listAudit-from" type="date" class="form-control" wire:model.live="date_from">
+            <input id="listAudit-from" type="date" class="form-control" wire:model.live="date_from"
+                min="{{ $this->getMinFilterDate() }}" max="{{ $this->getMaxFilterDate() }}">
         </div>
 
         <div class="col-md-3">
@@ -59,7 +60,8 @@
             <label class="form-label" for="listAudit-to">
                 Hasta
             </label>
-            <input id="listAudit-to" type="date" class="form-control" wire:model.live="date_to">
+            <input id="listAudit-to" type="date" class="form-control" wire:model.live="date_to"
+                min="{{ $this->getMinFilterDate() }}" max="{{ $this->getMaxFilterDate() }}">
         </div>
 
     </div>

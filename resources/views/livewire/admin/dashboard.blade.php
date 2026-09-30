@@ -84,7 +84,8 @@
                         Desde
                     </label>
                     <input id="dashboard-date-from" type="date" class="form-control form-control-sm"
-                        wire:model.live="date_from" max="{{ $date_to }}">
+                        wire:model.live="date_from" min="{{ $this->getMinFilterDate() }}"
+                        max="{{ $this->getMaxFilterDate() }}">
 
                 </div>
 
@@ -94,7 +95,8 @@
                         Hasta
                     </label>
                     <input id="dashboard-date-to" type="date" class="form-control form-control-sm"
-                        wire:model.live="date_to" min="{{ $date_from }}">
+                        wire:model.live="date_to" min="{{ $this->getMinFilterDate() }}"
+                        max="{{ $this->getMaxFilterDate() }}">
 
                 </div>
 

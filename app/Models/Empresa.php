@@ -155,7 +155,7 @@ class Empresa extends ModelHelper
         }
 
         if (! empty($filters['date_to'])) {
-            $query->whereDate('empresas.created_at', '<=', self::date($filters['date_to']));
+            $query->whereDate('empresas.created_at', '<=', self::date($filters['date_to'], 'date_to'));
         }
 
         if (! empty($filters['con_legales'])) {

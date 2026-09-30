@@ -87,7 +87,7 @@ class Programacion extends ModelHelper
         }
 
         if (! empty($filters['date_to'])) {
-            $query->whereDate('programaciones.fecha_salida', '<=', self::date($filters['date_to']));
+            $query->whereDate('programaciones.fecha_salida', '<=', self::date($filters['date_to'], 'date_to'));
         }
 
         if (! empty($filters['proximas'])) {

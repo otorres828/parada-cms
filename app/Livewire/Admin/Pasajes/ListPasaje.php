@@ -83,7 +83,7 @@ class ListPasaje extends Component
             'date_from' => $this->date_from,
             'date_to' => $this->date_to,
         ]);
-        Log::info('Exportando pasajes', [
+        Log::info('Exportando pasajes info', [
             'user_id' => Auth::id(),
             'empresa_id' => $this->empresa_id,
             'status' => $this->status,

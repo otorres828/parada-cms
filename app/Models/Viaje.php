@@ -88,7 +88,7 @@ class Viaje extends ModelHelper
         }
 
         if (! empty($filters['date_to'])) {
-            $query->whereDate('viajes.created_at', '<=', self::date($filters['date_to']));
+            $query->whereDate('viajes.created_at', '<=', self::date($filters['date_to'], 'date_to'));
         }
 
         if (! empty($filters['con_tasas'])) {

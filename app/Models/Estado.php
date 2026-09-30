@@ -42,7 +42,7 @@ class Estado extends ModelHelper
         }
 
         if (!empty($filters['date_to'])) {
-            $query->whereDate('estados.created_at', '<=', self::date($filters['date_to']));
+            $query->whereDate('estados.created_at', '<=', self::date($filters['date_to'], 'date_to'));
         }
 
         return $query;
