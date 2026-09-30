@@ -64,8 +64,8 @@ class SalesReport extends Component
 
         $this->validate([
             'tipo_transporte' => 'nullable|in:autobus,carro',
-            'date_from' => 'required|date_format:Y-m-d',
-            'date_to' => 'required|date_format:Y-m-d|after_or_equal:date_from',
+            'date_from' => 'required|date_format:Y-m-d|after_or_equal:'.self::getMinFilterDate().'|before_or_equal:'.self::getMaxFilterDate(),
+            'date_to' => 'required|date_format:Y-m-d|after_or_equal:date_from|before_or_equal:'.self::getMaxFilterDate(),
             'per_page' => 'integer|in:10,25,50,100',
         ]);
 
