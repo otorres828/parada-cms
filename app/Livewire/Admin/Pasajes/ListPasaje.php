@@ -10,6 +10,8 @@ use App\Traits\Listing;
 use App\Traits\Permissions;
 use App\Traits\TraitGeneral;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -74,6 +76,20 @@ class ListPasaje extends Component
     {
         Access::authorize('pasajes', 'list');
         Access::authorize('pasajes', 'detail');
+        Log::channel('downloads')->info('Exportando pasajes', [
+            'user_id' => Auth::id(),
+            'empresa_id' => $this->empresa_id,
+            'status' => $this->status,
+            'date_from' => $this->date_from,
+            'date_to' => $this->date_to,
+        ]);
+        Log::info('Exportando pasajes', [
+            'user_id' => Auth::id(),
+            'empresa_id' => $this->empresa_id,
+            'status' => $this->status,
+            'date_from' => $this->date_from,
+            'date_to' => $this->date_to,
+        ]);
 
         $query = Pasaje::searchAdmin($this->search, [
             'empresa_id' => $this->empresa_id,

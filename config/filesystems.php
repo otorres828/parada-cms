@@ -47,28 +47,14 @@ return [
             'report' => false,
         ],
 
-        'depositos' => [
+        'downloads' => [
             'driver' => 'local',
-            'root' => storage_path('app/public/depositos'),
-            'url' => env('APP_URL') . '/storage/depositos/',
+            'root' => storage_path('app/public/downloads'),
+            'url' => env('APP_URL') . '/storage/downloads/',
             'visibility' => 'public',
         ],
 
-        'retiros' => [
-            'driver' => 'local',
-            'root' => storage_path('app/public/retiros'),
-            'url' => env('APP_URL') . '/storage/retiros/',
-            'visibility' => 'public',
-        ],
-
-
-        'eventos' => [
-            'driver' => 'local',
-            'root' => storage_path('app/public/eventos'),
-            'url' => env('APP_URL') . '/storage/eventos/',
-            'visibility' => 'public',
-        ],
-
+   
         's3' => [
             'driver' => 's3',
             'key' => env('AWS_ACCESS_KEY_ID'),
