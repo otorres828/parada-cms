@@ -4,16 +4,22 @@ namespace App\Exports;
 
 use Illuminate\Database\Eloquent\Builder;
 use Maatwebsite\Excel\Concerns\FromQuery;
+use Maatwebsite\Excel\Concerns\WithCustomChunkSize;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
 
-class SalesReportExport implements FromQuery, WithHeadings, WithMapping
+class SalesReportExport implements FromQuery, WithCustomChunkSize, WithHeadings, WithMapping
 {
     public function __construct(private Builder $consulta) {}
 
     public function query(): Builder
     {
         return $this->consulta;
+    }
+
+    public function chunkSize(): int
+    {
+        return 1000;
     }
 
     public function headings(): array

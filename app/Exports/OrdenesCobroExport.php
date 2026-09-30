@@ -5,6 +5,7 @@ namespace App\Exports;
 use App\Support\ConversorMoneda;
 use Illuminate\Database\Eloquent\Builder;
 use Maatwebsite\Excel\Concerns\FromQuery;
+use Maatwebsite\Excel\Concerns\WithCustomChunkSize;
 use Maatwebsite\Excel\Concerns\WithCustomValueBinder;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
@@ -12,7 +13,7 @@ use PhpOffice\PhpSpreadsheet\Cell\Cell;
 use PhpOffice\PhpSpreadsheet\Cell\DataType;
 use PhpOffice\PhpSpreadsheet\Cell\DefaultValueBinder;
 
-class OrdenesCobroExport extends DefaultValueBinder implements FromQuery, WithCustomValueBinder, WithHeadings, WithMapping
+class OrdenesCobroExport extends DefaultValueBinder implements FromQuery, WithCustomChunkSize, WithCustomValueBinder, WithHeadings, WithMapping
 {
     private array $conversionesBs = [];
 
@@ -21,6 +22,11 @@ class OrdenesCobroExport extends DefaultValueBinder implements FromQuery, WithCu
     public function query(): Builder
     {
         return $this->consulta;
+    }
+
+    public function chunkSize(): int
+    {
+        return 1000;
     }
 
     public function headings(): array

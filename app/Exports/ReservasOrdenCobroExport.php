@@ -5,6 +5,7 @@ namespace App\Exports;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\FromCollection;
+use Maatwebsite\Excel\Concerns\WithCustomChunkSize;
 use Maatwebsite\Excel\Concerns\WithCustomValueBinder;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
@@ -12,7 +13,7 @@ use PhpOffice\PhpSpreadsheet\Cell\Cell;
 use PhpOffice\PhpSpreadsheet\Cell\DataType;
 use PhpOffice\PhpSpreadsheet\Cell\DefaultValueBinder;
 
-class ReservasOrdenCobroExport extends DefaultValueBinder implements FromCollection, WithCustomValueBinder, WithHeadings, WithMapping
+class ReservasOrdenCobroExport extends DefaultValueBinder implements FromCollection, WithCustomChunkSize, WithCustomValueBinder, WithHeadings, WithMapping
 {
     public function __construct(
         private array $reservas,
@@ -22,6 +23,11 @@ class ReservasOrdenCobroExport extends DefaultValueBinder implements FromCollect
     public function collection(): Collection
     {
         return collect($this->reservas);
+    }
+
+    public function chunkSize(): int
+    {
+        return 1000;
     }
 
     public function headings(): array
