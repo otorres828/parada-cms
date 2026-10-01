@@ -1,69 +1,65 @@
-# Flujo de reservas: contrato y auditoría
+# Reservas y checkout
 
-## Identidad y autorización
+## Responsabilidad
 
-Los servicios reciben al cliente de la compra, no al operador autenticado. No consultan la sesión ni agregan guards:
+El checkout del sitio de venta está protegido por autenticación. Los servicios reciben explícitamente al cliente y verifican que la reserva y el viajero le pertenezcan. El cliente nunca se determina desde un ID libre enviado por el navegador.
 
-- Sitio final: middleware de autenticación en todo el checkout; el consumidor pasa `auth()->user()`, nunca un cliente indicado por el navegador.
-- CRM: el administrador autenticado selecciona un `User` y lo pasa al servicio. El consumidor comprueba sus permisos y el alcance de empresa antes de ejecutar la operación.
-- Las operaciones de ReservaService y el reporte de pago conservan el filtro `usuario_id`: la reserva debe pertenecer al cliente recibido. Autenticación y propiedad son controles distintos.
-- CuponService recibe una reserva: el consumidor debe obtenerla desde las reservas del cliente o desde el ámbito autorizado del CRM. No debe usar un ID libre del navegador.
-- Confirmación y rechazo de pagos son operaciones administrativas/backend. No se exponen como acciones del comprador.
+Una reserva representa una compra para una programación y un tramo concreto. Todos sus pasajeros comparten origen y destino. Los asientos se asignan automáticamente al incorporar viajeros y su ocupación se calcula por los tramos que se superponen.
 
-## Secuencia vigente
+## Secuencia
 
-1. `Pasaje::consultarDisponibilidad($tarifaId)` consulta cupo por trayecto.
-2. `ReservaService::aplicarReserva($cliente, $tarifaId, $reprogramacionId)` crea una reserva NUEVA, con cotización provisional de un boleto y vencimiento de 20 minutos. No ocupa asientos todavía. El tercer argumento es opcional.
-3. `ReservaService::agregarPasajero($cliente, $reservaId, $datos)` asigna automáticamente el primer asiento libre. `removerPasajero($cliente, $reservaId, $pasajeId)` libera ese asiento. Ambas recalculan descuentos y tasas; retirar el último recupera la cotización provisional.
-4. Opcionalmente, `CuponService::aplicarCupon($reserva, $codigo)` o `removerCupon($reserva)`. Son métodos de instancia. Después se prepara el resumen para obtener las tasas actualizadas.
-5. `ReservaService::prepararResumen($cliente, $reservaId)` valida pasajeros y cupón, calcula tasas y devuelve el detalle.
-6. `PagoReservaService::pasarAPendiente($cliente, $reservaId, $metodoPagoId, $referenciaPago, $fechaPago, $comprobante)` registra el pago reportado. El comprobante es opcional. Revalida vencimiento bajo bloqueo de programación; elimina la expiración. Repetir con el mismo método y referencia no crea otro pago.
-7. Backend autorizado: `PagoReservaService::confirmarPago($reservaId, $montoConfirmado, 'USD')` después de verificar el pago, o `marcarPagoFallido($reservaId)` ante rechazo definitivo. Una confirmación repetida conserva el resultado.
-8. `ReservaService::cancelarReserva($cliente, $reservaId)` admite nuevas y canceladas, nunca pendientes o pagadas.
+1. `Pasaje::consultarDisponibilidad($tarifaId)` consulta el cupo del tramo.
+2. `ReservaService::aplicarReserva($cliente, $tarifaId, $reprogramacionId)` crea una reserva nueva o reinicia una reserva nueva reutilizable. La cotización inicial representa un pasaje y vence a los 20 minutos.
+3. El cliente crea o selecciona un viajero mediante `ViajeroService`.
+4. `ReservaService::agregarPasajero($cliente, $reservaId, $viajeroId)` crea el pasaje, asigna el primer asiento disponible y guarda el snapshot cifrado del viajero.
+5. `ReservaService::removerPasajero($cliente, $reservaId, $pasajeId)` elimina el pasaje mientras la reserva sea editable.
+6. `CuponService::aplicarCupon()` o `removerCupon()` modifica el descuento. Agregar o retirar pasajeros recalcula el cupón existente.
+7. `ReservaService::prepararResumen()` valida la reserva y calcula sus tasas.
+8. `PagoReservaService::pasarAPendiente()` registra el pago reportado, elimina la expiración y deja la reserva esperando revisión.
+9. El backend autorizado ejecuta `confirmarPago()` o `marcarPagoFallido()`.
 
-Los pasajes de reservas nuevas vigentes, pendientes y pagadas bloquean asientos según el solapamiento del trayecto. Agregar pasajeros y reportar pagos no deben renovar el plazo. La tarea `reservas:cancelar-expiradas` libera los cupones de reservas vencidas; los asientos dejan de bloquear por la consulta de vigencia incluso antes de ejecutar la tarea.
+## Estados y ocupación
 
-## Simplificación aplicada
+- **Nueva:** bloquea cupo solamente mientras `fecha_expiracion` siga vigente.
+- **Pendiente:** el cliente terminó el pago y espera validación; no tiene expiración.
+- **Pagada:** pago confirmado y pasajes emitidos.
+- **Cancelada o fallida:** no bloquea cupo.
+- **Reprogramada:** identifica una compra pagada sustituida por otra reserva.
+- **Reembolsada:** conserva el histórico del pago y de la tasa de servicio.
 
-- Eliminado `ReservaService::validarCuponReserva`: solo delegaba a CuponService.
-- Eliminado `CuponService::validarExistenciaYDisponibilidad`: sin consumidores en el repositorio; aplicarCupon ya valida dentro de su transacción.
-- Eliminados el filtrado duplicado de datos ya validados del pasajero y la generación de localizador repetida; Pasaje ya genera su UUID.
-- Eliminada la validación duplicada del intervalo al crear; disponibilidad ya la ejecuta.
-- Eliminada la consulta `exists` duplicada del método bancario y comprobaciones de vigencia redundantes en pagos.
-- Simplificado recalcularCupon para evitar la transacción y recargas adicionales de removerCupon.
-- ReembolsoService ya no libera el cupón ni recalcula la reserva pagada: conserva los importes y tasas históricos usados por OrdenCobroService.
+Las reservas nuevas vigentes, pendientes y pagadas ocupan asientos. La disponibilidad se determina por solapamiento entre origen y destino, por lo que un asiento puede venderse nuevamente después del terminal donde su pasajero desciende.
 
-Se conservan conReserva, el recálculo compartido, la cotización inicial, las validaciones de estado, transacciones y bloqueos porque cumplen funciones distintas. TasasServicioService mantiene el snapshot de tasas para no cambiar importes al reabrir el resumen. OrdenCobroService mantiene su ciclo de emisión, reporte, revisión y suspensión; no se eliminaron sus métodos operativos.
+## Pasajeros y cotización
 
-## Hallazgos pendientes de reglas o revisión adicional
+La reserva no crea viajeros. `agregarPasajero()` recibe un viajero activo ya existente y comprueba propiedad, duplicados y disponibilidad. Cada alta o retiro recalcula precio, descuento, tasa y total.
 
-- PagoReservaService acepta cualquier cuenta bancaria activa. Falta definir la selección de cuenta según empresa y tipo de contrato (plataforma o empresa receptora) antes de restringirla.
-- ReembolsoService solicita el total del pago, incluida la tasa. Confirmar si la política exige descontar la tasa no reembolsable antes de cambiar ese importe.
-- CuponService usa `redimido` desde la aplicación, antes del pago; depende de la tarea de expiración para recuperar usos. La documentación anterior afirmaba otra cosa.
-- El reparto proporcional del cupón usa floats y asigna el residuo al último boleto; requiere revisar los casos de centavos con precios pequeños o heterogéneos.
-- Las reprogramaciones no restringen aquí empresa, trayecto ni cantidad de pasajeros. Esas reglas comerciales no se inventaron durante esta simplificación.
-- La prueba en SQLite no demuestra el comportamiento concurrente de los bloqueos de MySQL. No se conectó una pasarela ni se implementaron pantallas del checkout.
+Si se retira el último pasaje, la reserva vuelve a la cotización provisional de una persona y libera el cupón. El viajero permanece en la libreta del cliente.
+
+## Cupones
+
+Una campaña define modalidad, tipo de descuento y ámbito de aplicación:
+
+- **Reserva:** calcula un descuento general y lo distribuye entre los pasajes.
+- **Pasajes:** aplica el descuento individualmente a cada pasaje.
+
+El cupón se valida nuevamente antes de reportar el pago. Si una reserva nueva se cancela o expira, el código se libera cuando corresponde.
+
+## Tasas de servicio
+
+La tasa la paga el cliente por pasaje. `TasasServicioService` calcula cada tasa sobre el subtotal después del descuento y suma los resultados en la reserva.
+
+No se genera tasa cuando existe una exoneración aplicable o cuando la reserva procede de una reprogramación. El pasaje conserva en `servicio_json` las condiciones usadas para que cambios futuros en la configuración no alteren el histórico.
+
+## Pagos
+
+Reportar un pago crea un único `PagoReserva`, cambia la reserva de nueva a pendiente y elimina su fecha de expiración. Una referencia no puede registrarse dos veces.
+
+Confirmar exige que el importe recibido coincida con la reserva y el registro del pago. En una reprogramación, la confirmación marca la reserva original como reprogramada. Un pago fallido libera el cupón aplicado.
+
+## Concurrencia
+
+Las operaciones críticas se ejecutan dentro de transacciones. La reserva se bloquea durante sus modificaciones y la programación se bloquea cuando se asignan o liberan asientos, evitando que dos solicitudes consuman el último cupo del mismo tramo.
 
 ## Verificación
 
-`tests/ReservaFlowSmoke.php` ejecuta las migraciones exclusivamente en SQLite en memoria. Comprueba cliente seleccionado sin dependencia de sesión, propiedad, cupo, recálculo del cupón al agregar/retirar pasajeros, cotización vacía, pago repetido, importe incorrecto, cancelación de pagadas, expiración y conservación del histórico al reembolsar.
-
-Ejecutar con PHP 8.3+, BCMath y PDO SQLite: `php tests/ReservaFlowSmoke.php`.
-
-## Bloqueo único de reserva
-
-`conReserva` adquiere el bloqueo de la reserva que entrega a su callback. El recálculo y la liberación interna de cupones usan esa misma instancia y transacción, sin volver a bloquearla. La tarea de expiración también bloquea antes de liberar el cupón.
-
-`aplicarCupon` y `removerCupon` conservan su bloqueo para llamadas independientes. Su argumento interno `reservaBloqueada: true` se usa exclusivamente cuando el llamador ya mantiene bloqueada esa reserva en una transacción; nunca procede de una petición del navegador. No se infiere que exista un bloqueo solo porque haya una transacción abierta.
-
-Los bloqueos de programación, cupón, campaña y reserva original de una reprogramación protegen registros diferentes y se conservan.
-
-## Selección de programaciones
-
-El sitio debe ofrecer únicamente programaciones habilitadas para venta hasta dos horas antes de la salida del bus. Esta selección corresponde al consumidor del servicio. Se eliminó Terminal::validarSalida y sus llamadas; el servicio no vuelve a comprobar la hora ni la habilitación de la salida. El filtro de dos horas no se implementó en este cambio.
-
-## Reiniciar al continuar
-
-`aplicarReserva` reutiliza la reserva NUEVA más reciente del cliente para la programación seleccionada, siempre que no tenga pago registrado; incluye reservas nuevas vencidas. Conserva ID, referencia y auditoría. Libera el cupón, elimina los pasajes y actualiza trayecto, tarifa, tipo de cambio, exoneración, importes, fecha de compra y vencimiento de 20 minutos. Los registros de viajeros se conservan como historial del cliente. Si no existe una reserva reutilizable, crea una. Las reservas pendientes, pagadas y de otros clientes o programaciones no se reinician.
-
-La limpieza y la cotización ocurren en la misma transacción: un error revierte todo. La disponibilidad se consulta después de retirar los pasajes anteriores para que no bloqueen el reinicio. Una reprogramación puede reutilizar su propia reserva nueva sin considerarla otra reprogramación activa. La serialización de solicitudes simultáneas sigue correspondiendo al backend llamador.
+`tests/ReservaFlowSmoke.php` ejecuta el flujo en SQLite en memoria y verifica propiedad, disponibilidad, cupones, tasas, pagos, vencimiento, snapshots y eliminación de viajeros.
