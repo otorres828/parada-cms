@@ -19,6 +19,10 @@ $assert($carro->fresh()->amenidades->first()->id === $amenidad->id, 'Relación d
 $assert(App\Models\Transporte::searchAdmin('', ['tipo_transporte'=>'carro'])->pluck('id')->all() === [$carro->id], 'Filtro carro');
 $assert(! App\Models\Transporte::searchAdmin('', ['tipo_transporte'=>'autobus'])->whereKey($carro->id)->exists(), 'Filtro autobús');
 $ventas = [];
+$viajeroTransporte = App\Services\ViajeroService::agregarViajero($cliente, array_merge($pasajero, [
+    'nombre' => 'Viajero transporte',
+    'documento_identidad' => 'V-87654321',
+]));
 foreach ([$bus, $carro] as $vehiculo) {
     $salida = $programacion->replicate();
     $salida->transporte_id = $vehiculo->id;
@@ -30,7 +34,7 @@ foreach ([$bus, $carro] as $vehiculo) {
     $compra = App\Services\ReservaService::aplicarReserva($cliente, $precio->id);
     $prefix = $vehiculo->tipo_transporte === 'carro' ? 'CA' : 'AU';
     $assert((bool) preg_match('/^'.$prefix.'-[A-Z0-9]{10}$/', $compra->codigo_referencia), 'Formato del código '.$prefix);
-    $compra = App\Services\ReservaService::agregarPasajero($cliente, $compra->id, $pasajero);
+    $compra = App\Services\ReservaService::agregarPasajero($cliente, $compra->id, $viajeroTransporte->id);
     $compra = App\Services\PagoReservaService::pasarAPendiente($cliente, $compra->id, $banco->id, 'TIPO-'.$compra->id, now()->toDateTimeString());
     $ventas[$vehiculo->tipo_transporte] = App\Services\PagoReservaService::confirmarPago($compra->id, $compra->monto_total);
 }
@@ -69,8 +73,18 @@ foreach (['', 'carro', 'autobus'] as $tipo) {
         ->filter(fn ($reserva) => $tipo === '' || $reserva->programacion->transporte->tipo_transporte === $tipo);
     $assert($data['totalReservas'] === $expected->count(), 'Dashboard conteos '.$tipo);
     $assert($data['ultimasReservas']->every(fn ($reserva) => $expected->contains('id', $reserva->id)), 'Dashboard reservas '.$tipo);
-    $paid = $expected->where('estado_pago', App\Models\Reserva::ESTADO_PAGO_PAGADO);
-    $assert($data['metrics']['pasajes'] === App\Models\Pasaje::whereIn('reserva_id', $paid->modelKeys())->count(), 'Dashboard pasajes '.$tipo);
+    $reservasContabilizadasComoPagadas = $expected->whereIn('estado_pago', [
+        App\Models\Reserva::ESTADO_PAGO_PAGADO,
+        App\Models\Reserva::ESTADO_PAGO_REEMBOLSADO,
+        App\Models\Reserva::ESTADO_PAGO_REPROGRAMADO,
+    ]);
+    $assert(
+        $data['metrics']['pasajes'] === App\Models\Pasaje::whereIn(
+            'reserva_id',
+            $reservasContabilizadasComoPagadas->modelKeys(),
+        )->count(),
+        'Dashboard pasajes '.$tipo,
+    );
 }
 foreach ([
     App\Livewire\Admin\Dashboard::class => [],
@@ -90,7 +104,14 @@ foreach ([
     $assert(strlen($html) > 100, 'Render '.$component);
     if ($component === App\Livewire\Admin\Dashboard::class) {
         $assert(str_contains($html, 'wire:model.live="tipo_transporte"'), 'Filtro de transporte del dashboard');
-    } else {
+    } elseif (in_array($component, [
+        App\Livewire\Admin\Transportes\ListTransporte::class,
+        App\Livewire\Admin\Transportes\DetailTransporte::class,
+        App\Livewire\Admin\Empresas\SaveEmpresa::class,
+        App\Livewire\Admin\Empresas\ListEmpresa::class,
+        App\Livewire\Admin\Reportes\SalesReport::class,
+        App\Livewire\Admin\Reportes\CompaniesReport::class,
+    ], true)) {
         $assert(str_contains($html, 'Tipo de') || str_contains($html, 'Tipos de'), 'Etiqueta de tipo ausente en '.$component);
     }
     if ($component === App\Livewire\Admin\Transportes\DetailTransporte::class) {

@@ -116,7 +116,7 @@
                     <x-list.sortable-button column="id" :$sortColumn :$sortDirection />
                 </th>
 
-                <th>Reserva </th>
+                <th class="text-nowrap">Reserva</th>
 
                 <th>Fecha de reserva</th>
 
@@ -165,7 +165,7 @@
                         {{ $pasaje->id }}
                     </td>
 
-                    <td>
+                    <td class="text-nowrap">
                         {{ $pasaje->reserva?->codigo_referencia ?? '—' }}
                     </td>
 

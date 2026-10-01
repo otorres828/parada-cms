@@ -120,7 +120,7 @@
                     <x-list.sortable-button column="id" :$sortColumn :$sortDirection />
                 </th>
 
-                <th>Reserva</th>
+                <th class="text-nowrap">Reserva</th>
 
                 <th>Empresa </th>
 
@@ -144,12 +144,14 @@
         <tbody>
 
             @forelse ($reembolsos as $reembolso)
+
                 <tr wire:key="listReembolso-{{ $reembolso->id }}">
+
                     <td>
                         {{ $reembolso->id }}
                     </td>
 
-                    <td>
+                    <td class="text-nowrap">
                         @if ($reembolso->pagoReserva?->reserva)
 
                             @if ($canViewReservation)
@@ -164,6 +166,7 @@
                         @else
                             —
                         @endif
+                        
                     </td>
 
                     <td>

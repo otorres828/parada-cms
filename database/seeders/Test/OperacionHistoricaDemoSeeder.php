@@ -283,6 +283,7 @@ class OperacionHistoricaDemoSeeder extends Seeder
             $buffers['pasajes'][] = [
                 'id' => $pasajeId,
                 'reserva_id' => $reservaId,
+                'viajero_id' => $viajeroId,
                 'viajero' => Crypt::encryptString(json_encode($viajeroSnapshot, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)),
                 'viajero_documento_hash' => PersonalData::hashDocumento($documento),
                 'numero_asiento' => $asiento,

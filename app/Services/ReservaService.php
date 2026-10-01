@@ -13,7 +13,6 @@ use App\Models\User;
 use App\Models\Viajero;
 use Closure;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 
 class ReservaService
@@ -124,20 +123,24 @@ class ReservaService
     }
 
     // 2. Agrega un pasajero y recalcula el cupón y los importes de la reserva.
-    public static function agregarPasajero(User $cliente, int $reservaId, array $pasajero): Reserva
+    public static function agregarPasajero(User $cliente, int $reservaId, int $viajeroId): Reserva
     {
-        $datos = Validator::make($pasajero, [
-            'nombre' => ['required', 'string', 'max:255'],
-            'apellido' => ['required', 'string', 'max:255'],
-            'tipo_documento' => ['required_with:documento_identidad', 'nullable', 'integer', 'in:1,2,3,4'],
-            'documento_identidad' => ['nullable', 'string', 'max:255'],
-            'fecha_nacimiento' => ['required', 'date_format:Y-m-d', 'before_or_equal:today'],
-            'tipo_pasajero' => ['required', 'in:adulto,nino,infante'],
-        ])->validate();
-
-        return self::conReserva($cliente, $reservaId, function ($reserva) use ($datos) {
+        return self::conReserva($cliente, $reservaId, function ($reserva) use ($cliente, $viajeroId) {
 
             $reserva->validarEditable();
+
+            $viajero = Viajero::query()
+                ->whereKey($viajeroId)
+                ->where('usuario_id', $cliente->id)
+                ->where('estatus', Viajero::ESTADO_ACTIVE)
+                ->lockForUpdate()
+                ->firstOrFail();
+
+            Pasaje::exigir(
+                ! $reserva->pasajes()->where('viajero_id', $viajero->id)->exists(),
+                'viajero',
+                'Este viajero ya está incluido en la reserva.',
+            );
 
             $programacion = Programacion::bloquear($reserva->programacion_id);
             $reserva->validarVigente();
@@ -164,21 +167,9 @@ class ReservaService
 
             $numeroAsiento = (int) $disponibilidad['asientos'][0];
 
-            $datosViajero = $datos;
-            $datosViajero['usuario_id'] = $reserva->usuario_id;
-
-            $viajero = Viajero::create($datosViajero);
-
             $reserva->pasajes()->create([
-                'viajero' => [
-                    'version' => 1,
-                    'nombre' => $viajero->nombre,
-                    'apellido' => $viajero->apellido,
-                    'tipo_documento' => $viajero->tipo_documento,
-                    'documento_identidad' => $viajero->documento_identidad,
-                    'fecha_nacimiento' => $viajero->fecha_nacimiento->toDateString(),
-                    'tipo_pasajero' => $viajero->tipo_pasajero,
-                ],
+                'viajero_id' => $viajero->id,
+                'viajero' => $viajero->datosParaPasaje(),
                 'numero_asiento' => $numeroAsiento,
                 'precio_base' => $tarifa->precio,
                 'descuento' => '0.00',

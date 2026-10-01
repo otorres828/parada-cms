@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Support\PersonalData;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Viajero extends ModelHelper
 {
@@ -44,6 +45,24 @@ class Viajero extends ModelHelper
     public function usuario(): BelongsTo
     {
         return $this->belongsTo(User::class, 'usuario_id');
+    }
+
+    public function pasajes(): HasMany
+    {
+        return $this->hasMany(Pasaje::class, 'viajero_id');
+    }
+
+    public function datosParaPasaje(): array
+    {
+        return [
+            'version' => 1,
+            'nombre' => $this->nombre,
+            'apellido' => $this->apellido,
+            'tipo_documento' => $this->tipo_documento,
+            'documento_identidad' => $this->documento_identidad,
+            'fecha_nacimiento' => $this->fecha_nacimiento->toDateString(),
+            'tipo_pasajero' => $this->tipo_pasajero,
+        ];
     }
 
     public function getTipoDocumento(): string

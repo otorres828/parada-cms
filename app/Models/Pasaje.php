@@ -24,6 +24,7 @@ class Pasaje extends ModelHelper
 
     protected $fillable = [
         'reserva_id',
+        'viajero_id',
         'viajero',
         'viajero_documento_hash',
         'numero_asiento',
@@ -42,6 +43,7 @@ class Pasaje extends ModelHelper
     {
         return [
             'viajero' => 'encrypted:array',
+            'viajero_id' => 'integer',
             'numero_asiento' => 'integer',
             'precio_base' => 'decimal:2',
             'descuento' => 'decimal:2',
@@ -56,6 +58,11 @@ class Pasaje extends ModelHelper
     public function reserva(): BelongsTo
     {
         return $this->belongsTo(Reserva::class, 'reserva_id');
+    }
+
+    public function viajeroOrigen(): BelongsTo
+    {
+        return $this->belongsTo(Viajero::class, 'viajero_id');
     }
 
     public function getViajeroNombreCompletoAttribute(): string

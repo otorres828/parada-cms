@@ -17,7 +17,7 @@
 
             <th>Cliente</th>
 
-            <th>Reserva</th>
+            <th class="text-nowrap">Reserva</th>
 
             <th>Fecha de redención</th>
 
@@ -40,7 +40,7 @@
                     {{ $cupon->usuario?->name ?? '—' }}
                 </td>
 
-                <td>
+                <td class="text-nowrap">
                     @if ($cupon->reserva)
                         @if ($canViewReservation)
                             <a href="{{ route('admin.reservas.detail', $cupon->reserva->id) }}"

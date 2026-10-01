@@ -11,6 +11,7 @@ return new class extends Migration
         Schema::create('pasajes', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('reserva_id');
+            $table->unsignedBigInteger('viajero_id')->nullable();
             $table->longText('viajero');
             $table->char('viajero_documento_hash', 64)->nullable()->index();
             $table->unsignedInteger('numero_asiento')->nullable();
@@ -26,6 +27,7 @@ return new class extends Migration
             $table->timestamps();
             $table->unique(['reserva_id', 'numero_asiento']);
             $table->foreign('reserva_id')->references('id')->on('reservas')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('viajero_id')->references('id')->on('viajeros')->onUpdate('cascade')->onDelete('set null');
         });
     }
 

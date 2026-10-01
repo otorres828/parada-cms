@@ -20,6 +20,7 @@ use App\Services\CuponService;
 use App\Services\Empresa\ReembolsoService;
 use App\Services\PagoReservaService;
 use App\Services\ReservaService;
+use App\Services\ViajeroService;
 use App\Support\ConversorMoneda;
 use Illuminate\Contracts\Console\Kernel;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -66,19 +67,29 @@ TasaServicio::create(['monto_minimo' => 0, 'monto_maximo' => null, 'cantidad' =>
 $tipoCambio = TipoCambio::create(['valor_usd' => '500.00000000', 'valor_eur' => '590.00000000', 'valor' => 1]);
 $banco = DatoBancario::create(['empresa_id' => $empresa->id, 'tipo' => 1, 'banco' => 'Banco', 'nombre_titular' => 'Empresa', 'tipo_titular' => 'juridico', 'numero_documento' => 'J1', 'numero_cuenta_telefono' => '123', 'estatus' => 1]);
 $pasajero = ['nombre' => 'Ana', 'apellido' => 'Perez', 'tipo_documento' => 1, 'documento_identidad' => 'V-12345678', 'fecha_nacimiento' => '1990-01-01', 'tipo_pasajero' => 'adulto'];
+$viajeroCliente = ViajeroService::agregarViajero($cliente, $pasajero);
+$viajeroClienteDos = ViajeroService::agregarViajero($cliente, array_merge($pasajero, [
+    'nombre' => 'Beatriz',
+    'documento_identidad' => 'V-12345679',
+]));
+$viajeroOtro = ViajeroService::agregarViajero($otro, $pasajero);
+$viajeroOtroDos = ViajeroService::agregarViajero($otro, array_merge($pasajero, [
+    'nombre' => 'Carlos',
+    'documento_identidad' => 'V-12345680',
+]));
 // El servicio funciona sin sesión: el middleware y el consumidor seleccionan al cliente.
 $r = ReservaService::aplicarReserva($cliente, $tarifa->id);
 $check($r->pasajes->isEmpty() && $r->monto_total === '11.00' && $r->tipos_cambios_id === $tipoCambio->id && $r->monto_total_bolivares === '5500.00');
-$reject(fn () => ReservaService::agregarPasajero($otro, $r->id, $pasajero), ModelNotFoundException::class);
-$r = ReservaService::agregarPasajero($cliente, $r->id, $pasajero);
+$reject(fn () => ReservaService::agregarPasajero($otro, $r->id, $viajeroCliente->id), ModelNotFoundException::class);
+$r = ReservaService::agregarPasajero($cliente, $r->id, $viajeroCliente->id);
 $pasajeCifrado = DB::table('pasajes')->where('reserva_id', $r->id)->first();
 $check(! str_contains($pasajeCifrado->viajero, 'V-12345678'));
 $check(Pasaje::searchAdmin('V-12345678')->whereKey($r->pasajes->first()->id)->exists());
 ConfiguracionCupon::create(['nombre_campana' => 'Descuento', 'tipo_cupon' => ConfiguracionCupon::TIPO_PERSONALIZADO, 'codigo_personalizado' => 'TEST', 'modalidad' => ConfiguracionCupon::MODALIDAD_PRIMERA_COMPRA, 'aplica_en' => ConfiguracionCupon::APLICA_EN_PASAJES, 'cantidad_generar' => 10, 'tipo_descuento' => 'monto_fijo', 'monto_descuento' => 1, 'fecha_inicio' => now()->subDay(), 'fecha_fin' => now()->addDay(), 'estatus' => 1]);
 app(CuponService::class)->aplicarCupon($r, 'TEST');
-$r = ReservaService::agregarPasajero($cliente, $r->id, $pasajero);
+$r = ReservaService::agregarPasajero($cliente, $r->id, $viajeroClienteDos->id);
 $check($r->monto_total === '20.00' && $r->descuento_aplicado === '2.00');
-$reject(fn () => ReservaService::agregarPasajero($cliente, $r->id, $pasajero), ValidationException::class);
+$reject(fn () => ReservaService::agregarPasajero($cliente, $r->id, $viajeroClienteDos->id), ValidationException::class);
 $r = ReservaService::removerPasajero($cliente, $r->id, $r->pasajes->last()->id);
 $check($r->monto_total === '10.00');
 $r = ReservaService::prepararResumen($cliente, $r->id);
@@ -104,10 +115,10 @@ $conversionOrden = ConversorMoneda::ordenes([$ordenPrueba])[999];
 $check($conversionOrden['total_bs'] === $r->calcularMontoBs($r->tasa_servicio));
 $reject(fn () => ReservaService::cancelarReserva($cliente, $r->id), ValidationException::class);
 $vac = ReservaService::aplicarReserva($otro, $tarifa->id);
-$vac = ReservaService::agregarPasajero($otro, $vac->id, $pasajero);
+$vac = ReservaService::agregarPasajero($otro, $vac->id, $viajeroOtro->id);
 $vac = ReservaService::removerPasajero($otro, $vac->id, $vac->pasajes->first()->id);
 $check($vac->pasajes->isEmpty() && $vac->monto_total === '11.00');
-$vac = ReservaService::agregarPasajero($otro, $vac->id, $pasajero);
+$vac = ReservaService::agregarPasajero($otro, $vac->id, $viajeroOtro->id);
 $vac->update(['fecha_expiracion' => now()->subSecond()]);
 $reject(fn () => PagoReservaService::pasarAPendiente($otro, $vac->id, $banco->id, 'REF2', now()->toDateTimeString()), ValidationException::class);
 echo "OK: flujo, cliente seleccionado, propiedad, cupos, cupones, tasas, pagos, caducidad.\n";
@@ -123,16 +134,16 @@ echo "OK: reembolso conserva cupón, tasas e importes históricos.\n";
 
 // Rutas de cupón que reciben una reserva ya bloqueada por conReserva.
 $nueva = ReservaService::aplicarReserva($otro, $tarifa->id);
-$nueva = ReservaService::agregarPasajero($otro, $nueva->id, $pasajero);
+$nueva = ReservaService::agregarPasajero($otro, $nueva->id, $viajeroOtro->id);
 $nueva = app(CuponService::class)->aplicarCupon($nueva, 'TEST');
 $nueva = ReservaService::removerPasajero($otro, $nueva->id, $nueva->pasajes->first()->id);
 $check($nueva->cupon_id === null && $nueva->monto_total === '11.00');
-$nueva = ReservaService::agregarPasajero($otro, $nueva->id, $pasajero);
+$nueva = ReservaService::agregarPasajero($otro, $nueva->id, $viajeroOtro->id);
 app(CuponService::class)->aplicarCupon($nueva, 'TEST');
 $nueva = ReservaService::cancelarReserva($otro, $nueva->id);
 $check($nueva->cupon_id === null && $nueva->estado_pago === Reserva::ESTADO_PAGO_CANCELADO);
 $nueva = ReservaService::aplicarReserva($otro, $tarifa->id);
-$nueva = ReservaService::agregarPasajero($otro, $nueva->id, $pasajero);
+$nueva = ReservaService::agregarPasajero($otro, $nueva->id, $viajeroOtro->id);
 app(CuponService::class)->aplicarCupon($nueva, 'TEST');
 PagoReservaService::pasarAPendiente($otro, $nueva->id, $banco->id, 'REF-FALLIDA', now()->toDateTimeString());
 $nueva = PagoReservaService::marcarPagoFallido($nueva->id);
@@ -141,12 +152,12 @@ echo "OK: liberación de cupón al retirar último pasajero, cancelar y rechazar
 
 // Continuar reutiliza la NUEVA, incluso vencida, y libera sus propios asientos.
 $reinicio = ReservaService::aplicarReserva($otro, $tarifa->id);
-$reinicio = ReservaService::agregarPasajero($otro, $reinicio->id, $pasajero);
-$reinicio = ReservaService::agregarPasajero($otro, $reinicio->id, $pasajero);
+$reinicio = ReservaService::agregarPasajero($otro, $reinicio->id, $viajeroOtro->id);
+$reinicio = ReservaService::agregarPasajero($otro, $reinicio->id, $viajeroOtroDos->id);
 $reinicio = app(CuponService::class)->aplicarCupon($reinicio, 'TEST');
 $codigoAnterior = $reinicio->codigo_referencia;
 $pasajeSnapshot = $reinicio->pasajes->first();
-$viajeroId = App\Models\Viajero::where('usuario_id', $otro->id)->latest('id')->value('id');
+$viajeroId = $viajeroOtroDos->id;
 $nombreSnapshot = $pasajeSnapshot->viajero_nombre_completo;
 App\Models\Viajero::whereKey($viajeroId)->update(['nombre' => 'Nombre modificado']);
 $check($pasajeSnapshot->fresh()->viajero_nombre_completo === $nombreSnapshot);
@@ -165,3 +176,26 @@ $check(App\Models\Viajero::whereKey($viajeroId)->exists());
 $reiniciado->update(['fecha_expiracion' => now()->subMinute()]);
 $check(ReservaService::aplicarReserva($otro, $tarifa->id)->id === $reinicio->id);
 echo "OK: reinicio de reserva nueva, cupón, asientos propios, vencimiento y rollback.\n";
+
+// Un viajero sin pasajes se elimina físicamente.
+$viajeroSinHistorial = ViajeroService::agregarViajero($cliente, array_merge($pasajero, [
+    'nombre' => 'Sin historial',
+    'documento_identidad' => 'V-99999991',
+]));
+ViajeroService::eliminarViajero($cliente, $viajeroSinHistorial->id);
+$check(! App\Models\Viajero::whereKey($viajeroSinHistorial->id)->exists());
+
+// Un viajero utilizado conserva su vínculo histórico y pasa a eliminado.
+ViajeroService::eliminarViajero($cliente, $viajeroCliente->id);
+$check($viajeroCliente->fresh()->estatus === App\Models\Viajero::ESTADO_DELETE);
+$check($r->pasajes()->first()->viajero_id === $viajeroCliente->id);
+
+// Una reserva nueva vigente impide eliminar al viajero hasta retirarlo del checkout.
+$abierta = ReservaService::aplicarReserva($otro, $tarifa->id);
+$abierta = ReservaService::agregarPasajero($otro, $abierta->id, $viajeroOtro->id);
+$reject(fn () => ViajeroService::eliminarViajero($otro, $viajeroOtro->id), ValidationException::class);
+$reject(fn () => ViajeroService::eliminarViajero($cliente, $viajeroOtro->id), ModelNotFoundException::class);
+$abierta = ReservaService::removerPasajero($otro, $abierta->id, $abierta->pasajes->first()->id);
+ViajeroService::eliminarViajero($otro, $viajeroOtro->id);
+$check($viajeroOtro->fresh()->estatus === App\Models\Viajero::ESTADO_DELETE);
+echo "OK: creación, propiedad, snapshot y eliminación de viajeros.\n";
