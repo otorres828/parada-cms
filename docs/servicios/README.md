@@ -40,3 +40,6 @@ La documentación registra la implementación actual. Las diferencias respecto a
 | `TipoCambioService` | Consulta la fuente configurada y registra las tasas USD y EUR válidas. |
 | `Admin\Access` | Comprueba permisos administrativos activos. |
 | `Admin\Audit` | Registra acciones administrativas omitiendo datos sensibles conocidos. |
+
+- [Reservas de taquilla](servicio-reserva-taquilla.md)
+- [Pagos de taquilla](servicio-pago-taquilla.md)

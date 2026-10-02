@@ -13,6 +13,10 @@ return new class extends Migration
             $table->unsignedBigInteger('programacion_id');
             $table->unsignedBigInteger('origen_terminal_id');
             $table->unsignedBigInteger('destino_terminal_id');
+            $table->date('fecha_salida')->nullable();
+            $table->time('hora_salida')->nullable();
+            $table->date('fecha_llegada')->nullable();
+            $table->time('hora_llegada')->nullable();
             $table->decimal('precio', 12, 2);
             $table->unsignedInteger('asientos_maximos_permitidos')->nullable();
             $table->timestamps();

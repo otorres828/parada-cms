@@ -137,6 +137,18 @@ class OperacionHistoricaDemoSeeder extends Seeder
             ->merge($viaje->tramos->sortBy('orden')->pluck('destino_terminal_id'))
             ->unique()
             ->values();
+        // Un horario por terminal de esta programación; los O&D comparten sus extremos.
+        $instante = $fecha->setTimeFromTimeString($hora);
+        $horarios = [$viaje->origen_terminal_id => $instante];
+        foreach ($viaje->tramos->sortBy('orden') as $tramo) {
+            [$horas, $minutos, $segundos] = array_map('intval', explode(':', $tramo->duracion_estimada ?? '01:30:00'));
+            $instante = $instante->addSeconds($horas * 3600 + $minutos * 60 + $segundos);
+            $horarios[$tramo->destino_terminal_id] = $instante;
+        }
+        if ($viaje->tramos->isEmpty()) {
+            [$horas, $minutos, $segundos] = array_map('intval', explode(':', $viaje->duracion_estimada));
+            $horarios[$viaje->destino_terminal_id] = $instante->addSeconds($horas * 3600 + $minutos * 60 + $segundos);
+        }
         $tarifaCompletaId = null;
         $precioCompleto = '0.00';
 
@@ -149,6 +161,10 @@ class OperacionHistoricaDemoSeeder extends Seeder
                     'programacion_id' => $programacionId,
                     'origen_terminal_id' => $terminales[$origen],
                     'destino_terminal_id' => $terminales[$destino],
+                    'fecha_salida' => $horarios[$terminales[$origen]]->toDateString(),
+                    'hora_salida' => $horarios[$terminales[$origen]]->format('H:i:s'),
+                    'fecha_llegada' => $horarios[$terminales[$destino]]->toDateString(),
+                    'hora_llegada' => $horarios[$terminales[$destino]]->format('H:i:s'),
                     'precio' => $precio,
                     'asientos_maximos_permitidos' => null,
                     'created_at' => $ahora,
