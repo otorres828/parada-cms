@@ -122,16 +122,6 @@ class Admin extends ModelHelper implements Authenticatable, Authorizable, CanRes
         return self::where('email', $email)->first();
     }
 
-    public function getJWTIdentifier()
-    {
-        return $this->getKey();
-    }
-
-    public function getJWTCustomClaims()
-    {
-        return [];
-    }
-
     public function reembolsos(): HasMany
     {
         return $this->hasMany(Reembolso::class, 'admin_id');
@@ -146,4 +136,16 @@ class Admin extends ModelHelper implements Authenticatable, Authorizable, CanRes
     {
         return $this->hasMany(OrdenCobro::class, 'admin_id');
     }
+
+    //JWT
+    public function getJWTIdentifier()
+    {
+        return $this->getKey();
+    }
+
+    public function getJWTCustomClaims()
+    {
+        return [];
+    }
+
 }
