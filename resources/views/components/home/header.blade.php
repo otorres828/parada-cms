@@ -15,7 +15,7 @@
         <a href="#contacto">Para agencias</a>
     </nav>
 
-    <a class="button button-small button-outline" href="{{ route('admin.login') }}">
+    <a class="button button-small button-outline" href="{{ route('empresas.login') }}">
         Iniciar sesión
         <i class="bi bi-arrow-up-right"></i>
     </a>

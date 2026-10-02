@@ -2,7 +2,7 @@
 
 namespace App\Notifications;
 
-use App\Exports\PasajesExport;
+use App\Exports\Admin\PasajesExport;
 use App\Exports\ReservasExport;
 use App\Models\OrdenCobro;
 use App\Models\Pasaje;

@@ -255,10 +255,19 @@ class Reserva extends ModelHelper
             ->orderByDesc('fecha_compra');
     }
 
-    public static function salesReport(string $dateFrom, string $dateTo, string $tipoTransporte = ''): Builder
+    public static function salesReport(string $dateFrom, string $dateTo, string $tipoTransporte = '', ?int $empresaId = null): Builder
     {
         return self::query()
-            ->when($tipoTransporte !== '', fn ($query) => $query->whereHas('programacion.transporte', fn ($transporte) => $transporte->where('tipo_transporte', $tipoTransporte)))
+            ->when($empresaId !== null, function ($query) use ($empresaId) {
+                $query->whereHas('programacion.viaje', function ($viaje) use ($empresaId) {
+                    $viaje->where('empresa_id', $empresaId);
+                });
+            })
+            ->when($tipoTransporte !== '', function ($query) use ($tipoTransporte) {
+                $query->whereHas('programacion.transporte', function ($transporte) use ($tipoTransporte) {
+                    $transporte->where('tipo_transporte', $tipoTransporte);
+                });
+            })
             ->join('tipos_cambios', 'tipos_cambios.id', '=', 'reservas.tipos_cambios_id')
             ->where('reservas.estado_pago', self::ESTADO_PAGO_PAGADO)
             ->whereDate('reservas.fecha_compra', '>=', self::date($dateFrom))
@@ -266,6 +275,30 @@ class Reserva extends ModelHelper
             ->selectRaw('DATE(reservas.fecha_compra) as fecha, COUNT(*) as cantidad, SUM(reservas.monto_total) as total, SUM(reservas.monto_total * tipos_cambios.valor_usd) as total_bs, SUM(reservas.tasa_servicio) as tasas, SUM(reservas.tasa_servicio * tipos_cambios.valor_usd) as tasas_bs')
             ->groupByRaw('DATE(reservas.fecha_compra)')
             ->orderByDesc('fecha');
+    }
+
+    public static function routesReport(string $dateFrom, string $dateTo, int $empresaId, string $tipoTransporte = ''): Builder
+    {
+        return self::query()
+            ->join('programaciones', 'programaciones.id', '=', 'reservas.programacion_id')
+            ->join('viajes', 'viajes.id', '=', 'programaciones.viaje_id')
+            ->join('terminales as origen', 'origen.id', '=', 'reservas.origen_terminal_id')
+            ->join('terminales as destino', 'destino.id', '=', 'reservas.destino_terminal_id')
+            ->join('tipos_cambios', 'tipos_cambios.id', '=', 'reservas.tipos_cambios_id')
+            ->where('viajes.empresa_id', $empresaId)
+            ->where('reservas.estado_pago', self::ESTADO_PAGO_PAGADO)
+            ->whereDate('reservas.fecha_compra', '>=', self::date($dateFrom))
+            ->whereDate('reservas.fecha_compra', '<=', self::date($dateTo, 'date_to'))
+            ->when($tipoTransporte !== '', function ($query) use ($tipoTransporte) {
+                $query->whereHas('programacion.transporte', function ($transporte) use ($tipoTransporte) {
+                    $transporte->where('tipo_transporte', $tipoTransporte);
+                });
+            })
+            ->selectRaw('origen.id as origen_id, origen.nombre as origen, destino.id as destino_id, destino.nombre as destino, COUNT(*) as cantidad, SUM(reservas.monto_total) as total, SUM(reservas.monto_total * tipos_cambios.valor_usd) as total_bs, SUM(reservas.tasa_servicio) as tasas, SUM(reservas.tasa_servicio * tipos_cambios.valor_usd) as tasas_bs')
+            ->groupBy('origen.id', 'origen.nombre', 'destino.id', 'destino.nombre')
+            ->orderByDesc('total')
+            ->orderBy('origen.id')
+            ->orderBy('destino.id');
     }
 
     public static function companiesReport(string $dateFrom, string $dateTo, string $tipoTransporte = ''): Builder

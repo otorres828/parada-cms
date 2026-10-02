@@ -38,7 +38,8 @@ class CheckPermissionEmpresa
 
         /* ----------------------------------------Reportes---------------------------------------- */
         'empresas.reportes.ventas' => ['reporte-ventas', 'list'],
-        'empresas.reportes.rutas' => ['reporte-rutas', 'list'],    ];
+        'empresas.reportes.rutas' => ['reporte-rutas', 'list'],
+    ];
 
     /* ----------------------------------------Mi cuenta---------------------------------------- */
     private const ROUTES_WITHOUT_PERMISSION = [

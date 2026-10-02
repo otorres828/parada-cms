@@ -14,4 +14,15 @@ La documentación se incorporará a medida que se implemente cada módulo. Cada 
 
 `App\View\Components\Layout\Sidebar\AdministrationMenuEmpresa` obtiene el usuario del guard `empresa`, comprueba que esté activo y resuelve los permisos en lote. La vista reutiliza `sidebar-li`, con el mismo patrón de grupos, enlaces y opciones activas de Admin. Mi cuenta no exige permisos de módulo.
 
-Los grupos siguen el orden del catálogo empresarial. La clase asigna los booleanos de permisos, igual que AdministrationMenuAdmin, y Blade utiliza condiciones por permiso y llamadas directas a route(). Dashboard y Mi cuenta están activos; los grupos pendientes permanecen en un comentario Blade hasta registrar sus rutas. Al implementar cada módulo se habilita su bloque y se mantiene sincronizado su nombre de ruta.
+Los grupos siguen el orden del catálogo empresarial. La clase asigna los booleanos de permisos, igual que AdministrationMenuAdmin, y Blade utiliza condiciones por permiso y llamadas directas a route(). Todos los enlaces del menú tienen rutas Livewire y permisos de entrada registrados. Los módulos no incluidos en el índice de listados implementados conservan su pantalla inicial. El listado existente de reembolsos queda limitado a la empresa autenticada; sus acciones posteriores todavía no están habilitadas.
+
+## Listados implementados
+
+- [ListTransporte](transportes/list-transporte.md)
+- [ListViaje](viajes/list-viaje.md)
+- [ListProgramacion](programaciones/list-programacion.md)
+- [ListReserva](reservas/list-reserva.md)
+- [ListPasaje](pasajes/list-pasaje.md)
+- [ListCampana](cupones/list-campana.md)
+- [SalesReport](reportes/sales-report.md)
+- [RoutesReport](reportes/routes-report.md)

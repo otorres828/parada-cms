@@ -106,6 +106,14 @@ class Empresa extends ModelHelper
         };
     }
 
+    public function getTipoTransporte(): string
+    {
+        return match ($this->tipo_entidad) {
+            self::AGENCIA_AUTOBUS => Transporte::AUTOBUS,
+            self::CONDUCTOR_CARRO => Transporte::CARRO,
+        };
+    }
+
     public function getDiaCorte(): string
     {
         return $this->getDiaSemana($this->dia_corte);

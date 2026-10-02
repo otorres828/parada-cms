@@ -2,7 +2,7 @@
 
 namespace App\Livewire\Admin\Pasajes;
 
-use App\Exports\PasajesExport;
+use App\Exports\Admin\PasajesExport;
 use App\Models\Empresa;
 use App\Models\Pasaje;
 use App\Services\Admin\Access;
