@@ -24,6 +24,8 @@ class Dashboard extends EmpresaComponent
 
     public string $date_to = '';
 
+    public bool $canAddReserva = false;
+
     public bool $canListReservas = false;
 
     public bool $canListProgramaciones = false;
@@ -50,6 +52,7 @@ class Dashboard extends EmpresaComponent
             'reservas' => ['reservas', 'list'],
             'programaciones' => ['programaciones', 'list'],
         ]);
+        $this->canAddReserva = $this->usuarioEmpresa->hasPermission('reservas', 'add');
         $this->canListReservas = $permisos['reservas'];
         $this->canListProgramaciones = $permisos['programaciones'];
 

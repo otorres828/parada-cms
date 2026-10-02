@@ -18,6 +18,10 @@ class CheckPermissionEmpresa
         'empresas.usuarios.list' => ['usuarios', 'list'],
         'empresas.politicas-embarque.edit' => ['politicas-embarque', 'edit'],
 
+        'empresas.datos-bancarios.list' => ['datos-bancarios', 'list'],
+        'empresas.datos-bancarios.add' => ['datos-bancarios', 'add'],
+        'empresas.datos-bancarios.edit' => ['datos-bancarios', 'edit'],
+
         /* ----------------------------------------Operación de viajes---------------------------------------- */
         'empresas.viajes.list' => ['viajes', 'list'],
         'empresas.programaciones.list' => ['programaciones', 'list'],
@@ -25,6 +29,7 @@ class CheckPermissionEmpresa
 
         /* ----------------------------------------Ventas y finanzas---------------------------------------- */
         'empresas.reservas.list' => ['reservas', 'list'],
+        'empresas.reservas.add' => ['reservas', 'add'],
         'empresas.pasajes.list' => ['pasajes', 'list'],
         'empresas.validacion-pagos.list' => ['validacion-pagos', 'list'],
         'empresas.reembolsos.list' => ['reembolsos', 'list'],

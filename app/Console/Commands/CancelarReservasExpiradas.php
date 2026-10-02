@@ -29,7 +29,7 @@ class CancelarReservasExpiradas extends Command
                         }
 
                         $reserva->update([
-                            'estado_pago' => Reserva::ESTADO_PAGO_CANCELADO,
+                            'estado_pago' => Reserva::ESTADO_PAGO_FALLIDO,
                             'fecha_expiracion' => null,
                         ]);
                         $cuponService->cancelarYLiberarCupon($reserva);

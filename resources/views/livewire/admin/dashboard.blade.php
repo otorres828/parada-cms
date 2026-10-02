@@ -301,7 +301,7 @@
                                 </td>
 
                                 <td>
-                                    {{ $reserva->usuario?->name ?? 'Sin cliente' }}
+                                    {{ $reserva->nombre_comprador }}
                                 </td>
 
                                 <td>
