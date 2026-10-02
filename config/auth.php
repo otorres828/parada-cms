@@ -88,6 +88,11 @@ return [
             'model' => App\Models\Admin::class,
         ],
 
+        'usuarios_empresa' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\UsuarioEmpresa::class,
+        ],
+
         // 'users' => [
         //     'driver' => 'database',
         //     'table' => 'users',

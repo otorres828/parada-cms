@@ -9,14 +9,16 @@ use Illuminate\Contracts\Auth\Access\Authorizable;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\CanResetPassword;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Notifications\Notifiable;
 
 class UsuarioEmpresa extends ModelHelper implements Authenticatable, Authorizable, CanResetPassword
 {
     use AuthenticatesModel;
-    use TraitGeneral;
+    use HasFactory, Notifiable, TraitGeneral;
 
     protected $table = 'usuarios_empresa';
 
