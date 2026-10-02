@@ -183,14 +183,19 @@ class Programacion extends ModelHelper
             ->orderByDesc('hora_salida');
     }
 
-    public static function upcomingForDashboard(string $dateFrom, string $dateTo): Builder
+    public static function upcomingForDashboard(string $dateFrom, string $dateTo, ?int $empresaId = null, string $tipoTransporte = ''): Builder
     {
         return self::searchAdmin('', [
+            'empresa_id' => $empresaId,
             'date_from' => $dateFrom,
             'date_to' => $dateTo,
             'activas' => true,
             'proximas' => true,
-        ])->orderBy('fecha_salida')
+        ])->when($tipoTransporte !== '', function ($query) use ($tipoTransporte) {
+            $query->whereHas('transporte', function ($transporte) use ($tipoTransporte) {
+                $transporte->where('tipo_transporte', $tipoTransporte);
+            });
+        })->orderBy('fecha_salida')
             ->orderBy('hora_salida')
             ->orderBy('id');
     }

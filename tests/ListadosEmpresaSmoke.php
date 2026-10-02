@@ -192,3 +192,18 @@ foreach ([true, false] as $mostrarTasa) {
 $check(in_array('Subtotal USD', $adminExport->headings()));
 $check(in_array('Tasa de servicio USD', $adminExport->headings()));
 echo "Columnas y montos por contrato; Admin sin cambios: OK\n";
+
+$dashboard = new App\Livewire\Empresas\Dashboard;
+$dashboard->mount();
+$datos = $dashboard->render()->getData();
+$check($datos['metrics']['reservas_pagadas'] === 1);
+$check($datos['metrics']['pasajes'] === 1);
+$check($datos['totalReservas'] === 1);
+$check($datos['ultimasReservas']->pluck('id')->all() === [$r->id]);
+$check($datos['proximasSalidas']->pluck('id')->all() === [$programacion->id]);
+$dashboard->date_from = '2500-01-01';
+$dashboard->render();
+$dashboard->periodo = '7';
+$dashboard->updatedPeriodo();
+$check($dashboard->date_from === today()->subDays(6)->toDateString());
+echo "Dashboard empresarial aislado, períodos y fechas: OK\n";

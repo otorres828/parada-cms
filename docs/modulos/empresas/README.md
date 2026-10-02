@@ -26,3 +26,5 @@ Los grupos siguen el orden del catálogo empresarial. La clase asigna los boolea
 - [ListCampana](cupones/list-campana.md)
 - [SalesReport](reportes/sales-report.md)
 - [RoutesReport](reportes/routes-report.md)
+
+- [Dashboard](dashboard.md)
