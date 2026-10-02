@@ -9,6 +9,4 @@ use Illuminate\Support\Facades\Route;
 |--------------------------------------------------------------------------
 */
 
-/* ------------------------------Authentication---------------------------- */
-
 Route::livewire('/', Home::class)->name('home');

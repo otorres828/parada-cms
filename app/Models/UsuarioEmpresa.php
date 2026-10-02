@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Services\Empresa\Access;
 use App\Traits\AuthenticatesModel;
 use App\Traits\TraitGeneral;
 use Illuminate\Contracts\Auth\Access\Authorizable;
@@ -29,6 +30,8 @@ class UsuarioEmpresa extends ModelHelper implements Authenticatable, Authorizabl
     ];
 
     protected $hidden = ['password', 'remember_token'];
+
+    const SUPERADMIN = 1;
 
     protected function casts(): array
     {
@@ -95,4 +98,50 @@ class UsuarioEmpresa extends ModelHelper implements Authenticatable, Authorizabl
 
         return $query->findOrFail($userId);
     }
+
+    public static function searchUserName(string $username)
+    {
+        return self::where('email', $username)->where('estatus', self::ESTADO_ACTIVE)->first();
+    }
+
+
+    public function isSuperAdmin(): bool
+    {
+        return $this->es_admin === self::SUPERADMIN;
+    }
+
+    public function permissions(): BelongsToMany
+    {
+        return $this->belongsToMany(PermissionAdmin::class, 'permission_admin_admin', 'admin_id', 'permission_id')->withPivot('status');
+    }
+
+    public function getPermissionsMap()
+    {
+        return Access::permissions($this);
+    }
+
+    public function hasPermission(string $sectionURL, string $permissionURL): bool
+    {
+        return $this->checkPermissionsBatch(['check' => [$sectionURL, $permissionURL]])['check'];
+    }
+
+    public function checkPermissionsBatch(array $checks): array
+    {
+        if ($this->estatus !== self::ESTADO_ACTIVE) {
+            return array_fill_keys(array_keys($checks), false);
+        }
+
+        if ($this->isSuperAdmin()) {
+            return array_fill_keys(array_keys($checks), true);
+        }
+        $permissions = $this->isSuperAdmin() ? collect() : $this->getPermissionsMap();
+        $results = [];
+
+        foreach ($checks as $key => [$section, $action]) {
+            $results[$key] = $section !== 'admins' && ($this->isSuperAdmin() || $section === 'account' || $permissions->contains(fn ($item) => $item->section_url === $section && $item->permission_url === $action));
+        }
+
+        return $results;
+    }
+
 }

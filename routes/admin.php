@@ -91,6 +91,8 @@ use App\Livewire\Admin\PreguntasFrecuentes\SavePregunta;
 /* ------------------------------Solicitudes de Nuevas Empresas-------------------- */
 use App\Livewire\Admin\Solicitudes\DetailSolicitud;
 use App\Livewire\Admin\Solicitudes\ListSolicitud;
+
+
 /*
 | Authentication Routes
 |--------------------------------------------------------------------------
@@ -109,7 +111,7 @@ Route::post('logout', [Login::class, 'logout'])
 |--------------------------------------------------------------------------
 */
 
-Route::group(['middleware' => ['auth:admin', 'check.permisos']], function () {
+Route::group(['middleware' => ['auth:admin', 'check.permisos.admin']], function () {
 
     Route::livewire('dashboard', Dashboard::class)->name('dashboard');
 
