@@ -2,12 +2,11 @@
 
 namespace App\Livewire\Empresas\Reembolsos;
 
-use App\Models\Empresa;
 use App\Models\Reembolso;
 use App\Traits\Listing;
-use App\Traits\Permissions;
+
 use App\Traits\TraitGeneral;
-use Illuminate\Database\Eloquent\Collection;
+
 use Livewire\Attributes\Layout;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -16,13 +15,16 @@ use Livewire\WithPagination;
 class ListReembolso extends Component
 {
     use Listing;
-    use Permissions;
+
     use TraitGeneral;
     use WithPagination;
 
-    public Collection $empresas;
+    // Las acciones se habilitarán al adaptar sus pantallas al panel empresarial.
+    public bool $canAdd = false;
 
-    public string $empresa_id = '';
+    public bool $canDetail = false;
+
+    public bool $canReview = false;
 
     public string $status = '';
 
@@ -31,7 +33,7 @@ class ListReembolso extends Component
     public string $date_to = '';
 
     protected array $queryString = [
-        'empresa_id' => ['except' => ''],
+
         'search' => ['except' => ''],
         'per_page' => ['except' => 10],
         'status' => ['except' => ''],
@@ -45,14 +47,13 @@ class ListReembolso extends Component
         $this->date_to = $this->date_to ?: self::getDefaultHasta();
         $this->sortColumn = 'id';
         $this->sortDirection = 'desc';
-        $this->checkPermissions('reembolsos', ['detail', 'review']);
-        $this->empresas = Empresa::searchAdmin()->orderBy('nombre')->get();
+
     }
 
     public function render()
     {
         $query = Reembolso::searchAdmin($this->search, [
-            'empresa_id' => $this->empresa_id,
+            'empresa_id' => auth('empresa')->user()->empresa_id,
             'status' => $this->status,
             'date_from' => $this->date_from,
             'date_to' => $this->date_to,
@@ -69,7 +70,7 @@ class ListReembolso extends Component
 
     public function updated($property): void
     {
-        if (in_array($property, ['empresa_id', 'search', 'status', 'date_from', 'date_to', 'per_page'])) {
+        if (in_array($property, ['search', 'status', 'date_from', 'date_to', 'per_page'])) {
             $this->resetPage();
         }
     }

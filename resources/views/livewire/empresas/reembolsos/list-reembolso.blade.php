@@ -55,23 +55,7 @@
 
     <div class="row g-3 mb-3">
 
-        <div class="col-md-3">
 
-            <label class="form-label" for="filtro-empresa">
-                Empresa
-            </label>
-
-            <select id="filtro-empresa" class="form-select" wire:model.live="empresa_id">
-
-                <option value="">Todas las empresas</option>
-
-                @foreach ($empresas as $empresa)
-                    <option value="{{ $empresa->id }}">{{ $empresa->nombre }}</option>
-                @endforeach
-
-            </select>
-
-        </div>
 
         <div class="col-md-3">
 
