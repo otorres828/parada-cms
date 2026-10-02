@@ -1,4 +1,6 @@
-# Viajeros y datos históricos de los pasajes
+# ViajeroService: viajeros y datos históricos de los pasajes
+
+Fuente: `app/Services/ViajeroService.php`, con las entidades `Viajero` y `Pasaje`.
 
 ## Objetivo
 
@@ -13,7 +15,7 @@ Esta separación permite que el cliente corrija o elimine posteriormente un viaj
 
 ## Propiedad del viajero
 
-Cada viajero pertenece a un único cliente mediante `viajeros.usuario_id`. Todas las operaciones reciben el cliente autenticado y comprueban esta propiedad en el servidor.
+Cada viajero pertenece a un único cliente mediante `viajeros.usuario_id`. Las operaciones reciben al cliente autorizado por el consumidor; el servicio no consulta la sesión. La eliminación y la incorporación a una reserva comprueban su propiedad.
 
 Conocer un ID no permite consultar, agregar o eliminar el viajero de otro cliente. Las consultas incluyen simultáneamente el ID del viajero y el ID del cliente.
 
@@ -29,6 +31,8 @@ Los estados disponibles son:
 
 `ReservaService::agregarPasajero()` acepta únicamente viajeros activos.
 
+Las constantes se heredan de `ModelHelper`: `ESTADO_ACTIVE`, `ESTADO_INACTIVE` y `ESTADO_DELETE`.
+
 ## Creación
 
 La creación se realiza con:
@@ -41,7 +45,7 @@ El servicio valida:
 
 - Nombre y apellido.
 - Tipo de documento permitido.
-- Documento opcional, necesario únicamente cuando corresponde.
+- Documento opcional. Si se proporciona, su tipo es obligatorio; el servicio no exige documento por edad.
 - Fecha de nacimiento válida y no posterior al día actual.
 - Tipo de pasajero: adulto, niño o infante.
 - Asociación con el cliente que realiza la operación.
@@ -124,7 +128,9 @@ El hash permite búsquedas exactas mediante Eloquent sin descifrar todas las fil
 ```php
 $hash = PersonalData::hashDocumento($documento);
 
-Viajero::where('documento_identidad_hash', $hash)->first();
+Viajero::where('usuario_id', $cliente->id)
+    ->where('documento_identidad_hash', $hash)
+    ->first();
 ```
 
 No permite búsquedas parciales con `LIKE`. El HMAC se utiliza en lugar de un SHA simple porque los números de documento poseen un espacio de valores predecible y serían más fáciles de adivinar mediante tablas precalculadas.
@@ -139,7 +145,7 @@ ReservaService::removerPasajero($cliente, $reservaId, $pasajeId);
 
 Esta operación elimina el pasaje de una reserva nueva y recalcula sus importes. No elimina el viajero de la libreta del cliente.
 
-Si se retira el último pasajero, la reserva vuelve a su cotización inicial de un pasaje, libera el cupón aplicado y conserva el bloqueo temporal correspondiente a la reserva nueva.
+Si se retira el último pasajero, la reserva vuelve a su cotización inicial de un pasaje y libera el cupón aplicado. Conserva su fecha de expiración, pero ya no ocupa asientos.
 
 ## Eliminación de viajeros
 
@@ -153,7 +159,7 @@ El resultado depende de su utilización:
 
 | Situación | Comportamiento |
 | --- | --- |
-| Nunca se utilizó en un pasaje | El registro se elimina físicamente. |
+| No tiene pasajes relacionados actualmente | El registro se elimina físicamente, incluso si tuvo pasajes que ya fueron retirados. |
 | Tiene pasajes históricos | Se conserva y cambia a estado eliminado (`0`). |
 | Está incluido en una reserva nueva, vigente y sin pago | La operación se rechaza. |
 | Solo aparece en una reserva nueva expirada | Puede pasar a estado eliminado; la reserva expirada se gestiona por su proceso correspondiente. |
@@ -168,7 +174,7 @@ No se elimina automáticamente el pasaje porque hacerlo podría liberar un asien
 
 La incorporación y eliminación se ejecutan dentro de transacciones.
 
-- Al incorporar se bloquean la reserva y el viajero que se utilizarán.
+- Al incorporar se bloquean la reserva, el viajero y la programación.
 - Al eliminar se bloquea únicamente el viajero solicitado.
 - No se bloquean tablas completas ni listados generales.
 

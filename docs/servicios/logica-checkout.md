@@ -2,7 +2,7 @@
 
 ## Responsabilidad
 
-El checkout del sitio de venta está protegido por autenticación. Los servicios reciben explícitamente al cliente y verifican que la reserva y el viajero le pertenezcan. El cliente nunca se determina desde un ID libre enviado por el navegador.
+Este CRM contiene los servicios de negocio; las pantallas del checkout pertenecen al proyecto del sitio de venta. Ese consumidor debe proteger el checkout con autenticación y pasar al cliente autorizado. Los servicios de reserva verifican la propiedad de la reserva y del viajero recibido.
 
 Una reserva representa una compra para una programación y un tramo concreto. Todos sus pasajeros comparten origen y destino. Los asientos se asignan automáticamente al incorporar viajeros y su ocupación se calcula por los tramos que se superponen.
 
@@ -27,7 +27,7 @@ Una reserva representa una compra para una programación y un tramo concreto. To
 - **Reprogramada:** identifica una compra pagada sustituida por otra reserva.
 - **Reembolsada:** conserva el histórico del pago y de la tasa de servicio.
 
-Las reservas nuevas vigentes, pendientes y pagadas ocupan asientos. La disponibilidad se determina por solapamiento entre origen y destino, por lo que un asiento puede venderse nuevamente después del terminal donde su pasajero desciende.
+Los pasajes de reservas nuevas vigentes, pendientes y pagadas ocupan asientos. Una reserva sin pasajes solo mantiene una cotización y no ocupa cupo. La disponibilidad se determina por solapamiento entre origen y destino, por lo que un asiento puede venderse nuevamente después del terminal donde su pasajero desciende.
 
 ## Pasajeros y cotización
 

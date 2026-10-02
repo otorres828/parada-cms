@@ -19,3 +19,6 @@ Una orden vencida emitida o rechazada bloquea a la empresa. Una orden pendiente 
 
 Al aprobar y no quedar deudas vencidas, se despacha la reactivación automática.
 
+El bloqueo se almacena en `empresas.bloqueada_por_cobranza_at`; estos métodos no cambian directamente `estatus`. Reactivar elimina esa marca, sin reemplazar la decisión administrativa de activar o inactivar la empresa.
+
+El período se calcula por `reservas.fecha_pago`. La primera orden toma siete días; las siguientes empiezan un segundo después del final de la última. Si no hay reservas cobrables, no se genera una orden. La emisión puede omitir notificaciones mediante `$notificar = false`.

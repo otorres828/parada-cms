@@ -1,4 +1,4 @@
-# Acceso y auditoría administrativa
+# Admin\Access
 
 ## Admin\Access
 
@@ -6,6 +6,4 @@
 
 Las rutas GET se protegen mediante `CheckPermission`. Las acciones que mutan información deben mantener autorización en el backend.
 
-## Admin\Audit
-
-`record()` guarda administrador, acción, entidad, ID, IP y datos adicionales. Antes de persistir elimina claves sensibles conocidas, entre ellas contraseñas, tokens, secretos, comprobantes y datos bancarios.
+Fuente: `app/Services/Admin/Access.php`. El servicio usa el guard `admin`; la decisión de `allows()` se delega a `Admin::hasPermission()`.

@@ -4,16 +4,26 @@ Esta carpeta documenta las entidades principales y los servicios que coordinan s
 
 ## Flujos documentados
 
-- [Reservas y checkout](reservas-y-checkout.md): creación o reinicio de la reserva, pasajeros, cupones, tasas y pago.
-- [Viajeros](viajeros.md): libreta del cliente, snapshot del pasaje, cifrado, hashes y eliminación.
-- [Datos personales cifrados](datos-personales-cifrados.md): llaves, casts cifrados e índices HMAC.
-- [Cupones](cupones.md): generación, aplicación, distribución y liberación.
-- [Tasas de servicio](tasas-servicio.md): exoneraciones, snapshots y cálculo por pasaje.
-- [Pagos de reservas](pagos-reservas.md): reporte, confirmación y pago fallido.
-- [Órdenes de cobro](ordenes-cobro.md): emisión, revisión y bloqueo por cobranza.
-- [Reembolsos](reembolsos.md): creación y resolución desde la empresa.
-- [Tipo de cambio](tipo-cambio.md): actualización desde la fuente configurada.
-- [Acceso y auditoría](acceso-y-auditoria.md): permisos y registro de acciones administrativas.
+- [Reservas y checkout](logica-checkout.md): creación o reinicio de la reserva, pasajeros, cupones, tasas y pago.
+- [Viajeros](servicio-viajero.md): libreta del cliente, snapshot del pasaje, cifrado, hashes y eliminación.
+- [Datos personales cifrados](logica-datos-personales-cifrados.md): llaves, casts cifrados e índices HMAC.
+- [Cupones](servicio-cupon.md): generación, aplicación, distribución y liberación.
+- [Tasas de servicio](servicio-tasas-servicio.md): exoneraciones, snapshots y cálculo por pasaje.
+- [Pagos de reservas](servicio-pago-reserva.md): reporte, confirmación y pago fallido.
+- [Órdenes de cobro](servicio-orden-cobro.md): emisión, revisión y bloqueo por cobranza.
+- [Reembolsos](servicio-reembolso.md): creación y resolución desde la empresa.
+- [Tipo de cambio](servicio-tipo-cambio.md): actualización desde la fuente configurada.
+- [ReservaService](servicio-reserva.md): métodos, reinicio, propiedad y transacciones de la reserva.
+- [Access](servicio-access.md): autorización administrativa.
+- [Audit](servicio-audit.md): registro explícito de acciones y exclusión de claves sensibles.
+
+## Convención de nombres
+
+- `servicio-<nombre>.md`: una clase de `app/Services` por archivo, con su nombre en slug y sin el sufijo `Service`.
+- `logica-<tema>.md`: entidades, reglas compartidas o flujos entre servicios.
+- `README.md`: índice de navegación.
+
+La documentación registra la implementación actual. Las diferencias respecto a reglas comerciales previstas se indican en el documento correspondiente; no se presentan como funcionalidades ya implementadas.
 
 ## Servicios actuales
 
