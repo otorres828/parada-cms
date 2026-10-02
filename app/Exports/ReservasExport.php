@@ -2,6 +2,7 @@
 
 namespace App\Exports;
 
+use App\Models\Reserva;
 use Illuminate\Database\Eloquent\Builder;
 use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\WithCustomChunkSize;
@@ -40,11 +41,13 @@ class ReservasExport extends DefaultValueBinder implements FromQuery, WithCustom
         $valores = [
             'id' => $reserva->id,
             'referencia' => $reserva->codigo_referencia,
+            'origen_venta' => $reserva->origen_venta === Reserva::ORIGEN_TAQUILLA ? 'Taquilla' : 'Web',
+            'receptor_pago' => $reserva->receptor_pago === 'empresa' ? 'Empresa' : ($reserva->receptor_pago === 'plataforma' ? 'Plataforma' : 'No registrado'),
             'tipo_transporte' => $reserva->programacion?->transporte?->getTipoTransporte(),
             'reprogramacion' => $reserva->reservaOriginal?->codigo_referencia,
             'fecha_reserva' => $reserva->fecha_compra?->format('d/m/Y H:i'),
-            'cliente' => $reserva->usuario?->name,
-            'correo_cliente' => $reserva->usuario?->email,
+            'cliente' => $reserva->nombre_comprador,
+            'correo_cliente' => $reserva->comprador_json['email'] ?? $reserva->usuario?->email,
             'empresa' => $reserva->programacion?->viaje?->empresa?->nombre,
             'origen' => $reserva->origenTerminal?->nombre,
             'destino' => $reserva->destinoTerminal?->nombre,
@@ -84,6 +87,8 @@ class ReservasExport extends DefaultValueBinder implements FromQuery, WithCustom
         return [
             'id' => 'ID reserva',
             'referencia' => 'Referencia',
+            'origen_venta' => 'Origen de venta',
+            'receptor_pago' => 'Receptor del pago',
             'tipo_transporte' => 'Tipo de transporte',
             'reprogramacion' => 'Reprogramación',
             'fecha_reserva' => 'Fecha de reserva',
