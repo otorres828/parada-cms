@@ -63,7 +63,7 @@
         <div class="col-md-6 col-xl-2">
 
             <label class="form-label" for="filtro-estado-pago">
-                Estado de la reserva
+                Estado
             </label>
 
             <select id="filtro-estado-pago" class="form-select" wire:model.live="status">
