@@ -3,11 +3,13 @@
 namespace App\Livewire\Empresas;
 
 use App\Models\Pasaje;
+use App\Models\Empresa;
 use App\Models\Programacion;
 use App\Models\Reserva;
 use App\Models\ViajeTramo;
 use App\Traits\TraitGeneral;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 use Livewire\Component;
@@ -28,6 +30,16 @@ class Dashboard extends Component
 
     public bool $canListProgramaciones = false;
 
+    public array $estados =  [
+            Reserva::ESTADO_PAGO_PAGADO => ['label' => 'Pagadas', 'color' => 'success'],
+            Reserva::ESTADO_PAGO_PENDIENTE => ['label' => 'Pendientes', 'color' => 'warning'],
+            Reserva::ESTADO_PAGO_NUEVO => ['label' => 'Nuevas', 'color' => 'info'],
+            Reserva::ESTADO_PAGO_FALLIDO => ['label' => 'Fallidas', 'color' => 'danger'],
+            Reserva::ESTADO_PAGO_CANCELADO => ['label' => 'Canceladas', 'color' => 'secondary'],
+            Reserva::ESTADO_PAGO_REPROGRAMADO => ['label' => 'Reprogramadas', 'color' => 'primary'],
+            Reserva::ESTADO_PAGO_REEMBOLSADO => ['label' => 'Reembolsadas', 'color' => 'primary'],
+    ];
+
     protected array $queryString = [
         'periodo' => ['except' => 'mes'],
         'date_from' => ['except' => ''],
@@ -36,7 +48,8 @@ class Dashboard extends Component
 
     public function mount(): void
     {
-        $permisos = auth('empresa')->user()->checkPermissionsBatch([
+        $user = Auth::guard('empresa')->user();
+        $permisos = $user->checkPermissionsBatch([
             'reservas' => ['reservas', 'list'],
             'programaciones' => ['programaciones', 'list'],
         ]);
@@ -59,6 +72,8 @@ class Dashboard extends Component
         }
 
         $empresa = auth('empresa')->user()->empresa;
+        $ellosReciben = (int) $empresa->tipo_contrato === Empresa::CONTRATO_ELLOS_RECIBEN;
+        
         $filtros = [
             'empresa_id' => $empresa->id,
             'tipo_transporte' => $empresa->getTipoTransporte(),
@@ -73,40 +88,37 @@ class Dashboard extends Component
             $empresa->id,
             $empresa->getTipoTransporte(),
         );
+
         $metrics = [
-            'ventas' => $resumen->ventas,
+            'ventas' => $ellosReciben ? $resumen->ventas : (float) $resumen->ventas - (float) $resumen->tasas,
             'tasas' => $resumen->tasas,
             'reservas_pagadas' => (int) $resumen->cantidad,
             'pasajes' => Pasaje::searchAdmin('', $pagadas)->count(),
             'pendientes' => Reserva::searchAdmin('', $filtros + ['estado_pago' => Reserva::ESTADO_PAGO_PENDIENTE])->count(),
             'salidas' => (clone $salidas)->count(),
         ];
+
         $ultimasReservas = Reserva::latestForDashboard($filtros);
         $proximasSalidas = (clone $salidas)
             ->limit(5)
             ->get();
-        $estados = [
-            Reserva::ESTADO_PAGO_PAGADO => ['label' => 'Pagadas', 'color' => 'success'],
-            Reserva::ESTADO_PAGO_PENDIENTE => ['label' => 'Pendientes', 'color' => 'warning'],
-            Reserva::ESTADO_PAGO_NUEVO => ['label' => 'Nuevas', 'color' => 'info'],
-            Reserva::ESTADO_PAGO_FALLIDO => ['label' => 'Fallidas', 'color' => 'danger'],
-            Reserva::ESTADO_PAGO_CANCELADO => ['label' => 'Canceladas', 'color' => 'secondary'],
-            Reserva::ESTADO_PAGO_REPROGRAMADO => ['label' => 'Reprogramadas', 'color' => 'primary'],
-            Reserva::ESTADO_PAGO_REEMBOLSADO => ['label' => 'Reembolsadas', 'color' => 'primary'],
-        ];
+        
         $conteos = Reserva::statusCountsForDashboard($filtros);
         $totalReservas = (int) $conteos->sum();
-        foreach ($estados as $estado => &$datos) {
+
+        foreach ($this->estados as $estado => &$datos) {
             $datos['cantidad'] = (int) ($conteos[$estado] ?? 0);
             $datos['porcentaje'] = $totalReservas ? round(($datos['cantidad'] * 100) / $totalReservas) : 0;
         }
+
         unset($datos);
 
         return view('livewire.empresas.dashboard', [
             'metrics' => $metrics,
+            'ellosReciben' => $ellosReciben,
             'ultimasReservas' => $ultimasReservas,
             'proximasSalidas' => $proximasSalidas,
-            'estados' => $estados,
+            'estados' => $this->estados,
             'totalReservas' => $totalReservas,
             'desde' => $desde,
             'hasta' => $hasta,

@@ -39,7 +39,7 @@ class ReembolsoService
                 'pago_reserva_id' => $pago->id,
                 'empresa_id' => $empresa->id,
                 'admin_id' => auth('admin')->id(),
-                'monto' => $pago->total,
+                'monto' => $reserva->getMontoSinTasa(),
                 'moneda' => 'USD',
                 'estatus' => 'pendiente',
                 'motivo' => $data['motivo'],

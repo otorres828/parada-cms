@@ -57,7 +57,7 @@
                 </dd>
                 <dt class="col-sm-4">Monto</dt>
                 <dd class="col-sm-8">
-                    {{ number_format($reembolso->monto ?? 0, 2) }}
+                    {{ number_format($reembolso->pagoReserva?->reserva?->getMontoSinTasa() ?? 0, 2) }}
                 </dd>
                 <dt class="col-sm-4">Estado</dt>
                 <dd class="col-sm-8">

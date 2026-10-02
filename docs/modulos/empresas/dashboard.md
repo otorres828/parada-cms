@@ -13,3 +13,7 @@ Los períodos son hoy, últimos 7 días, últimos 30 días, mes actual y rango p
 Las próximas salidas corresponden a los siguientes siete días, independientemente del período comercial. Incluyen disponibilidad por tramo y solo rutas y empresas activas. No se muestra la tarjeta de gestión de empresas ni el botón de registrar empresas.
 
 Los indicadores monetarios mantienen el cálculo del dashboard administrativo. El filtro de pagadas respeta los estados definidos por searchAdmin. Los datos históricos conservan el estado actual de cada reserva.
+
+## Importes según contrato
+
+Ellos reciben muestra el total cobrado y las tasas de servicio. La plataforma recibe muestra el importe de los pasajes menos descuentos, sin tasas. En Pasajes, subtotal se presenta como Total para La plataforma recibe; su Excel empresarial aplica la misma condición. En el dashboard se oculta la tarjeta Tasas para ese contrato y Ventas pagadas resta las tasas del total cobrado.

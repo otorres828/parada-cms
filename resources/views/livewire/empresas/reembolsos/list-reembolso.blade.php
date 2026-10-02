@@ -140,7 +140,7 @@
                     </td>
 
                     <td>
-                        {{ number_format($reembolso->monto ?? 0, 2) }}
+                        {{ number_format($reembolso->pagoReserva?->reserva?->getMontoSinTasa() ?? 0, 2) }}
                     </td>
 
                     <td>

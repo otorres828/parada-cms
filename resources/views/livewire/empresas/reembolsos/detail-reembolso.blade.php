@@ -8,7 +8,7 @@
     - <x-form.cancel-button />: Enlace para regresar al listado anterior.
     - <x-layout.loader.fullpage />: Indicador global durante operaciones de Livewire.
     - <x-list.heading />: Cabecera del módulo con título y acciones.
-    - <x-reembolsos.description />: Ficha descriptiva del reembolso.
+    - <x-money.dual />: Importe sin tasas en ambas monedas.
     --------------------------------------------------------------------------
 --}}
 
@@ -43,7 +43,41 @@
 
                 <div class="card">
 
-                    <x-reembolsos.description :reembolso="$reembolso" />
+                    <div class="card-body">
+
+    <dl class="row mb-0">
+        <dt class="col-sm-4">Tipo de transporte</dt><dd class="col-sm-8">{{ $reembolso->pagoReserva?->reserva?->programacion?->transporte?->getTipoTransporte() ?? 'No registrado' }}</dd>
+        <dt class="col-sm-4">Pago</dt>
+        <dd class="col-sm-8">
+            {{ $reembolso->pagoReserva?->referencia_pago ?? '—' }}
+        </dd>
+        <dt class="col-sm-4">Empresa</dt>
+        <dd class="col-sm-8">
+            {{ $reembolso->empresa?->nombre ?? '—' }}
+        </dd>
+        <dt class="col-sm-4">Monto</dt>
+        <dd class="col-sm-8">
+            <x-money.dual :usd="$reembolso->pagoReserva?->reserva?->getMontoSinTasa()" :bs="$reembolso->calcularMontoBs($reembolso->pagoReserva?->reserva?->getMontoSinTasa())" />
+        </dd>
+        <dt class="col-sm-4">Estado</dt>
+        <dd class="col-sm-8">
+            <x-list.status-badge :status="$reembolso->estatus" />
+        </dd>
+        <dt class="col-sm-4">Solicitado</dt>
+        <dd class="col-sm-8">
+            {{ $reembolso->created_at?->format('d/m/Y H:i') ?? '—' }}
+        </dd>
+        <dt class="col-sm-4">Motivo</dt>
+        <dd class="col-sm-8">{{ $reembolso->motivo ?? '—' }}</dd>
+        <dt class="col-sm-4">Observaciones</dt>
+        <dd class="col-sm-8">{{ $reembolso->comentario ?? '—' }}</dd>
+        <dt class="col-sm-4">Fecha de resolución</dt>
+        <dd class="col-sm-8">{{ $reembolso->fecha_resolucion?->format('d/m/Y H:i') ?? '—' }}</dd>
+    </dl>
+
+</div>
+
+
 
                 </div>
 

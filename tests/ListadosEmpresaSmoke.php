@@ -207,3 +207,24 @@ $dashboard->periodo = '7';
 $dashboard->updatedPeriodo();
 $check($dashboard->date_from === today()->subDays(6)->toDateString());
 echo "Dashboard empresarial aislado, períodos y fechas: OK\n";
+
+foreach ([Empresa::CONTRATO_ELLOS_RECIBEN, Empresa::CONTRATO_NOSOTROS_RECIBIMOS] as $contrato) {
+    $empresa->tipo_contrato = $contrato;
+    $empresa->save();
+    $usuarioEmpresa->unsetRelation('empresa');
+    $dashboard = new App\Livewire\Empresas\Dashboard;
+    $dashboard->mount();
+    $datos = $dashboard->render()->getData();
+    $ellosReciben = $contrato === Empresa::CONTRATO_ELLOS_RECIBEN;
+    $check($datos['ellosReciben'] === $ellosReciben);
+    $check((float) $datos['metrics']['ventas'] === (float) ($ellosReciben ? $r->monto_total : $r->getMontoSinTasa()));
+    $listado = new App\Livewire\Empresas\Reservas\ListReserva;
+    $listado->mount();
+    $check($listado->render()->getData()['ellosReciben'] === $ellosReciben);
+    $listadoPasajes = new App\Livewire\Empresas\Pasajes\ListPasaje;
+    $listadoPasajes->mount();
+    $check($listadoPasajes->render()->getData()['mostrarTasaServicio'] === $ellosReciben);
+}
+$ejemplo = new Reserva(['monto_pasajes' => '30.00', 'descuento_aplicado' => '3.00', 'tasa_servicio' => '2.00', 'monto_total' => '29.00']);
+$check($ejemplo->getMontoSinTasa() === '27.00');
+echo "Importes para ambos contratos y descuentos: OK\n";

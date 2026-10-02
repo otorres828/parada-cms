@@ -81,7 +81,7 @@
 
             </div>
 
-            <p>El reembolso es por el total del pago y reserva el neto correspondiente a la empresa.</p>
+            <p>El reembolso corresponde al importe de los pasajes menos los descuentos. No incluye la tasa de servicio.</p>
 
         </x-form.container-sm>
 

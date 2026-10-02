@@ -330,6 +330,11 @@ class Reserva extends ModelHelper
             ->findOrFail($reservaId);
     }
 
+    public function getMontoSinTasa(): string
+    {
+        return number_format((float) $this->monto_pasajes - (float) $this->descuento_aplicado, 2, '.', '');
+    }
+
     public static function dashboardSummary(array $filters): self
     {
         return self::searchAdmin('', $filters)

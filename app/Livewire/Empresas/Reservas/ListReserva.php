@@ -4,6 +4,7 @@ namespace App\Livewire\Empresas\Reservas;
 
 use App\Exports\ReservasExport;
 use App\Models\Reserva;
+use App\Models\Empresa;
 use App\Services\Empresa\Access;
 use App\Traits\Listing;
 use App\Traits\PermissionsEmpresa;
@@ -59,6 +60,7 @@ class ListReserva extends Component
 
         return view('livewire.empresas.reservas.list-reserva', [
             'reservas' => $reservas,
+            'ellosReciben' => (int) auth('empresa')->user()->empresa->tipo_contrato === Empresa::CONTRATO_ELLOS_RECIBEN,
         ]);
     }
 

@@ -16,8 +16,7 @@ Los cambios de filtros reinician la página. La paginación limita cada página 
 
 La vista conserva el encabezado, filtros y paginación del panel; la tabla está definida en su propia vista de Empresas, independiente de Admin. Solo se reutilizan elementos básicos de presentación como buscadores, botones, montos y contenedores. En Empresas no se muestra la columna Empresa ni se generan enlaces a rutas de detalle o edición que todavía no existen. Los formularios y detalles se implementarán por separado.
 
-## Columnas por contrato
 
-Con `CONTRATO_ELLOS_RECIBEN`, la vista muestra `subtotal` con el encabezado Total, oculta Tasa de servicio y el Total original. Para el otro contrato conserva las tres columnas. La condición se obtiene de la empresa autenticada en render, sin modificar los importes almacenados. Esta regla es de presentación de la vista.
+## Importes según contrato
 
-El Excel utiliza `App\Exports\Empresas\PasajesExport`, separado del export de Admin. Aplica la misma presentación por contrato: con Ellos reciben, Total contiene el subtotal y se omiten tasa y total con tasa, en ambas monedas. Conserva lectura en chunks de 1000 y tratamiento de texto contra fórmulas. Los adjuntos de órdenes de cobro conservan el formato completo de Admin para detallar las tasas cobradas.
+Ellos reciben muestra el total cobrado y las tasas de servicio. La plataforma recibe muestra el importe de los pasajes menos descuentos, sin tasas. En Pasajes, subtotal se presenta como Total para La plataforma recibe; su Excel empresarial aplica la misma condición. En el dashboard se oculta la tarjeta Tasas para ese contrato y Ventas pagadas resta las tasas del total cobrado.
