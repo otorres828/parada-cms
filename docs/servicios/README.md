@@ -43,3 +43,5 @@ La documentación registra la implementación actual. Las diferencias respecto a
 
 - [Reservas de taquilla](servicio-reserva-taquilla.md)
 - [Pagos de taquilla](servicio-pago-taquilla.md)
+
+- [Horarios por tramo de programación](logica-horarios-tramos.md)

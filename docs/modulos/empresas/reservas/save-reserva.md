@@ -33,3 +33,7 @@ La reserva se limita a la empresa autenticada. Un token Locked permite que un re
 ## Esquema
 
 Se modifican las migraciones originales: asiento nullable para infantes sin puesto; pagos de una reserva pasan a uno-a-muchos y conservan monto recibido y moneda. Actualizar el esquema de desarrollo y ejecutar GroupSectionPermissionEmpresaSeeder. No se ejecutó fresh sobre la base local.
+
+## Horario del tramo
+
+La fecha seleccionada corresponde al abordaje en el origen elegido, no al inicio del recorrido completo. Las opciones muestran la salida del tramo y la venta guardada muestra su llegada. Consultar [reglas de horarios](../../../servicios/logica-horarios-tramos.md).

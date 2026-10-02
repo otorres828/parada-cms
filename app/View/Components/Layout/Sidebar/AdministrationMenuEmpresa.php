@@ -18,6 +18,8 @@ class AdministrationMenuEmpresa extends Component
 
     public bool $editPoliticasEmbarque = false;
 
+    public bool $listDatosBancarios = false;
+
     public bool $listViajes = false;
 
     public bool $listProgramaciones = false;
@@ -61,6 +63,7 @@ class AdministrationMenuEmpresa extends Component
             'listDashboard' => ['dashboard', 'list'],
             'listUsuarios' => ['usuarios', 'list'],
             'editPoliticasEmbarque' => ['politicas-embarque', 'edit'],
+            'listDatosBancarios' => ['datos-bancarios', 'list'],
             'listViajes' => ['viajes', 'list'],
             'listProgramaciones' => ['programaciones', 'list'],
             'listTransportes' => ['transportes', 'list'],

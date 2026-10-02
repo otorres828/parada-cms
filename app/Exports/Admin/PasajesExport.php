@@ -18,7 +18,7 @@ class PasajesExport extends DefaultValueBinder implements FromQuery, WithCustomC
 
     public function query(): Builder
     {
-        return $this->consulta;
+        return $this->consulta->with('reserva.tramoPrecio.programacion.viaje');
     }
 
     public function chunkSize(): int
@@ -51,13 +51,14 @@ class PasajesExport extends DefaultValueBinder implements FromQuery, WithCustomC
             'Origen', 
             'Destino final',
             'Fecha de salida', 
-            'Hora de salida'];
+            'Hora de salida'
+        ];
     }
 
     public function map($pasaje): array
     {
         $reserva = $pasaje->reserva;
-        $programacion = $reserva?->programacion;
+        $salida = $reserva?->tramoPrecio?->getSalida();
 
         return [
             $pasaje->id, 
@@ -81,8 +82,8 @@ class PasajesExport extends DefaultValueBinder implements FromQuery, WithCustomC
             $reserva?->getStatusPago(), 
             $reserva?->origenTerminal?->nombre,
             $reserva?->destinoTerminal?->nombre,
-            $programacion?->fecha_salida?->format('d/m/Y'), 
-            $programacion?->hora_salida
+            $salida?->format('d/m/Y'), 
+            $salida?->format('H:i:s')
         ];
     }
 

@@ -8,14 +8,48 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class PagoReserva extends ModelHelper
 {
+    public const TIPO_PAGO_TRANSFERENCIA = 1;
+
+    public const TIPO_PAGO_EFECTIVO = 2;
+
+    public const TIPO_PAGO_MOVIL = 3;
+
+    public const TIPO_PAGO_TARJETA = 4;
+
+    public const NAME_TIPO_PAGO = [
+        self::TIPO_PAGO_TRANSFERENCIA => 'Transferencia',
+        self::TIPO_PAGO_EFECTIVO => 'Efectivo',
+        self::TIPO_PAGO_MOVIL => 'Pago Móvil',
+        self::TIPO_PAGO_TARJETA => 'Tarjeta',
+    ];
+
     protected $table = 'pagos_reservas';
 
-    protected $fillable = ['reserva_id', 'total', 'tasa_servicio', 'metodo_pago', 'referencia_pago', 'fecha_pago', 'comprobante'];
+    protected $fillable = [
+        'tipo_pago',
+        'moneda',
+        'monto_recibido',
+        'reserva_id',
+        'total',
+        'tasa_servicio',
+        'metodo_pago',
+        'referencia_pago',
+        'fecha_pago',
+        'comprobante'
+    ];
 
     protected function casts(): array
     {
-        return ['total' => 'decimal:2', 'tasa_servicio' => 'decimal:2', 'metodo_pago' => 'integer', 'fecha_pago' => 'datetime'];
+        return [
+            'tipo_pago' => 'integer',
+            'monto_recibido' => 'decimal:2',
+            'total' => 'decimal:2',
+            'tasa_servicio' => 'decimal:2',
+            'metodo_pago' => 'integer',
+            'fecha_pago' => 'datetime'
+        ];
     }
+
 
     public function datoBancario(): BelongsTo
     {
@@ -54,5 +88,10 @@ class PagoReserva extends ModelHelper
         }
 
         return $query;
+    }
+
+    public function getNameTipoPago(): string
+    {
+        return self::NAME_TIPO_PAGO[$this->tipo_pago] ?? 'Desconocido';
     }
 }

@@ -16,7 +16,7 @@
     ])
 @endif
 
-@if ($listUsuarios or $editPoliticasEmbarque)
+@if ($listUsuarios or $editPoliticasEmbarque or $listDatosBancarios)
     @include('components.layout.sidebar-li', [
         'menu' => 'Administración',
         'icon' => 'nav-icon bi bi-shield-lock',
@@ -32,6 +32,12 @@
                 'route' => route('empresas.politicas-embarque.edit'),
                 'name' => 'Políticas de embarque',
                 'active' => request()->routeIs('empresas.politicas-embarque.*') ? 'active' : '',
+            ],
+            [
+                'existe' => $listDatosBancarios,
+                'route' => route('empresas.datos-bancarios.list'),
+                'name' => 'Datos Bancarios',
+                'active' => request()->routeIs('empresas.datos-bancarios.*') ? 'active' : '',
             ],
         ],
     ])
