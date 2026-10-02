@@ -68,7 +68,7 @@ class PermisosEmpresaSmoke
         $this->seed(GroupSectionPermissionEmpresaSeeder::class);
 
         $this->assertSame(7, GroupEmpresa::count());
-        $this->assertSame(15, DB::table('sections_empresa')->count());
+        $this->assertSame(16, DB::table('sections_empresa')->count());
         $this->assertSame($cantidad, PermissionEmpresa::count());
         $this->assertSame('administracion', GroupEmpresa::findOrFail(2)->url);
         $this->assertTrue($usuario->hasPermission('reservas', 'list'));

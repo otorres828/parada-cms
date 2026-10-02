@@ -33,11 +33,14 @@
             {{ $pasaje->reserva?->fecha_compra?->format('d/m/Y H:i') ?? '—' }}
         </dd>
 
-        <dt class="col-sm-4">Horario de salida</dt>
+        <dt class="col-sm-4">Salida del tramo</dt>
 
         <dd class="col-sm-8">
-            {{ $pasaje->reserva?->programacion?->fecha_salida?->format('d/m/Y') ?? '—' }} {{ $pasaje->reserva?->programacion?->hora_salida ? substr($pasaje->reserva->programacion->hora_salida, 0, 5) : '—' }}
+            {{ $pasaje->reserva?->tramoPrecio?->getSalida()?->format('d/m/Y H:i') ?? 'Sin horario' }}
         </dd>
+
+        <dt class="col-sm-4">Llegada al destino</dt>
+        <dd class="col-sm-8">{{ $pasaje->reserva?->tramoPrecio?->getLlegada()?->format('d/m/Y H:i') ?? 'Sin horario' }}</dd>
 
         <hr class="col-12 my-3">
 

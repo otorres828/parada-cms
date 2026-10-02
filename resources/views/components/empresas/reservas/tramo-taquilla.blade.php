@@ -1,0 +1,54 @@
+{{-- Selección de origen, destino y salida que cubre el tramo. --}}
+@props(['origenes', 'destinos', 'opciones', 'salidas'])
+<div class="card mb-3">
+    <div class="card-body row g-3">
+        <div class="col-md-3">
+            <label class="form-label">Fecha de salida</label>
+            <input form="registrar-taquilla" required type="date" class="form-control" wire:model.live="fecha"
+                min="{{ today()->toDateString() }}">
+        </div>
+        <div class="col-md-3">
+            <label class="form-label">Origen</label>
+            <select form="registrar-taquilla" required class="form-select" wire:model.live="origenId">
+                <option value="">Seleccionar origen</option>
+                @foreach ($origenes as $terminal)
+                    <option value="{{ $terminal->id }}">{{ $terminal->nombre }}</option>
+                @endforeach
+            </select>
+        </div>
+        <div class="col-md-3">
+            <label class="form-label">Destino</label>
+            <select form="registrar-taquilla" required class="form-select" wire:model.live="destinoId">
+                <option value="">Seleccionar destino</option>
+                @foreach ($destinos as $terminal)
+                    <option value="{{ $terminal->id }}">{{ $terminal->nombre }}</option>
+                @endforeach
+            </select>
+        </div>
+        <div class="col-md-3">
+            <label class="form-label">Salida disponible para el tramo</label>
+            <select form="registrar-taquilla" required class="form-select" wire:model.live="tarifaId">
+                <option value="">Seleccionar salida</option>
+                @foreach ($opciones as $opcion)
+                    <option value="{{ $opcion->id }}">{{ $opcion->getSalida()?->format('d/m H:i') ?? 'Sin horario' }}
+                        · #{{ $opcion->programacion_id }} · ${{ $opcion->precio }}</option>
+                @endforeach
+            </select>
+            @if ($salidas->isEmpty())
+                <div class="col-12">
+                    <div class="alert alert-info mb-0" role="status">
+                        No hay programaciones activas disponibles en la fecha seleccionada.
+                        Selecciona otra fecha o revisa el estado de la ruta y del transporte.
+                    </div>
+                </div>
+            @elseif ($origenes->isEmpty())
+                <div class="col-12">
+                    <div class="alert alert-warning mb-0" role="status">
+                        Las salidas de esta fecha no tienen tramos con precios configurados. Configura sus tarifas para
+                        poder vender.
+                    </div>
+                </div>
+            @endif
+        </div>
+    </div>
+</div>
