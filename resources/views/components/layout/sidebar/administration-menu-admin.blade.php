@@ -123,16 +123,12 @@
 
 @if ($listcupones)
     @include('components.layout.sidebar-li', [
-        'menu' => 'Promociones',
+        'menu' => 'Cupones',
         'icon' => 'nav-icon bi bi-tags',
-        'list' => [
-            [
-                'existe' => $listcupones ?? false,
-                'route' => route('admin.cupones.list'),
-                'name' => 'Cupones',
-                'active' => request()->routeIs('admin.cupones.*') ? 'active' : '',
-            ],
-        ],
+        'existe' => $listcupones ?? false,
+        'route' => route('admin.cupones.list'),
+        'active' => request()->routeIs('admin.cupones.*') ? 'active' : '',
+        
     ])
 @endif
 
@@ -237,14 +233,10 @@
     @include('components.layout.sidebar-li', [
         'menu' => 'Soporte',
         'icon' => 'nav-icon bi bi-headset',
-        'list' => [
-            [
-                'existe' => $listSolicitudes ?? false,
-                'route' => route('admin.solicitudes.list'),
-                'name' => 'Contacto',
-                'active' => request()->routeIs('admin.solicitudes.*') ? 'active' : '',
-            ],
-        ],
+        'existe' => $listSolicitudes ?? false,
+        'route' => route('admin.solicitudes.list'),
+        'name' => 'Contacto',
+        'active' => request()->routeIs('admin.solicitudes.*') ? 'active' : '',
     ])
 @endif
 

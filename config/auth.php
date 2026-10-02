@@ -36,14 +36,22 @@ return [
     */
 
     'guards' => [
+        
         'web' => [
             'driver' => 'session',
             'provider' => 'users',
         ],
+
         'admin' => [
             'driver' => 'session',
             'provider' => 'admins',
         ],
+
+        'empresas' => [
+            'driver' => 'session',
+            'provider' => 'usuarios_empresa',
+        ],
+
         'api' => [
             'driver' => 'jwt',
             'provider' => 'admins',

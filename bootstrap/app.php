@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Middleware\CheckPermissionAdmin;
+use App\Http\Middleware\CheckPermissionEmpresa;
 use App\Http\Middleware\RedirectIfUnauthenticated;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
@@ -20,6 +21,10 @@ return Application::configure(basePath: dirname(__DIR__))
                 ->prefix('admin')
                 ->name('admin.')
                 ->group(base_path('routes/admin.php'));
+            Route::middleware('web')
+                ->prefix('empresas')
+                ->name('empresas.')
+                ->group(base_path('routes/empresas.php'));
         },
     )
     ->withMiddleware(function (Middleware $middleware): void {
@@ -28,8 +33,11 @@ return Application::configure(basePath: dirname(__DIR__))
             'throttle:web-get'
         ]);
 
-        $middleware->group('check.permisos', [
+        $middleware->group('check.permisos.admin', [
             CheckPermissionAdmin::class,
+        ]);
+        $middleware->group('check.permisos.empresa', [
+            CheckPermissionEmpresa::class,
         ]);
 
         // Configurar redirección para invitados (no autenticados)
