@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Empresas\Cupones;
 
+use App\Livewire\Empresas\EmpresaComponent;
 use App\Models\ConfiguracionCupon;
 use App\Services\Empresa\Access;
 use App\Traits\Listing;
@@ -9,11 +10,10 @@ use App\Traits\PermissionsEmpresa;
 use App\Traits\TraitGeneral;
 use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\Layout;
-use Livewire\Component;
 use Livewire\WithPagination;
 
 #[Layout('layouts.crm')]
-class ListCampana extends Component
+class ListCampana extends EmpresaComponent
 {
     use Listing;
     use PermissionsEmpresa;
@@ -46,7 +46,7 @@ class ListCampana extends Component
     public function render()
     {
         $query = ConfiguracionCupon::searchAdmin($this->search, [
-            'empresa_id' => auth('empresa')->user()->empresa_id,
+            'empresa_id' => $this->usuarioEmpresa->empresa_id,
             'status' => $this->status,
             'date_from' => $this->date_from,
             'date_to' => $this->date_to,
@@ -75,7 +75,7 @@ class ListCampana extends Component
         DB::transaction(function () use ($id) {
 
             $query = ConfiguracionCupon::searchAdmin('', [
-                'empresa_id' => auth('empresa')->user()->empresa_id,
+                'empresa_id' => $this->usuarioEmpresa->empresa_id,
             ]);
 
             $configuracionCupon = $query->whereKey($id)->lockForUpdate()->firstOrFail();

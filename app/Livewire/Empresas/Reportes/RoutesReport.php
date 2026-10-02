@@ -3,17 +3,17 @@
 namespace App\Livewire\Empresas\Reportes;
 
 use App\Exports\RoutesReportExport;
+use App\Livewire\Empresas\EmpresaComponent;
 use App\Models\Reserva;
 use App\Services\Empresa\Access;
 use App\Traits\TraitGeneral;
 use App\Traits\PermissionsEmpresa;
 use Livewire\Attributes\Layout;
-use Livewire\Component;
 use Livewire\WithPagination;
 use Maatwebsite\Excel\Facades\Excel;
 
 #[Layout('layouts.crm')]
-class RoutesReport extends Component
+class RoutesReport extends EmpresaComponent
 {
     use TraitGeneral;
     use PermissionsEmpresa;
@@ -55,7 +55,7 @@ class RoutesReport extends Component
 
     protected function query()
     {
-        return Reserva::routesReport($this->date_from, $this->date_to, auth('empresa')->user()->empresa_id, auth('empresa')->user()->empresa->getTipoTransporte());
+        return Reserva::routesReport($this->date_from, $this->date_to, $this->usuarioEmpresa->empresa_id, $this->usuarioEmpresa->empresa->getTipoTransporte());
     }
 
     public function export()

@@ -2,17 +2,17 @@
 
 namespace App\Livewire\Empresas\Reembolsos;
 
+use App\Livewire\Empresas\EmpresaComponent;
 use App\Models\Reembolso;
 use App\Traits\Listing;
 
 use App\Traits\TraitGeneral;
 
 use Livewire\Attributes\Layout;
-use Livewire\Component;
 use Livewire\WithPagination;
 
 #[Layout('layouts.crm')]
-class ListReembolso extends Component
+class ListReembolso extends EmpresaComponent
 {
     use Listing;
 
@@ -53,7 +53,7 @@ class ListReembolso extends Component
     public function render()
     {
         $query = Reembolso::searchAdmin($this->search, [
-            'empresa_id' => auth('empresa')->user()->empresa_id,
+            'empresa_id' => $this->usuarioEmpresa->empresa_id,
             'status' => $this->status,
             'date_from' => $this->date_from,
             'date_to' => $this->date_to,

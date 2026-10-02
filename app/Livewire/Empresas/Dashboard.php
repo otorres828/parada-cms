@@ -9,14 +9,12 @@ use App\Models\Reserva;
 use App\Models\ViajeTramo;
 use App\Traits\TraitGeneral;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
-use Livewire\Component;
 
 #[Layout('layouts.crm')]
 #[Title('Resumen de la empresa')]
-class Dashboard extends Component
+class Dashboard extends EmpresaComponent
 {
     use TraitGeneral;
 
@@ -48,8 +46,7 @@ class Dashboard extends Component
 
     public function mount(): void
     {
-        $user = Auth::guard('empresa')->user();
-        $permisos = $user->checkPermissionsBatch([
+        $permisos = $this->usuarioEmpresa->checkPermissionsBatch([
             'reservas' => ['reservas', 'list'],
             'programaciones' => ['programaciones', 'list'],
         ]);
@@ -71,9 +68,9 @@ class Dashboard extends Component
             $desde = $hasta->copy()->startOfDay();
         }
 
-        $empresa = auth('empresa')->user()->empresa;
+        $empresa = $this->usuarioEmpresa->empresa;
         $ellosReciben = (int) $empresa->tipo_contrato === Empresa::CONTRATO_ELLOS_RECIBEN;
-        
+
         $filtros = [
             'empresa_id' => $empresa->id,
             'tipo_transporte' => $empresa->getTipoTransporte(),

@@ -3,6 +3,7 @@
 namespace App\Livewire\Empresas\Reservas;
 
 use App\Exports\ReservasExport;
+use App\Livewire\Empresas\EmpresaComponent;
 use App\Models\Reserva;
 use App\Models\Empresa;
 use App\Services\Empresa\Access;
@@ -10,12 +11,11 @@ use App\Traits\Listing;
 use App\Traits\PermissionsEmpresa;
 use App\Traits\TraitGeneral;
 use Livewire\Attributes\Layout;
-use Livewire\Component;
 use Livewire\WithPagination;
 use Maatwebsite\Excel\Facades\Excel;
 
 #[Layout('layouts.crm')]
-class ListReserva extends Component
+class ListReserva extends EmpresaComponent
 {
     use Listing;
     use PermissionsEmpresa;
@@ -48,7 +48,7 @@ class ListReserva extends Component
     public function render()
     {
         $query = Reserva::searchAdmin($this->search, [
-            'empresa_id' => auth('empresa')->user()->empresa_id,
+            'empresa_id' => $this->usuarioEmpresa->empresa_id,
             'status' => $this->status,
             'date_from' => $this->date_from,
             'date_to' => $this->date_to,
@@ -60,7 +60,7 @@ class ListReserva extends Component
 
         return view('livewire.empresas.reservas.list-reserva', [
             'reservas' => $reservas,
-            'ellosReciben' => (int) auth('empresa')->user()->empresa->tipo_contrato === Empresa::CONTRATO_ELLOS_RECIBEN,
+            'ellosReciben' => (int) $this->usuarioEmpresa->empresa->tipo_contrato === Empresa::CONTRATO_ELLOS_RECIBEN,
         ]);
     }
 
@@ -69,7 +69,7 @@ class ListReserva extends Component
         Access::authorize('reservas', 'download');
 
         $query = Reserva::searchAdmin($this->search, [
-            'empresa_id' => auth('empresa')->user()->empresa_id,
+            'empresa_id' => $this->usuarioEmpresa->empresa_id,
             'status' => $this->status,
             'date_from' => $this->date_from,
             'date_to' => $this->date_to,

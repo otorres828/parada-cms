@@ -119,6 +119,7 @@ foreach ([
 ] as $nombre => [$variable, $id]) {
     $clase = 'App\\Livewire\\Empresas\\'.$nombre;
     $componente = new $clase;
+$componente->boot();
     $componente->sortColumn = 'id';
     $componente->sortDirection = 'desc';
     if (property_exists($componente, 'date_from')) {
@@ -132,6 +133,7 @@ foreach ([
 foreach (['SalesReport', 'RoutesReport'] as $nombre) {
     $clase = 'App\\Livewire\\Empresas\\Reportes\\'.$nombre;
     $componente = new $clase;
+$componente->boot();
     $componente->date_from = today()->subDay()->format('Y-m-d');
     $componente->date_to = today()->addDay()->format('Y-m-d');
     $filas = $componente->render()->getData()['rows'];
@@ -155,6 +157,7 @@ $campanaDos->empresa_id = $empresaDos->id;
 $campanaDos->codigo_personalizado = 'OTRA';
 $campanaDos->save();
 $listado = new App\Livewire\Empresas\Cupones\ListCampana;
+$listado->boot();
 $listado->mount();
 $check($listado->render()->getData()['cupones']->pluck('id')->all() === [$campana->id]);
 $reject(function () use ($listado, $campanaDos) {
@@ -165,6 +168,7 @@ $check($campana->fresh()->estatus == 2);
 foreach (['Reservas\\ListReserva', 'Pasajes\\ListPasaje'] as $nombre) {
     $clase = 'App\\Livewire\\Empresas\\'.$nombre;
     $componente = new $clase;
+$componente->boot();
     $componente->mount();
     $respuesta = $componente->exportExcel();
     $check($respuesta instanceof Symfony\Component\HttpFoundation\BinaryFileResponse);
@@ -194,6 +198,7 @@ $check(in_array('Tasa de servicio USD', $adminExport->headings()));
 echo "Columnas y montos por contrato; Admin sin cambios: OK\n";
 
 $dashboard = new App\Livewire\Empresas\Dashboard;
+$dashboard->boot();
 $dashboard->mount();
 $datos = $dashboard->render()->getData();
 $check($datos['metrics']['reservas_pagadas'] === 1);
@@ -213,15 +218,18 @@ foreach ([Empresa::CONTRATO_ELLOS_RECIBEN, Empresa::CONTRATO_NOSOTROS_RECIBIMOS]
     $empresa->save();
     $usuarioEmpresa->unsetRelation('empresa');
     $dashboard = new App\Livewire\Empresas\Dashboard;
+$dashboard->boot();
     $dashboard->mount();
     $datos = $dashboard->render()->getData();
     $ellosReciben = $contrato === Empresa::CONTRATO_ELLOS_RECIBEN;
     $check($datos['ellosReciben'] === $ellosReciben);
     $check((float) $datos['metrics']['ventas'] === (float) ($ellosReciben ? $r->monto_total : $r->getMontoSinTasa()));
     $listado = new App\Livewire\Empresas\Reservas\ListReserva;
+$listado->boot();
     $listado->mount();
     $check($listado->render()->getData()['ellosReciben'] === $ellosReciben);
     $listadoPasajes = new App\Livewire\Empresas\Pasajes\ListPasaje;
+$listadoPasajes->boot();
     $listadoPasajes->mount();
     $check($listadoPasajes->render()->getData()['mostrarTasaServicio'] === $ellosReciben);
 }

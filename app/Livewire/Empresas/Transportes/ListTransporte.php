@@ -2,15 +2,15 @@
 
 namespace App\Livewire\Empresas\Transportes;
 
+use App\Livewire\Empresas\EmpresaComponent;
 use App\Models\Transporte;
 use App\Traits\Listing;
 use App\Traits\PermissionsEmpresa;
 use Livewire\Attributes\Layout;
-use Livewire\Component;
 use Livewire\WithPagination;
 
 #[Layout('layouts.crm')]
-class ListTransporte extends Component
+class ListTransporte extends EmpresaComponent
 {
     use Listing;
     use PermissionsEmpresa;
@@ -34,9 +34,9 @@ class ListTransporte extends Component
     public function render()
     {
         $query = Transporte::searchAdmin($this->search, [
-            'empresa_id' => auth('empresa')->user()->empresa_id,
+            'empresa_id' => $this->usuarioEmpresa->empresa_id,
             'status' => $this->status,
-            'tipo_transporte' => auth('empresa')->user()->empresa->getTipoTransporte(),
+            'tipo_transporte' => $this->usuarioEmpresa->empresa->getTipoTransporte(),
         ]);
 
         $query = $this->applySort($query);

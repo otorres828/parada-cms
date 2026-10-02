@@ -2,10 +2,11 @@
 
 namespace App\View\Components\Layout\Sidebar;
 
+use Illuminate\View\Component;
+use Illuminate\Support\Facades\Auth;
 use App\Models\UsuarioEmpresa;
 use Closure;
 use Illuminate\Contracts\View\View;
-use Illuminate\View\Component;
 
 class AdministrationMenuEmpresa extends Component
 {
@@ -47,7 +48,7 @@ class AdministrationMenuEmpresa extends Component
 
     public function __construct()
     {
-        $this->usuario = auth('empresa')->user();
+        $this->usuario = Auth::guard('empresa')->user();
 
         if (! $this->usuario || $this->usuario->estatus !== UsuarioEmpresa::ESTADO_ACTIVE) {
             return;

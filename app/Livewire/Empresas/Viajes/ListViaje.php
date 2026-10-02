@@ -2,15 +2,15 @@
 
 namespace App\Livewire\Empresas\Viajes;
 
+use App\Livewire\Empresas\EmpresaComponent;
 use App\Models\Viaje;
 use App\Traits\Listing;
 use App\Traits\PermissionsEmpresa;
 use Livewire\Attributes\Layout;
-use Livewire\Component;
 use Livewire\WithPagination;
 
 #[Layout('layouts.crm')]
-class ListViaje extends Component
+class ListViaje extends EmpresaComponent
 {
     use Listing;
     use PermissionsEmpresa;
@@ -35,7 +35,7 @@ class ListViaje extends Component
     {
         $query = Viaje::searchAdmin($this->search, [
             'con_tasas' => true,
-            'empresa_id' => auth('empresa')->user()->empresa_id,
+            'empresa_id' => $this->usuarioEmpresa->empresa_id,
             'status' => $this->status,
         ]);
 

@@ -3,6 +3,7 @@
 namespace App\Livewire\Empresas\Pasajes;
 
 use App\Exports\Empresas\PasajesExport;
+use App\Livewire\Empresas\EmpresaComponent;
 use App\Models\Pasaje;
 use App\Models\Empresa;
 use App\Services\Empresa\Access;
@@ -10,12 +11,11 @@ use App\Traits\Listing;
 use App\Traits\PermissionsEmpresa;
 use App\Traits\TraitGeneral;
 use Livewire\Attributes\Layout;
-use Livewire\Component;
 use Livewire\WithPagination;
 use Maatwebsite\Excel\Facades\Excel;
 
 #[Layout('layouts.crm')]
-class ListPasaje extends Component
+class ListPasaje extends EmpresaComponent
 {
     use Listing;
     use PermissionsEmpresa;
@@ -48,7 +48,7 @@ class ListPasaje extends Component
     public function render()
     {
         $query = Pasaje::searchAdmin($this->search, [
-            'empresa_id' => auth('empresa')->user()->empresa_id,
+            'empresa_id' => $this->usuarioEmpresa->empresa_id,
             'estado_pago' => $this->status,
             'date_from' => $this->date_from,
             'date_to' => $this->date_to,
@@ -60,7 +60,7 @@ class ListPasaje extends Component
 
         return view('livewire.empresas.pasajes.list-pasaje', [
             'pasajes' => $pasajes,
-            'mostrarTasaServicio' => (int) auth('empresa')->user()->empresa->tipo_contrato === Empresa::CONTRATO_ELLOS_RECIBEN,
+            'mostrarTasaServicio' => (int) $this->usuarioEmpresa->empresa->tipo_contrato === Empresa::CONTRATO_ELLOS_RECIBEN,
         ]);
     }
 
@@ -69,7 +69,7 @@ class ListPasaje extends Component
         Access::authorize('pasajes', 'download');
 
         $query = Pasaje::searchAdmin($this->search, [
-            'empresa_id' => auth('empresa')->user()->empresa_id,
+            'empresa_id' => $this->usuarioEmpresa->empresa_id,
             'estado_pago' => $this->status,
             'date_from' => $this->date_from,
             'date_to' => $this->date_to,
@@ -78,7 +78,7 @@ class ListPasaje extends Component
         return Excel::download(
             new PasajesExport(
                 $this->applySort($query),
-                (int) auth('empresa')->user()->empresa->tipo_contrato === Empresa::CONTRATO_ELLOS_RECIBEN,
+                (int) $this->usuarioEmpresa->empresa->tipo_contrato === Empresa::CONTRATO_ELLOS_RECIBEN,
             ),
             'pasajes-'.now()->format('Y-m-d-His').'.xlsx',
         );
