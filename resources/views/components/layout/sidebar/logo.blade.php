@@ -1,9 +1,24 @@
-<div class="sidebar-brand">
+{{-- Logo compartido: dirige al dashboard del panel actual. --}}
 
-  <a href="{{ route('admin.dashboard') }}" class="brand-link">
+@php
+    $dashboardRoute = null;
 
-    <img src="{{ asset('assets/img/logo/icon-header.png') }}" alt="logo roster" class="w-160px"/>
+    if (request()->is('admin', 'admin/*')) {
+        $dashboardRoute = 'admin.dashboard';
+    } elseif (request()->is('empresa', 'empresa/*')) {
+        $dashboardRoute = 'empresas.dashboard';
+    }
+@endphp
 
-  </a>
+@if ($dashboardRoute)
+    <div class="sidebar-brand">
 
-</div>
+        <a href="{{ route($dashboardRoute) }}" class="brand-link">
+
+            <img src="{{ asset('assets/img/logo/icon-header.png') }}" alt="Logo de la plataforma"
+                class="w-160px" />
+
+        </a>
+
+    </div>
+@endif
