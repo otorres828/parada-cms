@@ -2,15 +2,15 @@
 
 namespace App\Livewire\Empresas\Account;
 
-use App\Models\Admin;
-use App\Services\Admin\Audit;
+use App\Livewire\Empresas\EmpresaComponent;
+use App\Models\UsuarioEmpresa;
+use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Livewire\Attributes\Layout;
-use Livewire\Component;
 
 #[Layout('layouts.crm')]
-class Password extends Component
+class Password extends EmpresaComponent
 {
     public string $password = '';
 
@@ -18,26 +18,39 @@ class Password extends Component
 
     public string $current_password = '';
 
-    public function render()
+    public function render(): View
     {
-        return view('livewire.admin.account.password', ['mode' => 'password']);
+        return view('livewire.empresas.account.password');
     }
 
     public function save(): void
     {
 
-        $admin = Admin::findOrFail(auth('admin')->id());
-        $rules = ['current_password' => 'required|current_password:admin'];
-        $rules['password'] = 'required|string|min:10|max:255|confirmed';
-        $data = $this->validate($rules);
-        unset($data['current_password']);
-        DB::transaction(function () use ($admin, $data) {
-            $admin->fill($data);
-            $admin->remember_token = Str::random(60);
-            DB::table('sessions')->where('authenticatable_type', Admin::class)->where('authenticatable_id', $admin->id)->where('id', '!=', session()->getId())->delete();
-            $admin->save();
-            Audit::record('cuenta.'.'password', $admin);
+        $data = $this->validate([
+            'current_password' => 'required|current_password:empresa',
+            'password' => 'required|string|min:10|max:255|confirmed',
+        ], [
+            'current_password.required' => 'Ingresa tu contraseña actual.',
+            'current_password.current_password' => 'La contraseña actual es incorrecta.',
+            'password.required' => 'Ingresa la nueva contraseña.',
+            'password.string' => 'La nueva contraseña debe ser un texto.',
+            'password.min' => 'La nueva contraseña debe tener al menos 10 caracteres.',
+            'password.max' => 'La nueva contraseña no debe superar los 255 caracteres.',
+            'password.confirmed' => 'La confirmación de la contraseña no coincide.',
+        ]);
+
+        DB::transaction(function () use ($data) {
+            $this->usuarioEmpresa->password = $data['password'];
+            $this->usuarioEmpresa->remember_token = Str::random(60);
+            $this->usuarioEmpresa->save();
+
+            DB::table('sessions')
+                ->where('authenticatable_type', UsuarioEmpresa::class)
+                ->where('authenticatable_id', $this->usuarioEmpresa->id)
+                ->where('id', '!=', session()->getId())
+                ->delete();
         });
+
         $this->reset('current_password', 'password', 'password_confirmation');
         $this->dispatch('successEventList', message: 'Cuenta actualizada.');
     }

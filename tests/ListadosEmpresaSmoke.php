@@ -236,3 +236,44 @@ $listadoPasajes->boot();
 $ejemplo = new Reserva(['monto_pasajes' => '30.00', 'descuento_aplicado' => '3.00', 'tasa_servicio' => '2.00', 'monto_total' => '29.00']);
 $check($ejemplo->getMontoSinTasa() === '27.00');
 echo "Importes para ambos contratos y descuentos: OK\n";
+
+$perfil = new App\Livewire\Empresas\Account\Profile;
+$perfil->boot();
+$perfil->mount();
+$check($perfil->nombre === $usuarioEmpresa->nombre);
+$check($perfil->email === $usuarioEmpresa->email);
+$check($perfil->render()->name() === 'livewire.empresas.account.profile');
+$perfil->nombre = 'Nombre actualizado';
+$perfil->email = 'perfil@empresa.test';
+$perfil->current_password = 'incorrecta';
+$reject(function () use ($perfil) {
+    $perfil->save();
+}, ValidationException::class);
+$perfil->current_password = 'test';
+$perfil->save();
+$check($usuarioEmpresa->fresh()->nombre === 'Nombre actualizado');
+$check($usuarioEmpresa->fresh()->email === 'perfil@empresa.test');
+$check($perfil->current_password === '');
+echo "Perfil empresarial: carga, contraseña y actualización correctas\n";
+
+$passwordEmpresa = new App\Livewire\Empresas\Account\Password;
+$passwordEmpresa->boot();
+$passwordEmpresa->password = 'NuevaClave12345';
+$passwordEmpresa->password_confirmation = 'NuevaClave12345';
+$passwordEmpresa->current_password = 'incorrecta';
+$hashAnterior = $usuarioEmpresa->fresh()->password;
+$reject(function () use ($passwordEmpresa) {
+    $passwordEmpresa->save();
+}, ValidationException::class);
+$check($usuarioEmpresa->fresh()->password === $hashAnterior);
+$passwordEmpresa->current_password = 'test';
+$passwordEmpresa->password_confirmation = 'OtraClave12345';
+$reject(function () use ($passwordEmpresa) {
+    $passwordEmpresa->save();
+}, ValidationException::class);
+$passwordEmpresa->password_confirmation = 'NuevaClave12345';
+$passwordEmpresa->save();
+$check(Illuminate\Support\Facades\Hash::check('NuevaClave12345', $usuarioEmpresa->fresh()->password));
+$check($passwordEmpresa->password === '' && $passwordEmpresa->password_confirmation === '' && $passwordEmpresa->current_password === '');
+$check(strlen($usuarioEmpresa->fresh()->remember_token) === 60);
+echo "Password empresarial: validación, hash y limpieza correctos\n";

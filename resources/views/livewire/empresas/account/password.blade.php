@@ -1,0 +1,154 @@
+{{--
+    CAMBIAR CONTRASEÑA
+    --------------------------------------------------------------------------
+    Permite cambiar la contraseña de la cuenta de empresa autenticada y presenta los errores de validación
+    del formulario.
+
+    Componentes reutilizables utilizados:
+    - <x-form.title />: Título principal del formulario.
+    - <x-layout.error />: Resumen de los errores de validación de Livewire.
+    - <x-form.container-sm />: Contenedor de ancho limitado para los campos.
+    - <x-form.text-input />: Campo de entrada con etiqueta.
+    - <x-layout.loader.fullpage />: Indicador de carga durante las operaciones de Livewire.
+    --------------------------------------------------------------------------
+--}}
+
+@section('title', 'Cambiar contraseña')
+
+<div x-data="password" class="py-3">
+
+    <x-form.title>
+        Cambiar contraseña
+    </x-form.title>
+
+    <x-layout.error />
+    <form id="passwordForm" x-ref="form" @submit.prevent="preSave" novalidate>
+
+        <x-form.container-sm>
+
+            <div class="mb-3">
+
+                <x-form.text-input type="password" name="password" x-model="$wire.password" autocomplete="new-password">
+                    Nueva
+                    contraseña
+                </x-form.text-input>
+
+                @error('password')
+                    <div class="text-danger small">
+                        {{ $message }}
+                    </div>
+                @enderror
+
+            </div>
+
+            <div class="mb-3">
+
+                <x-form.text-input type="password" name="password_confirmation" x-model="$wire.password_confirmation"
+                    autocomplete="new-password">
+                    Confirmar contraseña
+                </x-form.text-input>
+
+                @error('password_confirmation')
+                    <div class="text-danger small">
+                        {{ $message }}
+                    </div>
+                @enderror
+
+            </div>
+
+            <div class="mb-3">
+
+                <x-form.text-input type="password" name="current_password" x-model="$wire.current_password"
+                    autocomplete="current-password">
+                    Contraseña actual
+                </x-form.text-input>
+
+                @error('current_password')
+                    <div class="text-danger small">
+                        {{ $message }}
+                    </div>
+                @enderror
+
+            </div>
+
+        </x-form.container-sm>
+
+        <hr><button class="btn btn-primary" type="submit" :disabled="saving" wire:loading.attr="disabled">Guardar
+            cambios</button>
+    </form>
+
+    <x-layout.loader.fullpage wire:loading.delay.short />
+
+</div>
+
+@script
+    <script>
+        Alpine.data('password', () => ({
+            validator: null,
+            saving: false,
+            init() {
+                this.toastCleanup = [
+                    Livewire.on('successEventList', data => this.$store.toast.success(data.message)),
+                    Livewire.on('errorEventList', data => this.$store.toast.info(data.message)),
+                ];
+                const savedMessage = @js(session()->pull('empresa_success'));
+                if (savedMessage) this.$nextTick(() => Livewire.dispatch('successEventList', {
+                    message: savedMessage
+                }));
+                this.$nextTick(() => {
+                    this.validator = new JustValidate(this.$refs.form, {
+                        errorLabelCssClass: ['invalid-feedback'],
+                        errorFieldCssClass: ['is-invalid'],
+                        successFieldCssClass: ['is-valid'],
+                    });
+                    this.validator.addField(this.$refs.form.querySelector('[name="password"]'), [{
+                        rule: 'required',
+                        errorMessage: 'Este campo es requerido'
+                    }, {
+                        rule: 'maxLength',
+                        value: 255,
+                        errorMessage: 'Máximo 255 caracteres'
+                    }, {
+                        rule: 'minLength',
+                        value: 10,
+                        errorMessage: 'Mínimo 10 caracteres'
+                    }]);
+                    this.validator.addField(this.$refs.form.querySelector(
+                        '[name="password_confirmation"]'), [{
+                        validator: value => value === this.$refs.form.querySelector('[name="password"]').value,
+                        errorMessage: 'Las contraseñas no coinciden'
+                    }, {
+                        rule: 'required',
+                        errorMessage: 'Este campo es requerido'
+                    }, {
+                        rule: 'maxLength',
+                        value: 255,
+                        errorMessage: 'Máximo 255 caracteres'
+                    }, {
+                        rule: 'minLength',
+                        value: 10,
+                        errorMessage: 'Mínimo 10 caracteres'
+                    }]);
+                    this.validator.addField(this.$refs.form.querySelector('[name="current_password"]'),
+                        [{
+                            rule: 'required',
+                            errorMessage: 'Ingresa tu contraseña actual'
+                        }]);
+                });
+            },
+            async preSave() {
+                if (this.saving || !this.validator || !await this.validator.revalidate()) return;
+                this.saving = true;
+                try {
+                    await $wire.call('save');
+                } finally {
+                    this.saving = false;
+                }
+            },
+            destroy() {
+                this.toastCleanup?.forEach(cleanup => cleanup());
+                this.validator?.destroy();
+            },
+        }));
+    </script>
+@endscript
