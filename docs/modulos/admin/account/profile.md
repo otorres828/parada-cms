@@ -8,7 +8,7 @@ Edición de los datos del administrador conectado.
 
 ## Acceso y permisos
 
-Exige sesión administrativa activa. Las rutas de cuenta están exceptuadas de permisos de módulos en [CheckPermission](../../../../app/Http/Middleware/CheckPermission.php).
+Exige sesión administrativa activa. Las rutas de cuenta están exceptuadas de permisos de módulos en [CheckPermission](../../../../app/Http/Middleware/CheckPermissionAdmin.php).
 
 ## Funcionamiento paso a paso
 

@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Middleware\CheckPermission;
+use App\Http\Middleware\CheckPermissionAdmin;
 use App\Http\Middleware\RedirectIfUnauthenticated;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
@@ -29,7 +29,7 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
 
         $middleware->group('check.permisos', [
-            CheckPermission::class,
+            CheckPermissionAdmin::class,
         ]);
 
         // Configurar redirección para invitados (no autenticados)

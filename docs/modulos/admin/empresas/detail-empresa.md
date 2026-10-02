@@ -8,7 +8,7 @@ Consulta de los datos y cuentas de una empresa.
 
 ## Acceso y permisos
 
-La entrada está protegida por autenticación administrativa y el permiso de su ruta en [CheckPermission](../../../../app/Http/Middleware/CheckPermission.php). Los permisos visuales y las autorizaciones de acciones declaradas en esta clase se enumeran a continuación.
+La entrada está protegida por autenticación administrativa y el permiso de su ruta en [CheckPermission](../../../../app/Http/Middleware/CheckPermissionAdmin.php). Los permisos visuales y las autorizaciones de acciones declaradas en esta clase se enumeran a continuación.
 
 Comprobaciones declaradas por la clase. Cuando hay una condición entre alta y edición, el permiso depende de la operación:
 
