@@ -11,13 +11,34 @@ use Symfony\Component\HttpFoundation\Response;
 class CheckPermissionEmpresa
 {
     private const ROUTE_PERMISSIONS = [
-
         /* ----------------------------------------Dashboard---------------------------------------- */
         'empresas.dashboard' => ['dashboard', 'list'],
 
-        /* ----------------------------------------Administración---------------------------------- */
+        /* ----------------------------------------Administración---------------------------------------- */
+        'empresas.usuarios.list' => ['usuarios', 'list'],
+        'empresas.politicas-embarque.edit' => ['politicas-embarque', 'edit'],
 
-    ];
+        /* ----------------------------------------Operación de viajes---------------------------------------- */
+        'empresas.viajes.list' => ['viajes', 'list'],
+        'empresas.programaciones.list' => ['programaciones', 'list'],
+        'empresas.transportes.list' => ['transportes', 'list'],
+
+        /* ----------------------------------------Ventas y finanzas---------------------------------------- */
+        'empresas.reservas.list' => ['reservas', 'list'],
+        'empresas.pasajes.list' => ['pasajes', 'list'],
+        'empresas.validacion-pagos.list' => ['validacion-pagos', 'list'],
+        'empresas.reembolsos.list' => ['reembolsos', 'list'],
+        'empresas.reprogramaciones.list' => ['reprogramaciones', 'list'],
+
+        /* ----------------------------------------Cobranza---------------------------------------- */
+        'empresas.ordenes-cobro.list' => ['ordenes-cobro', 'list'],
+
+        /* ----------------------------------------Promociones---------------------------------------- */
+        'empresas.cupones.list' => ['cupones', 'list'],
+
+        /* ----------------------------------------Reportes---------------------------------------- */
+        'empresas.reportes.ventas' => ['reporte-ventas', 'list'],
+        'empresas.reportes.rutas' => ['reporte-rutas', 'list'],    ];
 
     /* ----------------------------------------Mi cuenta---------------------------------------- */
     private const ROUTES_WITHOUT_PERMISSION = [

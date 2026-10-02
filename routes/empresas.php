@@ -12,6 +12,34 @@ use Illuminate\Support\Facades\Route;
 use App\Livewire\Empresas\Auth\Login;
 /* ------------------------------Dashboard---------------------------------------- */
 use App\Livewire\Empresas\Dashboard;
+/* ------------------------------Usuarios------------------------------------ */
+use App\Livewire\Empresas\Usuarios\ListUsuario;
+/* ------------------------------Políticas de embarque------------------------------------ */
+use App\Livewire\Empresas\PoliticasEmbarque\SavePoliticaEmbarque;
+/* ------------------------------Rutas de viaje------------------------------------ */
+use App\Livewire\Empresas\Viajes\ListViaje;
+/* ------------------------------Programaciones------------------------------------ */
+use App\Livewire\Empresas\Programaciones\ListProgramacion;
+/* ------------------------------Transportes------------------------------------ */
+use App\Livewire\Empresas\Transportes\ListTransporte;
+/* ------------------------------Reservas------------------------------------ */
+use App\Livewire\Empresas\Reservas\ListReserva;
+/* ------------------------------Pasajes------------------------------------ */
+use App\Livewire\Empresas\Pasajes\ListPasaje;
+/* ------------------------------Validación de pagos------------------------------------ */
+use App\Livewire\Empresas\ValidacionPagos\ListValidacionPago;
+/* ------------------------------Reembolsos------------------------------------ */
+use App\Livewire\Empresas\Reembolsos\ListReembolso;
+/* ------------------------------Reprogramaciones------------------------------------ */
+use App\Livewire\Empresas\Reprogramaciones\ListReprogramacion;
+/* ------------------------------Órdenes de cobro------------------------------------ */
+use App\Livewire\Empresas\OrdenesCobro\ListOrdenCobro;
+/* ------------------------------Cupones------------------------------------ */
+use App\Livewire\Empresas\Cupones\ListCampana;
+/* ------------------------------Ventas------------------------------------ */
+use App\Livewire\Empresas\Reportes\SalesReport;
+/* ------------------------------Rutas------------------------------------ */
+use App\Livewire\Empresas\Reportes\RoutesReport;
 /* ------------------------------Perfil------------------------------------------- */
 use App\Livewire\Empresas\Account\Profile;
 use App\Livewire\Empresas\Account\Password;
@@ -20,7 +48,7 @@ use App\Livewire\Empresas\Account\Password;
 /*
 | Authentication Routes
 |--------------------------------------------------------------------------
-| bootstrap/app.php aplica el prefijo /empresas y el nombre empresas.
+| bootstrap/app.php aplica el prefijo /empresa y el nombre empresas.
 */
 
 Route::livewire('/', Login::class)->name('login');
@@ -39,18 +67,142 @@ Route::group(['middleware' => ['auth:empresa', 'check.permisos.empresa']], funct
 
     Route::livewire('dashboard', Dashboard::class)->name('dashboard');
 
-    /* --------------------------------------------ADMINISTRACION------------------------------------------------------- */
 
-    Route::prefix('administracion')->group(function(){
+    /* ----------------------------------------Administración---------------------------------------- */
 
-        /* ----------------------------------------Usuarios------------------------------------------------------- */
-    
+    Route::prefix('administracion')->group(function () {
 
+        /* ----------------------------------------Usuarios---------------------------------------- */
+
+        Route::prefix('usuarios')->name('usuarios.')->group(function () {
+
+            Route::livewire('/', ListUsuario::class)->name('list');
+
+        });
+
+        /* ----------------------------------------Políticas de embarque---------------------------------------- */
+
+        Route::prefix('politicas-embarque')->name('politicas-embarque.')->group(function () {
+
+            Route::livewire('/', SavePoliticaEmbarque::class)->name('edit');
+
+        });
 
     });
 
-  
+    /* ----------------------------------------Operación de viajes---------------------------------------- */
 
+    Route::prefix('operaciones')->group(function () {
+
+        /* ----------------------------------------Rutas de viaje---------------------------------------- */
+
+        Route::prefix('viajes')->name('viajes.')->group(function () {
+
+            Route::livewire('/', ListViaje::class)->name('list');
+
+        });
+
+        /* ----------------------------------------Programaciones---------------------------------------- */
+
+        Route::prefix('programaciones')->name('programaciones.')->group(function () {
+
+            Route::livewire('/', ListProgramacion::class)->name('list');
+
+        });
+
+        /* ----------------------------------------Transportes---------------------------------------- */
+
+        Route::prefix('transportes')->name('transportes.')->group(function () {
+
+            Route::livewire('/', ListTransporte::class)->name('list');
+
+        });
+
+    });
+
+    /* ----------------------------------------Ventas y finanzas---------------------------------------- */
+
+    Route::prefix('finanzas')->group(function () {
+
+        /* ----------------------------------------Reservas---------------------------------------- */
+
+        Route::prefix('reservas')->name('reservas.')->group(function () {
+
+            Route::livewire('/', ListReserva::class)->name('list');
+
+        });
+
+        /* ----------------------------------------Pasajes---------------------------------------- */
+
+        Route::prefix('pasajes')->name('pasajes.')->group(function () {
+
+            Route::livewire('/', ListPasaje::class)->name('list');
+
+        });
+
+        /* ----------------------------------------Validación de pagos---------------------------------------- */
+
+        Route::prefix('validacion-pagos')->name('validacion-pagos.')->group(function () {
+
+            Route::livewire('/', ListValidacionPago::class)->name('list');
+
+        });
+
+        /* ----------------------------------------Reembolsos---------------------------------------- */
+
+        Route::prefix('reembolsos')->name('reembolsos.')->group(function () {
+
+            Route::livewire('/', ListReembolso::class)->name('list');
+
+        });
+
+        /* ----------------------------------------Reprogramaciones---------------------------------------- */
+
+        Route::prefix('reprogramaciones')->name('reprogramaciones.')->group(function () {
+
+            Route::livewire('/', ListReprogramacion::class)->name('list');
+
+        });
+
+    });
+
+    /* ----------------------------------------Cobranza---------------------------------------- */
+
+    Route::prefix('cobranza')->group(function () {
+
+        /* ----------------------------------------Órdenes de cobro---------------------------------------- */
+
+        Route::prefix('ordenes-cobro')->name('ordenes-cobro.')->group(function () {
+
+            Route::livewire('/', ListOrdenCobro::class)->name('list');
+
+        });
+
+    });
+
+    /* ----------------------------------------Promociones---------------------------------------- */
+
+    Route::prefix('promociones')->group(function () {
+
+        /* ----------------------------------------Cupones---------------------------------------- */
+
+        Route::prefix('cupones')->name('cupones.')->group(function () {
+
+            Route::livewire('/', ListCampana::class)->name('list');
+
+        });
+
+    });
+
+    /* ----------------------------------------Reportes---------------------------------------- */
+
+    Route::prefix('reportes')->name('reportes.')->group(function () {
+
+        Route::livewire('ventas', SalesReport::class)->name('ventas');
+
+        Route::livewire('rutas', RoutesReport::class)->name('rutas');
+
+    });
     /* ---------------------------------------------MI CUENTA---------------------------------------------------------- */
 
     Route::prefix('mi-cuenta')->name('account.')->group(function () {

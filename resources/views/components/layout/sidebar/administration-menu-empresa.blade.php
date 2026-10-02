@@ -2,12 +2,12 @@
     EMPRESAS — MENÚ LATERAL
     --------------------------------------------------------------------------
     Presenta los grupos y módulos empresariales según los permisos del usuario.
-    La clase resuelve permisos; la vista genera enlaces y oculta módulos sin ruta.
+    La clase resuelve permisos y la vista genera enlaces siguiendo el menú de Admin.
     Reutiliza components.layout.sidebar-li para enlaces y grupos desplegables.
     --------------------------------------------------------------------------
 --}}
 
-@if (($listDashboard && Route::has('empresas.dashboard')))
+@if ($listDashboard)
     @include('components.layout.sidebar-li', [
         'menu' => 'Dashboard',
         'icon' => 'nav-icon bi bi-speedometer2',
@@ -16,20 +16,20 @@
     ])
 @endif
 
-@if (($listUsuarios && Route::has('empresas.usuarios.list')) or ($editPoliticasEmbarque && Route::has('empresas.politicas-embarque.edit')))
+@if ($listUsuarios or $editPoliticasEmbarque)
     @include('components.layout.sidebar-li', [
         'menu' => 'Administración',
         'icon' => 'nav-icon bi bi-shield-lock',
         'list' => [
             [
-                'existe' => $listUsuarios && Route::has('empresas.usuarios.list'),
-                'route' => Route::has('empresas.usuarios.list') ? route('empresas.usuarios.list') : '',
+                'existe' => $listUsuarios ?? false,
+                'route' => route('empresas.usuarios.list'),
                 'name' => 'Usuarios',
                 'active' => request()->routeIs('empresas.usuarios.*') ? 'active' : '',
             ],
             [
-                'existe' => $editPoliticasEmbarque && Route::has('empresas.politicas-embarque.edit'),
-                'route' => Route::has('empresas.politicas-embarque.edit') ? route('empresas.politicas-embarque.edit') : '',
+                'existe' => $editPoliticasEmbarque ?? false,
+                'route' => route('empresas.politicas-embarque.edit'),
                 'name' => 'Políticas de embarque',
                 'active' => request()->routeIs('empresas.politicas-embarque.*') ? 'active' : '',
             ],
@@ -37,26 +37,26 @@
     ])
 @endif
 
-@if (($listViajes && Route::has('empresas.viajes.list')) or ($listProgramaciones && Route::has('empresas.programaciones.list')) or ($listTransportes && Route::has('empresas.transportes.list')))
+@if ($listViajes or $listProgramaciones or $listTransportes)
     @include('components.layout.sidebar-li', [
         'menu' => 'Operación de viajes',
         'icon' => 'nav-icon bi bi-bus-front',
         'list' => [
             [
-                'existe' => $listViajes && Route::has('empresas.viajes.list'),
-                'route' => Route::has('empresas.viajes.list') ? route('empresas.viajes.list') : '',
+                'existe' => $listViajes ?? false,
+                'route' => route('empresas.viajes.list'),
                 'name' => 'Rutas de viaje',
                 'active' => request()->routeIs('empresas.viajes.*') ? 'active' : '',
             ],
             [
-                'existe' => $listProgramaciones && Route::has('empresas.programaciones.list'),
-                'route' => Route::has('empresas.programaciones.list') ? route('empresas.programaciones.list') : '',
+                'existe' => $listProgramaciones ?? false,
+                'route' => route('empresas.programaciones.list'),
                 'name' => 'Programaciones',
                 'active' => request()->routeIs('empresas.programaciones.*') ? 'active' : '',
             ],
             [
-                'existe' => $listTransportes && Route::has('empresas.transportes.list'),
-                'route' => Route::has('empresas.transportes.list') ? route('empresas.transportes.list') : '',
+                'existe' => $listTransportes ?? false,
+                'route' => route('empresas.transportes.list'),
                 'name' => 'Transportes',
                 'active' => request()->routeIs('empresas.transportes.*') ? 'active' : '',
             ],
@@ -64,38 +64,38 @@
     ])
 @endif
 
-@if (($listReservas && Route::has('empresas.reservas.list')) or ($listPasajes && Route::has('empresas.pasajes.list')) or ($listValidacionPagos && Route::has('empresas.validacion-pagos.list')) or ($listReembolsos && Route::has('empresas.reembolsos.list')) or ($listReprogramaciones && Route::has('empresas.reprogramaciones.list')))
+@if ($listReservas or $listPasajes or $listValidacionPagos or $listReembolsos or $listReprogramaciones)
     @include('components.layout.sidebar-li', [
         'menu' => 'Ventas y finanzas',
         'icon' => 'nav-icon bi bi-wallet2',
         'list' => [
             [
-                'existe' => $listReservas && Route::has('empresas.reservas.list'),
-                'route' => Route::has('empresas.reservas.list') ? route('empresas.reservas.list') : '',
+                'existe' => $listReservas ?? false,
+                'route' => route('empresas.reservas.list'),
                 'name' => 'Reservas',
                 'active' => request()->routeIs('empresas.reservas.*') ? 'active' : '',
             ],
             [
-                'existe' => $listPasajes && Route::has('empresas.pasajes.list'),
-                'route' => Route::has('empresas.pasajes.list') ? route('empresas.pasajes.list') : '',
+                'existe' => $listPasajes ?? false,
+                'route' => route('empresas.pasajes.list'),
                 'name' => 'Pasajes',
                 'active' => request()->routeIs('empresas.pasajes.*') ? 'active' : '',
             ],
             [
-                'existe' => $listValidacionPagos && Route::has('empresas.validacion-pagos.list'),
-                'route' => Route::has('empresas.validacion-pagos.list') ? route('empresas.validacion-pagos.list') : '',
+                'existe' => $listValidacionPagos ?? false,
+                'route' => route('empresas.validacion-pagos.list'),
                 'name' => 'Validación de pagos',
                 'active' => request()->routeIs('empresas.validacion-pagos.*') ? 'active' : '',
             ],
             [
-                'existe' => $listReembolsos && Route::has('empresas.reembolsos.list'),
-                'route' => Route::has('empresas.reembolsos.list') ? route('empresas.reembolsos.list') : '',
+                'existe' => $listReembolsos ?? false,
+                'route' => route('empresas.reembolsos.list'),
                 'name' => 'Reembolsos',
                 'active' => request()->routeIs('empresas.reembolsos.*') ? 'active' : '',
             ],
             [
-                'existe' => $listReprogramaciones && Route::has('empresas.reprogramaciones.list'),
-                'route' => Route::has('empresas.reprogramaciones.list') ? route('empresas.reprogramaciones.list') : '',
+                'existe' => $listReprogramaciones ?? false,
+                'route' => route('empresas.reprogramaciones.list'),
                 'name' => 'Reprogramaciones',
                 'active' => request()->routeIs('empresas.reprogramaciones.*') ? 'active' : '',
             ],
@@ -103,14 +103,14 @@
     ])
 @endif
 
-@if (($listOrdenesCobro && Route::has('empresas.ordenes-cobro.list')))
+@if ($listOrdenesCobro)
     @include('components.layout.sidebar-li', [
         'menu' => 'Cobranza',
         'icon' => 'nav-icon bi bi-receipt',
         'list' => [
             [
-                'existe' => $listOrdenesCobro && Route::has('empresas.ordenes-cobro.list'),
-                'route' => Route::has('empresas.ordenes-cobro.list') ? route('empresas.ordenes-cobro.list') : '',
+                'existe' => $listOrdenesCobro ?? false,
+                'route' => route('empresas.ordenes-cobro.list'),
                 'name' => 'Órdenes de cobro',
                 'active' => request()->routeIs('empresas.ordenes-cobro.*') ? 'active' : '',
             ],
@@ -118,14 +118,14 @@
     ])
 @endif
 
-@if (($listCupones && Route::has('empresas.cupones.list')))
+@if ($listCupones)
     @include('components.layout.sidebar-li', [
         'menu' => 'Promociones',
         'icon' => 'nav-icon bi bi-tags',
         'list' => [
             [
-                'existe' => $listCupones && Route::has('empresas.cupones.list'),
-                'route' => Route::has('empresas.cupones.list') ? route('empresas.cupones.list') : '',
+                'existe' => $listCupones ?? false,
+                'route' => route('empresas.cupones.list'),
                 'name' => 'Cupones',
                 'active' => request()->routeIs('empresas.cupones.*') ? 'active' : '',
             ],
@@ -133,20 +133,20 @@
     ])
 @endif
 
-@if (($listReporteVentas && Route::has('empresas.reportes.ventas')) or ($listReporteRutas && Route::has('empresas.reportes.rutas')))
+@if ($listReporteVentas or $listReporteRutas)
     @include('components.layout.sidebar-li', [
         'menu' => 'Reportes',
         'icon' => 'nav-icon bi bi-bar-chart',
         'list' => [
             [
-                'existe' => $listReporteVentas && Route::has('empresas.reportes.ventas'),
-                'route' => Route::has('empresas.reportes.ventas') ? route('empresas.reportes.ventas') : '',
+                'existe' => $listReporteVentas ?? false,
+                'route' => route('empresas.reportes.ventas'),
                 'name' => 'Ventas',
                 'active' => request()->routeIs('empresas.reportes.ventas') ? 'active' : '',
             ],
             [
-                'existe' => $listReporteRutas && Route::has('empresas.reportes.rutas'),
-                'route' => Route::has('empresas.reportes.rutas') ? route('empresas.reportes.rutas') : '',
+                'existe' => $listReporteRutas ?? false,
+                'route' => route('empresas.reportes.rutas'),
                 'name' => 'Rutas',
                 'active' => request()->routeIs('empresas.reportes.rutas') ? 'active' : '',
             ],
@@ -154,20 +154,20 @@
     ])
 @endif
 
-@if (($profileAccount && Route::has('empresas.account.profile')) or ($passwordAccount && Route::has('empresas.account.password')))
+@if ($profileAccount or $passwordAccount)
     @include('components.layout.sidebar-li', [
         'menu' => 'Mi cuenta',
         'icon' => 'nav-icon bi bi-person-circle',
         'list' => [
             [
-                'existe' => $profileAccount && Route::has('empresas.account.profile'),
-                'route' => Route::has('empresas.account.profile') ? route('empresas.account.profile') : '',
+                'existe' => $profileAccount ?? false,
+                'route' => route('empresas.account.profile'),
                 'name' => 'Perfil',
                 'active' => request()->routeIs('empresas.account.profile') ? 'active' : '',
             ],
             [
-                'existe' => $passwordAccount && Route::has('empresas.account.password'),
-                'route' => Route::has('empresas.account.password') ? route('empresas.account.password') : '',
+                'existe' => $passwordAccount ?? false,
+                'route' => route('empresas.account.password'),
                 'name' => 'Contraseña',
                 'active' => request()->routeIs('empresas.account.password') ? 'active' : '',
             ],
