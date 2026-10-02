@@ -32,7 +32,7 @@
             <x-layout.error />
 
             <div class="mb-3">
-                <x-form.dropdown label="Empresa" name="empresa_id" x-model="$wire.empresa_id">
+                <x-form.dropdown label="Empresa" name="empresa_id" x-model="$wire.empresa_id" disabled="$wire.exoneracion_tasa_servicio_id">
                     <option value="">Selecciona una empresa</option>
                     @foreach ($empresas as $empresa)
                         <option value="{{ $empresa->id }}">{{ $empresa->nombre }}</option>
@@ -41,13 +41,13 @@
             </div>
 
             <div class="mb-3">
-                <x-form.text-input type="datetime-local" name="fecha_desde" x-model="$wire.fecha_desde">
+                <x-form.text-input type="datetime-local" name="fecha_desde" x-model="$wire.fecha_desde" disabled="$wire.exoneracion_tasa_servicio_id">
                     Fecha desde
                 </x-form.text-input>
             </div>
 
             <div class="mb-3">
-                <x-form.text-input type="datetime-local" name="fecha_hasta" x-model="$wire.fecha_hasta">
+                <x-form.text-input type="datetime-local" name="fecha_hasta" x-model="$wire.fecha_hasta" disabled="$wire.exoneracion_tasa_servicio_id">
                     Fecha hasta
                 </x-form.text-input>
                 <small class="text-body-secondary">Déjala vacía para una exoneración sin vencimiento.</small>
