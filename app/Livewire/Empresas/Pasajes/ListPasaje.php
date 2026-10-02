@@ -60,7 +60,7 @@ class ListPasaje extends Component
 
         return view('livewire.empresas.pasajes.list-pasaje', [
             'pasajes' => $pasajes,
-            'mostrarTasaServicio' => (int) auth('empresa')->user()->empresa->tipo_contrato !== Empresa::CONTRATO_ELLOS_RECIBEN,
+            'mostrarTasaServicio' => (int) auth('empresa')->user()->empresa->tipo_contrato === Empresa::CONTRATO_ELLOS_RECIBEN,
         ]);
     }
 
