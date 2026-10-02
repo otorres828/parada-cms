@@ -35,7 +35,7 @@ Route::post('logout', [Login::class, 'logout'])
 |--------------------------------------------------------------------------
 */
 
-Route::group(['middleware' => ['auth:empresa', 'check.permisos.empresas']], function () {
+Route::group(['middleware' => ['auth:empresa', 'check.permisos.empresa']], function () {
 
     Route::livewire('dashboard', Dashboard::class)->name('dashboard');
 

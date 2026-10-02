@@ -23,7 +23,7 @@ return Application::configure(basePath: dirname(__DIR__))
                 ->group(base_path('routes/admin.php'));
             Route::middleware('web')
                 ->prefix('empresa')
-                ->name('empresa.')
+                ->name('empresas.')
                 ->group(base_path('routes/empresas.php'));
         },
     )
