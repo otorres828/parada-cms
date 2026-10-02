@@ -21,11 +21,7 @@ class DatabaseSeeder extends Seeder
 
             GroupSectionPermissionAdminSeeder::class,
 
-            GroupEmpresaSeeder::class,
-
-            SectionEmpresaSeeder::class,
-
-            PermissionEmpresaSeeder::class,
+            GroupSectionPermissionEmpresaSeeder::class,
 
             EstadoSeeder::class, 
             

@@ -44,6 +44,10 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->redirectTo(
             guests: function (Request $request) {
 
+                if ($request->is('empresa') || $request->is('empresa/*')) {
+                    return route('empresas.login');
+                }
+
                 if ($request->is('admin') || $request->is('admin/*')) {
                     return route('admin.login');
                 }

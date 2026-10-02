@@ -1,0 +1,145 @@
+[
+  {"id": 1, "name": "Dashboard", "url": "dashboard", "icon": "bi-speedometer2", "status": 1,
+    "sections": [
+      {"name": "Dashboard", "url": "dashboard", "status": 1,
+        "permissions": [
+          {"name": "Listar", "url": "list", "status": 1}
+        ]
+      }
+    ]
+  },
+  {"id": 2, "name": "Administración", "url": "administracion", "icon": "bi-shield-lock", "status": 1,
+    "sections": [
+      {"name": "Usuarios", "url": "usuarios", "status": 1,
+        "permissions": [
+          {"name": "Listar", "url": "list", "status": 1},
+          {"name": "Agregar", "url": "add", "status": 1},
+          {"name": "Editar", "url": "edit", "status": 1},
+          {"name": "Eliminar", "url": "delete", "status": 1},
+          {"name": "Ver detalle", "url": "detail", "status": 1},
+          {"name": "Gestionar permisos", "url": "permissions", "status": 1}
+        ]
+      },
+      {"name": "Políticas de embarque", "url": "politicas-embarque", "status": 1,
+        "permissions": [
+          {"name": "Editar", "url": "edit", "status": 1}
+        ]
+      }
+    ]
+  },
+  {"id": 3, "name": "Operación de viajes", "url": "operacion-viajes", "icon": "bi-bus-front", "status": 1,
+    "sections": [
+      {"name": "Rutas de viaje", "url": "viajes", "status": 1,
+        "permissions": [
+          {"name": "Listar", "url": "list", "status": 1},
+          {"name": "Agregar", "url": "add", "status": 1},
+          {"name": "Editar", "url": "edit", "status": 1},
+          {"name": "Eliminar", "url": "delete", "status": 1},
+          {"name": "Ver detalle", "url": "detail", "status": 1}
+        ]
+      },
+      {"name": "Programaciones", "url": "programaciones", "status": 1,
+        "permissions": [
+          {"name": "Listar", "url": "list", "status": 1},
+          {"name": "Agregar", "url": "add", "status": 1},
+          {"name": "Editar", "url": "edit", "status": 1},
+          {"name": "Eliminar", "url": "delete", "status": 1},
+          {"name": "Ver pasajeros", "url": "passengers", "status": 1}
+        ]
+      },
+      {"name": "Transportes", "url": "transportes", "status": 1,
+        "permissions": [
+          {"name": "Listar", "url": "list", "status": 1},
+          {"name": "Agregar", "url": "add", "status": 1},
+          {"name": "Editar", "url": "edit", "status": 1},
+          {"name": "Eliminar", "url": "delete", "status": 1},
+          {"name": "Ver detalle", "url": "detail", "status": 1}
+        ]
+      }
+    ]
+  },
+  {"id": 4, "name": "Ventas y finanzas", "url": "ventas-finanzas", "icon": "bi-wallet2", "status": 1,
+    "sections": [
+      {"name": "Reservas", "url": "reservas", "status": 1,
+        "permissions": [
+          {"name": "Listar", "url": "list", "status": 1},
+          {"name": "Ver detalle", "url": "detail", "status": 1},
+          {"name": "Descargar Excel", "url": "download", "status": 1}
+        ]
+      },
+      {"name": "Pasajes", "url": "pasajes", "status": 1,
+        "permissions": [
+          {"name": "Listar", "url": "list", "status": 1},
+          {"name": "Ver detalle", "url": "detail", "status": 1},
+          {"name": "Descargar Excel", "url": "download", "status": 1},
+          {"name": "Validar abordaje", "url": "validate", "status": 1}
+        ]
+      },
+      {"name": "Validación de pagos", "url": "validacion-pagos", "status": 1,
+        "permissions": [
+          {"name": "Listar", "url": "list", "status": 1},
+          {"name": "Ver detalle", "url": "detail", "status": 1},
+          {"name": "Aprobar o rechazar", "url": "review", "status": 1}
+        ]
+      },
+      {"name": "Reembolsos", "url": "reembolsos", "status": 1,
+        "permissions": [
+          {"name": "Listar", "url": "list", "status": 1},
+          {"name": "Agregar", "url": "add", "status": 1},
+          {"name": "Ver detalle", "url": "detail", "status": 1},
+          {"name": "Aprobar o rechazar", "url": "review", "status": 1},
+          {"name": "Descargar Excel", "url": "download", "status": 1}
+        ]
+      },
+      {"name": "Reprogramaciones", "url": "reprogramaciones", "status": 1,
+        "permissions": [
+          {"name": "Listar", "url": "list", "status": 1},
+          {"name": "Agregar", "url": "add", "status": 1},
+          {"name": "Ver detalle", "url": "detail", "status": 1},
+          {"name": "Aprobar o rechazar", "url": "review", "status": 1}
+        ]
+      }
+    ]
+  },
+  {"id": 5, "name": "Cobranza", "url": "cobranza", "icon": "bi-receipt", "status": 1,
+    "sections": [
+      {"name": "Órdenes de cobro", "url": "ordenes-cobro", "status": 1,
+        "permissions": [
+          {"name": "Listar", "url": "list", "status": 1},
+          {"name": "Ver detalle", "url": "detail", "status": 1},
+          {"name": "Reportar pago", "url": "report", "status": 1},
+          {"name": "Descargar Excel", "url": "download", "status": 1}
+        ]
+      }
+    ]
+  },
+  {"id": 6, "name": "Promociones", "url": "promociones", "icon": "bi-tags", "status": 1,
+    "sections": [
+      {"name": "Cupones", "url": "cupones", "status": 1,
+        "permissions": [
+          {"name": "Listar", "url": "list", "status": 1},
+          {"name": "Agregar", "url": "add", "status": 1},
+          {"name": "Editar", "url": "edit", "status": 1},
+          {"name": "Eliminar", "url": "delete", "status": 1},
+          {"name": "Ver detalle", "url": "detail", "status": 1}
+        ]
+      }
+    ]
+  },
+  {"id": 7, "name": "Reportes", "url": "reportes", "icon": "bi-bar-chart", "status": 1,
+    "sections": [
+      {"name": "Ventas", "url": "reporte-ventas", "status": 1,
+        "permissions": [
+          {"name": "Listar", "url": "list", "status": 1},
+          {"name": "Descargar Excel", "url": "download", "status": 1}
+        ]
+      },
+      {"name": "Rutas", "url": "reporte-rutas", "status": 1,
+        "permissions": [
+          {"name": "Listar", "url": "list", "status": 1},
+          {"name": "Descargar Excel", "url": "download", "status": 1}
+        ]
+      }
+    ]
+  }
+]

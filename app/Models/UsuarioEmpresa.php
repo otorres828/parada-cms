@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Collection;
 
 class UsuarioEmpresa extends ModelHelper implements Authenticatable, Authorizable, CanResetPassword
 {
@@ -33,11 +34,9 @@ class UsuarioEmpresa extends ModelHelper implements Authenticatable, Authorizabl
 
     protected $hidden = ['password', 'remember_token'];
 
-    const SUPERADMIN = 1;
-
     protected function casts(): array
     {
-        return ['es_admin' => 'boolean', 'estatus' => 'integer', 'password' => 'hashed'];
+        return ['es_admin' => 'integer', 'estatus' => 'integer', 'password' => 'hashed'];
     }
 
     public function empresa(): BelongsTo
@@ -94,7 +93,7 @@ class UsuarioEmpresa extends ModelHelper implements Authenticatable, Authorizabl
     {
         $query = self::query()->where('empresa_id', $companyId);
 
-        if ($lockForUpdate) {
+      if ($lockForUpdate) {
             $query->lockForUpdate();
         }
 
@@ -107,17 +106,17 @@ class UsuarioEmpresa extends ModelHelper implements Authenticatable, Authorizabl
     }
 
 
-    public function isSuperAdmin(): bool
+    public function isAdmin(): bool
     {
-        return $this->es_admin === self::SUPERADMIN;
+        return $this->es_admin;
     }
 
     public function permissions(): BelongsToMany
     {
-        return $this->belongsToMany(PermissionAdmin::class, 'permission_admin_admin', 'admin_id', 'permission_id')->withPivot('status');
+        return $this->permisos();
     }
 
-    public function getPermissionsMap()
+    public function getPermissionsMap(): Collection
     {
         return Access::permissions($this);
     }
@@ -133,14 +132,16 @@ class UsuarioEmpresa extends ModelHelper implements Authenticatable, Authorizabl
             return array_fill_keys(array_keys($checks), false);
         }
 
-        if ($this->isSuperAdmin()) {
+        if ($this->isAdmin()) {
             return array_fill_keys(array_keys($checks), true);
         }
-        $permissions = $this->isSuperAdmin() ? collect() : $this->getPermissionsMap();
+        $permissions = $this->getPermissionsMap();
         $results = [];
 
         foreach ($checks as $key => [$section, $action]) {
-            $results[$key] = $section !== 'admins' && ($this->isSuperAdmin() || $section === 'account' || $permissions->contains(fn ($item) => $item->section_url === $section && $item->permission_url === $action));
+            $results[$key] = $section === 'account' || $permissions->contains(function ($permission) use ($section, $action) {
+                return $permission->section_url === $section && $permission->permission_url === $action;
+            });
         }
 
         return $results;
