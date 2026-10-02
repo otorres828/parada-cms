@@ -7,7 +7,7 @@ Usar nombres por responsabilidad: `ListAmenidad`, `SaveAmenidad`, `DetailReserva
 Orden habitual de la clase:
 
 1. Namespace e imports necesarios.
-2. Atributos Livewire, como `#[Layout('layouts.cms')]` para Admin.
+2. Atributos Livewire, como `#[Layout('layouts.crm')]` para Admin.
 3. Traits utilizados.
 4. Propiedades tipadas, IDs protegidos y configuración de query string.
 5. `mount`, `render`, hooks de filtros y acciones públicas.

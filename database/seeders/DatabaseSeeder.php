@@ -16,15 +16,15 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->call([
-            
+
             UserSeeder::class,
 
             GroupSectionPermissionAdminSeeder::class,
 
             GroupSectionPermissionEmpresaSeeder::class,
 
-            EstadoSeeder::class, 
-            
+            EstadoSeeder::class,
+
             TasaServicioSeeder::class,
 
             AdminRolesSeeder::class,

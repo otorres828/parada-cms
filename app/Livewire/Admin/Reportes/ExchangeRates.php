@@ -10,7 +10,7 @@ use Livewire\Attributes\Layout;
 use Livewire\Component;
 use Livewire\WithPagination;
 
-#[Layout('layouts.cms')]
+#[Layout('layouts.crm')]
 class ExchangeRates extends Component
 {
     use WithPagination, Listing;

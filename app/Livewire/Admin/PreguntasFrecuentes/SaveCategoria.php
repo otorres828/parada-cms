@@ -15,7 +15,7 @@ use Livewire\Component;
 use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 use Livewire\WithFileUploads;
 
-#[Layout('layouts.cms')]
+#[Layout('layouts.crm')]
 class SaveCategoria extends Component
 {
     use WithFileUploads;

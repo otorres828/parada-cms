@@ -9,7 +9,7 @@ use Livewire\Attributes\Layout;
 use Livewire\Attributes\Locked;
 use Livewire\Component;
 
-#[Layout('layouts.cms')]
+#[Layout('layouts.crm')]
 class DetailReembolso extends Component
 {
     #[Locked]

@@ -15,6 +15,7 @@ Esta carpeta documenta las entidades principales y los servicios que coordinan s
 - [Tipo de cambio](servicio-tipo-cambio.md): actualización desde la fuente configurada.
 - [ReservaService](servicio-reserva.md): métodos, reinicio, propiedad y transacciones de la reserva.
 - [Access](servicio-access.md): autorización administrativa.
+- [Access de Empresas](servicio-access-empresa.md): permisos empresariales, usuarios administradores y catálogo inicial.
 - [Audit](servicio-audit.md): registro explícito de acciones y exclusión de claves sensibles.
 
 ## Convención de nombres

@@ -9,7 +9,7 @@ use Illuminate\Support\Str;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
 
-#[Layout('layouts.cms')]
+#[Layout('layouts.crm')]
 class Password extends Component
 {
     public string $password = '';

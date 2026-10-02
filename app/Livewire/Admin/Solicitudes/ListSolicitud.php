@@ -12,7 +12,7 @@ use Livewire\Attributes\Layout;
 use Livewire\Component;
 use Livewire\WithPagination;
 
-#[Layout('layouts.cms')]
+#[Layout('layouts.crm')]
 class ListSolicitud extends Component
 {
     use Listing;

@@ -12,7 +12,7 @@ use Livewire\Attributes\Locked;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 
-#[Layout('layouts.cms')]
+#[Layout('layouts.crm')]
 class ReviewReembolso extends Component
 {
     #[Locked]

@@ -17,7 +17,7 @@ use Livewire\Component;
 use Livewire\WithPagination;
 use Maatwebsite\Excel\Facades\Excel;
 
-#[Layout('layouts.cms')]
+#[Layout('layouts.crm')]
 class ListPasaje extends Component
 {
     use Listing;

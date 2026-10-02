@@ -105,10 +105,9 @@ class UsuarioEmpresa extends ModelHelper implements Authenticatable, Authorizabl
         return self::where('email', $username)->where('estatus', self::ESTADO_ACTIVE)->first();
     }
 
-
     public function isAdmin(): bool
     {
-        return $this->es_admin;
+        return (int) $this->es_admin === 1;
     }
 
     public function permissions(): BelongsToMany

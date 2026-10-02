@@ -8,7 +8,7 @@ use Livewire\Attributes\Layout;
 use Livewire\Attributes\Locked;
 use Livewire\Component;
 
-#[Layout('layouts.cms')]
+#[Layout('layouts.crm')]
 class DetailPasaje extends Component
 {
     public bool $canViewCampaign = false;

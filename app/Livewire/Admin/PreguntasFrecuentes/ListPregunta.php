@@ -14,7 +14,7 @@ use Livewire\Attributes\Layout;
 use Livewire\Component;
 use Livewire\WithPagination;
 
-#[Layout('layouts.cms')]
+#[Layout('layouts.crm')]
 class ListPregunta extends Component
 {
     use Listing;

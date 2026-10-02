@@ -14,7 +14,7 @@ use Livewire\Attributes\Locked;
 use Livewire\Component;
 use Livewire\WithPagination;
 
-#[Layout('layouts.cms')]
+#[Layout('layouts.crm')]
 class ListEmpresaUser extends Component
 {
     #[Locked]

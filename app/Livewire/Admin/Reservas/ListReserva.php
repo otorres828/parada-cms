@@ -15,7 +15,7 @@ use Livewire\Component;
 use Livewire\WithPagination;
 use Maatwebsite\Excel\Facades\Excel;
 
-#[Layout('layouts.cms')]
+#[Layout('layouts.crm')]
 class ListReserva extends Component
 {
     use Listing;

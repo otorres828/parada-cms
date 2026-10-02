@@ -16,7 +16,7 @@ use Livewire\WithPagination;
 use Maatwebsite\Excel\Facades\Excel;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
-#[Layout('layouts.cms')]
+#[Layout('layouts.crm')]
 class ListOrdenCobro extends Component
 {
     use Listing;

@@ -14,7 +14,7 @@ use Livewire\Attributes\Layout;
 use Livewire\Attributes\Locked;
 use Livewire\Component;
 
-#[Layout('layouts.cms')]
+#[Layout('layouts.crm')]
 class PermissionEmpresaUser extends Component
 {
     #[Locked]

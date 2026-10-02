@@ -1,7 +1,5 @@
 <?php
 
-
-
 use App\Http\Middleware\CheckPermissionEmpresa;
 use App\Models\GroupEmpresa;
 use App\Models\PermissionEmpresa;
@@ -16,7 +14,6 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
-
 require __DIR__.'/../vendor/autoload.php';
 $app = require __DIR__.'/../bootstrap/app.php';
 $app->make(\Illuminate\Contracts\Console\Kernel::class)->bootstrap();
@@ -27,7 +24,6 @@ class PermisosEmpresaSmoke
 {
     protected function setUp(): void
     {
-
 
         // Base exclusiva en memoria: nunca modifica los datos locales del CRM.
         config(['database.connections.permisos_test' => [

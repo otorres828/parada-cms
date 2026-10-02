@@ -15,7 +15,7 @@ use Livewire\Component;
 use Maatwebsite\Excel\Facades\Excel;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
-#[Layout('layouts.cms')]
+#[Layout('layouts.crm')]
 class DetailOrdenCobro extends Component
 {
     #[Locked]
