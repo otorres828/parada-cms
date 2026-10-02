@@ -185,3 +185,13 @@ Esto evita que un viajero sea eliminado mientras otra petición intenta incorpor
 Aunque los datos estén cifrados, deben mantenerse las autorizaciones por cliente y los permisos administrativos. También debe evitarse registrar documentos completos en logs, errores o auditorías.
 
 Las exportaciones que incluyan documentos deben tratarse como archivos privados, con acceso autorizado y una política de eliminación. El cifrado de la base de datos no protege un documento después de exportarlo a Excel.
+
+## Eliminación paso a paso
+
+1. Abre una transacción y bloquea al viajero filtrando por su ID y cliente.
+2. Busca pasajes con ese viajero_id; para pasajes sin referencia contempla el mismo hash de documento y propietario.
+3. Si encuentra una reserva nueva, vigente y sin pago, lanza la validación y no elimina nada.
+4. Si quedan pasajes relacionados marca ESTADO_DELETE.
+5. Si no quedan pasajes relacionados elimina físicamente la fila.
+
+Retirar un pasaje del checkout y borrar un viajero de la libreta son acciones separadas. Un documento modificado después de un pasaje sin viajero_id puede impedir la asociación histórica por hash; los pasajes con referencia directa no tienen esa limitación.

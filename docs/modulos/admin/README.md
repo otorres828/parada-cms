@@ -15,7 +15,7 @@ Presenta ventas, tasas de servicio, reservas, pasajes, empresas y próximas sali
 
 ## Empresas y clientes
 
-- **Empresas:** administra agencias de autobuses y conductores de carro, su contrato, fechas de cobranza, políticas y datos bancarios.
+- **Empresas:** administra identidad, contrato y fechas de cobranza de agencias y conductores; su detalle consulta políticas y datos bancarios.
 - **Usuarios de empresa:** consulta y gestiona los usuarios vinculados a una empresa y sus permisos.
 - **Clientes:** consulta clientes, sus reservas y viajeros frecuentes.
 
@@ -63,3 +63,136 @@ El almacenamiento y las reglas se detallan en [Contenido legal y preguntas frecu
 
 Todo administrador autenticado puede actualizar su perfil y contraseña. Estas operaciones no dependen de permisos de módulos.
 
+
+
+## Documentación por clase Livewire
+
+Cada clase tiene su propio documento, agrupado por su módulo. Listados, formularios, detalles y pantallas especiales explican sus acciones reales por separado.
+
+### Dashboard
+
+- [Dashboard](dashboard.md)
+
+### account
+
+- [Password](account/password.md)
+- [Profile](account/profile.md)
+
+### admins
+
+- [ListAdmin](admins/list-admin.md)
+- [SaveAdmin](admins/save-admin.md)
+
+### amenidades
+
+- [ListAmenidad](amenidades/list-amenidad.md)
+- [SaveAmenidad](amenidades/save-amenidad.md)
+
+### auditoria
+
+- [DetailAudit](auditoria/detail-audit.md)
+- [ListAudit](auditoria/list-audit.md)
+
+### auth
+
+- [Login](auth/login.md)
+
+### clientes
+
+- [DetailCliente](clientes/detail-cliente.md)
+- [ListCliente](clientes/list-cliente.md)
+- [SaveCliente](clientes/save-cliente.md)
+
+### cupones
+
+- [DetailCampana](cupones/detail-campana.md)
+- [ListCampana](cupones/list-campana.md)
+- [SaveCampana](cupones/save-campana.md)
+
+### empresa-users
+
+- [DetailEmpresaUser](empresa-users/detail-empresa-user.md)
+- [ListEmpresaUser](empresa-users/list-empresa-user.md)
+- [PermissionEmpresaUser](empresa-users/permission-empresa-user.md)
+- [SaveEmpresaUser](empresa-users/save-empresa-user.md)
+
+### empresas
+
+- [DetailEmpresa](empresas/detail-empresa.md)
+- [ListEmpresa](empresas/list-empresa.md)
+- [PoliticasEmpresa](empresas/politicas-empresa.md)
+- [SaveEmpresa](empresas/save-empresa.md)
+
+### exoneraciones-tasa-servicio
+
+- [ListExoneracionTasaServicio](exoneraciones-tasa-servicio/list-exoneracion-tasa-servicio.md)
+- [SaveExoneracionTasaServicio](exoneraciones-tasa-servicio/save-exoneracion-tasa-servicio.md)
+
+### legales
+
+- [ContenidoPagina](legales/contenido-pagina.md)
+- [EmpresaDocumento](legales/empresa-documento.md)
+- [ListDocumentos](legales/list-documentos.md)
+
+### ordenes-cobro
+
+- [DetailOrdenCobro](ordenes-cobro/detail-orden-cobro.md)
+- [ListOrdenCobro](ordenes-cobro/list-orden-cobro.md)
+
+### pasajes
+
+- [DetailPasaje](pasajes/detail-pasaje.md)
+- [ListPasaje](pasajes/list-pasaje.md)
+
+### preguntas-frecuentes
+
+- [ListCategoria](preguntas-frecuentes/list-categoria.md)
+- [ListPregunta](preguntas-frecuentes/list-pregunta.md)
+- [SaveCategoria](preguntas-frecuentes/save-categoria.md)
+- [SavePregunta](preguntas-frecuentes/save-pregunta.md)
+
+### programaciones
+
+- [ListProgramacion](programaciones/list-programacion.md)
+- [PassengerProgramacion](programaciones/passenger-programacion.md)
+
+### reembolsos
+
+- [DetailReembolso](reembolsos/detail-reembolso.md)
+- [ListReembolso](reembolsos/list-reembolso.md)
+
+### reportes
+
+- [CompaniesReport](reportes/companies-report.md)
+- [ExchangeRates](reportes/exchange-rates.md)
+- [SalesReport](reportes/sales-report.md)
+
+### reservas
+
+- [DetailReserva](reservas/detail-reserva.md)
+- [ListReserva](reservas/list-reserva.md)
+
+### solicitudes
+
+- [DetailSolicitud](solicitudes/detail-solicitud.md)
+- [ListSolicitud](solicitudes/list-solicitud.md)
+
+### tasas-servicio
+
+- [ListTasaServicio](tasas-servicio/list-tasa-servicio.md)
+- [SaveTasaServicio](tasas-servicio/save-tasa-servicio.md)
+
+### terminales
+
+- [ListTerminal](terminales/list-terminal.md)
+- [SaveTerminal](terminales/save-terminal.md)
+
+### transportes
+
+- [DetailTransporte](transportes/detail-transporte.md)
+- [ListTransporte](transportes/list-transporte.md)
+
+### viajes
+
+- [DetailViaje](viajes/detail-viaje.md)
+- [ListViaje](viajes/list-viaje.md)
