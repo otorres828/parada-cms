@@ -16,6 +16,9 @@ use App\Livewire\Empresas\Dashboard;
 use App\Livewire\Empresas\Usuarios\ListUsuario;
 /* ------------------------------Políticas de embarque------------------------------------ */
 use App\Livewire\Empresas\PoliticasEmbarque\SavePoliticaEmbarque;
+/* ------------------------------Datos Bancarios------------------------------------ */
+use App\Livewire\Empresas\DatosBancarios\ListDatoBancario;
+use App\Livewire\Empresas\DatosBancarios\SaveDatoBancario;
 /* ------------------------------Rutas de viaje------------------------------------ */
 use App\Livewire\Empresas\Viajes\ListViaje;
 /* ------------------------------Programaciones------------------------------------ */
@@ -24,6 +27,7 @@ use App\Livewire\Empresas\Programaciones\ListProgramacion;
 use App\Livewire\Empresas\Transportes\ListTransporte;
 /* ------------------------------Reservas------------------------------------ */
 use App\Livewire\Empresas\Reservas\ListReserva;
+use App\Livewire\Empresas\Reservas\SaveReserva;
 /* ------------------------------Pasajes------------------------------------ */
 use App\Livewire\Empresas\Pasajes\ListPasaje;
 /* ------------------------------Validación de pagos------------------------------------ */
@@ -88,6 +92,14 @@ Route::group(['middleware' => ['auth:empresa', 'check.permisos.empresa']], funct
 
         });
 
+        /* ----------------------------------------Datos Bancarios---------------------------------------- */
+
+        Route::prefix('datos-bancarios')->name('datos-bancarios.')->group(function () {
+            Route::livewire('/', ListDatoBancario::class)->name('list');
+            Route::livewire('nuevo', SaveDatoBancario::class)->name('add');
+            Route::livewire('editar/{cuenta_id}', SaveDatoBancario::class)->whereNumber('cuenta_id')->name('edit');
+        });
+
     });
 
     /* ----------------------------------------Operación de viajes---------------------------------------- */
@@ -129,6 +141,7 @@ Route::group(['middleware' => ['auth:empresa', 'check.permisos.empresa']], funct
         Route::prefix('reservas')->name('reservas.')->group(function () {
 
             Route::livewire('/', ListReserva::class)->name('list');
+            Route::livewire('taquilla/{reserva_id?}', SaveReserva::class)->whereNumber('reserva_id')->name('add');
 
         });
 

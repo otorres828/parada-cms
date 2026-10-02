@@ -24,6 +24,13 @@
         "permissions": [
           {"name": "Editar", "url": "edit", "status": 1}
         ]
+      },
+      {"name": "Datos Bancarios", "url": "datos-bancarios", "status": 1,
+        "permissions": [
+          {"name": "Listar", "url": "list", "status": 1},
+          {"name": "Agregar", "url": "add", "status": 1},
+          {"name": "Editar", "url": "edit", "status": 1}
+        ]
       }
     ]
   },
@@ -63,6 +70,8 @@
       {"name": "Reservas", "url": "reservas", "status": 1,
         "permissions": [
           {"name": "Listar", "url": "list", "status": 1},
+          {"name": "Venta por taquilla", "url": "add", "status": 1},
+          {"name": "Confirmar cobro de taquilla", "url": "confirm", "status": 1},
           {"name": "Ver detalle", "url": "detail", "status": 1},
           {"name": "Descargar Excel", "url": "download", "status": 1}
         ]

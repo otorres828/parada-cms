@@ -10,7 +10,12 @@ return new class extends Migration
     {
         Schema::create('reservas', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('usuario_id');
+            $table->string('codigo_referencia')->unique();
+            $table->unsignedBigInteger('usuario_id')->nullable();
+            $table->enum('origen_venta', ['web', 'taquilla'])->default('web');
+            $table->foreignId('usuario_empresa_id')->nullable()->constrained('usuarios_empresa')->restrictOnDelete();
+            $table->text('comprador_json')->nullable();
+            $table->enum('receptor_pago', ['empresa', 'plataforma'])->nullable();
             $table->unsignedBigInteger('programacion_id');
             $table->unsignedBigInteger('origen_terminal_id')->nullable();
             $table->unsignedBigInteger('destino_terminal_id')->nullable();
@@ -18,7 +23,6 @@ return new class extends Migration
             $table->unsignedBigInteger('cupon_id')->nullable();
             $table->unsignedBigInteger('reprogramacion_id')->nullable();
             $table->foreignId('tipos_cambios_id')->constrained('tipos_cambios')->restrictOnDelete();
-            $table->string('codigo_referencia')->unique();
             $table->decimal('monto_pasajes', 12, 2);
             $table->decimal('descuento_aplicado', 12, 2);
             $table->json('exoneracion_tasa_json')->nullable();
