@@ -179,8 +179,11 @@
 
                         <x-list.button-group>
 
-                            @if ($canAdd && $reserva->origen_venta === \App\Models\Reserva::ORIGEN_TAQUILLA)
-                                <a class="btn btn-outline-secondary" href="{{ route('empresas.reservas.add', ['reserva_id' => $reserva->id]) }}" wire:navigate title="Ver venta de taquilla"><i class="bi bi-receipt"></i></a>
+                            @if ($canDetail)
+                                <a class="btn btn-outline-secondary"
+                                    href="{{ route('admin.reservas.detail', ['reserva_id' => $reserva->id]) }}"
+                                    wire:navigate title="Detalle" aria-label="Detalle"><i
+                                        class="bi bi-people-fill"></i></a>
                             @endif
 
                         </x-list.button-group>
