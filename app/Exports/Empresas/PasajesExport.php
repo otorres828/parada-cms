@@ -43,8 +43,8 @@ class PasajesExport extends DefaultValueBinder implements FromQuery, WithCustomC
             'Precio base Bs',
             'Descuento USD',
             'Descuento Bs',
-            'Subtotal USD',
-            'Subtotal Bs',
+            'Subtotal USD', //columna 11
+            'Subtotal Bs',  //columna 12
             'Tasa de servicio USD',
             'Tasa de servicio Bs',
             'Total USD',
@@ -57,6 +57,8 @@ class PasajesExport extends DefaultValueBinder implements FromQuery, WithCustomC
             'Hora de salida',
         ];
 
+        // Si la empresa no tiene contrato "Ellos reciben", no se muestran  las
+        // columnas de tasa de servicio y se ajustan los name de las columnas 11 y 12.
         if (! $this->mostrarTasaServicio) {
             $columnas[11] = 'Total USD';
             $columnas[12] = 'Total Bs';
