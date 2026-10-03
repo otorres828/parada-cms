@@ -1,6 +1,6 @@
 ---
 name: estandar-programacion-crm
-description: Crear, modificar o revisar módulos del CRM Laravel y Livewire de Parada CMS respetando el estilo de Oliver en clases, modelos, permisos, rutas, listados, detalles, componentes Blade, Alpine, formularios y documentación. Usar también al adaptar módulos de Admin al panel de Empresas.
+description: Crear, modificar o revisar módulos del CRM Laravel y Livewire de Rodando CMS respetando el estilo de Oliver en clases, modelos, permisos, rutas, listados, detalles, componentes Blade, Alpine, formularios y documentación. Usar también al adaptar módulos de Admin al panel de Empresas.
 ---
 
 # Estándar de programación del CRM

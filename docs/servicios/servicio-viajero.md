@@ -194,4 +194,4 @@ Las exportaciones que incluyan documentos deben tratarse como archivos privados,
 4. Si quedan pasajes relacionados marca ESTADO_DELETE.
 5. Si no quedan pasajes relacionados elimina físicamente la fila.
 
-Retirar un pasaje del checkout y borrar un viajero de la libreta son acciones separadas. Un documento modificado después de un pasaje sin viajero_id puede impedir la asociación histórica por hash; los pasajes con referencia directa no tienen esa limitación.
+Retirar un pasaje del checkout y borrar un viajero de la libreta son acciones seRodandos. Un documento modificado después de un pasaje sin viajero_id puede impedir la asociación histórica por hash; los pasajes con referencia directa no tienen esa limitación.

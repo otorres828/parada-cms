@@ -1,4 +1,4 @@
-# Documentación funcional de Parada CMS
+# Documentación funcional de Rodando CMS
 
 Esta carpeta explica el comportamiento vigente del proyecto. No contiene planes futuros, bitácoras de cambios ni diagramas históricos.
 

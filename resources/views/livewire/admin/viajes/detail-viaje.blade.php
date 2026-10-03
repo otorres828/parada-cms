@@ -10,7 +10,7 @@
     - <x-form.cancel-button />: Enlace para regresar al listado anterior.
     - <x-layout.loader.fullpage />: Indicador global durante operaciones de Livewire.
     - <x-list.heading />: Cabecera del módulo con título y acciones.
-    - <x-viajes.description />: Ficha descriptiva de la ruta y sus paradas.
+    - <x-viajes.description />: Ficha descriptiva de la ruta y sus Rodandos.
     - <x-viajes.programaciones-table />: Historial de programaciones de la ruta.
     - <x-viajes.tramo-precios-table />: Matriz de precios por origen y destino.
     --------------------------------------------------------------------------
@@ -43,13 +43,13 @@
 
         <div class="row g-3">
 
-            {{-- Columna Izquierda: Información de la Ruta e Itinerario de Paradas --}}
+            {{-- Columna Izquierda: Información de la Ruta e Itinerario de Rodandos --}}
             <div class="col-md-6">
 
                 <div class="card h-100">
 
                     <div class="card-header fw-semibold">
-                        <i class="bi bi-info-circle me-1" aria-hidden="true"></i> Información & Secuencia de Paradas
+                        <i class="bi bi-info-circle me-1" aria-hidden="true"></i> Información & Secuencia de Rodandos
                     </div>
 
                     <x-viajes.description :viaje="$viaje" />

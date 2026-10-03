@@ -1,5 +1,5 @@
 {{--
-    HOME PÚBLICO — PLATAFORMA PARADA
+    HOME PÚBLICO — PLATAFORMA Rodando
     --------------------------------------------------------------------------
     Presenta la solución comercial para agencias de transportes, resume las herramientas
     operativas disponibles y captura solicitudes de empresas interesadas mediante Livewire.
@@ -16,7 +16,7 @@
     --------------------------------------------------------------------------
 --}}
 
-@section('title', 'Parada | Venta digital de pasajes para agencias de transportes')
+@section('title', 'Rodando | Venta digital de pasajes para agencias de transportes')
 
 <div>
 

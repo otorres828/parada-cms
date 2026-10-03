@@ -18,7 +18,7 @@
         <div>
 
             <div class="text-primary small fw-semibold text-uppercase mb-1">
-                Parada · Empresas
+                Rodando · Empresas
             </div>
 
             <h1 class="h3 fw-bold mb-1">Resumen de la empresa</h1>

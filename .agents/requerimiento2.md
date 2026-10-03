@@ -12,8 +12,8 @@ El usuario no quiere ver tres opciones de buses diferentes si va a viajar en el 
 ### 2. El Desglose del Itinerario (Vista Detallada)
 Al hacer clic en "Ver detalles" o "Itinerario", la interfaz se expande para transparentar el recorrido físico del autobús. Esto le da confianza al pasajero y le explica por qué el viaje toma ese tiempo:
 * 🚌 **08:00 AM** – Salida: São Paulo (Terminal Tietê)
-* 🛑 **11:30 AM** – Parada 1: Registro (Terminal Rodoviário) – *Sube/baja gente o descanso*
-* 🛑 **01:15 PM** – Parada 2: Registro (O otra ciudad intermedia)
+* 🛑 **11:30 AM** – Rodando 1: Registro (Terminal Rodoviário) – *Sube/baja gente o descanso*
+* 🛑 **01:15 PM** – Rodando 2: Registro (O otra ciudad intermedia)
 * 🏁 **03:30 PM** – Llegada: Curitiba (Rodoviária)
 
 ---
@@ -66,7 +66,7 @@ Para resolver esto, atomizaremos la lógica del recorrido. A continuación se de
 
 ### 1. Nueva Tabla: `viaje_tramos`
 * **Qué se hace:** Se crea una tabla que divide un `Viaje` en partes lógicas usando una columna `orden`.
-* **Por qué se hace:** Para que el sistema sepa secuencialmente el orden de las paradas (Ej: São Paulo [Orden 1] ➔ Registro [Orden 2] ➔ Curitiba [Orden 3]).
+* **Por qué se hace:** Para que el sistema sepa secuencialmente el orden de las Rodandos (Ej: São Paulo [Orden 1] ➔ Registro [Orden 2] ➔ Curitiba [Orden 3]).
 * **Impacto en el Modelo (`Viaje.php`):** El modelo `Viaje` ahora tendrá una relación de **Uno a Muchos** (`hasMany`) con `ViajeTramo`.
 
 ### 2. Modificación en la Tabla: `programaciones`

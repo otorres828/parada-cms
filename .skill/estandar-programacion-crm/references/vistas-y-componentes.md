@@ -6,7 +6,7 @@ Aplicar `.editorconfig`: cuatro espacios, sin tabs, UTF-8 y LF. En Blade dejar u
 
 No compactar un formulario, `<tr>` completo o pares `<dt>/<dd>` en una sola línea. Tampoco intercalar varias líneas vacías entre instrucciones sencillas. Dividir atributos largos de manera consistente; no forzar un atributo por línea para botones cortos.
 
-PHP usa llaves en línea separada para clases/métodos y `function (...) { ... }` para closures. Separar propiedades y métodos con una línea vacía. Arrays de validación, datos y configuración: una pareja clave/valor por línea. Los JSON de permisos usan estructura jerárquica legible; los metadatos breves del grupo/sección y cada permiso pueden ocupar una línea, según el formato existente.
+PHP usa llaves en línea seRodando para clases/métodos y `function (...) { ... }` para closures. Separar propiedades y métodos con una línea vacía. Arrays de validación, datos y configuración: una pareja clave/valor por línea. Los JSON de permisos usan estructura jerárquica legible; los metadatos breves del grupo/sección y cada permiso pueden ocupar una línea, según el formato existente.
 
 ## Comentario principal
 
@@ -74,7 +74,7 @@ Reutilizar `x-list.actions` y sus slots `search`, `group` y `button`.
 </x-list.actions>
 ```
 
-Adaptar la ruta al módulo; no mostrar Nuevo si la operación no existe, aunque haya un booleano genérico. El botón no va en una fila superior separada del buscador. Si solo hay búsqueda y un select, usar el slot `group` en lugar de una fila debajo que ocupe toda la pantalla.
+Adaptar la ruta al módulo; no mostrar Nuevo si la operación no existe, aunque haya un booleano genérico. El botón no va en una fila superior seRodando del buscador. Si solo hay búsqueda y un select, usar el slot `group` en lugar de una fila debajo que ocupe toda la pantalla.
 
 Con varios filtros, usar `row g-3 mb-3 align-items-end` y columnas como `col-md-6 col-xl-2`. El botón Excel va al extremo derecho con `ms-xl-auto`, alineado con los controles. En móvil permitir apilado sin overflow.
 

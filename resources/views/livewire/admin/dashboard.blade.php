@@ -18,7 +18,7 @@
         <div>
 
             <div class="text-primary small fw-semibold text-uppercase mb-1">
-                Parada · Administración
+                Rodando · Administración
             </div>
 
             <h1 class="h3 fw-bold mb-1">Resumen de la plataforma</h1>

@@ -1,6 +1,6 @@
 # Contexto de Arquitectura: Sistema de Pasajes por Tramos (O&D)
 
-Estoy desarrollando un sitio web de compra de pasajes de autobús en Laravel. Necesito diseñar la lógica del backend basándome en una arquitectura de **Matriz de Origen y Destino (O&D)** para gestionar rutas con paradas/escalas intermedias utilizando un solo autobús físico.
+Estoy desarrollando un sitio web de compra de pasajes de autobús en Laravel. Necesito diseñar la lógica del backend basándome en una arquitectura de **Matriz de Origen y Destino (O&D)** para gestionar rutas con Rodandos/escalas intermedias utilizando un solo autobús físico.
 
 A continuación, se detalla el comportamiento esperado de la plataforma, las reglas de negocio y los cambios estructurales requeridos en la base de datos.
 
@@ -11,10 +11,10 @@ A continuación, se detalla el comportamiento esperado de la plataforma, las reg
 Cuando un usuario busca un pasaje de **São Paulo** a **Curitiba**, el sistema debe operar con dos capas de información visual:
 
 1. **La Tarjeta del Viaje Principal:** Muestra el viaje completo como un único elemento agrupado. Indica: **Origen: São Paulo ➔ Destino: Curitiba**, hora de salida (08:00 AM), hora de llegada (03:30 PM), duración y precio final del tramo largo (**R\$ 110,00**).
-2. **El Desglose del Itinerario:** Al hacer clic en "Ver detalles", se despliega la lista secuencial de paradas físicas:
+2. **El Desglose del Itinerario:** Al hacer clic en "Ver detalles", se despliega la lista secuencial de Rodandos físicas:
    * 🚌 **08:00 AM** – Salida: São Paulo (Terminal Tietê)
-   * 🛑 **11:30 AM** – Parada 1: Registro (Terminal Rodoviário) – *Sube/baja gente o descanso*
-   * 🛑 **01:15 PM** – Parada 2: Registro (U otra ciudad intermedia)
+   * 🛑 **11:30 AM** – Rodando 1: Registro (Terminal Rodoviário) – *Sube/baja gente o descanso*
+   * 🛑 **01:15 PM** – Rodando 2: Registro (U otra ciudad intermedia)
    * 🏁 **03:30 PM** – Llegada: Curitiba (Rodoviária)
 
 ---
@@ -51,7 +51,7 @@ Los precios se configuran de forma independiente por tramo y no son estrictament
 Para migrar el sistema desde un enfoque lineal hacia este enfoque por tramos, se definen las siguientes modificaciones en las migraciones de Laravel:
 
 ### 1. Nueva Tabla: `viaje_tramos`
-Define el recorrido físico y la secuencia lógica de las paradas mediante una columna `orden`.
+Define el recorrido físico y la secuencia lógica de las Rodandos mediante una columna `orden`.
 * **Impacto en Eloquent:** El modelo `Viaje` tiene una relación `hasMany` con `ViajeTramo`.
 
 ### 2. Modificación en la Tabla: `programaciones`

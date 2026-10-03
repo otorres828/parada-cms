@@ -7,7 +7,7 @@
         <div class="journey-copy">
             <span class="section-kicker light">Una operación conectada</span>
             <h2>De la venta digital al momento de abordar.</h2>
-            <p>Parada conecta el sitio web de compra, el CRM de tu agencia y la aplicación de validación para que todo el proceso se gestione desde un mismo ecosistema.</p>
+            <p>Rodando conecta el sitio web de compra, el CRM de tu agencia y la aplicación de validación para que todo el proceso se gestione desde un mismo ecosistema.</p>
 
             <ol class="journey-list">
                 <li><span>1</span><div><strong>Compra desde el sitio web</strong><small>El pasajero elige su tramo y forma de pago directamente desde el portal.</small></div></li>

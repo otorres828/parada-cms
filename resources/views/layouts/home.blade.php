@@ -3,7 +3,7 @@
 
 <head>
     @php
-        $seoTitle = 'Parada | Venta digital de pasajes para agencias de transportes';
+        $seoTitle = 'Rodando | Venta digital de pasajes para agencias de transportes';
         $seoDescription = 'Digitaliza tu agencia de transportes con venta de pasajes en línea, gestión de rutas, flota, pasajeros, pagos, cupones y validación de boletos QR.';
         $seoKeywords = implode(', ', [
             'compra de boletos de transporte',
@@ -40,7 +40,7 @@
             'agencias de transportes Venezuela',
             'transporte terrestre Venezuela',
             'vender pasajes por internet',
-            'Parada',
+            'Rodando',
         ]);
         $canonicalUrl = url('/');
         $structuredData = [
@@ -49,7 +49,7 @@
                 [
                     '@type' => 'Organization',
                     '@id' => $canonicalUrl . '#organization',
-                    'name' => config('app.name', 'Parada'),
+                    'name' => config('app.name', 'Rodando'),
                     'url' => $canonicalUrl,
                     'logo' => asset('assets/img/email/logo.svg'),
                     'description' => $seoDescription,
@@ -61,7 +61,7 @@
                 [
                     '@type' => 'WebSite',
                     '@id' => $canonicalUrl . '#website',
-                    'name' => config('app.name', 'Parada'),
+                    'name' => config('app.name', 'Rodando'),
                     'url' => $canonicalUrl,
                     'inLanguage' => 'es-VE',
                     'publisher' => [
@@ -71,7 +71,7 @@
                 [
                     '@type' => 'SoftwareApplication',
                     '@id' => $canonicalUrl . '#platform',
-                    'name' => 'Parada para agencias de transportes',
+                    'name' => 'Rodando para agencias de transportes',
                     'url' => $canonicalUrl,
                     'description' => $seoDescription,
                     'applicationCategory' => 'BusinessApplication',
@@ -103,8 +103,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
     <meta name="description" content="{{ $seoDescription }}">
     <meta name="keywords" content="{{ $seoKeywords }}">
-    <meta name="author" content="{{ config('app.name', 'Parada') }}">
-    <meta name="application-name" content="{{ config('app.name', 'Parada') }}">
+    <meta name="author" content="{{ config('app.name', 'Rodando') }}">
+    <meta name="application-name" content="{{ config('app.name', 'Rodando') }}">
     <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
     <meta name="googlebot" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
     <meta name="referrer" content="strict-origin-when-cross-origin">
@@ -115,7 +115,7 @@
 
     <meta property="og:type" content="website">
     <meta property="og:locale" content="es_VE">
-    <meta property="og:site_name" content="{{ config('app.name', 'Parada') }}">
+    <meta property="og:site_name" content="{{ config('app.name', 'Rodando') }}">
     <meta property="og:title" content="{{ $seoTitle }}">
     <meta property="og:description" content="{{ $seoDescription }}">
     <meta property="og:url" content="{{ $canonicalUrl }}">

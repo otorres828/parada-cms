@@ -11,12 +11,12 @@
 
             <div class="eyebrow">
                 <span></span>
-                La nueva parada de tu operación digital
+                La nueva Rodando de tu operación digital
             </div>
 
             <h1>
                 Tu agencia vende viajes.
-                <em>Parada mueve el negocio.</em>
+                <em>Rodando mueve el negocio.</em>
             </h1>
 
             <p class="hero-lead">
@@ -26,7 +26,7 @@
 
             <div class="hero-actions">
                 <a class="button button-primary" href="#contacto">
-                    Quiero vender en Parada
+                    Quiero vender en Rodando
                     <i class="bi bi-arrow-right"></i>
                 </a>
                 <a class="button button-ghost" href="#plataforma">

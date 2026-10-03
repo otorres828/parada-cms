@@ -8,7 +8,7 @@
 
     <link rel="icon" type="image/png" href="{{ asset('favicon.ico') }}" sizes="64x64">
 
-    <title>Parada | @yield('title')</title>
+    <title>Rodando | @yield('title')</title>
 
     <meta name="robots" content="noindex, nofollow">
 

@@ -4,9 +4,9 @@
 
 <div class="home-container home-nav">
 
-    <a class="brand" href="#inicio" aria-label="Parada, inicio">
+    <a class="brand" href="#inicio" aria-label="Rodando, inicio">
         <span class="brand-mark"><i class="bi bi-bus-front-fill"></i></span>
-        <span>Parada</span>
+        <span>Rodando</span>
     </a>
 
     <nav class="nav-links" aria-label="Navegación principal">

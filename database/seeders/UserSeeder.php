@@ -19,7 +19,7 @@ class UserSeeder extends Seeder
         // Crear Administradores de prueba
         Admin::updateOrCreate([
             'name' => 'Oliver Torres',
-            'email' => 'oliver@parada.com',
+            'email' => 'oliver@rodando.com',
             'username' => 'oliver'
         ], [
             'password' => Hash::make(26269828),
@@ -29,7 +29,7 @@ class UserSeeder extends Seeder
 
         Admin::updateOrCreate([
             'name' => 'Ancarlys Rosas',
-            'email' => 'ancarlys@parada.com',
+            'email' => 'ancarlys@rodando.com',
             'username' => 'ancarlys'
         ], [
             'password' => Hash::make(26269828),
@@ -39,7 +39,7 @@ class UserSeeder extends Seeder
 
         Admin::updateOrCreate([
             'name' => 'Cesar Sotillo',
-            'email' => 'cesar@parada.com',
+            'email' => 'cesar@rodando.com',
             'username' => 'cesar'
         ], [
             'password' => Hash::make(26269828),

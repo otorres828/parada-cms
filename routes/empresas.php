@@ -144,7 +144,7 @@ Route::group(['middleware' => ['auth:empresa', 'check.permisos.empresa']], funct
 
             Route::livewire('/', ListReserva::class)->name('list');
             Route::livewire('detalle/{reserva_id}', DetailReserva::class)->whereNumber('reserva_id')->name('detail');
-            Route::livewire('taquilla/{reserva_id?}', SaveReserva::class)->whereNumber('reserva_id')->name('add');
+            Route::livewire('agregar', SaveReserva::class)->whereNumber('reserva_id')->name('add');
 
         });
 

@@ -59,7 +59,7 @@ class AdminRolesSeeder extends Seeder
             $credentials = [];
 
             foreach ($profiles as $username => $profile) {
-                $email = $username.'@pidetuparada.com';
+                $email = $username.'@pidetuRodando.com';
                 $admin = Admin::where('email', $email)->first();
                 $needsPassword = ! $admin;
 

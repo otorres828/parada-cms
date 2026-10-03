@@ -13,7 +13,7 @@ En A → B → C, un boleto B → C muestra la salida desde B y la llegada a C. 
 
 `ProgramacionTramoPrecio::paraTaquilla` filtra por empresa, programación/ruta/transporte activos y fecha de salida del tramo. No excluye orígenes por la hora. Si el autobús inició ayer pero pasa por B hoy, B aparece al consultar hoy.
 
-`getSalida` y `getLlegada` devuelven los horarios del tramo. Para compatibilidad, sin horario explícito solo se admite la salida de la programación cuando el tramo comienza en el origen general. Nunca se reutiliza esa hora para una parada intermedia; debe configurarse su horario.
+`getSalida` y `getLlegada` devuelven los horarios del tramo. Para compatibilidad, sin horario explícito solo se admite la salida de la programación cuando el tramo comienza en el origen general. Nunca se reutiliza esa hora para una Rodando intermedia; debe configurarse su horario.
 
 Al registrar, `validarSalida` exige un horario futuro en el punto de abordaje. La venta desde B sigue permitida si A ya salió pero B aún no. Se aplica en taquilla y en los servicios de reserva/pago web. La confirmación administrativa posterior de un pago pendiente no utiliza este corte de venta.
 
@@ -25,4 +25,4 @@ Taquilla, correo, detalle del pasaje, matriz de tarifas y exportaciones de pasaj
 
 Se modificó la migración original de programacion_tramo_precios. El esquema y los datos existentes necesitan actualizarse antes de utilizar la consulta nueva. El seeder actualizado genera horarios al recrear los datos; no modifica programaciones existentes ni se ejecutó fresh sobre la base local. No hay actualmente formulario de alta/edición de programaciones; estos campos quedan listos para ese módulo.
 
-Prueba: tests/HorariosTramosSmoke.php, con SQLite en memoria; cubre medianoche, venta desde parada intermedia, fecha de llegada, corte horario y aislamiento de empresas.
+Prueba: tests/HorariosTramosSmoke.php, con SQLite en memoria; cubre medianoche, venta desde Rodando intermedia, fecha de llegada, corte horario y aislamiento de empresas.

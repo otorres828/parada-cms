@@ -11,9 +11,9 @@
     Open Graph (OG) Social Media Tags
     Configures how the site appears when shared on Facebook, LinkedIn, and WhatsApp.
 --}}
-<meta property="og:url" content="https://Parada.com" />
+<meta property="og:url" content="https://Rodando.com" />
 <meta property="og:type" content="website" />
-<meta property="og:title" content="Parada" />
+<meta property="og:title" content="Rodando" />
 <meta property="og:description"
     content="@yield('meta-title')" />
 <meta property="og:image" content="{{ asset('assets/img/logo/icon-roster.png') }}" />
@@ -23,7 +23,7 @@
     Optimized for X (Twitter) sharing.
 --}}
 <meta name="twitter:card" content="summary" />
-<meta name="twitter:title" content="Parada" />
+<meta name="twitter:title" content="Rodando" />
 <meta name="twitter:description"
     content="@yield('meta-title')" />
 <meta name="twitter:image" content="{{ asset('assets/img/logo/icon-roster.png') }}" />

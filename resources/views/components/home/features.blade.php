@@ -18,10 +18,10 @@
                 <div class="feature-icon"><i class="bi bi-signpost-split"></i></div>
                 <span class="feature-number">01</span>
                 <h3>Planifica rutas y salidas</h3>
-                <p>Configura terminales, paradas, tramos, tarifas y horarios. Controla el cupo real por cada tramo del recorrido.</p>
+                <p>Configura terminales, Rodandos, tramos, tarifas y horarios. Controla el cupo real por cada tramo del recorrido.</p>
                 <div class="route-visual">
                     <div><span>A</span><b>Caracas</b></div>
-                    <i></i><small>2 paradas</small><i></i>
+                    <i></i><small>2 Rodandos</small><i></i>
                     <div><span>Z</span><b>Maracaibo</b></div>
                 </div>
             </article>

@@ -1,5 +1,5 @@
 {{--
-    DESCRIPCIÓN DE RUTA | Presenta datos generales, estado y secuencia de paradas.
+    DESCRIPCIÓN DE RUTA | Presenta datos generales, estado y secuencia de Rodandos.
 --}}
 
 @props(['viaje'])
@@ -35,7 +35,7 @@
         <div class="d-flex align-items-center justify-content-between mb-2 flex-wrap gap-2">
             <div class="fw-semibold">
                 <i class="bi bi-signpost-split me-1" aria-hidden="true"></i>
-                Secuencia de paradas e itinerario
+                Secuencia de Rodandos e itinerario
             </div>
             @if ($viaje->tramos->isNotEmpty())
                 <div class="form-check form-switch mb-0 small">
@@ -61,7 +61,7 @@
                             @if ($loop->first)
                                 <span class="badge text-bg-success rounded-pill small">Origen</span>
                             @else
-                                <span class="badge text-bg-secondary rounded-pill small">Parada
+                                <span class="badge text-bg-secondary rounded-pill small">Rodando
                                     Intermedia</span>
                             @endif
                         </li>
@@ -102,7 +102,7 @@
                 </ol>
             </div>
         @else
-            <div class="text-body-secondary">Sin paradas intermedias registradas.</div>
+            <div class="text-body-secondary">Sin Rodandos intermedias registradas.</div>
         @endif
 
     </div>
