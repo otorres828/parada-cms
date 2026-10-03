@@ -181,7 +181,7 @@
 
                             @if ($canDetail)
                                 <a class="btn btn-outline-secondary"
-                                    href="{{ route('admin.reservas.detail', ['reserva_id' => $reserva->id]) }}"
+                                    href="{{ route('empresas.reservas.detail', ['reserva_id' => $reserva->id]) }}"
                                     wire:navigate title="Detalle" aria-label="Detalle"><i
                                         class="bi bi-people-fill"></i></a>
                             @endif

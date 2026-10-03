@@ -29,6 +29,7 @@ class CheckPermissionEmpresa
 
         /* ----------------------------------------Ventas y finanzas---------------------------------------- */
         'empresas.reservas.list' => ['reservas', 'list'],
+        'empresas.reservas.detail' => ['reservas', 'detail'],
         'empresas.reservas.add' => ['reservas', 'add'],
         'empresas.pasajes.list' => ['pasajes', 'list'],
         'empresas.validacion-pagos.list' => ['validacion-pagos', 'list'],

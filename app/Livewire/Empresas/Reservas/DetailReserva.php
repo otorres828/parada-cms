@@ -4,7 +4,7 @@ namespace App\Livewire\Empresas\Reservas;
 
 use App\Livewire\Empresas\EmpresaComponent;
 use App\Models\Reserva;
-use App\Services\Admin\Access;
+use App\Services\Empresa\Access;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Locked;
 
@@ -41,6 +41,6 @@ class DetailReserva extends EmpresaComponent
 
     protected function findReserva(): Reserva
     {
-        return Reserva::findAdminDetail($this->reserva_id);
+        return Reserva::findAdminDetail($this->reserva_id,['empresa_id' => $this->usuarioEmpresa->empresa_id]);
     }
 }
