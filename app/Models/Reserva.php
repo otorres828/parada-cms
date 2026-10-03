@@ -233,6 +233,24 @@ class Reserva extends ModelHelper
         return $this->origen_venta === self::ORIGEN_TAQUILLA;
     }
 
+    public function getMontoTotalUSD($viewTasaServicio = false): string
+    {
+        if ($viewTasaServicio) {
+            return $this->monto_total;
+        }
+
+        return $this->getMontoSinTasa();
+    }
+
+    public function getMontoTotalBS($viewTasaServicio = false): string
+    {
+        if ($viewTasaServicio) {
+            return $this->calcularMontoBs($this->monto_total);
+        }
+
+        return $this->calcularMontoBs($this->getMontoSinTasa());
+    }
+
 
     public static function findAdminDetail(int $reservaId, array $filters = []): self
     {

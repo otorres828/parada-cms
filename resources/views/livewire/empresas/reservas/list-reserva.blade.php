@@ -168,7 +168,12 @@
                     </td>
 
                     <td>
-                        <x-money.dual :usd="$ellosReciben ? $reserva->monto_total : $reserva->getMontoSinTasa()" :bs="$reserva->calcularMontoBs($ellosReciben ? $reserva->monto_total : $reserva->getMontoSinTasa())" />
+
+                        <x-money.dual 
+                            :usd="$reserva->getMontoTotalUSD($viewTasaServicio)"
+                            :bs="$reserva->getMontoTotalBS($viewTasaServicio)"
+                        />
+
                     </td>
 
                     <td>

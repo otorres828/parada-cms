@@ -194,7 +194,12 @@
                     </td>
 
                     <td>
-                        <x-money.dual :usd="$reserva->monto_total" :bs="$reserva->calcularMontoBs($reserva->monto_total)" />
+
+                        <x-money.dual 
+                            :usd="$reserva->getMontoTotalUSD(true)"
+                            :bs="$reserva->getMontoTotalBS(true)"
+                        />
+
                     </td>
 
                     <td>
