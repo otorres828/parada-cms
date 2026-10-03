@@ -4,8 +4,6 @@
 <meta name="theme-color" content="#1a1a1a" media="(prefers-color-scheme: dark)" />
 <meta name="supported-color-schemes" content="light dark" />
 
-<link rel="preload" href="{{ asset('/css/adminlte.css') }}" as="style" />
-
 {{--Fonts--}}
 <link
     rel="stylesheet"
