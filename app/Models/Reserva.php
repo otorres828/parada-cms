@@ -76,14 +76,6 @@ class Reserva extends ModelHelper
         return $this->comprador_json['nombre'] ?? $this->usuario?->name ?? 'Sin cliente';
     }
 
-    public static function taquillaEmpresa(int $empresaId): Builder
-    {
-        return self::query()->where('origen_venta', self::ORIGEN_TAQUILLA)
-            ->whereHas('programacion.viaje', function ($query) use ($empresaId) {
-                $query->where('empresa_id', $empresaId);
-            });
-    }
-
     public function usuario(): BelongsTo
     {
         return $this->belongsTo(User::class, 'usuario_id');
@@ -143,7 +135,6 @@ class Reserva extends ModelHelper
     {
         return $this->hasOne(self::class, 'reprogramacion_id');
     }
-
     
     public function pagos(): HasMany
     {
@@ -155,7 +146,6 @@ class Reserva extends ModelHelper
         return $this->hasOne(PagoReserva::class, 'reserva_id');
     }
     
-
     public function esReprogramacion(): bool
     {
         return $this->reprogramacion_id !== null;
@@ -233,6 +223,28 @@ class Reserva extends ModelHelper
         };
     }
 
+    public function getMontoSinTasa(): string
+    {
+        return number_format((float) $this->monto_pasajes - (float) $this->descuento_aplicado, 2, '.', '');
+    }
+
+    public function isTaquilla(): bool
+    {
+        return $this->origen_venta === self::ORIGEN_TAQUILLA;
+    }
+
+
+    public static function findAdminDetail(int $reservaId, array $filters = []): self
+    {
+        return self::searchAdmin('', $filters)
+            ->with([
+                'cupon.configuracionCupon',
+                'reservaOriginal',
+                'reprogramado',
+            ])
+            ->findOrFail($reservaId);
+    }
+
     public static function searchAdmin(string $search = '', array $filters = []): Builder
     {
         $query = self::query()
@@ -246,17 +258,13 @@ class Reserva extends ModelHelper
                 'tipoCambio',
             ]);
 
+        $status = $filters['status'] ?? $filters['estatus'] ?? $filters['estado_pago'] ?? null;
+
         if ($search !== '') {
             $query->where(function ($query) use ($search) {
                 $query->where('reservas.id', ctype_digit($search) ? $search : -1);
                 $query->orWhere('reservas.codigo_referencia', 'like', '%'.$search.'%');
             });
-        }
-
-        $status = $filters['status'] ?? $filters['estatus'] ?? $filters['estado_pago'] ?? null;
-
-        if (! empty($filters['tipo_transporte'])) {
-            $query->whereHas('programacion.transporte', fn ($transporte) => $transporte->where('tipo_transporte', $filters['tipo_transporte']));
         }
 
         if ($status !== null && $status !== '') {
@@ -267,6 +275,10 @@ class Reserva extends ModelHelper
             } else {
                 $query->where('reservas.estado_pago', $status);
             }
+        }
+
+        if (! empty($filters['tipo_transporte'])) {
+            $query->whereHas('programacion.transporte', fn ($transporte) => $transporte->where('tipo_transporte', $filters['tipo_transporte']));
         }
 
         if (! empty($filters['date_from'])) {
@@ -285,6 +297,15 @@ class Reserva extends ModelHelper
 
         return $query;
     }
+
+    public static function taquillaEmpresa(int $empresaId): Builder
+    {
+        return self::query()->where('origen_venta', self::ORIGEN_TAQUILLA)
+            ->whereHas('programacion.viaje', function ($query) use ($empresaId) {
+                $query->where('empresa_id', $empresaId);
+            });
+    }
+
 
     public static function searchDetailClient(int $user_id): Builder
     {
@@ -354,29 +375,6 @@ class Reserva extends ModelHelper
             ->selectRaw('empresas.id, empresas.nombre, empresas.tipo_entidad, COUNT(*) as cantidad, SUM(reservas.monto_total) as total, SUM(reservas.monto_total * tipos_cambios.valor_usd) as total_bs, SUM(reservas.tasa_servicio) as tasas, SUM(reservas.tasa_servicio * tipos_cambios.valor_usd) as tasas_bs')
             ->groupBy('empresas.id', 'empresas.nombre', 'empresas.tipo_entidad')
             ->orderByDesc('total');
-    }
-
-    public static function findAdminDetail(int $reservaId): self
-    {
-        return self::searchAdmin()
-            ->with([
-                'pasajes.reserva',
-                'cupon.configuracionCupon',
-                'reservaOriginal',
-                'reprogramado',
-                'tipoCambio',
-            ])
-            ->findOrFail($reservaId);
-    }
-
-    public function getMontoSinTasa(): string
-    {
-        return number_format((float) $this->monto_pasajes - (float) $this->descuento_aplicado, 2, '.', '');
-    }
-
-    public function isTaquilla(): bool
-    {
-        return $this->origen_venta === self::ORIGEN_TAQUILLA;
     }
 
     public static function dashboardSummary(array $filters): self

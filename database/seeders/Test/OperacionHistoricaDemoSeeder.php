@@ -15,11 +15,11 @@ use Illuminate\Support\Facades\DB;
 
 class OperacionHistoricaDemoSeeder extends Seeder
 {
-    private const PASAJES_POR_AUTOBUS = 10;
+    private const PASAJES_POR_AUTOBUS = 4;
 
     private const PASAJES_POR_CARRO = 2;
 
-    private const TAMANO_LOTE_PROGRAMACIONES = 200;
+    private const TAMANO_LOTE_PROGRAMACIONES = 20;
 
     private array $secuencias = [
         'user' => 1,
