@@ -11,6 +11,7 @@
     - <x-layout.loader.fullpage />: Indicador global durante operaciones de Livewire.
     - <x-list.heading />: Cabecera del módulo con título y acciones.
     - <x-pasajes.description />: Ficha descriptiva del pasaje.
+    - <x-pasajes.localizador />: Elemento de presentación del localizador y QR del pasaje.
     --------------------------------------------------------------------------
 --}}
 
