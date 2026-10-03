@@ -59,8 +59,7 @@ class ListReserva extends EmpresaComponent
         $reservas = $query->paginate(max(1, min(100, (int) $this->per_page)));
 
         return view('livewire.empresas.reservas.list-reserva', [
-            'reservas' => $reservas,
-            'ellosReciben' => (int) $this->usuarioEmpresa->empresa->tipo_contrato === Empresa::CONTRATO_ELLOS_RECIBEN,
+            'reservas' => $reservas
         ]);
     }
 
