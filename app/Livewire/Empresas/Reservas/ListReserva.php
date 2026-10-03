@@ -2,10 +2,9 @@
 
 namespace App\Livewire\Empresas\Reservas;
 
-use App\Exports\ReservasExport;
+use App\Exports\Empresas\ReservasExport;
 use App\Livewire\Empresas\EmpresaComponent;
 use App\Models\Reserva;
-use App\Models\Empresa;
 use App\Services\Empresa\Access;
 use App\Traits\Listing;
 use App\Traits\PermissionsEmpresa;

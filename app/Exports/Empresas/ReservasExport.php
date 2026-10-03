@@ -1,9 +1,11 @@
 <?php
 
-namespace App\Exports;
+namespace App\Exports\Empresas;
 
 use App\Models\Reserva;
+use App\Models\UsuarioEmpresa;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\WithCustomChunkSize;
 use Maatwebsite\Excel\Concerns\WithCustomValueBinder;
@@ -15,10 +17,17 @@ use PhpOffice\PhpSpreadsheet\Cell\DefaultValueBinder;
 
 class ReservasExport extends DefaultValueBinder implements FromQuery, WithCustomChunkSize, WithCustomValueBinder, WithHeadings, WithMapping
 {
+
+    public UsuarioEmpresa $usuarioEmpresa;
+    public bool $viewTasaServicio;
+
     public function __construct(
         private Builder $consulta,
         private array $columnasOmitidas = [],
-    ) {}
+    ) {
+        $this->usuarioEmpresa = Auth::guard('empresa')->user();
+        $this->viewTasaServicio = $this->usuarioEmpresa->empresa->viewTasaServicio();
+    }
 
     public function query(): Builder
     {

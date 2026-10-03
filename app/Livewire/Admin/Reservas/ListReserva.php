@@ -2,7 +2,7 @@
 
 namespace App\Livewire\Admin\Reservas;
 
-use App\Exports\ReservasExport;
+use App\Exports\Admin\ReservasExport;
 use App\Models\Empresa;
 use App\Models\Reserva;
 use App\Services\Admin\Access;
