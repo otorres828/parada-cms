@@ -77,7 +77,7 @@ class ListPasaje extends EmpresaComponent
         return Excel::download(
             new PasajesExport(
                 $this->applySort($query),
-                (int) $this->usuarioEmpresa->empresa->tipo_contrato === Empresa::CONTRATO_ELLOS_RECIBEN,
+                $this->viewTasaServicio,
             ),
             'pasajes-'.now()->format('Y-m-d-His').'.xlsx',
         );

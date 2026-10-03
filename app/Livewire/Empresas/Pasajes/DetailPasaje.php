@@ -4,7 +4,7 @@ namespace App\Livewire\Empresas\Pasajes;
 
 use App\Livewire\Empresas\EmpresaComponent;
 use App\Models\Pasaje;
-use App\Services\Admin\Access;
+use App\Services\Empresa\Access;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Locked;
 
