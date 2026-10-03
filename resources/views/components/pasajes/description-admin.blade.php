@@ -120,6 +120,12 @@
 
         <hr class="col-12 my-3">
 
+        <dt class="col-sm-4">Tipo de cambio aplicado</dt>
+        <dd class="col-sm-8">
+            $1.00 / Bs. {{ number_format($pasaje->reserva->tipoCambio->valor_usd, 2, ',', '.') }}
+                ({{ $pasaje->reserva->tipoCambio->timestamp?->format('d/m/Y H:i') }})
+        </dd>
+
         <dt class="col-sm-4">Tipo de tasa de servicio aplicada</dt>
 
         <dd class="col-sm-8">
