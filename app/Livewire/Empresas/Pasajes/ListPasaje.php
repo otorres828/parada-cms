@@ -59,8 +59,7 @@ class ListPasaje extends EmpresaComponent
         $pasajes = $query->paginate(max(1, min(100, (int) $this->per_page)));
 
         return view('livewire.empresas.pasajes.list-pasaje', [
-            'pasajes' => $pasajes,
-            'mostrarTasaServicio' => (int) $this->usuarioEmpresa->empresa->tipo_contrato === Empresa::CONTRATO_ELLOS_RECIBEN,
+            'pasajes' => $pasajes
         ]);
     }
 

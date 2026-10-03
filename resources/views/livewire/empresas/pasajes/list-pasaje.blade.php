@@ -123,16 +123,18 @@
                     <x-list.sortable-button column="descuento" :$sortColumn :$sortDirection />
                 </th>
 
-                <th>{{ $mostrarTasaServicio ? 'Subtotal' : 'Total' }}
+                <th>{{ $viewTasaServicio ? 'Subtotal' : 'Total' }}
                     <x-list.sortable-button column="subtotal" :$sortColumn :$sortDirection />
                 </th>
 
-                @if ($mostrarTasaServicio)
+                @if ($viewTasaServicio)
+
                     <th>Tasa de servicio</th>
 
                     <th>Total
                         <x-list.sortable-button column="total" :$sortColumn :$sortDirection />
                     </th>
+                    
                 @endif
 
                 <th>Pago </th>
@@ -185,7 +187,7 @@
                         <x-money.dual :usd="$pasaje->subtotal" :bs="$pasaje->calcularMontoBs($pasaje->subtotal)" />
                     </td>
 
-                    @if ($mostrarTasaServicio)
+                    @if ($viewTasaServicio)
                         <td>
                             <x-money.dual :usd="$pasaje->tasa_servicio" :bs="$pasaje->calcularMontoBs($pasaje->tasa_servicio)" />
                         </td>
