@@ -46,7 +46,10 @@
                             <tr>
                                 <td class="px-3 py-2">{{ $persona['nombre'] }} {{ $persona['apellido'] }}</td>
                                 <td class="px-3 py-2 text-muted">{{ $ocupa ? 'Asignación automática' : 'Sin asiento' }}</td>
-                                <td class="px-3 py-2 text-end text-nowrap">${{ number_format($ocupa ? $precio : 0, 2) }}</td>
+                                <td class="px-3 py-2 text-end">
+                                    <span class="text-nowrap">USD {{ number_format($ocupa ? $precio : 0, 2) }}</span> /
+                                    <span class="text-nowrap">BS {{ number_format(($ocupa ? $precio : 0) * (float) $cambio?->valor_usd, 2, ',', '.') }}</span>
+                                </td>
                             </tr>
                         @endforeach
                     </tbody>
@@ -55,12 +58,16 @@
 
             <div class="bg-light border rounded-3 p-3 mb-3">
                 <div class="d-flex justify-content-between gap-3 mb-2">
+                    <span class="text-muted">Subtotal de pasajes</span>
+                    <span class="text-end">USD {{ number_format($total, 2) }} / BS {{ number_format($total * (float) $cambio?->valor_usd, 2, ',', '.') }}</span>
+                </div>
+                <div class="d-flex justify-content-between gap-3 mb-2">
                     <span class="text-muted">Tasa de servicio</span>
-                    <span>$0.00</span>
+                    <span class="text-end">USD 0.00 / BS 0,00</span>
                 </div>
                 <div class="d-flex justify-content-between gap-3 mb-3">
                     <span class="text-muted">Pagos agregados</span>
-                    <span>USD {{ number_format($abonado, 2) }}</span>
+                    <span class="text-end">USD {{ number_format($abonado, 2) }} / BS {{ number_format($abonado * (float) $cambio?->valor_usd, 2, ',', '.') }}</span>
                 </div>
                 <div class="d-flex justify-content-between align-items-center gap-3 border-top pt-3">
                     <strong class="text-dark">Total de la reserva</strong>

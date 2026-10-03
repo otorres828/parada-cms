@@ -12,3 +12,5 @@
 Los métodos crear, guardarComprador, agregarPasajero y removerPasajero conservan su validación para operaciones internas. La clase Livewire no expone acciones para persistir borradores. validarPasajero valida datos sin escribir, para el formulario de cotización.
 
 La tasa es cero por origen taquilla, con independencia del contrato. No se crean cuentas User ni viajeros asociados al vendedor. El correo se envía solo mediante acción explícita posterior a una venta pagada.
+
+La salida se valida por fecha del tramo, ignorando su hora: se puede vender durante todo ese día o anticipadamente, siempre que la programación, ruta y transporte estén activos. No se permiten fechas pasadas ni se requiere abrir o cerrar embarque manualmente. La validación se conserva al registrar pasajeros y pagos.

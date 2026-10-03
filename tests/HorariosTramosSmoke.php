@@ -67,11 +67,27 @@ try {
     $nuevo->mount();
     $check($nuevo->render()->getData()['origenes']->contains('id', $intermedia->id));
 
-    Carbon::setTestNow($reloj->copy()->setTime(1, 0));
-    // Se mantiene visible al consultar orígenes, pero ya no permite registrar.
+    Carbon::setTestNow($reloj->copy()->setTime(23, 59));
+    // Taquilla permite vender durante toda la fecha del tramo, aunque pasó la hora.
     $check(ProgramacionTramoPrecio::paraTaquilla($usuarioEmpresa->empresa_id, $reloj->toDateString())->whereKey($tramo->id)->exists());
-    $reject(function () use ($usuarioEmpresa, $tramo, $comprador, $persona) {
-        ReservaTaquillaService::registrar($usuarioEmpresa, $tramo->id, $comprador, [$persona], [['tipo' => 2, 'moneda' => 'USD', 'monto' => '10.00']]);
+    $ventaTardia = ReservaTaquillaService::registrar($usuarioEmpresa, $tramo->id, $comprador, [$persona], [['tipo' => 2, 'moneda' => 'USD', 'monto' => '10.00']]);
+    $check($ventaTardia->estado_pago === Reserva::ESTADO_PAGO_PAGADO);
+    $check($ventaTardia->pasajes->every(function ($pasaje) {
+        return filled($pasaje->localizador) && $pasaje->getQr() !== null;
+    }));
+    $reject(function () use ($tramo) {
+        $tramo->validarSalida();
+    }, ValidationException::class);
+    foreach ([Programacion::ESTADO_INACTIVO, Programacion::ESTADO_FINALIZADO] as $estatus) {
+        $salida->estatus = $estatus;
+        $reject(function () use ($salida, $usuarioEmpresa, $tramo) {
+            ReservaTaquillaService::validarSalida($salida, $usuarioEmpresa, $tramo);
+        }, ValidationException::class);
+    }
+    $salida->estatus = Programacion::ESTADO_PROGRAMADO;
+    Carbon::setTestNow($reloj->copy()->addDay()->startOfDay());
+    $reject(function () use ($salida, $usuarioEmpresa, $tramo) {
+        ReservaTaquillaService::validarSalida($salida, $usuarioEmpresa, $tramo);
     }, ValidationException::class);
     $reject(function () use ($tramo) {
         $tramo->update(['hora_llegada' => '00:45:00']);
@@ -83,7 +99,7 @@ try {
     $reject(function () use ($sinHorario) {
         $sinHorario->validarSalida();
     }, ValidationException::class);
-    echo "Horarios por tramo: medianoche, origen intermedio, llegada final, aislamiento y cierre de venta OK\n";
+    echo "Horarios por tramo: medianoche, origen intermedio, venta tardía en taquilla, fecha pasada y estados de programación OK\n";
 } finally {
     Carbon::setTestNow();
 }

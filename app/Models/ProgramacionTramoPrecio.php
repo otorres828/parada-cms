@@ -68,11 +68,15 @@ class ProgramacionTramoPrecio extends ModelHelper
             : null;
     }
 
-    public function validarSalida(): void
+    public function validarSalida(bool $validarHora = true): void
     {
         $salida = $this->getSalida();
         self::exigir($salida !== null, 'tarifa', 'Configura la fecha y hora de salida de este tramo antes de vender.');
-        self::exigir($salida->isFuture(), 'tarifa', 'La fecha y hora de salida de este tramo ya pasaron.');
+        if ($validarHora) {
+            self::exigir($salida->isFuture(), 'tarifa', 'La fecha y hora de salida de este tramo ya pasaron.');
+        } else {
+            self::exigir($salida->copy()->startOfDay()->greaterThanOrEqualTo(today()), 'tarifa', 'La fecha de salida de este tramo ya pasó.');
+        }
     }
 
     public static function paraTaquilla(int $empresaId, string $fecha): Builder

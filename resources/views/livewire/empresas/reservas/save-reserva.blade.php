@@ -156,7 +156,7 @@
                                 cancelButtonText: 'Volver a revisar',
                                 reverseButtons: true,
                                 customClass: {
-                                    popup: 'rounded-4 shadow-lg p-0 overflow-hidden',
+                                    popup: 'reserva-confirmacion rounded-4 shadow-lg p-0 overflow-hidden',
                                     title: 'text-start fs-4 px-4 pt-4 pb-0 m-0',
                                     htmlContainer: 'text-start m-0 p-4',
                                     actions: 'd-flex flex-wrap justify-content-end gap-2 w-100 border-top m-0 p-3 bg-light',

@@ -195,7 +195,7 @@ class ReservaTaquillaService
             'programacion',
             'La salida ya no está disponible para vender.',
         );
-        $tarifa->validarSalida();
+        $tarifa->validarSalida(validarHora: false);
     }
 
     private static function modificar(UsuarioEmpresa $vendedor, int $reservaId, Closure $accion): Reserva

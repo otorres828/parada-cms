@@ -41,3 +41,49 @@
 .swal2-timer-progress-bar {
     background: #28a745 !important;
 }
+/* Confirmación de taquilla: prevalece sobre los ajustes globales de SweetAlert. */
+.swal2-popup.reserva-confirmacion {
+    max-width: calc(100vw - 2rem);
+    min-width: 0;
+}
+
+.swal2-popup.reserva-confirmacion .swal2-title {
+    padding: 1.5rem 3.5rem 0 1.5rem !important;
+    font-size: 1.35rem !important;
+}
+
+.swal2-popup.reserva-confirmacion .swal2-html-container {
+    box-sizing: border-box;
+    min-width: 0;
+    max-width: 100%;
+    margin: 0 !important;
+    padding: 1.25rem 1.5rem !important;
+    overflow-x: hidden;
+    overflow-wrap: anywhere;
+}
+
+.swal2-popup.reserva-confirmacion .swal2-html-container > div {
+    min-width: 0;
+    max-width: 100%;
+}
+
+.swal2-popup.reserva-confirmacion .swal2-actions {
+    box-sizing: border-box;
+    min-width: 0;
+    margin: 0 !important;
+    padding: 1rem 1.5rem !important;
+}
+
+@media (max-width: 575.98px) {
+    .swal2-popup.reserva-confirmacion .swal2-html-container {
+        padding: 1rem !important;
+    }
+
+    .swal2-popup.reserva-confirmacion .swal2-actions {
+        padding: 1rem !important;
+    }
+
+    .swal2-popup.reserva-confirmacion .swal2-actions button {
+        width: 100%;
+    }
+}
