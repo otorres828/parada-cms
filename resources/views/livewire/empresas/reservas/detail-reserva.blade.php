@@ -71,8 +71,13 @@
 
         <div class="table-responsive">
 
-            <x-reservas.pasajes-table :tickets="$tickets" :can-view-ticket="$canViewTicket" />
-
+            <x-reservas.pasajes-table 
+                :tickets="$tickets" 
+                :can-view-ticket="$canViewTicket" 
+                :view-tasa-servicio="$viewTasaServicio"
+                route-name="empresas.pasajes.detail"
+            />
+            
         </div>
 
     </div>

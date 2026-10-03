@@ -2,7 +2,7 @@
     TABLA DE PASAJES DE LA RESERVA | Presenta viajeros, precios, estado de abordaje y QR.
 --}}
 
-@props(['tickets', 'canViewTicket'])
+@props(['tickets', 'canViewTicket','routeName','viewTasaServicio'=>true])
 
 <table class="table align-middle">
 
@@ -23,9 +23,13 @@
 
             <th class="text-end">Descuento</th>
 
-            <th class="text-end">Subtotal</th>
+            @if ($viewTasaServicio)
+                
+                <th class="text-end">Subtotal</th>
 
-            <th class="text-end">Tasa de servicio</th>
+                <th class="text-end">Tasa de servicio</th>
+                
+            @endif
 
             <th class="text-end">Total</th>
 
@@ -37,10 +41,12 @@
     <tbody>
 
         @forelse ($tickets as $ticket)
+
             <tr>
+
                 <td>
                     @if ($canViewTicket)
-                        <a href="{{ route('admin.pasajes.detail', $ticket->id) }}" wire:navigate>
+                        <a href="{{ route($routeName, $ticket->id) }}" wire:navigate>
                             #{{ $ticket->id }}
                         </a>
                     @else
@@ -72,16 +78,23 @@
                     <x-money.dual :usd="$ticket->descuento" :bs="$ticket->calcularMontoBs($ticket->descuento)" />
                 </td>
 
-                <td class="text-end">
-                    <x-money.dual :usd="$ticket->subtotal" :bs="$ticket->calcularMontoBs($ticket->subtotal)" />
-                </td>
+                @if ($viewTasaServicio)
+                    
+                    <td class="text-end">
+                        <x-money.dual :usd="$ticket->subtotal" :bs="$ticket->calcularMontoBs($ticket->subtotal)" />
+                    </td>
+
+                    <td class="text-end">
+                        <x-money.dual :usd="$ticket->tasa_servicio" :bs="$ticket->calcularMontoBs($ticket->tasa_servicio)" />
+                    </td>
+
+                @endif
 
                 <td class="text-end">
-                    <x-money.dual :usd="$ticket->tasa_servicio" :bs="$ticket->calcularMontoBs($ticket->tasa_servicio)" />
-                </td>
-
-                <td class="text-end">
-                    <x-money.dual :usd="$ticket->total" :bs="$ticket->calcularMontoBs($ticket->total)" />
+                    <x-money.dual 
+                        :usd="$viewTasaServicio ? $ticket->total : ($ticket->total - $ticket->tasa_servicio)" 
+                        :bs="$ticket->calcularMontoBs($viewTasaServicio ? $ticket->total : ($ticket->total - $ticket->tasa_servicio))" 
+                    />
                 </td>
 
                 <td class="text-center">
