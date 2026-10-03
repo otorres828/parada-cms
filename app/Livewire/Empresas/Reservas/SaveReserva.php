@@ -130,7 +130,6 @@ class SaveReserva extends EmpresaComponent
     public function agregarPasajero(): void
     {
         Access::authorize('reservas', 'add');
-        Reserva::exigir($this->reservaId === null, 'reserva', 'La venta ya fue registrada.');
         $this->pasajeros[] = ReservaTaquillaService::validarPasajero($this->pasajero);
         $this->reset('pasajero');
         $this->resetValidation();
