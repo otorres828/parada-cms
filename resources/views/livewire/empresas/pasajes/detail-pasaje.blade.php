@@ -50,7 +50,7 @@
                         :can-view-campaign="$canViewCampaign" 
                         :can-view-reservation="$canViewReservation" 
                     />
-                    
+
                 </div>
 
             </div>

@@ -202,7 +202,10 @@
                     <td class="text-end">
 
                         <x-list.button-group>
-
+                            
+                            @if ($canDetail)
+                                <x-list.view-button :route="route('empresas.pasajes.detail', ['pasaje_id' => $pasaje->id])" :target="false" />
+                            @endif
 
                         </x-list.button-group>
 

@@ -27,11 +27,17 @@ class CheckPermissionEmpresa
         'empresas.programaciones.list' => ['programaciones', 'list'],
         'empresas.transportes.list' => ['transportes', 'list'],
 
-        /* ----------------------------------------Ventas y finanzas---------------------------------------- */
+        /* ----------------------------------------Ventas y finanzas------------------------------- */
+
+        // Reservas
         'empresas.reservas.list' => ['reservas', 'list'],
         'empresas.reservas.detail' => ['reservas', 'detail'],
         'empresas.reservas.add' => ['reservas', 'add'],
+
+        // Pasajes
         'empresas.pasajes.list' => ['pasajes', 'list'],
+        'empresas.pasajes.detail' => ['pasajes', 'detail'],
+
         'empresas.validacion-pagos.list' => ['validacion-pagos', 'list'],
         'empresas.reembolsos.list' => ['reembolsos', 'list'],
         'empresas.reprogramaciones.list' => ['reprogramaciones', 'list'],
