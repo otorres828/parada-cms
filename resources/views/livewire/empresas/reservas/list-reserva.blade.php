@@ -146,7 +146,7 @@
 
                     <td>
                         {{ $reserva->codigo_referencia ?? '—' }}
-                        @if ($reserva->origen_venta === \App\Models\Reserva::ORIGEN_TAQUILLA)
+                        @if ($reserva->isTaquilla())
                             <span class="badge text-bg-info">Taquilla</span>
                         @endif
                     </td>
