@@ -78,7 +78,7 @@ class SaveDatoBancario extends EmpresaComponent
             DatoBancario::where('empresa_id', $this->usuarioEmpresa->empresa_id)->findOrFail($this->cuentaId)->update($datos);
         }
         
-        $this->dispatch('successEventList', message: 'Datos bancarios guardados correctamente.');
+        session()->flash('datos_success', 'Datos bancarios guardados correctamente.');
 
         return $this->redirect(route('empresas.datos-bancarios.list'), navigate: true);
 
