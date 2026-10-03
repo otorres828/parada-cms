@@ -16,7 +16,7 @@ class PasajesExport extends DefaultValueBinder implements FromQuery, WithCustomC
 {
     public function __construct(
         private Builder $consulta,
-        private bool $mostrarTasaServicio,
+        private bool $viewTasaServicio,
     ) {}
 
     public function query(): Builder
@@ -59,7 +59,7 @@ class PasajesExport extends DefaultValueBinder implements FromQuery, WithCustomC
 
         // Si la empresa no tiene contrato "Ellos reciben", no se muestran  las
         // columnas de tasa de servicio y se ajustan los name de las columnas 11 y 12.
-        if (! $this->mostrarTasaServicio) {
+        if (! $this->viewTasaServicio) {
             $columnas[11] = 'Total USD';
             $columnas[12] = 'Total Bs';
             array_splice($columnas, 13, 4);
@@ -99,7 +99,7 @@ class PasajesExport extends DefaultValueBinder implements FromQuery, WithCustomC
             $salida?->format('H:i:s')
         ];
 
-        if (! $this->mostrarTasaServicio) {
+        if (! $this->viewTasaServicio) {
             array_splice($valores, 13, 4);
         }
 
