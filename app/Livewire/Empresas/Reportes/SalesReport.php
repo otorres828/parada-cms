@@ -69,7 +69,10 @@ class SalesReport extends EmpresaComponent
         ]);
 
         return Excel::download(
-            new SalesReportExport($this->query()),
+            new SalesReportExport(
+                $this->query(),
+                $this->viewTasaServicio
+            ),
             'reporte-ventas-'.$this->date_from.'-'.$this->date_to.'.xlsx',
         );
     }

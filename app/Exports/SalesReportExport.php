@@ -10,7 +10,12 @@ use Maatwebsite\Excel\Concerns\WithMapping;
 
 class SalesReportExport implements FromQuery, WithCustomChunkSize, WithHeadings, WithMapping
 {
-    public function __construct(private Builder $consulta) {}
+
+    public bool $viewTasaServicio;
+
+    public function __construct(private Builder $consulta, bool $viewTasaServicio = true) {
+        $this->viewTasaServicio = $viewTasaServicio;
+    }
 
     public function query(): Builder
     {
@@ -24,25 +29,42 @@ class SalesReportExport implements FromQuery, WithCustomChunkSize, WithHeadings,
 
     public function headings(): array
     {
-        return [
+        $headings= [
             'Fecha',
             'Reservas pagadas',
             'Ventas USD',
-            'Ventas Bs',
-            'Tasas de servicio USD',
-            'Tasas de servicio Bs',
+            'Ventas Bs'
         ];
+        if($this->viewTasaServicio){
+            $headings[] = 'Tasas de servicio USD';
+            $headings[] = 'Tasas de servicio Bs';
+        }
+        return $headings;
+           
     }
 
     public function map($row): array
     {
+
+        if($this->viewTasaServicio){
+
+            return [
+                $row->fecha,
+                (int) $row->cantidad,
+                (float) $row->total,
+                (float) $row->total_bs,
+                (float) $row->tasas,
+                (float) $row->tasas_bs,
+            ];
+
+        }
+
         return [
             $row->fecha,
             (int) $row->cantidad,
-            (float) $row->total,
-            (float) $row->total_bs,
-            (float) $row->tasas,
-            (float) $row->tasas_bs,
+            (float) $row->total - (float) $row->tasas,
+            (float) $row->total_bs - (float) $row->tasas_bs,
         ];
+
     }
 }

@@ -70,13 +70,16 @@
         <thead>
 
             <tr>
-                    <th>Fecha</th>
+                
+                <th>Fecha</th>
 
                 <th>Reservas pagadas</th>
 
                 <th>Ventas</th>
 
-                <th>Tasas</th>
+                @if ($viewTasaServicio)
+                    <th>Tasas</th>
+                @endif
 
             </tr>
         </thead>
@@ -91,13 +94,27 @@
                         {{ $row->cantidad ?? '—' }}
                     </td>
 
-                    <td>
-                        <x-money.dual :usd="$row->total" :bs="$row->total_bs" />
-                    </td>
+                    
+                    @if ($viewTasaServicio)
+                        
+                        <td>
+                            <x-money.dual :usd="$row->total" :bs="$row->total_bs" />
+                        </td>
 
-                    <td>
-                        <x-money.dual :usd="$row->tasas" :bs="$row->tasas_bs" />
-                    </td>
+                        <td>
+                            <x-money.dual :usd="$row->tasas" :bs="$row->tasas_bs" />
+                        </td>
+
+                    @else
+
+                        <td>
+                            <x-money.dual 
+                                :usd="$row->total - $row->tasas" 
+                                :bs="$row->total_bs - $row->tasas_bs" 
+                            />
+                        </td>
+                        
+                    @endif
 
             </tr>
 

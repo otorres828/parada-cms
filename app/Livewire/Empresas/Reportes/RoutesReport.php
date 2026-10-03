@@ -69,7 +69,10 @@ class RoutesReport extends EmpresaComponent
         ]);
 
         return Excel::download(
-            new RoutesReportExport($this->query()),
+            new RoutesReportExport(
+                $this->query(),
+                $this->viewTasaServicio
+            ),
             'reporte-rutas-'.$this->date_from.'-'.$this->date_to.'.xlsx',
         );
     }
