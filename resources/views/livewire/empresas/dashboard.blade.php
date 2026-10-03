@@ -26,7 +26,9 @@
 
         </div>
 
-
+        @if ($canAddReserva)
+            <a href="{{ route('empresas.reservas.add') }}" wire:navigate class="btn btn-primary"><i class="bi bi-plus-lg me-1"></i>Nueva Reserva</a>
+        @endif
     </div>
 
     <div class="card border-0 shadow-sm mb-4">
@@ -256,7 +258,7 @@
                                 </td>
 
                                 <td>
-                                    {{ $reserva->usuario?->name ?? 'Sin cliente' }}
+                                    {{ $reserva->nombre_comprador }}
                                 </td>
 
 

@@ -37,7 +37,7 @@
 
         <dt class="col-sm-4">Cliente</dt>
         <dd class="col-sm-8">
-            {{ $reserva->usuario?->name ?? '—' }}
+            {{ $reserva->nombre_comprador }}
         </dd>
         <dt class="col-sm-4">Empresa</dt>
         <dd class="col-sm-8">

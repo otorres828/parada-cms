@@ -13,7 +13,8 @@
             </div>
             <div class="col-md-6">
                 <label class="form-label">Fecha de nacimiento</label>
-                <input type="date" max="{{ today()->toDateString() }}" class="form-control" wire:model="pasajero.fecha_nacimiento" required maxlength="255">
+                <input type="date" max="{{ today()->toDateString() }}" class="form-control"
+                    wire:model="pasajero.fecha_nacimiento" required maxlength="255">
             </div>
             <div class="col-md-6">
                 <label class="form-label">Tipo de pasajero</label>
@@ -42,7 +43,7 @@
             </div>
             <div class="col-md-6">
                 <label class="form-label">Documento (opcional)</label>
-                <input type="text" class="form-control" wire:model="pasajero.documento_identidad"  maxlength="255">
+                <input type="text" class="form-control" wire:model="pasajero.documento_identidad" maxlength="255">
             </div>
         </div>
         <button class="btn btn-primary mt-3" type="submit" wire:loading.attr="disabled">Agregar pasajero</button>

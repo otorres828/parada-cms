@@ -13,6 +13,8 @@
                     <thead>
                         <tr>
                             <th>Tramo Comercial</th>
+                            <th>Salida del tramo</th>
+                            <th>Llegada al destino</th>
                             <th class="text-end">Precio</th>
                             <th class="text-center">Tope Asientos</th>
                             <th class="text-center">Ocupados</th>
@@ -27,6 +29,8 @@
                                     <i class="bi bi-arrow-right text-muted mx-1"></i>
                                     <span class="fw-semibold">{{ $tramoPrecio->destinoTerminal?->nombre }}</span>
                                 </td>
+                                <td>{{ $tramoPrecio->getSalida()?->format('d/m/Y H:i') ?? 'Sin horario' }}</td>
+                                <td>{{ $tramoPrecio->getLlegada()?->format('d/m/Y H:i') ?? 'Sin horario' }}</td>
                                 <td class="text-end text-success fw-bold">
                                     <x-money.dual :usd="$tramoPrecio->precio" :bs="$tramoPrecio->calcularMontoBs($tipoCambio)" />
                                 </td>

@@ -27,6 +27,7 @@ use App\Livewire\Empresas\Programaciones\ListProgramacion;
 use App\Livewire\Empresas\Transportes\ListTransporte;
 /* ------------------------------Reservas------------------------------------ */
 use App\Livewire\Empresas\Reservas\ListReserva;
+use App\Livewire\Empresas\Reservas\DetailReserva;
 use App\Livewire\Empresas\Reservas\SaveReserva;
 /* ------------------------------Pasajes------------------------------------ */
 use App\Livewire\Empresas\Pasajes\ListPasaje;
@@ -141,6 +142,7 @@ Route::group(['middleware' => ['auth:empresa', 'check.permisos.empresa']], funct
         Route::prefix('reservas')->name('reservas.')->group(function () {
 
             Route::livewire('/', ListReserva::class)->name('list');
+            Route::livewire('detalle/{reserva_id}', DetailReserva::class)->whereNumber('reserva_id')->name('detail');
             Route::livewire('taquilla/{reserva_id?}', SaveReserva::class)->whereNumber('reserva_id')->name('add');
 
         });

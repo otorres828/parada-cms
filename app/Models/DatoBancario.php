@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Collection;
 
 class DatoBancario extends ModelHelper
 {
@@ -48,6 +49,15 @@ class DatoBancario extends ModelHelper
     public function pagosReservas(): HasMany
     {
         return $this->hasMany(PagoReserva::class, 'metodo_pago');
+    }
+
+    public static function searchEmpresa(int $empresaId): Collection
+    {
+        $query = self::query()->where('empresa_id', $empresaId);
+
+        $query = $query->where('estatus', DatoBancario::ACTIVO)->get();
+
+        return $query;
     }
 
     public static function searchAdmin(string $search = '', array $filters = []): Builder

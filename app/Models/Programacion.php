@@ -189,7 +189,6 @@ class Programacion extends ModelHelper
             'empresa_id' => $empresaId,
             'date_from' => $dateFrom,
             'date_to' => $dateTo,
-            'activas' => true,
             'proximas' => true,
         ])->when($tipoTransporte !== '', function ($query) use ($tipoTransporte) {
             $query->whereHas('transporte', function ($transporte) use ($tipoTransporte) {
@@ -198,6 +197,23 @@ class Programacion extends ModelHelper
         })->orderBy('fecha_salida')
             ->orderBy('hora_salida')
             ->orderBy('id');
+    }
+
+    public static function paraTaquilla(int $empresaId, bool $soloFuturas = true): Builder
+    {
+        return self::searchAdmin('', [
+            'empresa_id' => $empresaId,
+            'status' => self::ESTADO_PROGRAMADO,
+            'proximas' => $soloFuturas,
+        ])->whereHas('viaje', function ($query) {
+            $query->where('estatus', self::ESTADO_ACTIVE)
+                ->whereHas('empresa', function ($empresa) {
+                    $empresa->where('estatus', self::ESTADO_ACTIVE);
+                });
+        })->whereHas('transporte', function ($query) {
+            $query->where('estatus', self::ESTADO_ACTIVE);
+        })->with(['transporte', 'tramoPrecios.origenTerminal', 'tramoPrecios.destinoTerminal'])
+            ->orderBy('fecha_salida')->orderBy('hora_salida');
     }
 
     public static function bloquear(int $programacionId): self

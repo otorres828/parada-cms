@@ -43,6 +43,7 @@
 
         </x-slot:group>
 
+
     </x-list.actions>
 
     <div class="row g-3 mb-3 align-items-end">
@@ -86,6 +87,8 @@
 
         @if ($canDownload)
             <div class="col-md-12 col-xl-auto ms-xl-auto text-md-end">
+                                    <a class="btn btn-primary" href="{{ route('empresas.reservas.add') }}" wire:navigate>Nueva Reserva</a>
+
                 <button type="button" class="btn btn-success" wire:click="exportExcel"
                     wire:loading.attr="disabled" wire:target="exportExcel">
                     <i class="bi bi-file-earmark-excel" aria-hidden="true"></i> Descargar Excel
@@ -109,8 +112,6 @@
                 </th>
 
                 <th>Cliente </th>
-
-                <th>Transporte</th>
 
                 <th>Pasajes</th>
 
@@ -145,14 +146,14 @@
 
                     <td>
                         {{ $reserva->codigo_referencia ?? '—' }}
+                        @if ($reserva->origen_venta === \App\Models\Reserva::ORIGEN_TAQUILLA)
+                            <span class="badge text-bg-info">Taquilla</span>
+                        @endif
                     </td>
 
                     <td>
-                        {{ $reserva->usuario?->name ?? '—' }}
+                        {{ $reserva->nombre_comprador }}
                     </td>
-
-
-                    <td>{{ $reserva->programacion?->transporte?->getTipoTransporte() ?? 'No registrado' }}</td>
 
                     <td>
                         {{ $reserva->pasajes->count() }}
@@ -178,6 +179,9 @@
 
                         <x-list.button-group>
 
+                            @if ($canAdd && $reserva->origen_venta === \App\Models\Reserva::ORIGEN_TAQUILLA)
+                                <a class="btn btn-outline-secondary" href="{{ route('empresas.reservas.add', ['reserva_id' => $reserva->id]) }}" wire:navigate title="Ver venta de taquilla"><i class="bi bi-receipt"></i></a>
+                            @endif
 
                         </x-list.button-group>
 

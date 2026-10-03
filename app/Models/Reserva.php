@@ -19,6 +19,10 @@ class Reserva extends ModelHelper
 
     protected $fillable = [
         'usuario_id',
+        'origen_venta',
+        'usuario_empresa_id',
+        'comprador_json',
+        'receptor_pago',
         'programacion_id',
         'origen_terminal_id',
         'destino_terminal_id',
@@ -39,6 +43,10 @@ class Reserva extends ModelHelper
         'comentarios_auditoria',
     ];
 
+    public const ORIGEN_TAQUILLA = 'taquilla';
+
+    public const ORIGEN_WEB = 'web';
+
     const ESTADO_PAGO_NUEVO = 1;
 
     const ESTADO_PAGO_PAGADO = 2;
@@ -55,7 +63,25 @@ class Reserva extends ModelHelper
 
     protected function casts(): array
     {
-        return ['reprogramacion_id' => 'integer', 'estado_pago' => 'integer', 'monto_pasajes' => 'decimal:2', 'descuento_aplicado' => 'decimal:2', 'exoneracion_tasa_json' => 'array', 'tasa_servicio' => 'decimal:2', 'monto_total' => 'decimal:2', 'fecha_compra' => 'datetime', 'fecha_pago' => 'datetime', 'fecha_expiracion' => 'datetime', 'comentarios_auditoria' => 'array'];
+        return ['comprador_json' => 'encrypted:array', 'usuario_empresa_id' => 'integer', 'reprogramacion_id' => 'integer', 'estado_pago' => 'integer', 'monto_pasajes' => 'decimal:2', 'descuento_aplicado' => 'decimal:2', 'exoneracion_tasa_json' => 'array', 'tasa_servicio' => 'decimal:2', 'monto_total' => 'decimal:2', 'fecha_compra' => 'datetime', 'fecha_pago' => 'datetime', 'fecha_expiracion' => 'datetime', 'comentarios_auditoria' => 'array'];
+    }
+
+    public function vendedor(): BelongsTo
+    {
+        return $this->belongsTo(UsuarioEmpresa::class, 'usuario_empresa_id');
+    }
+
+    public function getNombreCompradorAttribute(): string
+    {
+        return $this->comprador_json['nombre'] ?? $this->usuario?->name ?? 'Sin cliente';
+    }
+
+    public static function taquillaEmpresa(int $empresaId): Builder
+    {
+        return self::query()->where('origen_venta', self::ORIGEN_TAQUILLA)
+            ->whereHas('programacion.viaje', function ($query) use ($empresaId) {
+                $query->where('empresa_id', $empresaId);
+            });
     }
 
     public function usuario(): BelongsTo
@@ -118,6 +144,18 @@ class Reserva extends ModelHelper
         return $this->hasOne(self::class, 'reprogramacion_id');
     }
 
+    
+    public function pagos(): HasMany
+    {
+        return $this->hasMany(PagoReserva::class, 'reserva_id');
+    }
+
+    public function pago(): HasOne
+    {
+        return $this->hasOne(PagoReserva::class, 'reserva_id');
+    }
+    
+
     public function esReprogramacion(): bool
     {
         return $this->reprogramacion_id !== null;
@@ -150,6 +188,7 @@ class Reserva extends ModelHelper
             'origenTerminal',
             'destinoTerminal',
             'tipoCambio',
+            'tramoPrecio.programacion.viaje',
         ]);
     }
 
@@ -335,6 +374,11 @@ class Reserva extends ModelHelper
         return number_format((float) $this->monto_pasajes - (float) $this->descuento_aplicado, 2, '.', '');
     }
 
+    public function isTaquilla(): bool
+    {
+        return $this->origen_venta === self::ORIGEN_TAQUILLA;
+    }
+
     public static function dashboardSummary(array $filters): self
     {
         return self::searchAdmin('', $filters)
@@ -372,8 +416,4 @@ class Reserva extends ModelHelper
         });
     }
 
-    public function pago(): HasOne
-    {
-        return $this->hasOne(PagoReserva::class, 'reserva_id');
-    }
 }

@@ -164,10 +164,15 @@
 
                     <td>
                         {{ $reserva->codigo_referencia ?? '—' }}
+
+                        @if ($reserva->isTaquilla())
+                            <span class="badge text-bg-info">Taquilla</span>
+                        @endif
+
                     </td>
 
                     <td>
-                        {{ $reserva->usuario?->name ?? '—' }}
+                        {{ $reserva->nombre_comprador }}
                     </td>
 
                     <td>
