@@ -61,21 +61,38 @@ class ReservasExport extends DefaultValueBinder implements FromQuery, WithCustom
             'origen' => $reserva->origenTerminal?->nombre,
             'destino' => $reserva->destinoTerminal?->nombre,
             'cantidad_pasajes' => $reserva->pasajes->count(),
-            'subtotal' => (float) $reserva->monto_pasajes,
-            'subtotal_bs' => (float) $reserva->calcularMontoBs($reserva->monto_pasajes),
+            'precio' => (float) $reserva->monto_pasajes,
+            'precio_bs' => (float) $reserva->calcularMontoBs($reserva->monto_pasajes),
             'descuento' => (float) $reserva->descuento_aplicado,
-            'descuento_bs' => (float) $reserva->calcularMontoBs($reserva->descuento_aplicado),
-            'total' => (float) $totalSinTasa,
-            'total_bs' => (float) $reserva->calcularMontoBs($totalSinTasa),
-            'tasa_servicio' => (float) $reserva->tasa_servicio,
-            'tasa_servicio_bs' => (float) $reserva->calcularMontoBs($reserva->tasa_servicio),
-            'total_tasa_servicio' => (float) $reserva->monto_total,
-            'total_tasa_servicio_bs' => (float) $reserva->calcularMontoBs($reserva->monto_total),
-            'cupon' => $reserva->cupon?->codigo,
-            'estado_pago' => $reserva->getStatusPago(),
-            'fecha_salida' => $reserva->programacion?->fecha_salida?->format('d/m/Y'),
-            'hora_salida' => $reserva->programacion?->hora_salida,
+            'descuento_bs' => (float) $reserva->calcularMontoBs($reserva->descuento_aplicado)
         ];
+
+        if($this->viewTasaServicio){
+            $valores = array_merge($valores, 
+            [
+                'subtotal' => (float) $totalSinTasa,
+                'subtotal_bs' => (float) $reserva->calcularMontoBs($totalSinTasa),
+                'tasa_servicio' => (float) $reserva->tasa_servicio,
+                'tasa_servicio_bs' => (float) $reserva->calcularMontoBs($reserva->tasa_servicio),
+                'total' => (float) $reserva->monto_total,
+                'total_bs' => (float) $reserva->calcularMontoBs($reserva->monto_total),
+                'cupon' => $reserva->cupon?->codigo,
+                'estado_pago' => $reserva->getStatusPago(),
+                'fecha_salida' => $reserva->programacion?->fecha_salida?->format('d/m/Y'),
+                'hora_salida' => $reserva->programacion?->hora_salida,
+            ]);
+        }else{
+            $valores = array_merge($valores, 
+            [
+                'total' => (float) $totalSinTasa,
+                'total_bs' => (float) $reserva->calcularMontoBs($totalSinTasa),
+                'cupon' => $reserva->cupon?->codigo,
+                'estado_pago' => $reserva->getStatusPago(),
+                'fecha_salida' => $reserva->programacion?->fecha_salida?->format('d/m/Y'),
+                'hora_salida' => $reserva->programacion?->hora_salida,
+            ]);    
+        }
+        
 
         return array_values($this->filtrarColumnas($valores));
     }
@@ -93,7 +110,7 @@ class ReservasExport extends DefaultValueBinder implements FromQuery, WithCustom
 
     private function encabezados(): array
     {
-        return [
+        $headings = [
             'id' => 'ID reserva',
             'referencia' => 'Referencia',
             'origen_venta' => 'Origen de venta',
@@ -107,21 +124,40 @@ class ReservasExport extends DefaultValueBinder implements FromQuery, WithCustom
             'origen' => 'Origen',
             'destino' => 'Destino final',
             'cantidad_pasajes' => 'Cantidad de pasajes',
-            'subtotal' => 'Subtotal USD',
-            'subtotal_bs' => 'Subtotal Bs',
+            'precio' => 'Precio USD',
+            'precio_bs' => 'Precio Bs',
             'descuento' => 'Descuento USD',
-            'descuento_bs' => 'Descuento Bs',
-            'total' => 'Total USD',
-            'total_bs' => 'Total Bs',
-            'tasa_servicio' => 'Tasa de servicio USD',
-            'tasa_servicio_bs' => 'Tasa de servicio Bs',
-            'total_tasa_servicio' => 'Total + tasa de servicio USD',
-            'total_tasa_servicio_bs' => 'Total + tasa de servicio Bs',
-            'cupon' => 'Cupón',
-            'estado_pago' => 'Estado de pago',
-            'fecha_salida' => 'Fecha de salida',
-            'hora_salida' => 'Hora de salida',
+            'descuento_bs' => 'Descuento Bs'
         ];
+
+        if($this->viewTasaServicio){
+            $headings = array_merge($headings, 
+            [
+                'subtotal' => 'SubTotal USD',
+                'subtotal_bs' => 'SubTotal Bs',
+                'tasa_servicio' => 'Tasa de servicio USD',
+                'tasa_servicio_bs' => 'Tasa de servicio Bs',
+                'total' => 'Total USD',
+                'total_bs' => 'Total Bs',
+                'cupon' => 'Cupón',
+                'estado_pago' => 'Estado de pago',
+                'fecha_salida' => 'Fecha de salida',
+                'hora_salida' => 'Hora de salida',
+            ]);
+        }else{
+            $headings = array_merge($headings, 
+            [
+                'total' => 'Total USD',
+                'total_bs' => 'Total Bs',
+                'cupon' => 'Cupón',
+                'estado_pago' => 'Estado de pago',
+                'fecha_salida' => 'Fecha de salida',
+                'hora_salida' => 'Hora de salida',
+            ]);
+        }
+
+        return $headings;
+    
     }
 
     private function filtrarColumnas(array $columnas): array
