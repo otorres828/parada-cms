@@ -51,6 +51,7 @@ class TasasServicioService
         $descuentos = '0.00';
 
         foreach ($pasajes as $pasaje) {
+            
             if (bccomp($pasaje->precio_base, '0', 2) < 0
                 || bccomp($pasaje->descuento, '0', 2) < 0
                 || bccomp($pasaje->descuento, $pasaje->precio_base, 2) > 0) {
@@ -61,20 +62,38 @@ class TasasServicioService
 
             $pasaje->subtotal = bcsub($pasaje->precio_base, $pasaje->descuento, 2);
 
-            if ($reserva->exoneracion_tasa_json !== null || $reserva->esReprogramacion()) {
+            //La Tasa de servicio no se aplica a los siguientes casos:
+            $siEsInfanteSinAsiento = ($pasaje->numero_asiento === null && ($pasaje->viajero['tipo_pasajero'] ?? null) === 'infante');
+            $siVentaPorTaquilla = $reserva->origen_venta === Reserva::ORIGEN_TAQUILLA;
+            $siPoseeExoneracion = $reserva->exoneracion_tasa_json !== null;
+            $siEsReprogramacion = $reserva->esReprogramacion();
+
+            //La Tasa de servicio aplica a los siguientes casos:
+            $poseeTasaServicio = $pasaje->servicio_json !== null;
+
+            if ($siEsInfanteSinAsiento || $siVentaPorTaquilla || $siPoseeExoneracion || $siEsReprogramacion) {
+                
                 $tasaCalculada = '0.00';
                 $pasaje->servicio_json = null;
-            } elseif ($pasaje->servicio_json !== null) {
+
+            } elseif ($poseeTasaServicio) {
+
                 $tasaCalculada = $pasaje->tasa_servicio;
+
             } else {
+
+                //Si el pasaje no tiene tasa de servicio, se calcula según la tarifa del precio base.
                 $tasa = TasaServicio::paraPrecio($pasaje->subtotal);
+
                 $tasaCalculada = $tasa->calcular($pasaje->subtotal);
+
                 $pasaje->servicio_json = [
                     'monto_minimo' => $tasa->monto_minimo,
                     'monto_maximo' => $tasa->monto_maximo,
                     'valor' => $tasa->cantidad,
                     'tipo_servicio' => $tasa->tipo_servicio,
                 ];
+
             }
 
             $pasaje->tasa_servicio = $tasaCalculada;
