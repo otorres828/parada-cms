@@ -221,17 +221,17 @@ foreach ([Empresa::CONTRATO_ELLOS_RECIBEN, Empresa::CONTRATO_NOSOTROS_RECIBIMOS]
 $dashboard->boot();
     $dashboard->mount();
     $datos = $dashboard->render()->getData();
-    $ellosReciben = $contrato === Empresa::CONTRATO_ELLOS_RECIBEN;
-    $check($datos['ellosReciben'] === $ellosReciben);
-    $check((float) $datos['metrics']['ventas'] === (float) ($ellosReciben ? $r->monto_total : $r->getMontoSinTasa()));
+    $viewTasaServicio = $contrato === Empresa::CONTRATO_ELLOS_RECIBEN;
+    $check($datos['viewTasaServicio'] === $viewTasaServicio);
+    $check((float) $datos['metrics']['ventas'] === (float) ($viewTasaServicio ? $r->monto_total : $r->getMontoSinTasa()));
     $listado = new App\Livewire\Empresas\Reservas\ListReserva;
 $listado->boot();
     $listado->mount();
-    $check($listado->render()->getData()['ellosReciben'] === $ellosReciben);
+    $check($listado->render()->getData()['viewTasaServicio'] === $viewTasaServicio);
     $listadoPasajes = new App\Livewire\Empresas\Pasajes\ListPasaje;
 $listadoPasajes->boot();
     $listadoPasajes->mount();
-    $check($listadoPasajes->render()->getData()['mostrarTasaServicio'] === $ellosReciben);
+    $check($listadoPasajes->render()->getData()['mostrarTasaServicio'] === $viewTasaServicio);
 }
 $ejemplo = new Reserva(['monto_pasajes' => '30.00', 'descuento_aplicado' => '3.00', 'tasa_servicio' => '2.00', 'monto_total' => '29.00']);
 $check($ejemplo->getMontoSinTasa() === '27.00');

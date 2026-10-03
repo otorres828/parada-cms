@@ -72,7 +72,6 @@ class Dashboard extends EmpresaComponent
         }
 
         $empresa = $this->usuarioEmpresa->empresa;
-        $ellosReciben = (int) $empresa->tipo_contrato === Empresa::CONTRATO_ELLOS_RECIBEN;
 
         $filtros = [
             'empresa_id' => $empresa->id,
@@ -90,7 +89,7 @@ class Dashboard extends EmpresaComponent
         );
 
         $metrics = [
-            'ventas' => $ellosReciben ? $resumen->ventas : (float) $resumen->ventas - (float) $resumen->tasas,
+            'ventas' => $this->viewTasaServicio ? $resumen->ventas : (float) $resumen->ventas - (float) $resumen->tasas,
             'tasas' => $resumen->tasas,
             'reservas_pagadas' => (int) $resumen->cantidad,
             'pasajes' => Pasaje::searchAdmin('', $pagadas)->count(),
@@ -115,7 +114,6 @@ class Dashboard extends EmpresaComponent
 
         return view('livewire.empresas.dashboard', [
             'metrics' => $metrics,
-            'ellosReciben' => $ellosReciben,
             'ultimasReservas' => $ultimasReservas,
             'proximasSalidas' => $proximasSalidas,
             'estados' => $this->estados,

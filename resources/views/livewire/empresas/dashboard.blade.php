@@ -109,8 +109,8 @@
     <div class="row g-3 mb-2" wire:loading.class="opacity-50">
 
         @foreach ([['label' => 'Ventas pagadas', 'value' => number_format($metrics['ventas'], 2, ',', '.'), 'note' => $metrics['reservas_pagadas'] . ' reservas pagadas', 'icon' => 'cash-stack', 'color' => 'primary'], ['label' => 'Pasajes vendidos', 'value' => number_format($metrics['pasajes'], 0, ',', '.'), 'note' => 'Pasajes de reservas pagadas', 'icon' => 'ticket-perforated', 'color' => 'success'], ['label' => 'Tasas de servicio', 'value' => number_format($metrics['tasas'], 2, ',', '.'), 'note' => 'Incluidas en las ventas pagadas', 'icon' => 'receipt', 'color' => 'info'], ['label' => 'Reservas pendientes', 'value' => number_format($metrics['pendientes'], 0, ',', '.'), 'note' => 'Con estado de pago pendiente', 'icon' => 'hourglass-split', 'color' => 'warning']] as $card)
-            @if ($card['icon'] !== 'receipt' || $ellosReciben)
-            <div class="col-sm-6 {{ $ellosReciben ? 'col-xl-3' : 'col-xl-4' }}">
+            @if ($card['icon'] !== 'receipt' || $viewTasaServicio)
+            <div class="col-sm-6 {{ $viewTasaServicio ? 'col-xl-3' : 'col-xl-4' }}">
 
                 <div class="card h-100 border-0 shadow-sm">
 
@@ -143,7 +143,7 @@
 
     <p class="small text-body-secondary mb-4">Importes en la moneda de operación. Calculados por fecha de compra y
         estado actual de la
-        reserva; excluyen cancelaciones y reembolsos. @if ($ellosReciben) Las tasas corresponden al importe que debes transferir a la plataforma. @else Las ventas excluyen las tasas de servicio. @endif</p>
+        reserva; excluyen cancelaciones y reembolsos. @if ($viewTasaServicio) Las tasas corresponden al importe que debes transferir a la plataforma. @else Las ventas excluyen las tasas de servicio. @endif</p>
 
     <div class="row g-3 mb-4">
 
@@ -267,7 +267,7 @@
                                 </td>
 
                                 <td class="text-end text-nowrap">
-                                    {{ number_format($ellosReciben ? $reserva->monto_total : $reserva->getMontoSinTasa(), 2, ',', '.') }}
+                                    {{ number_format($viewTasaServicio ? $reserva->monto_total : $reserva->getMontoSinTasa(), 2, ',', '.') }}
                                 </td>
 
                                 <td class="pe-4">
