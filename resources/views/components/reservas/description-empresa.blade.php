@@ -72,6 +72,16 @@
 
         @if ($viewTasaServicio)
             
+            <dt class="col-sm-4">Precio</dt>
+            <dd class="col-sm-8">
+                <x-money.dual :usd="$reserva->monto_pasajes" :bs="$reserva->calcularMontoBs($reserva->monto_pasajes)" />
+            </dd>
+
+            <dt class="col-sm-4">Descuento</dt>
+            <dd class="col-sm-8">
+                <x-money.dual :usd="$reserva->descuento_aplicado" :bs="$reserva->calcularMontoBs($reserva->descuento_aplicado)" />
+            </dd>
+
             <dt class="col-sm-4">SubTotal</dt>
             <dd class="col-sm-8">
                 @php($totalSinTasa = bcsub($reserva->monto_pasajes ?? '0', $reserva->descuento_aplicado ?? '0', 2))
@@ -96,6 +106,16 @@
             </dd>
 
         @else
+
+            <dt class="col-sm-4">Precio</dt>
+            <dd class="col-sm-8">
+                <x-money.dual :usd="$reserva->monto_pasajes" :bs="$reserva->calcularMontoBs($reserva->monto_pasajes)" />
+            </dd>
+
+            <dt class="col-sm-4">Descuento</dt>
+            <dd class="col-sm-8">
+                <x-money.dual :usd="$reserva->descuento_aplicado" :bs="$reserva->calcularMontoBs($reserva->descuento_aplicado)" />
+            </dd>
 
             <dt class="col-sm-4">Total</dt>
             <dd class="col-sm-8">
