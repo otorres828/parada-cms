@@ -11,13 +11,17 @@ use Livewire\Attributes\Locked;
 #[Layout('layouts.crm')]
 class DetailPasaje extends EmpresaComponent
 {
+
+    #[Locked]
     public bool $canViewCampaign = false;
 
+    #[Locked]
     public bool $canViewReservation = false;
 
     #[Locked]
     public ?int $pasaje_id = null;
 
+    #[Locked]
     public Pasaje $pasaje;
 
     public string $qr;
@@ -33,7 +37,6 @@ class DetailPasaje extends EmpresaComponent
 
     public function render()
     {
-
         return view('livewire.empresas.pasajes.detail-pasaje');
     }
 

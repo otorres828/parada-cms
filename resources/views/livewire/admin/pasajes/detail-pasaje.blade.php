@@ -10,7 +10,7 @@
     - <x-form.cancel-button />: Enlace para regresar al listado anterior.
     - <x-layout.loader.fullpage />: Indicador global durante operaciones de Livewire.
     - <x-list.heading />: Cabecera del módulo con título y acciones.
-    - <x-pasajes.description />: Ficha descriptiva del pasaje.
+    - <x-pasajes.description-admin />: Ficha descriptiva del pasaje.
     - <x-pasajes.localizador />: Elemento de presentación del localizador y QR del pasaje.
     --------------------------------------------------------------------------
 --}}
@@ -46,7 +46,7 @@
 
                 <div class="card">
 
-                    <x-pasajes.description 
+                    <x-pasajes.description-admin
                         :pasaje="$pasaje" 
                         :can-view-campaign="$canViewCampaign" 
                         :can-view-reservation="$canViewReservation" 

@@ -9,9 +9,11 @@ use Livewire\Component;
 abstract class EmpresaComponent extends Component
 {
     protected UsuarioEmpresa $usuarioEmpresa;
+    public bool $viewTasaServicio = false;
 
     public function boot(): void
     {
         $this->usuarioEmpresa = Auth::guard('empresa')->user();
+        $this->viewTasaServicio = $this->usuarioEmpresa->empresa->viewTasaServicio();
     }
 }

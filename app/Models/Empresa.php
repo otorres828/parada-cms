@@ -83,6 +83,16 @@ class Empresa extends ModelHelper
         return $this->hasMany(ExoneracionTasaServicio::class, 'empresa_id');
     }
 
+    public function reembolsos(): HasMany
+    {
+        return $this->hasMany(Reembolso::class, 'empresa_id');
+    }
+
+    public function documentosLegales(): HasMany
+    {
+        return $this->hasMany(DocumentoLegal::class, 'empresa_id');
+    }
+
     public function estaBloqueadaPorCobranza(): bool
     {
         return $this->bloqueada_por_cobranza_at !== null;
@@ -137,6 +147,21 @@ class Empresa extends ModelHelper
         ][$dia] ?? 'Sin configurar';
     }
 
+    public static function findAdminDetail(int $empresaId): self
+    {
+        return self::query()
+            ->with([
+                'datosBancarios' => function ($query) {
+                    $query->where('estatus', '!=', DatoBancario::ELIMINADO)
+                        ->orderByDesc('estatus')
+                        ->orderBy('tipo')
+                        ->orderBy('id');
+                },
+            ])
+            ->findOrFail($empresaId);
+    }
+
+
     public static function searchAdmin(string $search = '', array $filters = []): Builder
     {
         $query = self::query();
@@ -188,27 +213,10 @@ class Empresa extends ModelHelper
             ->first();
     }
 
-    public static function findAdminDetail(int $empresaId): self
+    public function viewTasaServicio(): bool
     {
-        return self::query()
-            ->with([
-                'datosBancarios' => function ($query) {
-                    $query->where('estatus', '!=', DatoBancario::ELIMINADO)
-                        ->orderByDesc('estatus')
-                        ->orderBy('tipo')
-                        ->orderBy('id');
-                },
-            ])
-            ->findOrFail($empresaId);
+        return $this->tipo_contrato === self::CONTRATO_ELLOS_RECIBEN;
     }
 
-    public function reembolsos(): HasMany
-    {
-        return $this->hasMany(Reembolso::class, 'empresa_id');
-    }
 
-    public function documentosLegales(): HasMany
-    {
-        return $this->hasMany(DocumentoLegal::class, 'empresa_id');
-    }
 }
