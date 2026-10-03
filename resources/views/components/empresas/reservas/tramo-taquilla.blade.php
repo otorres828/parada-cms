@@ -1,15 +1,16 @@
 {{-- Selección de origen, destino y salida que cubre el tramo. --}}
 @props(['origenes', 'destinos', 'opciones', 'salidas'])
 <div class="card mb-3">
+    <div class="card-header">1. Selecciona el viaje</div>
     <div class="card-body row g-3">
         <div class="col-md-3">
-            <label class="form-label">Fecha de salida</label>
-            <input form="registrar-taquilla" required type="date" class="form-control" wire:model.live="fecha"
+            <label class="form-label" for="taquilla-tramo-fecha">Fecha de salida</label>
+            <input id="taquilla-tramo-fecha" form="registrar-taquilla" required type="date" class="form-control" wire:model.live="fecha"
                 min="{{ today()->toDateString() }}">
         </div>
         <div class="col-md-3">
-            <label class="form-label">Origen</label>
-            <select form="registrar-taquilla" required class="form-select" wire:model.live="origenId">
+            <label class="form-label" for="taquilla-tramo-origen">Origen</label>
+            <select id="taquilla-tramo-origen" form="registrar-taquilla" required class="form-select" wire:model.live="origenId">
                 <option value="">Seleccionar origen</option>
                 @foreach ($origenes as $terminal)
                     <option value="{{ $terminal->id }}">{{ $terminal->nombre }}</option>
@@ -17,8 +18,8 @@
             </select>
         </div>
         <div class="col-md-3">
-            <label class="form-label">Destino</label>
-            <select form="registrar-taquilla" required class="form-select" wire:model.live="destinoId">
+            <label class="form-label" for="taquilla-tramo-destino">Destino</label>
+            <select id="taquilla-tramo-destino" form="registrar-taquilla" required class="form-select" wire:model.live="destinoId">
                 <option value="">Seleccionar destino</option>
                 @foreach ($destinos as $terminal)
                     <option value="{{ $terminal->id }}">{{ $terminal->nombre }}</option>
@@ -26,8 +27,8 @@
             </select>
         </div>
         <div class="col-md-3">
-            <label class="form-label">Salida disponible para el tramo</label>
-            <select form="registrar-taquilla" required class="form-select" wire:model.live="tarifaId">
+            <label class="form-label" for="taquilla-tramo-salida">Salida disponible para el tramo</label>
+            <select id="taquilla-tramo-salida" form="registrar-taquilla" required class="form-select" wire:model.live="tarifaId">
                 <option value="">Seleccionar salida</option>
                 @foreach ($opciones as $opcion)
                     <option value="{{ $opcion->id }}">{{ $opcion->getSalida()?->format('d/m H:i') ?? 'Sin horario' }}

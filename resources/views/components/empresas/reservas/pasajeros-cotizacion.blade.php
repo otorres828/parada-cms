@@ -1,6 +1,8 @@
 {{-- Pasajeros temporales: retirar no modifica la base de datos. --}}
 @props(['pasajeros', 'precio'])
-<div class="card mb-3">
+<div class="card mb-3"
+    :class="{ 'border-primary': resaltados.pasajeros }"
+    style="transition: border-color 250ms ease;">
     <div class="card-header">Pasajeros de la cotización</div>
     <div class="table-responsive">
         <table class="table mb-0">

@@ -83,9 +83,6 @@ $reject(function () use ($ajeno, $venta) {
 echo "Taquilla: comprador cifrado, sin cuentas ficticias, cupos, tasa cero, cobros y aislamiento OK\n";
 
 // Renderiza el componente Livewire real para detectar variables o componentes Blade inválidos.
-$html = Livewire\Livewire::mount(App\Livewire\Empresas\Reservas\SaveReserva::class, ['reserva_id' => $efectivo->id]);
-$check(str_contains($html, $efectivo->codigo_referencia));
-$check(str_contains($html, 'data:image/svg+xml;base64,'));
 $htmlNuevo = Livewire\Livewire::mount(App\Livewire\Empresas\Reservas\SaveReserva::class);
 $check(str_contains($htmlNuevo, 'Seleccionar salida'));
 
@@ -112,11 +109,6 @@ $check(!$sinPasajeros->pago()->exists());
 // Envío bajo acción explícita; se usa un transporte falso y no salen correos reales.
 Illuminate\Support\Facades\Mail::fake();
 $efectivo->update(['comprador_json' => array_merge($comprador, ['email' => 'comprador@example.test'])]);
-$componente = new App\Livewire\Empresas\Reservas\SaveReserva;
-$componente->boot();
-$componente->mount($efectivo->id);
-$componente->enviarPasajes();
-$check(Illuminate\Support\Facades\Mail::sent(App\Mail\PasajesTaquilla::class)->count() === 1);
 $correo = new App\Mail\PasajesTaquilla($efectivo->fresh()->detalle());
 $check(count($correo->attachments()) === 1);
 $check(str_contains($correo->render(), $efectivo->codigo_referencia));
@@ -153,6 +145,16 @@ $draft = new App\Livewire\Empresas\Reservas\SaveReserva;
 $draft->boot();
 $draft->mount();
 $antes = [Reserva::count(), Pasaje::count(), App\Models\PagoReserva::count()];
+$reject(function () use ($draft) {
+    $draft->agregarPasajero();
+}, ValidationException::class);
+$draft->fecha = $otraSalida->fecha_salida->toDateString();
+$draft->origenId = (string) $otraTarifa->origen_terminal_id;
+$draft->destinoId = (string) $otraTarifa->destino_terminal_id;
+$draft->tarifaId = (string) $otraTarifa->id;
+$reject(function () use ($draft) {
+    $draft->agregarPago();
+}, ValidationException::class);
 $draft->pasajero = $persona;
 $draft->agregarPasajero();
 $check(count($draft->pasajeros) === 1);
@@ -190,7 +192,7 @@ $reject(function () use ($usuarioEmpresa, $tarifaMixta, $comprador, $persona) {
     ReservaTaquillaService::registrar($usuarioEmpresa, $tarifaMixta->id, $comprador, [$persona], [['tipo' => 2, 'moneda' => 'USD', 'monto' => '10.00']]);
 }, ValidationException::class);
 $check(Reserva::count() === $antes);
-$check(str_contains(Livewire\Livewire::mount(App\Livewire\Empresas\Reservas\SaveReserva::class, ['reserva_id' => $mixta->id]), 'Pagos registrados'));
+
 $check(str_contains(Livewire\Livewire::mount(App\Livewire\Empresas\DatosBancarios\ListDatoBancario::class), 'Datos Bancarios'));
 $check(str_contains(Livewire\Livewire::mount(App\Livewire\Empresas\DatosBancarios\SaveDatoBancario::class), 'Seleccionar banco'));
 echo "Cotización sin escrituras, pagos combinados, rollback, infantes y cuentas bancarias: OK\n";
@@ -201,20 +203,22 @@ $tarifaMovil = $tarifa->replicate();
 $tarifaMovil->programacion_id = $salidaMovil->id;
 $tarifaMovil->save();
 $cuentaMovil = $cuenta->replicate();
-$cuentaMovil->tipo = DatoBancario::PAGO_MOVIL;
+$cuentaMovil->tipo = DatoBancario::TIPO_PAGO_MOVIL;
 $cuentaMovil->save();
-$cuentaTarjeta = $cuenta->replicate();
-$cuentaTarjeta->tipo = DatoBancario::CUENTA_BANCARIA;
-$cuentaTarjeta->save();
 $cobros = [
     ['tipo' => 3, 'moneda' => 'VES', 'monto' => number_format(4 * App\Models\TipoCambio::vigente()->valor_usd, 2, '.', ''), 'cuenta_id' => $cuentaMovil->id, 'referencia' => 'MOVIL-MIXTO'],
-    ['tipo' => 4, 'moneda' => 'USD', 'monto' => '6.00', 'cuenta_id' => $cuentaTarjeta->id, 'referencia' => 'TARJETA-MIXTO'],
+    ['tipo' => 4, 'moneda' => 'USD', 'monto' => '6.00', 'referencia' => 'TARJETA-MIXTO'],
 ];
 $movil = ReservaTaquillaService::registrar($usuarioEmpresa, $tarifaMovil->id, $comprador, [$persona], $cobros, 'TQ-PRUEBA-UNICA');
-$check($movil->estado_pago === Reserva::ESTADO_PAGO_PENDIENTE && $movil->pagos()->count() === 2);
+$check($movil->estado_pago === Reserva::ESTADO_PAGO_PAGADO && $movil->pagos()->count() === 2);
+$check($movil->pasajes->every(function ($pasaje) {
+    return ! empty($pasaje->localizador) && $pasaje->getQr() !== null;
+}));
+$check($movil->pagos->firstWhere('tipo_pago', 4)->metodo_pago === null);
+$check($movil->pagos->firstWhere('tipo_pago', 3)->monto_recibido === '4.00');
+$check(! Illuminate\Support\Facades\Schema::hasColumn('pagos_reservas', 'moneda'));
 $repetida = ReservaTaquillaService::registrar($usuarioEmpresa, $tarifaMovil->id, $comprador, [$persona], $cobros, 'TQ-PRUEBA-UNICA');
 $check($movil->id === $repetida->id);
-$movil = PagoTaquillaService::confirmar($usuarioEmpresa, $movil->id);
 $check($movil->estado_pago === Reserva::ESTADO_PAGO_PAGADO);
 $antes = Reserva::count();
 $cuentaAjena = $cuenta->replicate();
@@ -245,3 +249,43 @@ $reject(function () use ($bank, $empresaDos) {
     $bank->mount(DatoBancario::where('empresa_id', $empresaDos->id)->firstOrFail()->id);
 }, ModelNotFoundException::class);
 echo "Pago móvil y tarjeta, suma confirmada, reintentos y bancos aislados: OK\n";
+
+// El formulario nuevo solo registra; una venta terminada deja listo otro borrador.
+$nuevaSalida = $programacion->replicate();
+$nuevaSalida->save();
+$nuevaTarifa = $tarifa->replicate();
+$nuevaTarifa->programacion_id = $nuevaSalida->id;
+$nuevaTarifa->save();
+$formulario = new App\Livewire\Empresas\Reservas\SaveReserva;
+$formulario->boot();
+$formulario->mount();
+$formulario->fecha = $nuevaSalida->fecha_salida->toDateString();
+$formulario->origenId = (string) $nuevaTarifa->origen_terminal_id;
+$formulario->destinoId = (string) $nuevaTarifa->destino_terminal_id;
+$formulario->tarifaId = (string) $nuevaTarifa->id;
+$formulario->comprador = $comprador;
+$formulario->pasajero = $persona;
+$formulario->agregarPasajero();
+$formulario->pago = ['tipo' => 4, 'moneda' => 'USD', 'monto' => '10.00', 'referencia' => 'TARJETA-FORMULARIO'];
+$formulario->agregarPago();
+$token = $formulario->ventaToken;
+$antes = Reserva::count();
+$formulario->registrar();
+$check(Reserva::count() === $antes + 1);
+$check(Reserva::where('codigo_referencia', $token)->firstOrFail()->estado_pago === Reserva::ESTADO_PAGO_PAGADO);
+$check($formulario->ventaToken !== $token && $formulario->pasajeros === [] && $formulario->pagos === []);
+$check($formulario->tarifaId === '' && $formulario->comprador['nombre'] === '');
+$formulario->pagos = [['tipo' => 2, 'moneda' => 'USD', 'monto' => '10.00']];
+$formulario->updatedDestinoId();
+$check($formulario->pagos === [] && $formulario->tarifaId === '');
+echo "Alta única: registro completo, limpieza de cotización y pagos al cambiar tramo OK\n";
+
+// También el pago móvil requiere autorización de cobro y revierte todo si falta.
+$antes = [Reserva::count(), Pasaje::count(), App\Models\PagoReserva::count()];
+$reject(function () use ($cajero, $nuevaTarifa, $comprador, $persona, $cuentaMovil) {
+    ReservaTaquillaService::registrar($cajero, $nuevaTarifa->id, $comprador, [$persona], [
+        ['tipo' => 3, 'moneda' => 'USD', 'monto' => '10.00', 'cuenta_id' => $cuentaMovil->id, 'referencia' => 'SIN-PERMISO-CONFIRMAR'],
+    ]);
+}, Symfony\Component\HttpKernel\Exception\HttpException::class);
+$check($antes === [Reserva::count(), Pasaje::count(), App\Models\PagoReserva::count()]);
+echo "Pago móvil de taquilla pagado con QR y confirmación autorizada: OK\n";

@@ -27,12 +27,14 @@ class ReembolsoService
 
         return DB::transaction(function () use ($data) {
             $pago = PagoReserva::with('reserva.programacion.viaje')->whereKey($data['pago_reserva_id'])->lockForUpdate()->firstOrFail();
-            $reserva = $pago->reserva;
+            $reserva = Reserva::whereKey($pago->reserva_id)->lockForUpdate()->firstOrFail();
             if ($reserva->estado_pago !== Reserva::ESTADO_PAGO_PAGADO) {
                 self::fail('La reserva no está pagada.');
             }
-            if (Reembolso::where('pago_reserva_id', $pago->id)->exists()) {
-                self::fail('Ya existe una solicitud para este pago.');
+            if (Reembolso::whereHas('pagoReserva', function ($query) use ($reserva) {
+                $query->where('reserva_id', $reserva->id);
+            })->exists()) {
+                self::fail('Ya existe una solicitud para esta reserva.');
             }
             $empresa = Empresa::whereKey($reserva->programacion->viaje->empresa_id)->lockForUpdate()->firstOrFail();
             $record = Reembolso::create([

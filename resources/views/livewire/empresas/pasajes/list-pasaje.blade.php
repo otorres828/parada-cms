@@ -218,7 +218,7 @@
             @empty
 
                 <tr>
-                    <td colspan="{{ $mostrarTasaServicio ? 14 : 12 }}" class="text-center py-5">
+                    <td colspan="{{ $viewTasaServicio ? 14 : 12 }}" class="text-center py-5">
                         No se encontraron registros.
                     </td>
 

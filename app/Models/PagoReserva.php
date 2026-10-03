@@ -27,7 +27,6 @@ class PagoReserva extends ModelHelper
 
     protected $fillable = [
         'tipo_pago',
-        'moneda',
         'monto_recibido',
         'reserva_id',
         'total',

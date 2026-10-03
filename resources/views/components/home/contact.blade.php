@@ -25,7 +25,7 @@
                 <div class="form-success" role="status">
                     <span><i class="bi bi-check-lg"></i></span>
                     <h3>Recibimos tu solicitud</h3>
-                    <p>Gracias por considerar Parada. Nuestro equipo revisará los datos y se pondrá en contacto contigo.</p>
+                    <p>Gracias por considerar Rodando. Nuestro equipo revisará los datos y se pondrá en contacto contigo.</p>
                     <button type="button" wire:click="$set('solicitudEnviada', false)">Enviar otra solicitud</button>
                 </div>
 

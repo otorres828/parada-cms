@@ -82,7 +82,7 @@ class EmpresasDemoSeeder extends Seeder
         DatoBancario::updateOrCreate(
             ['empresa_id' => $empresa->id, 'numero_cuenta_telefono' => '0414'.str_pad((string) $numero, 7, '0', STR_PAD_LEFT)],
             [
-                'tipo' => DatoBancario::PAGO_MOVIL,
+                'tipo' => DatoBancario::TIPO_PAGO_MOVIL,
                 'banco' => ['Banesco', 'Mercantil', 'Banco Nacional de Crédito'][$numero % 3],
                 'nombre_titular' => $empresa->nombre,
                 'tipo_titular' => $empresa->tipo_entidad === Empresa::AGENCIA_AUTOBUS ? 'juridico' : 'personal',

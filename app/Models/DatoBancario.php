@@ -9,9 +9,11 @@ use Illuminate\Database\Eloquent\Collection;
 
 class DatoBancario extends ModelHelper
 {
-    public const PAGO_MOVIL = 1;
+    public const TIPO_PAGO_MOVIL = 1;
 
-    public const CUENTA_BANCARIA = 2;
+    public const TIPO_CUENTA_BANCARIA = 2;
+
+    public const TIPO_TARJETA = 3;
 
     public const ACTIVO = 1;
 
@@ -91,8 +93,8 @@ class DatoBancario extends ModelHelper
     public function getTipo(): string
     {
         return match ($this->tipo) {
-            self::PAGO_MOVIL => 'Pago móvil',
-            self::CUENTA_BANCARIA => 'Cuenta bancaria',
+            self::TIPO_PAGO_MOVIL => 'Pago móvil',
+            self::TIPO_CUENTA_BANCARIA => 'Cuenta bancaria',
             default => 'Desconocido',
         };
     }
@@ -104,6 +106,16 @@ class DatoBancario extends ModelHelper
             'extranjero' => 'Extranjero',
             'personal' => 'Personal',
             default => 'Desconocido',
+        };
+    }
+
+    public function getTipoDocumento(): string
+    {
+        return match ($this->tipo_titular) {
+            'juridico' => 'J',
+            'extranjero' => 'E',
+            'personal' => 'V',
+            default => '',
         };
     }
 

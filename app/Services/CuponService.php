@@ -83,10 +83,14 @@ class CuponService
                 : 0.0;
             $restante = $descuentoReserva;
             $descuentoAplicado = 0.0;
-            $ultimo = $pasajes->count() - 1;
+            $ultimo = $pasajes->filter(function ($pasaje) {
+                return (float) $pasaje->precio_base > 0;
+            })->keys()->last();
 
             foreach ($pasajes as $indice => $pasaje) {
-                if ($campana->aplica_en === ConfiguracionCupon::APLICA_EN_PASAJES) {
+                if ((float) $pasaje->precio_base === 0.0) {
+                    $descuento = 0.0;
+                } elseif ($campana->aplica_en === ConfiguracionCupon::APLICA_EN_PASAJES) {
                     $descuento = $this->calcularDescuento((float) $pasaje->precio_base, $campana);
                 } elseif ($indice === $ultimo) {
                     $descuento = $restante;

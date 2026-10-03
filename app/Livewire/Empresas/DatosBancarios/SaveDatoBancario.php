@@ -47,7 +47,7 @@ class SaveDatoBancario extends EmpresaComponent
             'datos.nombre_titular' => ['required', 'string', 'max:255'],
             'datos.tipo_titular' => ['required', 'in:juridico,extranjero,personal'],
             'datos.numero_documento' => ['required', 'string', 'max:30'],
-            'datos.numero_cuenta_telefono' => (int) $this->datos['tipo'] === DatoBancario::PAGO_MOVIL
+            'datos.numero_cuenta_telefono' => (int) $this->datos['tipo'] === DatoBancario::TIPO_PAGO_MOVIL
                 ? ['required', 'regex:/^0(412|414|416|424|426)[0-9]{7}$/']
                 : ['required', 'digits:20'],
             'datos.tipo_cuenta' => ['nullable', 'required_if:datos.tipo,2', 'in:corriente,ahorro'],
@@ -69,7 +69,7 @@ class SaveDatoBancario extends EmpresaComponent
         ]);
         $datos = $validated['datos'];
 
-        $datos['tipo_cuenta'] = (int) $datos['tipo'] === DatoBancario::PAGO_MOVIL ? null : $datos['tipo_cuenta'];
+        $datos['tipo_cuenta'] = (int) $datos['tipo'] === DatoBancario::TIPO_PAGO_MOVIL ? null : $datos['tipo_cuenta'];
 
         if ($this->cuentaId === null) {
             $cuenta = DatoBancario::create($datos + ['empresa_id' => $this->usuarioEmpresa->empresa_id]);

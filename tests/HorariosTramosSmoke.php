@@ -17,7 +17,7 @@ Carbon::setTestNow($reloj);
 try {
     $intermedia = Terminal::create([
         'estado_id' => $estado->id,
-        'nombre' => 'Parada intermedia nocturna',
+        'nombre' => 'Rodando intermedia nocturna',
         'direccion' => 'Calle',
         'latitud' => 0,
         'longitud' => 0,
@@ -62,8 +62,6 @@ try {
     $check($venta->estado_pago === Reserva::ESTADO_PAGO_PAGADO);
     $check($venta->tramoPrecio->getSalida()->format('H:i') === '01:00');
     $check($venta->tramoPrecio->getLlegada()->format('H:i') === '02:00');
-    $html = Livewire\Livewire::mount(App\Livewire\Empresas\Reservas\SaveReserva::class, ['reserva_id' => $venta->id]);
-    $check(str_contains($html, '01:00') && str_contains($html, '02:00'));
     $nuevo = new App\Livewire\Empresas\Reservas\SaveReserva;
     $nuevo->boot();
     $nuevo->mount();

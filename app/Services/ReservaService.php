@@ -60,6 +60,7 @@ class ReservaService
                 ->with(['viaje.tramos', 'viaje.empresa', 'transporte'])
                 ->findOrFail($tarifa->programacion_id);
 
+            $tarifa->validarSalida();
             $terminales = Terminal::obtenerSecuenciaRuta($programacion);
 
             if ($reserva !== null) {
@@ -96,6 +97,8 @@ class ReservaService
             }
             $reserva->fill([
                 'usuario_id' => $cliente->id,
+                'origen_venta' => Reserva::ORIGEN_WEB,
+                'receptor_pago' => (int) $programacion->viaje->empresa->tipo_contrato === \App\Models\Empresa::CONTRATO_ELLOS_RECIBEN ? 'empresa' : 'plataforma',
                 'programacion_id' => $programacion->id,
                 'origen_terminal_id' => $tarifa->origen_terminal_id,
                 'destino_terminal_id' => $tarifa->destino_terminal_id,
@@ -123,9 +126,9 @@ class ReservaService
     }
 
     // 2. Agrega un pasajero y recalcula el cupón y los importes de la reserva.
-    public static function agregarPasajero(User $cliente, int $reservaId, int $viajeroId): Reserva
+    public static function agregarPasajero(User $cliente, int $reservaId, int $viajeroId, bool $conAsiento = false): Reserva
     {
-        return self::conReserva($cliente, $reservaId, function ($reserva) use ($cliente, $viajeroId) {
+        return self::conReserva($cliente, $reservaId, function ($reserva) use ($cliente, $viajeroId, $conAsiento) {
 
             $reserva->validarEditable();
 
@@ -151,6 +154,7 @@ class ReservaService
                 ->where('destino_terminal_id', $reserva->destino_terminal_id)
                 ->findOrFail($reserva->programacion_tramo_precio_id);
 
+            $tarifa->validarSalida();
             $terminales = Terminal::obtenerSecuenciaRuta($programacion);
 
             $disponibilidad = Pasaje::disponibilidad(
@@ -159,23 +163,25 @@ class ReservaService
                 $terminales,
             );
 
+            $ocupaAsiento = $viajero->tipo_pasajero !== 'infante' || $conAsiento;
             Pasaje::exigir(
-                $disponibilidad['cupo_tramo'] > 0 && $disponibilidad['asientos'] !== [],
+                ! $ocupaAsiento || ($disponibilidad['cupo_tramo'] > 0 && $disponibilidad['asientos'] !== []),
                 'pasajero',
                 'No quedan puestos disponibles para este trayecto.',
             );
 
-            $numeroAsiento = (int) $disponibilidad['asientos'][0];
+            $numeroAsiento = $ocupaAsiento ? (int) $disponibilidad['asientos'][0] : null;
+            $precio = $ocupaAsiento ? $tarifa->precio : '0.00';
 
             $reserva->pasajes()->create([
                 'viajero_id' => $viajero->id,
                 'viajero' => $viajero->datosParaPasaje(),
                 'numero_asiento' => $numeroAsiento,
-                'precio_base' => $tarifa->precio,
+                'precio_base' => $precio,
                 'descuento' => '0.00',
-                'subtotal' => $tarifa->precio,
+                'subtotal' => $precio,
                 'tasa_servicio' => '0.00',
-                'total' => $tarifa->precio,
+                'total' => $precio,
                 'localizador' => (string) Str::random(20),
             ]);
 

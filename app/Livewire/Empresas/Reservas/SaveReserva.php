@@ -4,9 +4,7 @@ namespace App\Livewire\Empresas\Reservas;
 
 use App\Livewire\Empresas\EmpresaComponent;
 use App\Models\DatoBancario;
-use App\Mail\PasajesTaquilla;
 use App\Models\PagoReserva;
-use Illuminate\Support\Facades\Mail;
 use App\Models\ProgramacionTramoPrecio;
 use App\Models\Reserva;
 use App\Models\TipoCambio;
@@ -49,8 +47,8 @@ class SaveReserva extends EmpresaComponent
     ];
 
     public array $comprador = [
-        'nombre' => '', 
-        'telefono' => '', 
+        'nombre' => '',
+        'telefono' => '',
         'email' => ''
     ];
 
@@ -109,57 +107,80 @@ class SaveReserva extends EmpresaComponent
             'abonado' => $abonado,
             'cambio' => $cambio,
             'salidas' => $salidas,
+            'tarifa' => $tarifa,
+            'puedeAgregarPasajeros' => $tarifa !== null,
+            'puedeAgregarPagos' => $tarifa !== null && $cantidad > 0,
         ]);
     }
 
     public function updatedFecha(): void
     {
-        $this->reset('tarifaId', 'origenId', 'destinoId');
+        $this->reset('tarifaId', 'origenId', 'destinoId', 'pagos', 'pago');
     }
 
     public function updatedOrigenId(): void
     {
-        $this->reset('destinoId', 'tarifaId');
+        $this->reset('destinoId', 'tarifaId', 'pagos', 'pago');
     }
 
     public function updatedDestinoId(): void
     {
-        $this->reset('tarifaId');
+        $this->reset('tarifaId', 'pagos', 'pago');
+    }
+
+    public function updatedTarifaId(): void
+    {
+        $this->reset('pagos', 'pago');
     }
 
     public function agregarPasajero(): void
     {
         Access::authorize('reservas', 'add');
+        $this->validarTramo();
         $this->pasajeros[] = ReservaTaquillaService::validarPasajero($this->pasajero);
         $this->reset('pasajero');
         $this->resetValidation();
+        $this->dispatch('cotizacion-actualizada', secciones: ['pasajeros', 'resumen']);
     }
 
     public function removerPasajero(int $indice): void
     {
+        Access::authorize('reservas', 'add');
         unset($this->pasajeros[$indice]);
         $this->pasajeros = array_values($this->pasajeros);
+        if ($this->pasajeros === []) {
+            $this->reset('pagos', 'pago');
+        }
+        $this->dispatch('cotizacion-actualizada', secciones: $this->pasajeros === []
+            ? ['pasajeros', 'pagos', 'resumen']
+            : ['pasajeros', 'resumen']);
     }
 
     public function agregarPago(): void
     {
         Access::authorize('reservas', 'add');
+        $this->validarTramo();
+        Reserva::exigir(count($this->pasajeros) > 0, 'pasajeros', 'Agrega los pasajeros antes de registrar un pago.');
+        if ((int) $this->pago['tipo'] !== PagoReserva::TIPO_PAGO_MOVIL) {
+            Access::authorize('reservas', 'confirm');
+        }
         $this->pagos[] = PagoTaquillaService::validarPago($this->pago);
         $this->reset('pago');
         $this->resetValidation();
+        $this->dispatch('cotizacion-actualizada', secciones: ['pagos', 'resumen']);
     }
 
     public function removerPago(int $indice): void
     {
+        Access::authorize('reservas', 'add');
         unset($this->pagos[$indice]);
         $this->pagos = array_values($this->pagos);
+        $this->dispatch('cotizacion-actualizada', secciones: ['pagos', 'resumen']);
     }
 
     public function registrar(): void
     {
         Access::authorize('reservas', 'add');
-
-        Reserva::exigir($this->reservaId === null, 'reserva', 'La venta ya fue registrada.');
 
         $this->validate([
             'tarifaId' => 'required|integer',
@@ -168,58 +189,39 @@ class SaveReserva extends EmpresaComponent
         ], [
             'required' => 'Selecciona :attribute.',
             'integer' => 'Selecciona una opción válida.',
+        ], [
+            'tarifaId' => 'la salida',
+            'origenId' => 'el origen',
+            'destinoId' => 'el destino',
         ]);
 
-        ProgramacionTramoPrecio::where('origen_terminal_id', $this->origenId)
-                                ->where('destino_terminal_id', $this->destinoId)
-                                ->findOrFail($this->tarifaId);
+        $this->validarTramo();
 
         ReservaTaquillaService::registrar(
-            $this->usuarioEmpresa, 
-            (int) $this->tarifaId, 
-            $this->comprador, 
-            $this->pasajeros, 
-            $this->pagos, 
+            $this->usuarioEmpresa,
+            (int) $this->tarifaId,
+            $this->comprador,
+            $this->pasajeros,
+            $this->pagos,
             $this->ventaToken
         );
 
-        $this->reset('pasajeros', 'pagos');
+        $this->reset('pasajeros', 'pagos', 'pasajero', 'pago', 'comprador', 'tarifaId');
+        $this->ventaToken = 'TQ-'.Str::ulid();
+        $this->resetValidation();
         $this->dispatch('successEventList', message: 'Reserva y pagos registrados correctamente.');
 
     }
 
-    public function confirmarPago(): void
+    private function validarTramo(): ProgramacionTramoPrecio
     {
-        PagoTaquillaService::confirmar($this->usuarioEmpresa, $this->idReserva());
-        $this->dispatch('successEventList', message: 'Pago confirmado. Los pasajes están disponibles.');
-    }
+        $tarifa = ProgramacionTramoPrecio::paraTaquilla($this->usuarioEmpresa->empresa_id, $this->fecha)
+            ->where('origen_terminal_id', $this->origenId)
+            ->where('destino_terminal_id', $this->destinoId)
+            ->find($this->tarifaId);
 
-    public function rechazarPago(): void
-    {
-        PagoTaquillaService::rechazar($this->usuarioEmpresa, $this->idReserva());
-        $this->dispatch('successEventList', message: 'Pago rechazado.');
-    }
+        Reserva::exigir($tarifa !== null, 'tarifaId', 'Selecciona una salida disponible antes de continuar.');
 
-    public function cancelar(): void
-    {
-        ReservaTaquillaService::cancelar($this->usuarioEmpresa, $this->idReserva());
-        $this->dispatch('successEventList', message: 'Reserva cancelada.');
-    }
-
-    public function enviarPasajes(): void
-    {
-        Access::authorize('reservas', 'add');
-        $reserva = Reserva::taquillaEmpresa($this->usuarioEmpresa->empresa_id)->findOrFail($this->idReserva())->detalle();
-        Reserva::exigir($reserva->estado_pago === Reserva::ESTADO_PAGO_PAGADO, 'reserva', 'Solo se pueden enviar pasajes pagados.');
-        Reserva::exigir(! empty($reserva->comprador_json['email']), 'comprador', 'El comprador no tiene un correo registrado.');
-        Mail::to($reserva->comprador_json['email'])->send(new PasajesTaquilla($reserva));
-        $this->dispatch('successEventList', message: 'Pasajes enviados al correo del comprador.');
-    }
-
-    private function idReserva(): int
-    {
-        abort_if($this->reservaId === null, 404);
-
-        return $this->reservaId;
+        return $tarifa;
     }
 }

@@ -11,13 +11,12 @@ return new class extends Migration
         Schema::create('pagos_reservas', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('reserva_id')->index();
-            $table->enum('moneda', ['USD', 'VES'])->default('USD');
             $table->decimal('monto_recibido', 12, 2)->nullable();
             $table->decimal('total', 12, 2);
-            $table->decimal('tasa_servicio', 12, 2);
+            $table->decimal('tasa_servicio', 12, 2)->default(0.00);
             $table->unsignedBigInteger('metodo_pago')->nullable();
             $table->enum('tipo_pago', [1, 2, 3, 4])->default(1);
-            $table->string('referencia_pago')->unique();
+            $table->string('referencia_pago')->nullable();
             $table->dateTime('fecha_pago');
             $table->string('comprobante')->nullable();
             $table->timestamps();

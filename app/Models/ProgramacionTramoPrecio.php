@@ -90,7 +90,7 @@ class ProgramacionTramoPrecio extends ModelHelper
                         });
                     });
             })
-            ->with(['origenTerminal', 'destinoTerminal', 'programacion.viaje'])
+            ->with(['origenTerminal', 'destinoTerminal', 'programacion.viaje', 'programacion.transporte.amenidades'])
             ->orderBy('hora_salida')->orderBy('id');
     }
 

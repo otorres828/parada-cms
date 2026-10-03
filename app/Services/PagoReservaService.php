@@ -61,6 +61,7 @@ class PagoReservaService
             $reserva->validarEditable();
             Programacion::bloquear($reserva->programacion_id);
             $reserva->validarVigente();
+            $reserva->tramoPrecio?->validarSalida();
 
             app(CuponService::class)->validarCuponAplicado($reserva);
 
@@ -109,7 +110,7 @@ class PagoReservaService
             );
             Reserva::exigir(
                 bccomp($reserva->monto_total, $montoConfirmado, 2) === 0
-                    && bccomp($pago->total, $montoConfirmado, 2) === 0,
+                    && bccomp((string) $reserva->pagos()->sum('total'), $montoConfirmado, 2) === 0,
                 'pago',
                 'El cobro no coincide con el total de la reserva.',
             );
