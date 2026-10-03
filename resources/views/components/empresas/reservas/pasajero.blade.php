@@ -25,8 +25,8 @@
                     <label class="form-label" for="taquilla-pasajero-tipo_pasajero">Tipo de pasajero</label>
                     <select id="taquilla-pasajero-tipo_pasajero" class="form-select" x-model="tipo">
                         <option value="adulto">Adulto</option>
-                        <option value="nino">Niño</option>
-                        <option value="infante">Infante</option>
+                        <option value="nino">Niño (5-17)</option>
+                        <option value="infante">Infante (0-4)</option>
                     </select>
                 </div>
                 <div class="col-md-6" x-show="tipo === 'infante'" x-cloak>

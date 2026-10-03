@@ -36,6 +36,7 @@
                     <thead class="table-light">
                         <tr>
                             <th class="px-3 py-2">Nombre</th>
+                            <th class="px-3 py-2">Tipo de Pasajero</th>
                             <th class="px-3 py-2">Asiento</th>
                             <th class="px-3 py-2 text-end">Precio</th>
                         </tr>
@@ -45,6 +46,7 @@
                             @php($ocupa = $persona['tipo_pasajero'] !== 'infante' || ! empty($persona['con_asiento']))
                             <tr>
                                 <td class="px-3 py-2">{{ $persona['nombre'] }} {{ $persona['apellido'] }}</td>
+                                <td class="px-3 py-2">{{ $persona['tipo_pasajero'] }}</td>
                                 <td class="px-3 py-2 text-muted">{{ $ocupa ? 'Asignación automática' : 'Sin asiento' }}</td>
                                 <td class="px-3 py-2 text-end">
                                     <span class="text-nowrap">USD {{ number_format($ocupa ? $precio : 0, 2) }}</span> /

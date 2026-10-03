@@ -13,7 +13,9 @@
         @endunless
 
         <fieldset class="border-0 p-0 m-0" @disabled(! $habilitado)>
+            
             <div class="row g-3">
+
                 <div class="col-md-4">
                     <label class="form-label" for="taquilla-pago-tipo">Método</label>
                     <select id="taquilla-pago-tipo" class="form-select" x-model.number="datos.tipo">
@@ -24,14 +26,7 @@
                         @endif
                     </select>
                 </div>
-                <div class="col-md-4">
-                    <label class="form-label" for="taquilla-pago-bs">Monto en bolívares</label>
-                    <div class="input-group">
-                        <span class="input-group-text">Bs</span>
-                        <input id="taquilla-pago-bs" type="number" min="0.01" step="0.01" class="form-control"
-                            x-model="bolivares" @input="convertir('VES', $event.target.value)" required>
-                    </div>
-                </div>
+               
                 <div class="col-md-4">
                     <label class="form-label" for="taquilla-pago-usd">Monto en dólares</label>
                     <div class="input-group">
@@ -40,6 +35,16 @@
                             x-model="dolares" @input="convertir('USD', $event.target.value)" required>
                     </div>
                 </div>
+
+                 <div class="col-md-4">
+                    <label class="form-label" for="taquilla-pago-bs">Monto en bolívares</label>
+                    <div class="input-group">
+                        <span class="input-group-text">Bs</span>
+                        <input id="taquilla-pago-bs" type="number" min="0.01" step="0.01" class="form-control"
+                            x-model="bolivares" @input="convertir('VES', $event.target.value)" required>
+                    </div>
+                </div>
+
                 <div class="col-md-6" x-show="Number(datos.tipo) === 3" x-cloak>
                     <label class="form-label" for="taquilla-pago-cuenta">Cuenta receptora</label>
                     <select id="taquilla-pago-cuenta" class="form-select" x-model="datos.cuenta_id"
@@ -50,6 +55,7 @@
                         @endforeach
                     </select>
                 </div>
+
                 <div class="col-md-6" x-show="Number(datos.tipo) !== 2" x-cloak>
                     <label class="form-label" for="taquilla-pago-referencia">Referencia</label>
                     <input id="taquilla-pago-referencia" class="form-control" x-model="datos.referencia" maxlength="255"
