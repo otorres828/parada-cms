@@ -38,7 +38,7 @@ class SaveDatoBancario extends EmpresaComponent
         }
     }
 
-    public function save(): void
+    public function save()
     {
         Access::authorize('datos-bancarios', $this->cuentaId === null ? 'add' : 'edit');
         $validated = $this->validate([
@@ -79,5 +79,9 @@ class SaveDatoBancario extends EmpresaComponent
         }
         
         $this->dispatch('successEventList', message: 'Datos bancarios guardados correctamente.');
+
+        return $this->redirect(route('empresas.datos-bancarios.list'), navigate: true);
+
+
     }
 }
