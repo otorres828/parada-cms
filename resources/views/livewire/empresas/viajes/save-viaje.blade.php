@@ -27,7 +27,8 @@
     <form id="save-viaje" x-ref="form" @submit.prevent="preSave" novalidate>
         <div class="row g-4">
             <div class="col-lg-5">
-                <x-empresas.viajes.recorrido-form :terminales="$terminales" :paradas="$paradas" :viaje-id="$viajeId" />
+                <x-empresas.viajes.recorrido-form :terminales="$terminales" :paradas="$paradas" :viaje-id="$viajeId"
+                    :estados="$estados" :terminales-origen="$terminalesOrigen" :terminales-parada="$terminalesParada" />
             </div>
             <div class="col-lg-7">
                 <x-empresas.viajes.tarifas-form :terminales="$terminales" :combinaciones="$combinaciones" />

@@ -29,3 +29,5 @@ Si la ruta ya tiene programaciones no se permite alterar su secuencia: sus cálc
 La persistencia se delega a [ViajeService](../../../servicios/servicio-viaje.md), en una transacción. Redirige al listado con mensaje de éxito cuando existe permiso para listar. Sin ese permiso, muestra la alerta en la pantalla.
 
 Prueba: `tests/ViajesEmpresaSmoke.php`, SQLite en memoria. Cubre alta, combinaciones, precios independientes, edición, extremos inmutables, protección de rutas programadas, aislamiento, permisos y renderizado de vistas.
+
+El alta permite filtrar por estado tanto el origen como la siguiente parada, con Todos los estados por defecto. Un cambio de filtro limpia la selección incompatible, sin borrar el recorrido ni los precios. Si se limpia el origen, debe seleccionarse nuevamente antes de guardar. En edición no se muestra el selector para añadir paradas.

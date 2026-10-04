@@ -4,6 +4,7 @@ namespace App\Livewire\Empresas\Viajes;
 
 use App\Livewire\Empresas\EmpresaComponent;
 use App\Models\Terminal;
+use App\Models\Estado;
 use App\Models\Viaje;
 use App\Services\Empresa\Access;
 use App\Services\Empresa\ViajeService;
@@ -22,6 +23,10 @@ class SaveViaje extends EmpresaComponent
     public string $origenId = '';
 
     public string $terminalId = '';
+
+    public string $estadoOrigenId = '';
+
+    public string $estadoParadaId = '';
 
     public array $paradas = [];
 
@@ -57,10 +62,35 @@ class SaveViaje extends EmpresaComponent
 
     public function render(): View
     {
+        $terminales = Terminal::searchAdmin('', ['status' => Terminal::ESTADO_ACTIVE])->orderBy('nombre')->get()->keyBy('id');
+
         return view('livewire.empresas.viajes.save-viaje', [
-            'terminales' => Terminal::searchAdmin('', ['status' => Terminal::ESTADO_ACTIVE])->orderBy('nombre')->get()->keyBy('id'),
+            'terminales' => $terminales,
+            'estados' => Estado::orderBy('nombre')->get(),
+            'terminalesOrigen' => $this->estadoOrigenId === '' ? $terminales : $terminales->where('estado_id', $this->estadoOrigenId),
+            'terminalesParada' => $this->estadoParadaId === '' ? $terminales : $terminales->where('estado_id', $this->estadoParadaId),
             'combinaciones' => Viaje::combinaciones($this->paradas),
         ]);
+    }
+
+    public function updatedEstadoOrigenId(): void
+    {
+        if ($this->viajeId === null && $this->estadoOrigenId !== '' && $this->origenId !== '') {
+            $terminal = Terminal::find($this->origenId);
+            if ((string) $terminal?->estado_id !== $this->estadoOrigenId) {
+                $this->origenId = '';
+            }
+        }
+    }
+
+    public function updatedEstadoParadaId(): void
+    {
+        if ($this->estadoParadaId !== '' && $this->terminalId !== '') {
+            $terminal = Terminal::find($this->terminalId);
+            if ((string) $terminal?->estado_id !== $this->estadoParadaId) {
+                $this->terminalId = '';
+            }
+        }
     }
 
     public function updatedOrigenId(): void
@@ -123,6 +153,7 @@ class SaveViaje extends EmpresaComponent
     public function save()
     {
         Access::authorize('viajes', $this->viajeId === null ? 'add' : 'edit');
+        Viaje::exigir($this->origenId !== '' && (int) $this->origenId === (int) ($this->paradas[0] ?? 0), 'origenId', 'Selecciona el terminal de origen antes de guardar.');
         ViajeService::guardar($this->usuarioEmpresa, $this->viajeId, $this->paradas, $this->precios, $this->minutos, $this->comentario, $this->estatus);
         session()->flash('empresa_success', 'Ruta de viaje guardada correctamente.');
 
@@ -131,7 +162,7 @@ class SaveViaje extends EmpresaComponent
         }
         $this->dispatch('successEventList', message: 'Ruta de viaje guardada correctamente.');
         if ($this->viajeId === null) {
-            $this->reset('origenId', 'terminalId', 'paradas', 'precios', 'minutos', 'comentario', 'estatus');
+            $this->reset('origenId', 'terminalId', 'estadoOrigenId', 'estadoParadaId', 'paradas', 'precios', 'minutos', 'comentario', 'estatus');
         }
 
         return null;

@@ -1,5 +1,5 @@
 {{-- Paradas ordenadas. El selector para añadir paradas solo aparece durante el alta. --}}
-@props(['terminales', 'paradas', 'viajeId'])
+@props(['terminales', 'paradas', 'viajeId', 'estados', 'terminalesOrigen', 'terminalesParada'])
 
 <div class="card">
 
@@ -9,37 +9,67 @@
 
     <div class="card-body">
 
-        <label class="form-label" for="viaje-origen">Terminal de origen</label>
-        <select id="viaje-origen" class="form-select mb-3" wire:model.live="origenId" required
-            @disabled($viajeId !== null)>
-            <option value="">Seleccionar origen</option>
-            @foreach ($terminales as $terminal)
-                <option value="{{ $terminal->id }}">{{ $terminal->nombre }}</option>
-            @endforeach
-        </select>
+        @if ($viajeId === null)
+            <div class="row g-2 mb-3">
+                <div class="col-sm-4">
+                    <label class="form-label" for="viaje-estado-origen">Estado</label>
+                    <select id="viaje-estado-origen" class="form-select" wire:model.live="estadoOrigenId">
+                        <option value="">Todos los estados</option>
+                        @foreach ($estados as $estado)
+                            <option value="{{ $estado->id }}">{{ $estado->nombre }}</option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <div class="col-sm-8">
+                    <label class="form-label" for="viaje-origen">Terminal de origen</label>
+                    <select id="viaje-origen" class="form-select" wire:model.live="origenId" required>
+                        <option value="">Seleccionar origen</option>
+                        @foreach ($terminalesOrigen as $terminal)
+                            <option value="{{ $terminal->id }}">{{ $terminal->nombre }}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+        @endif
 
         @if ($viajeId !== null)
             <p class="small text-muted">
                 El origen y el destino son fijos. No se pueden eliminar paradas ni tramos existentes.
             </p>
         @else
-            <label class="form-label" for="viaje-parada">Destino o parada</label>
+            <div class="row g-2 mb-4 align-items-end">
+                <div class="col-sm-4">
+                    <label class="form-label" for="viaje-estado-parada">Estado</label>
+                    <select id="viaje-estado-parada" class="form-select" wire:model.live="estadoParadaId">
+                        <option value="">Todos los estados</option>
+                        @foreach ($estados as $estado)
+                            <option value="{{ $estado->id }}">{{ $estado->nombre }}</option>
+                        @endforeach
+                    </select>
+                </div>
 
-            <div class="d-flex gap-2 mb-4">
-                <select id="viaje-parada" class="form-select" wire:model="terminalId"
-                    @disabled(count($paradas) === 0)>
-                    <option value="">Seleccionar terminal</option>
-                    @foreach ($terminales as $terminal)
-                        @if (! in_array($terminal->id, $paradas))
-                            <option value="{{ $terminal->id }}">{{ $terminal->nombre }}</option>
-                        @endif
-                    @endforeach
-                </select>
+                <div class="col-sm-8">
+                    <label class="form-label" for="viaje-parada">Destino o parada</label>
+                    <div class="d-flex align-items-center gap-2">
+                        <select id="viaje-parada" class="form-select flex-grow-1" wire:model="terminalId"
+                            style="width: 0; min-width: 0;"
+                            @disabled(count($paradas) === 0)>
+                            <option value="">Seleccionar terminal</option>
+                            @foreach ($terminalesParada as $terminal)
+                                @if (! in_array($terminal->id, $paradas))
+                                    <option value="{{ $terminal->id }}">{{ $terminal->nombre }}</option>
+                                @endif
+                            @endforeach
+                        </select>
 
-                <button type="button" class="btn btn-outline-primary" wire:click="agregarParada"
-                    wire:loading.attr="disabled" @disabled(count($paradas) === 0)>
-                    <i class="bi bi-plus-lg" aria-hidden="true"></i> Añadir
-                </button>
+                        <button type="button" class="btn btn-outline-primary d-inline-flex align-items-center gap-1 text-nowrap flex-shrink-0"
+                            wire:click="agregarParada"
+                            wire:loading.attr="disabled" @disabled(count($paradas) === 0)>
+                            <i class="bi bi-plus-lg" aria-hidden="true"></i> Añadir
+                        </button>
+                    </div>
+                </div>
             </div>
 
             @error('terminalId')
