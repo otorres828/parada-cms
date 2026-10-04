@@ -35,11 +35,16 @@ try {
             'origen_terminal_id' => $extremos[0],
             'destino_terminal_id' => $extremos[1],
             'orden' => $orden + 1,
-            'posicion_origen' => $orden,
-            'posicion_destino' => $orden + 1,
             'duracion_estimada' => '01:30:00',
         ]);
     }
+    $completo = ViajeTramo::create([
+        'viaje_id' => $ruta->id,
+        'origen_terminal_id' => $terminales[0]->id,
+        'destino_terminal_id' => $terminales[1]->id,
+        'orden' => 3,
+        'precio' => '12.00',
+    ]);
     $salida = Programacion::create([
         'viaje_id' => $ruta->id,
         'transporte_id' => $programacion->transporte_id,
@@ -120,19 +125,9 @@ try {
     $sinHorario->hora_salida = null;
     $check($sinHorario->getSalida() === null);
     $primerTramoRuta = $ruta->tramos()->orderBy('orden')->first();
-    $ultimoTramoRuta = $ruta->tramos()->orderByDesc('orden')->reorder('orden', 'desc')->first();
+    $ultimoTramoRuta = $ruta->tramos()->where('origen_terminal_id', $intermedia->id)->first();
     $primerTramoRuta->update(['precio' => '10.25']);
     $ultimoTramoRuta->update(['precio' => '5.50']);
-    $ruta->unsetRelation('tramos');
-    $completo = ViajeTramo::create([
-        'viaje_id' => $ruta->id,
-        'origen_terminal_id' => $terminales[0]->id,
-        'destino_terminal_id' => $terminales[1]->id,
-        'posicion_origen' => 0,
-        'posicion_destino' => 2,
-        'orden' => 3,
-        'precio' => '12.00',
-    ]);
     $ruta->unsetRelation('tramos');
     $check(ViajeTramo::precioBase($ruta, $terminales[0]->id, $terminales[1]->id) === '12.00');
     $check(ViajeTramo::precioBase($ruta, $intermedia->id, $terminales[1]->id) === '5.50');

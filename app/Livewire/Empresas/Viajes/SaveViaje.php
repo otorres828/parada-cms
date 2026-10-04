@@ -46,7 +46,7 @@ class SaveViaje extends EmpresaComponent
             foreach ($viaje->tramos as $tramo) {
                 $clave = $tramo->origen_terminal_id.'-'.$tramo->destino_terminal_id;
                 $this->precios[$clave] = $tramo->precio ?? '';
-                if ($tramo->posicion_destino === $tramo->posicion_origen + 1) {
+                if ($viaje->tramosConsecutivos()->contains('id', $tramo->id)) {
                     [$horas, $minutos] = explode(':', $tramo->duracion_estimada ?? '00:00:00');
                     $this->minutos[$clave] = (int) $horas * 60 + (int) $minutos;
                 }
@@ -112,7 +112,7 @@ class SaveViaje extends EmpresaComponent
         foreach (Viaje::combinaciones($this->paradas) as $tramo) {
             $clave = $tramo['clave'];
             $precios[$clave] = $this->precios[$clave] ?? '';
-            if ($tramo['posicion_destino'] === $tramo['posicion_origen'] + 1) {
+            if (array_search($tramo['destino_terminal_id'], $this->paradas, true) === array_search($tramo['origen_terminal_id'], $this->paradas, true) + 1) {
                 $minutos[$clave] = $this->minutos[$clave] ?? '';
             }
         }

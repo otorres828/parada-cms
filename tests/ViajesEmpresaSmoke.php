@@ -140,7 +140,7 @@ $detalle->viaje_id = $seedEmpresa->viajes->first()->id;
 $reject(function () use ($detalle) { $detalle->findViaje(); }, ModelNotFoundException::class);
 $reject(function () use ($detalle) { $detalle->render(); }, ModelNotFoundException::class);
 $html = Livewire\Livewire::mount(App\Livewire\Empresas\Viajes\DetailViaje::class, ['viaje_id' => $ruta->id]);
-$check(str_contains($html, 'Precios base por trayecto'));
+$check(str_contains($html, 'Matriz de Precios por Trayecto'));
 $check(str_contains($html, '/empresa/operaciones/programaciones/detalle/'));
 $check(! str_contains($html, '/admin/programaciones/'));
 $adminDetalle = new App\Livewire\Admin\Viajes\DetailViaje;

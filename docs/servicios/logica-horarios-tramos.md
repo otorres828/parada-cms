@@ -1,6 +1,6 @@
 # Horarios por tramo de programación
 
-Los tramos de la ruta (`viaje_tramos`) son todas las combinaciones vendibles de la plantilla, con precio independiente, duración y posiciones de sus extremos. Las fechas concretas pertenecen a `programacion_tramo_precios`, porque cada programación ocurre en un día y horario distinto.
+Los tramos de la ruta (`viaje_tramos`) son todas las combinaciones vendibles de la plantilla, con precio independiente, duración y orden explícito. Las fechas concretas pertenecen a `programacion_tramo_precios`, porque cada programación ocurre en un día y horario distinto.
 
 Cada tramo comercial guarda:
 
@@ -13,7 +13,7 @@ En A → B → C, un boleto B → C muestra la salida desde B y la llegada a C. 
 
 `viaje_tramos` y `programacion_tramo_precios` conservan ambos `origen_terminal_id` y `destino_terminal_id`. Esta repetición es intencional y no debe eliminarse como una simple normalización:
 
-- `viaje_tramos` define todas las combinaciones A → B, A → C, B → C. `posicion_origen` y `posicion_destino` comienzan en cero. Las combinaciones con posiciones consecutivas reconstruyen las paradas; `orden` numera las filas comerciales.
+- `viaje_tramos` define todas las combinaciones A → B, A → C, B → C. `orden` numera las combinaciones generadas por los dos bucles. Las que parten del origen principal, ordenadas por ese campo, reconstruyen el recorrido: A→B, A→C, A→D permiten recuperar [A,B,C,D]. No se guardan posiciones adicionales.
 - `programacion_tramo_precios` define los trayectos comerciales de una salida concreta, con sus terminales, precio y horarios propios. Puede incluir A → C, copiando la combinación de la plantilla. Solo deben crearse las tarifas seleccionadas al generar una programación; la plantilla conserva todas las combinaciones.
 - Los terminales de la tarifa conservan los extremos definidos para esa programación. No deben resolverse dinámicamente desde un `viaje_tramo_id` mutable: cambiar el origen o destino del tramo referenciado podría alterar la interpretación de ventas existentes.
 

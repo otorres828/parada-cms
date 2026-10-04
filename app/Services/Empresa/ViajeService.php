@@ -68,10 +68,8 @@ class ViajeService
                     'destino_terminal_id' => $tramo['destino_terminal_id'],
                 ], [
                     'orden' => $orden + 1,
-                    'posicion_origen' => $tramo['posicion_origen'],
-                    'posicion_destino' => $tramo['posicion_destino'],
                     'precio' => $datos['precios'][$tramo['clave']],
-                    'duracion_estimada' => self::hora($duraciones[$tramo['posicion_destino']] - $duraciones[$tramo['posicion_origen']]),
+                    'duracion_estimada' => self::hora($duraciones[array_search($tramo['destino_terminal_id'], $paradas, true)] - $duraciones[array_search($tramo['origen_terminal_id'], $paradas, true)]),
                 ]);
             }
 

@@ -50,22 +50,29 @@ class Viaje extends ModelHelper
 
     public function tramosConsecutivos(): \Illuminate\Database\Eloquent\Collection
     {
-        return $this->tramos->filter(function ($tramo) {
-            return $tramo->posicion_destino === $tramo->posicion_origen + 1;
-        })->sortBy('posicion_origen')->values();
+        $terminales = $this->secuenciaTerminales();
+        $tramos = new \Illuminate\Database\Eloquent\Collection;
+        for ($i = 0; $i < count($terminales) - 1; $i++) {
+            $tramo = $this->tramos->first(function ($tramo) use ($terminales, $i) {
+                return (int) $tramo->origen_terminal_id === $terminales[$i]
+                    && (int) $tramo->destino_terminal_id === $terminales[$i + 1];
+            });
+            self::exigir($tramo !== null || $this->tramos->isEmpty(), 'viaje', 'Falta un tramo consecutivo de la ruta.');
+            if ($tramo !== null) {
+                $tramos->push($tramo);
+            }
+        }
+
+        return $tramos;
     }
 
     public function secuenciaTerminales(): array
     {
         $terminales = [(int) $this->origen_terminal_id];
-        foreach ($this->tramosConsecutivos() as $posicion => $tramo) {
-            self::exigir(
-                $tramo->posicion_origen === $posicion
-                    && (int) $tramo->origen_terminal_id === end($terminales),
-                'viaje',
-                'La secuencia de paradas de la ruta es inválida.',
-            );
-            $terminales[] = (int) $tramo->destino_terminal_id;
+        foreach ($this->tramos->sortBy('orden') as $tramo) {
+            if ((int) $tramo->origen_terminal_id === (int) $this->origen_terminal_id) {
+                $terminales[] = (int) $tramo->destino_terminal_id;
+            }
         }
         if ($this->tramos->isEmpty()) {
             $terminales[] = (int) $this->destino_terminal_id;
@@ -89,8 +96,6 @@ class Viaje extends ModelHelper
                     'clave' => $paradas[$origen].'-'.$paradas[$destino],
                     'origen_terminal_id' => (int) $paradas[$origen],
                     'destino_terminal_id' => (int) $paradas[$destino],
-                    'posicion_origen' => $origen,
-                    'posicion_destino' => $destino,
                 ];
             }
         }

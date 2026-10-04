@@ -17,8 +17,6 @@ class ViajeTramo extends ModelHelper
         'origen_terminal_id',
         'destino_terminal_id',
         'orden',
-        'posicion_origen',
-        'posicion_destino',
         'duracion_estimada',
         'precio',
     ];
@@ -27,8 +25,6 @@ class ViajeTramo extends ModelHelper
     {
         return [
             'orden' => 'integer',
-            'posicion_origen' => 'integer',
-            'posicion_destino' => 'integer',
             'precio' => 'decimal:2',
         ];
     }

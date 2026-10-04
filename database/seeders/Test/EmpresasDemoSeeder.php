@@ -169,13 +169,11 @@ class EmpresasDemoSeeder extends Seeder
                 return $terminales[$indice]->id;
             }, $secuencia);
             foreach (Viaje::combinaciones($paradas) as $orden => $tramo) {
-                $segmentos = $tramo['posicion_destino'] - $tramo['posicion_origen'];
+                $segmentos = array_search($tramo['destino_terminal_id'], $paradas, true) - array_search($tramo['origen_terminal_id'], $paradas, true);
                 ViajeTramo::updateOrCreate(
                     ['viaje_id' => $viaje->id, 'origen_terminal_id' => $tramo['origen_terminal_id'], 'destino_terminal_id' => $tramo['destino_terminal_id']],
                     [
                         'orden' => $orden + 1,
-                        'posicion_origen' => $tramo['posicion_origen'],
-                        'posicion_destino' => $tramo['posicion_destino'],
                         'duracion_estimada' => sprintf('%02d:%02d:00', intdiv($segmentos * 90, 60), $segmentos * 90 % 60),
                         'precio' => number_format(10 + ($empresa->id % 7) + $segmentos * 6, 2, '.', ''),
                     ],
