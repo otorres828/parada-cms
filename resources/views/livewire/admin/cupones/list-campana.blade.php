@@ -66,11 +66,15 @@
         </x-slot:group>
 
         @if (Route::has('admin.cupones.add') && $canAdd)
+
             <x-slot:button>
-                <x-list.add-button :route="route('admin.cupones.add')">
+
+                <x-list.add-button :route="route('admin.cupones.add')" >
                     Nuevo registro
                 </x-list.add-button>
+
             </x-slot:button>
+
         @endif
 
     </x-list.actions>
@@ -160,7 +164,9 @@
                     </td>
 
                     <td>
+
                         <x-list.status-badge :status="$configuracionCupon->estatus" />
+
                     </td>
 
                     <td class="text-end">
@@ -168,21 +174,25 @@
                         <x-list.button-group>
 
                             @if ($canDetail)
+
                                 <x-list.view-button :route="route('admin.cupones.detail', [
                                     'configuracion_cupon_id' => $configuracionCupon->id
                                 ])" :target="false" />
+
                             @endif
 
                             @if ($canEdit)
+
                                 <x-list.edit-button :route="route('admin.cupones.edit', [
                                     'configuracion_cupon_id' => $configuracionCupon->id
                                 ])" />
+
                             @endif
 
                             @if ($canEdit)
-                                <x-list.status-button wire:click="changeStatus({{ $configuracionCupon->id }})"
-                                    :status="$configuracionCupon->estatus"
-                                    wire:loading.attr="disabled" />
+
+                                <x-list.status-button wire:click="changeStatus({{ $configuracionCupon->id }})" :status="$configuracionCupon->estatus" wire:loading.attr="disabled" />
+
                             @endif
 
                         </x-list.button-group>
@@ -231,4 +241,3 @@
         }));
     </script>
 @endscript
-

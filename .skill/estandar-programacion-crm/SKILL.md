@@ -56,3 +56,11 @@ Para el panel de Empresas, aplicar el mismo estilo pero verificar guard, modelo 
 - Revisar filtros, estados vacíos, navegación, paginación y permisos afectados. Si hay widgets Alpine, probar entrar, salir y volver mediante navegación Livewire.
 - Elegir comprobaciones proporcionales: sintaxis/compilación para plantillas y PHP; pruebas de comportamiento para reglas de negocio; inspección visual para alineación. No añadir tests que solo repitan la implementación ni ejecutar migraciones destructivas por revisar el estilo.
 - Aplicar el protocolo de `.agents/AGENTS.md`: objetivo, trabajo, revisión y entrega, informando las verificaciones realmente realizadas.
+
+Excepción de formato: las aperturas de `x-form.text-input` y de los componentes de botones de formulario (`x-form.*button`) pueden mantener todos sus parámetros en una sola línea. Conservar la separación entre bloques y la indentación del contenido y del cierre cuando tengan cuerpo.
+
+Regla de cantidad de propiedades (prevalece sobre las indicaciones generales anteriores): componentes con cero o una propiedad se escriben en una sola línea. Con dos o más propiedades, escribir una por línea y el cierre alineado con la apertura. Mantener la excepción de `x-form.text-input` y `x-form.*button`, que pueden ir en una línea incluso con varias propiedades. Los atributos sin valor, como `wire:loading.delay.longer`, también cuentan como propiedades.
+
+Excepción para tablas: dentro de `<table>` o `<x-list.table>`, las aperturas de todos los componentes se mantienen en una sola línea, incluso con dos o más propiedades; por ejemplo `<x-list.sortable-button column="id" :$sortColumn :$sortDirection />`. Conservar la indentación por nivel y la separación entre bloques. Esta excepción prevalece sobre la regla de cantidad de propiedades.
+
+Encabezados de tabla: dentro de cada `<th>` no dejar líneas vacías entre el texto, los componentes y el cierre. El componente de ordenación conserva su apertura en una sola línea y la indentación del nivel correspondiente.

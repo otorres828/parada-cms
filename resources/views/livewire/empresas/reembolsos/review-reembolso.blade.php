@@ -32,7 +32,7 @@
 
         <x-slot:button>
 
-            <x-form.cancel-button :link="route('empresas.reembolsos.list')">
+            <x-form.cancel-button :link="route('empresas.reembolsos.list')" >
                 Volver al listado
             </x-form.cancel-button>
 
@@ -61,7 +61,9 @@
                 </dd>
                 <dt class="col-sm-4">Estado</dt>
                 <dd class="col-sm-8">
+
                     <x-list.status-badge :status="$reembolso->estatus" />
+
                 </dd>
                 <dt class="col-sm-4">Solicitado</dt>
                 <dd class="col-sm-8">
@@ -85,7 +87,11 @@
 
         <x-form.container-sm>
 
-            <x-form.dropdown label="Resolución" name="decision" x-model="$wire.decision">
+            <x-form.dropdown
+                label="Resolución"
+                name="decision"
+                x-model="$wire.decision"
+            >
 
                 <option value="">Seleccionar...</option>
 
@@ -101,13 +107,16 @@
 
             </x-form.dropdown>
 
-            <x-form.textarea name="comentario" x-model="$wire.comentario">
+            <x-form.textarea
+                name="comentario"
+                x-model="$wire.comentario"
+            >
                 Motivo / observaciones
             </x-form.textarea>
 
             <div x-show="$wire.decision === 'pagado'">
 
-                <x-form.text-input name="referencia" x-model="$wire.referencia">
+                <x-form.text-input name="referencia" x-model="$wire.referencia" >
                     Referencia de la transferencia
                 </x-form.text-input>
 
@@ -127,12 +136,17 @@
             <button class="btn btn-primary" type="submit" :disabled="saving" wire:loading.attr="disabled">Registrar
                 resolución</button>
         @else
+
             <div class="alert alert-info">
+
                 Esta solicitud ya fue resuelta.
+
             </div>
+
         @endif
 
     </form>
+
     <x-layout.loader.fullpage wire:loading.delay.short />
 
 </div>
@@ -196,4 +210,3 @@
         }));
     </script>
 @endscript
-

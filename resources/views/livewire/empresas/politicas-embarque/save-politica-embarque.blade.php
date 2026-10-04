@@ -29,10 +29,15 @@
 
             <form wire:submit="save">
 
-                <x-form.rich-text-editor id="politicas-embarque-empresa" model="contenido" />
+                <x-form.rich-text-editor
+                    id="politicas-embarque-empresa"
+                    model="contenido"
+                />
 
                 <div class="form-text mb-3">
+
                     Indica las condiciones de embarque y desembarque. Puedes utilizar títulos, listas, enlaces y tablas.
+
                 </div>
 
                 <hr>

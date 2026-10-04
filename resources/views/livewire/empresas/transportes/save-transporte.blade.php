@@ -21,7 +21,7 @@
 
         <x-slot:button>
 
-            <x-form.cancel-button :link="route('empresas.transportes.list')">
+            <x-form.cancel-button :link="route('empresas.transportes.list')" >
                 Volver al listado
             </x-form.cancel-button>
 
@@ -40,9 +40,10 @@
                 <div class="card card-body">
 
                     <div class="row g-3">
+
                         <div class="col-md-6">
 
-                            <x-form.text-input type="text" name="placa" wire:model="placa" maxlength="255" required>
+                            <x-form.text-input type="text" name="placa" wire:model="placa" maxlength="255" required >
                                 Placa
                             </x-form.text-input>
 
@@ -50,7 +51,7 @@
 
                         <div class="col-md-6">
 
-                            <x-form.text-input type="text" name="modelo" wire:model="modelo" maxlength="255" required>
+                            <x-form.text-input type="text" name="modelo" wire:model="modelo" maxlength="255" required >
                                 Modelo
                             </x-form.text-input>
 
@@ -58,7 +59,7 @@
 
                         <div class="col-md-6">
 
-                            <x-form.text-input type="text" name="tipo_asiento" wire:model="tipo_asiento" maxlength="255" required>
+                            <x-form.text-input type="text" name="tipo_asiento" wire:model="tipo_asiento" maxlength="255" required >
                                 Tipo de asiento
                             </x-form.text-input>
 
@@ -66,7 +67,7 @@
 
                         <div class="col-md-6">
 
-                            <x-form.text-input type="number" name="total_asientos" wire:model="total_asientos" min="1" max="100" required>
+                            <x-form.text-input type="number" name="total_asientos" wire:model="total_asientos" min="1" max="100" required >
                                 Cantidad de puestos
                             </x-form.text-input>
 
@@ -82,13 +83,18 @@
 
                 <div class="card">
 
-                    <div class="card-header fw-semibold">Amenidades del transporte</div>
+                    <div class="card-header fw-semibold">
+
+                        Amenidades del transporte
+
+                    </div>
 
                     <div class="card-body">
 
                         <div class="row g-3">
 
                             @forelse ($amenidades as $amenidad)
+
                                 <div class="col-sm-6" wire:key="transporte-amenidad-{{ $amenidad->id }}">
 
                                     <div class="form-check">
@@ -102,8 +108,15 @@
                                     </div>
 
                                 </div>
+
                             @empty
-                                <div class="col-12 text-muted">No hay amenidades disponibles.</div>
+
+                                <div class="col-12 text-muted">
+
+                                    No hay amenidades disponibles.
+
+                                </div>
+
                             @endforelse
 
                         </div>
@@ -120,7 +133,11 @@
 
             <x-form.container-sm>
 
-                <x-form.dropdown label="Estatus" name="estatus" wire:model="estatus">
+                <x-form.dropdown
+                    label="Estatus"
+                    name="estatus"
+                    wire:model="estatus"
+                >
                     <option value="1">Activo</option>
                     <option value="2">Inactivo</option>
                 </x-form.dropdown>

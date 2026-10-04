@@ -27,7 +27,7 @@
 
         <x-slot:button>
 
-            <x-form.cancel-button :link="route('admin.auditoria.list')">
+            <x-form.cancel-button :link="route('admin.auditoria.list')" >
                 Volver al listado
             </x-form.cancel-button>
 
@@ -79,5 +79,3 @@
         }));
     </script>
 @endscript
-
-

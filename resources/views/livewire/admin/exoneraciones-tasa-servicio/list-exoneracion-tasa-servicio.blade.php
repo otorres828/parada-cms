@@ -34,7 +34,9 @@
     <x-list.actions>
 
         <x-slot:search>
+
             <x-list.search-input wire:model.live.debounce.1200ms="search" />
+
         </x-slot:search>
 
         <x-slot:group>
@@ -57,11 +59,15 @@
         </x-slot:group>
 
         @if ($canAdd)
+
             <x-slot:button>
-                <x-list.add-button :route="route('admin.exoneraciones-tasa-servicio.add')">
+
+                <x-list.add-button :route="route('admin.exoneraciones-tasa-servicio.add')" >
                     Nueva exoneración
                 </x-list.add-button>
+
             </x-slot:button>
+
         @endif
 
     </x-list.actions>
@@ -88,21 +94,26 @@
                     <td>{{ $exoneracion->fecha_hasta?->format('d/m/Y H:i') ?? 'Sin vencimiento' }}</td>
                     <td>{{ $exoneracion->motivo }}</td>
                     <td>
+
                         <x-list.status-badge :status="$exoneracion->estatus" />
+
                     </td>
                     <td class="text-end">
 
                         <x-list.button-group>
 
                             @if ($canEdit)
-                                <x-list.status-button wire:click="changeStatus({{ $exoneracion->id }})"
-                                    :status="$exoneracion->estatus" />
+
+                                <x-list.status-button wire:click="changeStatus({{ $exoneracion->id }})" :status="$exoneracion->estatus" />
+
                                 <x-list.edit-button :route="route('admin.exoneraciones-tasa-servicio.edit', $exoneracion->id)" />
+
                             @endif
 
                             @if ($canDelete)
-                                <x-list.delete-button x-data
-                                    @click="$dispatch('confirmDeletion', { id: {{ $exoneracion->id }} })" />
+
+                                <x-list.delete-button x-data @click="$dispatch('confirmDeletion', { id: {{ $exoneracion->id }} })" />
+
                             @endif
 
                         </x-list.button-group>

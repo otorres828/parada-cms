@@ -31,7 +31,7 @@
 
         <x-slot:button>
 
-            <x-form.cancel-button :link="route('admin.viajes.list')">
+            <x-form.cancel-button :link="route('admin.viajes.list')" >
                 Volver al listado
             </x-form.cancel-button>
 
@@ -44,12 +44,15 @@
         <div class="row g-3">
 
             {{-- Columna Izquierda: Información de la Ruta e Itinerario de Rodandos --}}
+
             <div class="col-md-6">
 
                 <div class="card h-100">
 
                     <div class="card-header fw-semibold">
+
                         <i class="bi bi-info-circle me-1" aria-hidden="true"></i> Información & Secuencia de Rodandos
+
                     </div>
 
                     <x-viajes.description :viaje="$viaje" />
@@ -59,12 +62,15 @@
             </div>
 
             {{-- Columna Derecha: Precios base por trayecto --}}
+
             <div class="col-md-6">
 
                 <div class="card h-100">
 
                     <div class="card-header fw-semibold">
+
                         <i class="bi bi-tags me-1" aria-hidden="true"></i> Precios base por trayecto
+
                     </div>
 
                     <div class="card-body">
@@ -73,9 +79,9 @@
 
                             <div class="table-responsive">
 
-                                <x-viajes.tramo-precios-table 
+                                <x-viajes.tramo-precios-table
                                     :tramo-precios="$viaje->tramos"
-                                    :tipo-cambio="$tipoCambioVigente" 
+                                    :tipo-cambio="$tipoCambioVigente"
                                 />
 
                             </div>
@@ -83,9 +89,12 @@
                         @else
 
                             <div class="text-body-secondary py-3 text-center">
+
                                 No s
                                 e han configurado tramos con precios base para esta ruta.
+
                             </div>
+
                         @endif
 
                     </div>
@@ -101,14 +110,16 @@
     <div class="card mt-4">
 
         <div class="card-header fw-semibold">
+
             <i class="bi bi-calendar-event me-1" aria-hidden="true"></i> Historial de salidas programadas
+
         </div>
 
         <div class="table-responsive">
 
-            <x-viajes.programaciones-table 
-                :programaciones="$programaciones" 
-                :can-view-passengers="$canViewPassengers" 
+            <x-viajes.programaciones-table
+                :programaciones="$programaciones"
+                :can-view-passengers="$canViewPassengers"
             />
 
         </div>
@@ -141,7 +152,3 @@
         }));
     </script>
 @endscript
-
-
-
-

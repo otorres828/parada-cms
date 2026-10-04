@@ -135,7 +135,9 @@
                     </td>
 
                     <td>
+
                         <x-list.status-programacion :status="$programacion->estatus" />
+
                     </td>
 
                     <td class="text-end">
@@ -195,4 +197,3 @@
         }));
     </script>
 @endscript
-

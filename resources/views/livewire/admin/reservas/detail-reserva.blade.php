@@ -29,7 +29,7 @@
 
         <x-slot:button>
 
-            <x-form.cancel-button :link="route('admin.reservas.list')">
+            <x-form.cancel-button :link="route('admin.reservas.list')" >
                 Volver al listado
             </x-form.cancel-button>
 
@@ -45,11 +45,11 @@
 
                 <div class="card">
 
-                    <x-reservas.description-admin 
-                        :reserva="$reserva" 
+                    <x-reservas.description-admin
+                        :reserva="$reserva"
                         :can-view-campaign="$canViewCampaign"
-                        :can-view-passengers="$canViewPassengers" 
-                        :can-view-reservation="$canViewReservation" 
+                        :can-view-passengers="$canViewPassengers"
+                        :can-view-reservation="$canViewReservation"
                     />
 
                 </div>
@@ -65,14 +65,16 @@
     <div class="card">
 
         <div class="card-header">
+
             Pasajeros
+
         </div>
 
         <div class="table-responsive">
 
-            <x-reservas.pasajes-table 
-                :tickets="$tickets" 
-                :can-view-ticket="$canViewTicket" 
+            <x-reservas.pasajes-table
+                :tickets="$tickets"
+                :can-view-ticket="$canViewTicket"
                 :view-tasa-servicio="true"
                 route-name="admin.pasajes.detail"
             />
@@ -105,6 +107,3 @@
         }));
     </script>
 @endscript
-
-
-

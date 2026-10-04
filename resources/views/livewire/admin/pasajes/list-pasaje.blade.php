@@ -84,6 +84,7 @@
             </label>
             <input id="listPasaje-from" type="date" class="form-control" wire:model.live="date_from"
                 min="{{ $this->getMinFilterDate() }}" max="{{ $this->getMaxFilterDate() }}">
+
         </div>
 
         <div class="col-md-6 col-xl-2">
@@ -93,15 +94,20 @@
             </label>
             <input id="listPasaje-to" type="date" class="form-control" wire:model.live="date_to"
                 min="{{ $this->getMinFilterDate() }}" max="{{ $this->getMaxFilterDate() }}">
+
         </div>
 
         @if ($canDetail)
+
             <div class="col-md-12 col-xl-auto ms-xl-auto text-md-end">
+
                 <button type="button" class="btn btn-success" wire:click="exportExcel"
                     wire:loading.attr="disabled" wire:target="exportExcel">
                     <i class="bi bi-file-earmark-excel" aria-hidden="true"></i> Descargar Excel
                 </button>
+
             </div>
+
         @endif
 
     </div>
@@ -188,27 +194,39 @@
                     </td>
 
                     <td>
+
                         <x-money.dual :usd="$pasaje->precio_base" :bs="$pasaje->calcularMontoBs($pasaje->precio_base)" />
+
                     </td>
 
                     <td>
+
                         <x-money.dual :usd="$pasaje->descuento" :bs="$pasaje->calcularMontoBs($pasaje->descuento)" />
+
                     </td>
 
                     <td>
+
                         <x-money.dual :usd="$pasaje->subtotal" :bs="$pasaje->calcularMontoBs($pasaje->subtotal)" />
+
                     </td>
 
                     <td>
+
                         <x-money.dual :usd="$pasaje->tasa_servicio" :bs="$pasaje->calcularMontoBs($pasaje->tasa_servicio)" />
+
                     </td>
 
                     <td>
+
                         <x-money.dual :usd="$pasaje->total" :bs="$pasaje->calcularMontoBs($pasaje->total)" />
+
                     </td>
 
                     <td>
+
                         <x-list.status-reserva :status="$pasaje->reserva->estado_pago" />
+
                     </td>
 
                     <td class="text-end">
@@ -216,7 +234,9 @@
                         <x-list.button-group>
 
                             @if ($canDetail)
+
                                 <x-list.view-button :route="route('admin.pasajes.detail', ['pasaje_id' => $pasaje->id])" :target="false" />
+
                             @endif
 
                         </x-list.button-group>

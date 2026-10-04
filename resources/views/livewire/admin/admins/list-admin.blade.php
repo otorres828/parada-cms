@@ -51,11 +51,15 @@
         </x-slot:group>
 
         @if ($canAdd)
+
             <x-slot:button>
-                <x-list.add-button :route="route('admin.admins.add')">
+
+                <x-list.add-button :route="route('admin.admins.add')" >
                     Nuevo registro
                 </x-list.add-button>
+
             </x-slot:button>
+
         @endif
 
     </x-list.actions>
@@ -112,7 +116,9 @@
                     </td>
 
                     <td>
+
                         <x-list.status-badge :status="$admin->status" />
+
                     </td>
 
                     <td class="text-end">
@@ -120,7 +126,9 @@
                         <x-list.button-group>
 
                             @if ($canEdit)
+
                                 <x-list.edit-button :route="route('admin.admins.edit', ['admin_id' => $admin->id])" />
+
                             @endif
 
                         </x-list.button-group>
@@ -169,4 +177,3 @@
         }));
     </script>
 @endscript
-

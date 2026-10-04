@@ -13,7 +13,7 @@
     <x-list.heading>
 
         <x-slot:title>
-            
+
             Programaciones @if ($programacion_id)
                 <small class="text-body-secondary">#{{ $programacion_id }}</small>
             @endif
@@ -22,7 +22,7 @@
 
         <x-slot:button>
 
-            <x-form.cancel-button :link="route('admin.programaciones.list')">
+            <x-form.cancel-button :link="route('admin.programaciones.list')" >
                 Volver al listado
             </x-form.cancel-button>
 
@@ -36,13 +36,13 @@
 
             <div class="col-md-5">
 
-                <x-programacion.description 
-                    :programacion="$programacion" 
+                <x-programacion.description
+                    :programacion="$programacion"
                     :capacidad="$capacidad"
-                    :pasajes-pagados="$pasajesPagados" 
+                    :pasajes-pagados="$pasajesPagados"
                     :pasajes-pendientes="$pasajesPendientes"
-                    :can-viajes-detail="$canViajesDetail" 
-                    :can-transportes-detail="$canTransportesDetail" 
+                    :can-viajes-detail="$canViajesDetail"
+                    :can-transportes-detail="$canTransportesDetail"
                     route-viaje="admin.viajes.detail"
                     route-transporte="admin.transportes.detail"
                 />
@@ -51,19 +51,21 @@
 
             <div class="col-md-7">
 
-                <x-programacion.rates-matrix 
+                <x-programacion.rates-matrix
                     :programacion="$programacion"
-                    :disponibilidad-tramos="$disponibilidadTramos" 
-                    :tipo-cambio="$tipoCambioVigente" 
+                    :disponibilidad-tramos="$disponibilidadTramos"
+                    :tipo-cambio="$tipoCambioVigente"
                 />
 
             </div>
+
         </div>
+
     </div>
 
-    <x-programacion.passengers-table 
-        :tickets="$tickets" 
-        :can-reservas-detail="$canReservasDetail" 
+    <x-programacion.passengers-table
+        :tickets="$tickets"
+        :can-reservas-detail="$canReservasDetail"
     />
 
     <x-layout.loader.fullpage wire:loading.delay.short />

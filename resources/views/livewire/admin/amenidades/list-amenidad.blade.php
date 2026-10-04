@@ -51,12 +51,16 @@
 
         </x-slot:group>
 
-        @if (Route::has('admin.amenidades.add') && $canAdd)
+        @if ($canAdd)
+
             <x-slot:button>
-                <x-list.add-button :route="route('admin.amenidades.add')">
+
+                <x-list.add-button :route="route('admin.amenidades.add')" >
                     Nuevo registro
                 </x-list.add-button>
+
             </x-slot:button>
+
         @endif
 
     </x-list.actions>
@@ -104,17 +108,21 @@
                     </td>
 
                     <td>
+
                         <x-list.status-badge :status="$amenidad->estatus" />
+
                     </td>
 
                     <td class="text-end">
 
                         <x-list.button-group>
-                            
+
                             @if ($canEdit)
+
                                 <x-list.edit-button :route="route('admin.amenidades.edit', ['amenidad_id' => $amenidad->id])" />
-                                <x-list.status-button wire:click="changeStatus({{ $amenidad->id }})" :status="$amenidad->estatus"
-                                    wire:loading.attr="disabled" />
+
+                                <x-list.status-button wire:click="changeStatus({{ $amenidad->id }})" :status="$amenidad->estatus" wire:loading.attr="disabled" />
+
                             @endif
 
                         </x-list.button-group>
@@ -163,4 +171,3 @@
         }));
     </script>
 @endscript
-

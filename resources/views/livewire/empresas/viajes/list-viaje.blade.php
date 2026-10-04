@@ -53,9 +53,11 @@
         </x-slot:group>
 
         @if ($canAdd)
+
             <x-slot:button>
                 <a class="btn btn-primary" href="{{ route('empresas.viajes.add') }}" wire:navigate><i class="bi bi-plus-lg me-1" aria-hidden="true"></i> Nuevo registro</a>
             </x-slot:button>
+
         @endif
     </x-list.actions>
 
@@ -67,7 +69,6 @@
                 <th>ID
                     <x-list.sortable-button column="id" :$sortColumn :$sortDirection />
                 </th>
-
 
                 <th>Origen </th>
 
@@ -96,7 +97,6 @@
                         {{ $viaje->id }}
                     </td>
 
-
                     <td>
                         {{ $viaje->origenTerminal?->nombre ?? '—' }}
                     </td>
@@ -110,7 +110,9 @@
                     </td>
 
                     <td>
+
                         <x-list.status-badge :status="$viaje->estatus" />
+
                     </td>
 
                     <td class="text-end">
@@ -118,14 +120,18 @@
                         <x-list.button-group>
 
                             @if ($canDetail)
+
                                 <x-list.view-button :route="route('empresas.viajes.detail', ['viaje_id' => $viaje->id])" :target="false" />
+
                             @endif
 
                             @if ($canEdit)
-                                <x-list.edit-button :route="route('empresas.viajes.edit', $viaje->id)" :target="false" />
-                                <x-list.status-button wire:click="changeStatus({{ $viaje->id }})" :status="$viaje->estatus" wire:loading.attr="disabled" />
-                            @endif
 
+                                <x-list.edit-button :route="route('empresas.viajes.edit', $viaje->id)" :target="false" />
+
+                                <x-list.status-button wire:click="changeStatus({{ $viaje->id }})" :status="$viaje->estatus" wire:loading.attr="disabled" />
+
+                            @endif
 
                         </x-list.button-group>
 

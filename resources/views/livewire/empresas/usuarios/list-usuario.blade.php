@@ -20,7 +20,9 @@
     </x-list.heading>
 
     <div class="alert alert-info" role="status">
+
         Este módulo está pendiente de implementación.
+
     </div>
 
 </div>

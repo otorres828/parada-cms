@@ -28,9 +28,7 @@
 
         <x-slot:button>
 
-            <x-form.cancel-button
-                :link="route('empresas.reservas.list')"
-            >
+            <x-form.cancel-button :link="route('empresas.reservas.list')" >
                 Volver al listado
             </x-form.cancel-button>
 
@@ -54,13 +52,9 @@
 
         <div class="col-xl-8">
 
-            <x-empresas.reservas.comprador
-                :habilitado="$puedeAgregarPasajeros"
-            />
+            <x-empresas.reservas.comprador :habilitado="$puedeAgregarPasajeros" />
 
-            <x-empresas.reservas.pasajero
-                :habilitado="$puedeAgregarPasajeros"
-            />
+            <x-empresas.reservas.pasajero :habilitado="$puedeAgregarPasajeros" />
 
             <x-empresas.reservas.pasajeros-cotizacion
                 :pasajeros="$pasajeros"
@@ -111,6 +105,7 @@
                             @disabled(! $canConfirm || ! $puedeAgregarPagos || count($pagos) === 0 || round($total - $abonado, 2) !== 0.0)>
                             Registrar reserva
                         </button>
+
                     </div>
 
                 </form>
@@ -130,9 +125,7 @@
         :cambio="$cambio"
     />
 
-    <x-layout.loader.fullpage
-        wire:loading.delay.short
-    />
+    <x-layout.loader.fullpage wire:loading.delay.short />
 
 </div>
 

@@ -95,7 +95,7 @@
         <tbody>
 
             @forelse ($viajes as $viaje)
-            
+
                 <tr wire:key="listViaje-{{ $viaje->id }}">
 
                     <td>
@@ -119,7 +119,9 @@
                     </td>
 
                     <td>
+
                         <x-list.status-badge :status="$viaje->estatus" />
+
                     </td>
 
                     <td class="text-end">
@@ -127,7 +129,9 @@
                         <x-list.button-group>
 
                             @if ($canDetail)
+
                                 <x-list.view-button :route="route('admin.viajes.detail', ['viaje_id' => $viaje->id])" :target="false" />
+
                             @endif
 
                         </x-list.button-group>
@@ -176,4 +180,3 @@
         }));
     </script>
 @endscript
-

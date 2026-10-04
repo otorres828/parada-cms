@@ -78,7 +78,6 @@
                     <x-list.sortable-button column="nombre_campana" :$sortColumn :$sortDirection />
                 </th>
 
-
                 <th>Descuento
                     <x-list.sortable-button column="tipo_descuento" :$sortColumn :$sortDirection />
                 </th>
@@ -120,7 +119,6 @@
                         {{ $configuracionCupon->nombre_campana ?? '—' }}
                     </td>
 
-
                     <td>
                         {{ $configuracionCupon->tipo_descuento === 'porcentaje' ? 'Porcentaje' : 'Monto fijo' }}
                     </td>
@@ -146,19 +144,19 @@
                     </td>
 
                     <td>
+
                         <x-list.status-badge :status="$configuracionCupon->estatus" />
+
                     </td>
 
                     <td class="text-end">
 
                         <x-list.button-group>
 
-
-
                             @if ($canEdit)
-                                <x-list.status-button wire:click="changeStatus({{ $configuracionCupon->id }})"
-                                    :status="$configuracionCupon->estatus"
-                                    wire:loading.attr="disabled" />
+
+                                <x-list.status-button wire:click="changeStatus({{ $configuracionCupon->id }})" :status="$configuracionCupon->estatus" wire:loading.attr="disabled" />
+
                             @endif
 
                         </x-list.button-group>

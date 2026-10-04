@@ -29,7 +29,9 @@
     <x-list.actions>
 
         <x-slot:search>
+
             <x-list.search-input wire:model.live.debounce.1200ms="search" />
+
         </x-slot:search>
 
     </x-list.actions>
@@ -37,6 +39,7 @@
     <div class="row g-3 mb-3 align-items-end">
 
         <div class="col-md-6 col-xl-2">
+
             <label class="form-label" for="orden-empresa">Empresa</label>
             <select id="orden-empresa" class="form-select" wire:model.live="empresa_id">
                 <option value="">Todas</option>
@@ -44,9 +47,11 @@
                     <option value="{{ $empresa->id }}">{{ $empresa->nombre }}</option>
                 @endforeach
             </select>
+
         </div>
 
         <div class="col-md-6 col-xl-2">
+
             <label class="form-label" for="orden-estatus">Estado</label>
             <select id="orden-estatus" class="form-select" wire:model.live="estatus">
                 <option value="">Todos</option>
@@ -55,27 +60,36 @@
                 <option value="3">Rechazadas</option>
                 <option value="4">Aprobadas</option>
             </select>
+
         </div>
 
         <div class="col-md-6 col-xl-2">
+
             <label class="form-label" for="orden-desde">Desde</label>
             <input id="orden-desde" class="form-control" type="date" wire:model.live="date_from"
                 min="{{ $this->getMinFilterDate() }}" max="{{ $this->getMaxFilterDate() }}">
+
         </div>
 
         <div class="col-md-6 col-xl-2">
+
             <label class="form-label" for="orden-hasta">Hasta</label>
             <input id="orden-hasta" class="form-control" type="date" wire:model.live="date_to"
                 min="{{ $this->getMinFilterDate() }}" max="{{ $this->getMaxFilterDate() }}">
+
         </div>
 
         @if ($canDownload)
+
             <div class="col-md-12 col-xl-auto ms-xl-auto text-md-end">
+
                 <button type="button" class="btn btn-success" wire:click="exportExcel"
                     wire:loading.attr="disabled" wire:target="exportExcel">
                     <i class="bi bi-file-earmark-excel" aria-hidden="true"></i> Descargar Excel
                 </button>
+
             </div>
+
         @endif
 
     </div>
@@ -102,7 +116,11 @@
                     <td>{{ $orden->empresa->nombre }}</td>
                     <td>{{ $orden->periodo_desde->format('d/m/Y') }} — {{ $orden->periodo_hasta->format('d/m/Y') }}</td>
                     <td>{{ $orden->cantidad_reservas }}</td>
-                    <td><x-money.dual :usd="$orden->total" :bs="data_get($conversionesBs, $orden->id . '.total_bs')" /></td>
+                    <td>
+
+                    <x-money.dual :usd="$orden->total" :bs="data_get($conversionesBs, $orden->id . '.total_bs')" />
+
+                    </td>
                     <td>{{ $orden->fecha_vencimiento->format('d/m/Y H:i') }}</td>
                     <td>
                         <span @class([
@@ -115,7 +133,9 @@
                     </td>
                     <td class="text-end">
                         @if ($canDetail)
+
                             <x-list.view-button :route="route('admin.ordenes-cobro.detail', $orden->id)" :target="false" />
+
                         @endif
                     </td>
                 </tr>

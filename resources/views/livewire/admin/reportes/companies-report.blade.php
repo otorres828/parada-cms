@@ -26,22 +26,25 @@
     </x-list.heading>
 
     <x-layout.error />
+
     <form x-ref="form" @submit.prevent="preSave" novalidate>
 
         <div class="row g-3 mb-3 align-items-end">
+
             <div class="col-md-3">
+
                 <label class="form-label" for="tipo-transporte">Tipo de transporte</label>
                 <select id="tipo-transporte" class="form-select" wire:model.live="tipo_transporte">
                     <option value="">Todos los transportes</option>
                     <option value="autobus">Autobús</option>
                     <option value="carro">Carro</option>
                 </select>
+
             </div>
 
             <div class="col-md-6 col-xl-2">
 
-                <x-form.text-input margin="0" type="date" name="date_from" wire:model.live="date_from"
-                    min="{{ $this->getMinFilterDate() }}" max="{{ $this->getMaxFilterDate() }}">
+                <x-form.text-input margin="0" type="date" name="date_from" wire:model.live="date_from" min="{{ $this->getMinFilterDate() }}" max="{{ $this->getMaxFilterDate() }}" >
                     Desde
                 </x-form.text-input>
 
@@ -49,18 +52,19 @@
 
             <div class="col-md-6 col-xl-2">
 
-                <x-form.text-input margin="0" type="date" name="date_to" wire:model.live="date_to"
-                    min="{{ $this->getMinFilterDate() }}" max="{{ $this->getMaxFilterDate() }}">
+                <x-form.text-input margin="0" type="date" name="date_to" wire:model.live="date_to" min="{{ $this->getMinFilterDate() }}" max="{{ $this->getMaxFilterDate() }}" >
                     Hasta
                 </x-form.text-input>
 
             </div>
 
             <div class="col-md-12 col-xl-auto ms-xl-auto text-md-end">
+
                 <button type="button" class="btn btn-success" @click="preSave" :disabled="saving"
                     wire:loading.attr="disabled" wire:target="export">
                     <i class="bi bi-file-earmark-excel" aria-hidden="true"></i> Descargar Excel
                 </button>
+
             </div>
 
         </div>
@@ -75,7 +79,7 @@
 
             <tr>
                 <th>Empresa</th>
-                
+
                 <th>Tipo de entidad</th>
 
                 <th>Reservas pagadas</th>
@@ -103,11 +107,15 @@
                     </td>
 
                     <td>
+
                         <x-money.dual :usd="$row->total" :bs="$row->total_bs" />
+
                     </td>
 
                     <td>
+
                         <x-money.dual :usd="$row->tasas" :bs="$row->tasas_bs" />
+
                     </td>
 
             </tr>@empty

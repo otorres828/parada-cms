@@ -68,11 +68,13 @@
         </x-slot:group>
 
         @if ($canAdd)
+
             <x-slot:button>
                 <a class="btn btn-primary" href="{{ route('empresas.programaciones.add') }}" wire:navigate>
                     <i class="bi bi-plus-lg me-1"></i> Nuevo registro
                 </a>
             </x-slot:button>
+
         @endif
 
     </x-list.actions>
@@ -85,7 +87,6 @@
                 <th>ID
                     <x-list.sortable-button column="id" :$sortColumn :$sortDirection />
                 </th>
-
 
                 <th>Origen </th>
 
@@ -117,7 +118,6 @@
                         {{ $programacion->id }}
                     </td>
 
-
                     <td>
                         {{ $programacion->viaje?->origenTerminal?->nombre ?? '—' }}
                     </td>
@@ -135,7 +135,9 @@
                     </td>
 
                     <td>
+
                         <x-list.status-programacion :status="$programacion->estatus" />
+
                     </td>
 
                     <td class="text-end">
@@ -150,9 +152,8 @@
                             @endif
 
                             @if ($canEdit && in_array($programacion->estatus, [1, 2]))
-                            
-                                <x-list.edit-button :route="route('empresas.programaciones.edit', ['programacion_id' => $programacion->id])"
-                                    :disabled="$programacion->reservas_exists" disabled-reason="Esta programación tiene reservas y no puede editarse." />
+
+                                <x-list.edit-button :route="route('empresas.programaciones.edit', ['programacion_id' => $programacion->id])" :disabled="$programacion->reservas_exists" disabled-reason="Esta programación tiene reservas y no puede editarse." />
 
                                 <x-list.status-button wire:click="changeStatus({{ $programacion->id }})" :status="$programacion->estatus" wire:loading.attr="disabled" />
 

@@ -30,7 +30,7 @@
 
         <x-slot:button>
 
-            <x-form.cancel-button :link="route('admin.empresas.list')">
+            <x-form.cancel-button :link="route('admin.empresas.list')" >
                 Volver al listado
             </x-form.cancel-button>
 
@@ -39,80 +39,114 @@
     </x-list.heading>
 
     <x-layout.error />
+
     <form id="saveEmpresaForm" x-ref="form" @submit.prevent="preSave" novalidate>
 
         <x-form.container-sm>
-            
+
             <div class="mb-3">
-                <x-form.dropdown label="Tipo de entidad" name="tipo_entidad" x-model="$wire.tipo_entidad">
+
+                <x-form.dropdown
+                    label="Tipo de entidad"
+                    name="tipo_entidad"
+                    x-model="$wire.tipo_entidad"
+                >
                     <option value="">Seleccionar...</option>
                     <option value="agencia_autobus">Agencia de Autobús</option>
                     <option value="conductor_carro">Conductor de carro</option>
-                </x-form.dropdown>@error('tipo_entidad') 
+                </x-form.dropdown>
 
-                <div class="text-danger small">{{ $message }}</div> @enderror
-                
+                @error('tipo_entidad')
+
+                <div class="text-danger small">
+
+                    {{ $message }}
+
+                </div>
+
+                @enderror
+
             </div>
 
             <div class="mb-3">
 
-                <x-form.text-input type="text" name="nombre" x-model="$wire.nombre">
+                <x-form.text-input type="text" name="nombre" x-model="$wire.nombre" >
                     Nombre
                 </x-form.text-input>
 
                 @error('nombre')
+
                     <div class="text-danger small">
+
                         {{ $message }}
+
                     </div>
+
                 @enderror
 
             </div>
 
             <div class="mb-3">
 
-                <x-form.text-input type="text" name="rif" x-model="$wire.rif">
+                <x-form.text-input type="text" name="rif" x-model="$wire.rif" >
                     Identificación fiscal
                 </x-form.text-input>
 
                 @error('rif')
+
                     <div class="text-danger small">
+
                         {{ $message }}
+
                     </div>
+
                 @enderror
 
             </div>
 
             <div class="mb-3">
 
-                <x-form.text-input type="text" name="telefono" x-model="$wire.telefono">
+                <x-form.text-input type="text" name="telefono" x-model="$wire.telefono" >
                     Teléfono
                 </x-form.text-input>
 
                 @error('telefono')
+
                     <div class="text-danger small">
+
                         {{ $message }}
+
                     </div>
+
                 @enderror
 
             </div>
 
             <div class="mb-3">
 
-                <x-form.text-input type="email" name="email" x-model="$wire.email">
+                <x-form.text-input type="email" name="email" x-model="$wire.email" >
                     Correo
                 </x-form.text-input>
 
                 @error('email')
+
                     <div class="text-danger small">
+
                         {{ $message }}
+
                     </div>
+
                 @enderror
 
             </div>
 
             <div class="mb-3">
 
-                <x-form.dropdown label="Gestión de pagos" name="tipo_contrato" x-model="$wire.tipo_contrato">
+                <x-form.dropdown
+                    label="Gestión de pagos"
+                    name="tipo_contrato"
+                    x-model="$wire.tipo_contrato"
+                >
 
                     <option value="">Seleccionar...</option>
                     <option value="{{ \App\Models\Empresa::CONTRATO_ELLOS_RECIBEN }}">La empresa recibe los pagos</option>
@@ -121,9 +155,13 @@
                 </x-form.dropdown>
 
                 @error('tipo_contrato')
+
                     <div class="text-danger small">
+
                         {{ $message }}
+
                     </div>
+
                 @enderror
 
             </div>
@@ -133,7 +171,12 @@
                 <div class="row g-3">
 
                     <div class="col-md-6">
-                        <x-form.dropdown label="Día de corte" name="dia_corte" x-model="$wire.dia_corte">
+
+                        <x-form.dropdown
+                            label="Día de corte"
+                            name="dia_corte"
+                            x-model="$wire.dia_corte"
+                        >
                             <option value="">Seleccionar...</option>
                             <option value="1">Lunes</option>
                             <option value="2">Martes</option>
@@ -143,17 +186,42 @@
                             <option value="6">Sábado</option>
                             <option value="7">Domingo</option>
                         </x-form.dropdown>
-                        @error('dia_corte') <div class="text-danger small">{{ $message }}</div> @enderror
+
+                        @error('dia_corte')
+
+                        <div class="text-danger small">
+
+                            {{ $message }}
+
+                        </div>
+
+                        @enderror
+
                     </div>
 
                     <div class="col-md-6">
+
                         <label class="form-label" for="hora_corte">Hora de corte</label>
                         <input id="hora_corte" class="form-control" type="time" name="hora_corte" x-model="$wire.hora_corte">
-                        @error('hora_corte') <div class="text-danger small">{{ $message }}</div> @enderror
+                        @error('hora_corte')
+
+                        <div class="text-danger small">
+
+                            {{ $message }}
+
+                        </div>
+
+                        @enderror
+
                     </div>
 
                     <div class="col-md-6">
-                        <x-form.dropdown label="Día de cierre" name="dia_vencimiento" x-model="$wire.dia_vencimiento">
+
+                        <x-form.dropdown
+                            label="Día de cierre"
+                            name="dia_vencimiento"
+                            x-model="$wire.dia_vencimiento"
+                        >
                             <option value="">Seleccionar...</option>
                             <option value="1">Lunes</option>
                             <option value="2">Martes</option>
@@ -163,13 +231,33 @@
                             <option value="6">Sábado</option>
                             <option value="7">Domingo</option>
                         </x-form.dropdown>
-                        @error('dia_vencimiento') <div class="text-danger small">{{ $message }}</div> @enderror
+
+                        @error('dia_vencimiento')
+
+                        <div class="text-danger small">
+
+                            {{ $message }}
+
+                        </div>
+
+                        @enderror
+
                     </div>
 
                     <div class="col-md-6">
+
                         <label class="form-label" for="hora_vencimiento">Hora de cierre</label>
                         <input id="hora_vencimiento" class="form-control" type="time" name="hora_vencimiento" x-model="$wire.hora_vencimiento">
-                        @error('hora_vencimiento') <div class="text-danger small">{{ $message }}</div> @enderror
+                        @error('hora_vencimiento')
+
+                        <div class="text-danger small">
+
+                            {{ $message }}
+
+                        </div>
+
+                        @enderror
+
                     </div>
 
                 </div>
@@ -180,7 +268,11 @@
 
             <div class="mb-3">
 
-                <x-form.dropdown label="Estado" name="estatus" x-model="$wire.estatus">
+                <x-form.dropdown
+                    label="Estado"
+                    name="estatus"
+                    x-model="$wire.estatus"
+                >
 
                     <option value="">Seleccionar...</option>
                     <option value="0">Inactivo</option>
@@ -189,15 +281,19 @@
                 </x-form.dropdown>
 
                 @error('estatus')
+
                     <div class="text-danger small">
+
                         {{ $message }}
+
                     </div>
+
                 @enderror
 
             </div>
 
             <hr>
-            
+
         </x-form.container-sm>
 
         <button class="btn btn-primary" type="submit" :disabled="saving"

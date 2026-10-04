@@ -41,7 +41,9 @@
     <x-list.actions>
 
         <x-slot:search>
+
             <x-list.search-input wire:model.live.debounce.1200ms="search" />
+
         </x-slot:search>
 
         <x-slot:group>
@@ -69,11 +71,15 @@
         </x-slot:group>
 
         @if ($canAdd)
+
             <x-slot:button>
-                <x-list.add-button :route="route('admin.preguntas-frecuentes.add')">
+
+                <x-list.add-button :route="route('admin.preguntas-frecuentes.add')" >
                     Nueva pregunta
                 </x-list.add-button>
+
             </x-slot:button>
+
         @endif
 
     </x-list.actions>
@@ -111,7 +117,9 @@
                     <td>{{ $pregunta->destacada ? 'Sí' : 'No' }}</td>
 
                     <td>
+
                         <x-list.status-badge :status="$pregunta->estatus" />
+
                     </td>
 
                     <td class="text-end">
@@ -119,14 +127,17 @@
                         <x-list.button-group>
 
                             @if ($canEdit)
-                                <x-list.status-button wire:click="changeStatus({{ $pregunta->id }})"
-                                    :status="$pregunta->estatus" />
+
+                                <x-list.status-button wire:click="changeStatus({{ $pregunta->id }})" :status="$pregunta->estatus" />
+
                                 <x-list.edit-button :route="route('admin.preguntas-frecuentes.edit', $pregunta->id)" />
+
                             @endif
 
                             @if ($canDelete)
-                                <x-list.delete-button x-data
-                                    @click="$dispatch('confirmDeletion', { id: {{ $pregunta->id }}, type: 'single' })" />
+
+                                <x-list.delete-button x-data @click="$dispatch('confirmDeletion', { id: {{ $pregunta->id }}, type: 'single' })" />
+
                             @endif
 
                         </x-list.button-group>
@@ -134,7 +145,7 @@
                     </td>
 
                 </tr>
-                
+
             @empty
                 <tr>
                     <td colspan="6" class="text-center py-5">

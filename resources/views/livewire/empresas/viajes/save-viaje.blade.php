@@ -22,9 +22,7 @@
 
         <x-slot:button>
 
-            <x-form.cancel-button
-                :link="route('empresas.viajes.list')"
-            >
+            <x-form.cancel-button :link="route('empresas.viajes.list')" >
                 Volver al listado
             </x-form.cancel-button>
 
@@ -101,9 +99,7 @@
 
     </form>
 
-    <x-layout.loader.fullpage
-        wire:loading.delay.short
-    />
+    <x-layout.loader.fullpage wire:loading.delay.short />
 
 </div>
 

@@ -30,7 +30,7 @@
 
         <x-slot:button>
 
-            <x-form.cancel-button :link="route('admin.clientes.list')">
+            <x-form.cancel-button :link="route('admin.clientes.list')" >
                 Volver al listado
             </x-form.cancel-button>
 
@@ -39,69 +39,90 @@
     </x-list.heading>
 
     <x-layout.error />
+
     <form id="saveUserForm" x-ref="form" @submit.prevent="preSave" novalidate>
 
         <x-form.container-sm>
 
             <div class="mb-3">
 
-                <x-form.text-input type="text" name="name" x-model="$wire.name">
+                <x-form.text-input type="text" name="name" x-model="$wire.name" >
                     Nombre
                 </x-form.text-input>
 
                 @error('name')
+
                     <div class="text-danger small">
+
                         {{ $message }}
+
                     </div>
+
                 @enderror
 
             </div>
 
             <div class="mb-3">
 
-                <x-form.text-input type="text" name="lastname" x-model="$wire.lastname">
+                <x-form.text-input type="text" name="lastname" x-model="$wire.lastname" >
                     Apellido
                 </x-form.text-input>
 
                 @error('lastname')
+
                     <div class="text-danger small">
+
                         {{ $message }}
+
                     </div>
+
                 @enderror
 
             </div>
 
             <div class="mb-3">
 
-                <x-form.text-input type="email" name="email" x-model="$wire.email">
+                <x-form.text-input type="email" name="email" x-model="$wire.email" >
                     Correo
                 </x-form.text-input>
 
                 @error('email')
+
                     <div class="text-danger small">
+
                         {{ $message }}
+
                     </div>
+
                 @enderror
 
             </div>
 
             <div class="mb-3">
 
-                <x-form.text-input type="text" name="telefono" x-model="$wire.telefono">
+                <x-form.text-input type="text" name="telefono" x-model="$wire.telefono" >
                     Teléfono
                 </x-form.text-input>
 
                 @error('telefono')
+
                     <div class="text-danger small">
+
                         {{ $message }}
+
                     </div>
+
                 @enderror
 
             </div>
 
             <div class="mb-3">
 
-                <x-form.dropdown label="Estado" name="status" x-model="$wire.status">
+                <x-form.dropdown
+                    label="Estado"
+                    name="status"
+                    x-model="$wire.status"
+                >
 
                     <option value="">Seleccionar...</option>
                     <option value="1">Activo</option>
@@ -110,9 +131,13 @@
                 </x-form.dropdown>
 
                 @error('status')
+
                     <div class="text-danger small">
+
                         {{ $message }}
+
                     </div>
+
                 @enderror
 
             </div>

@@ -104,7 +104,9 @@
                     </td>
 
                     <td>
+
                         <x-list.status-badge :status="$usuarioEmpresa->estatus" />
+
                     </td>
 
                     <td class="text-end">
@@ -112,17 +114,21 @@
                         <x-list.button-group>
 
                             @if ($canDetail)
+
                                 <x-list.view-button :route="route('admin.empresas.users.detail', [
                                     'empresa_id' => $empresa_id,
                                     'usuario_empresa_id' => $usuarioEmpresa->id,
                                 ])" :target="false" />
+
                             @endif
 
                             @if ($canEdit)
+
                                 <x-list.edit-button :route="route('admin.empresas.users.edit', [
                                     'empresa_id' => $empresa_id,
                                     'usuario_empresa_id' => $usuarioEmpresa->id,
                                 ])" />
+
                             @endif
 
                             @if ($canPermissions)
@@ -133,9 +139,9 @@
                             @endif
 
                             @if ($canEdit)
-                                <x-list.status-button wire:click="changeStatus({{ $usuarioEmpresa->id }})"
-                                    :status="$usuarioEmpresa->estatus"
-                                    wire:loading.attr="disabled" />
+
+                                <x-list.status-button wire:click="changeStatus({{ $usuarioEmpresa->id }})" :status="$usuarioEmpresa->estatus" wire:loading.attr="disabled" />
+
                             @endif
 
                         </x-list.button-group>

@@ -20,9 +20,11 @@
 <div x-data="saveExoneracionTasa" class="py-3">
 
     <x-list.heading>
+
         <x-slot:title>
             {{ $exoneracion_tasa_servicio_id ? 'Editar exoneración' : 'Nueva exoneración' }}
         </x-slot:title>
+
     </x-list.heading>
 
     <form x-ref="form" @submit.prevent="preSave" novalidate>
@@ -32,41 +34,61 @@
             <x-layout.error />
 
             <div class="mb-3">
-                <x-form.dropdown label="Empresa" name="empresa_id" x-model="$wire.empresa_id" disabled="$wire.exoneracion_tasa_servicio_id">
+
+                <x-form.dropdown
+                    label="Empresa"
+                    name="empresa_id"
+                    x-model="$wire.empresa_id"
+                    disabled="$wire.exoneracion_tasa_servicio_id"
+                >
                     <option value="">Selecciona una empresa</option>
                     @foreach ($empresas as $empresa)
                         <option value="{{ $empresa->id }}">{{ $empresa->nombre }}</option>
                     @endforeach
                 </x-form.dropdown>
+
             </div>
 
             <div class="mb-3">
-                <x-form.text-input type="datetime-local" name="fecha_desde" x-model="$wire.fecha_desde" disabled="$wire.exoneracion_tasa_servicio_id">
+
+                <x-form.text-input type="datetime-local" name="fecha_desde" x-model="$wire.fecha_desde" disabled="$wire.exoneracion_tasa_servicio_id" >
                     Fecha desde
                 </x-form.text-input>
+
             </div>
 
             <div class="mb-3">
-                <x-form.text-input type="datetime-local" name="fecha_hasta" x-model="$wire.fecha_hasta" disabled="$wire.exoneracion_tasa_servicio_id">
+
+                <x-form.text-input type="datetime-local" name="fecha_hasta" x-model="$wire.fecha_hasta" disabled="$wire.exoneracion_tasa_servicio_id" >
                     Fecha hasta
                 </x-form.text-input>
+
                 <small class="text-body-secondary">Déjala vacía para una exoneración sin vencimiento.</small>
+
             </div>
 
             <div class="mb-3">
-                <x-form.text-input type="text" name="motivo" x-model="$wire.motivo">
+
+                <x-form.text-input type="text" name="motivo" x-model="$wire.motivo" >
                     Motivo
                 </x-form.text-input>
+
             </div>
 
             <div class="mb-3">
-                <x-form.dropdown label="Estado" name="estatus" x-model="$wire.estatus">
+
+                <x-form.dropdown
+                    label="Estado"
+                    name="estatus"
+                    x-model="$wire.estatus"
+                >
                     <option value="1">Activo</option>
                     <option value="2">Inactivo</option>
                 </x-form.dropdown>
+
             </div>
 
-            <x-form.cancel-button :link="route('admin.exoneraciones-tasa-servicio.list')">
+            <x-form.cancel-button :link="route('admin.exoneraciones-tasa-servicio.list')" >
                 Cancelar
             </x-form.cancel-button>
 

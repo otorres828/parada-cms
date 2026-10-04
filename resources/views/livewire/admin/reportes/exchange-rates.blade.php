@@ -1,12 +1,15 @@
 @section('title', 'Histórico de tasas de cambio')
 
 <div x-data="exchangeRates" class="py-3">
+
     <x-list.heading>
+
         <x-slot:title>
             Histórico de tasas de cambio
         </x-slot:title>
 
         @if ($canUpdate)
+
             <x-slot:button>
                 <button type="button" class="btn btn-primary" wire:click="updateRates"
                     wire:loading.attr="disabled" wire:target="updateRates">
@@ -18,6 +21,7 @@
                     </span>
                 </button>
             </x-slot:button>
+
         @endif
     </x-list.heading>
 

@@ -49,22 +49,31 @@
 
                 {{-- Username field synchronized with Livewire $username property --}}
 
-                <x-auth.username-input wire:model="username" :hasError="$errors->has('username')" :errorMessage="$errors->first('username')" name="username" />
+                <x-auth.username-input
+                    wire:model="username"
+                    :hasError="$errors->has('username')"
+                    :errorMessage="$errors->first('username')"
+                    name="username"
+                />
 
                 {{--
                     Password field with dynamic masking logic.
                     Type toggles between 'text' and 'password' via Alpine state.
                 --}}
 
-                <x-auth.password-input wire:model="password" :hasError="$errors->has('password')"
+                <x-auth.password-input
+                    wire:model="password"
+                    :hasError="$errors->has('password')"
                     x-bind:type="(isPasswordVisible) ? 'text' : 'password'"
-                    :errorMessage="$errors->first('password')" name="password" />
+                    :errorMessage="$errors->first('password')"
+                    name="password"
+                />
 
                 <div class="mb-4">
 
                     {{-- Reactive toggle linked to isPasswordVisible boolean --}}
 
-                    <x-form.switch x-model="isPasswordVisible">
+                    <x-form.switch x-model="isPasswordVisible" >
 
                         Mostrar contraseña
 

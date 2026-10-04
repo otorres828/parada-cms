@@ -27,7 +27,7 @@
 
         <x-slot:button>
 
-            <x-form.cancel-button :link="route('admin.empresas.users.list', ['empresa_id' => $empresa_id])">
+            <x-form.cancel-button :link="route('admin.empresas.users.list', ['empresa_id' => $empresa_id])" >
                 Volver al listado
             </x-form.cancel-button>
 
@@ -36,23 +36,28 @@
     </x-list.heading>
 
     <x-layout.error />
+
     <form x-ref="form" @submit.prevent="preSave" novalidate>
         <p>Selecciona los permisos del colaborador dentro del panel de su empresa.</p>
 
         <div class="row g-3">
 
             @foreach ($permissions as $section => $items)
+
                 <div class="col-md-4">
 
                     <div class="card h-100">
 
                         <div class="card-header">
+
                             {{ $section }}
+
                         </div>
 
                         <div class="card-body">
 
                             @foreach ($items as $permission)
+
                                 <div class="form-check">
 
                                     <input id="permission-{{ $permission->id }}" class="form-check-input"
@@ -64,6 +69,7 @@
                                     </label>
 
                                 </div>
+
                             @endforeach
 
                         </div>
@@ -71,6 +77,7 @@
                     </div>
 
                 </div>
+
             @endforeach
 
         </div>
@@ -78,6 +85,7 @@
         <button type="submit" class="btn btn-primary mt-3" :disabled="saving" wire:loading.attr="disabled">Guardar
             permisos</button>
     </form>
+
     <x-layout.loader.fullpage wire:loading.delay.short />
 
 </div>

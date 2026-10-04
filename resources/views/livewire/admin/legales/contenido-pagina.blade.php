@@ -24,7 +24,7 @@
 
         <x-slot:button>
 
-            <x-form.cancel-button :link="route('admin.legales.documentos.list')">
+            <x-form.cancel-button :link="route('admin.legales.documentos.list')" >
                 Volver
             </x-form.cancel-button>
 
@@ -40,14 +40,21 @@
 
             <form wire:submit="save">
 
-                <x-form.rich-text-editor id="contenido-{{ $pagina }}" model="contenido" />
+                <x-form.rich-text-editor
+                    id="contenido-{{ $pagina }}"
+                    model="contenido"
+                />
 
                 <div class="form-text mb-3">
+
                     Utiliza el editor para aplicar títulos, listas, enlaces, tablas y formato al contenido público.
+
                 </div>
 
                 <div>
+
                     <button class="btn btn-primary" wire:loading.attr="disabled">Guardar contenido</button>
+
                 </div>
 
             </form>

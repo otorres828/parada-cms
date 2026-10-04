@@ -18,7 +18,9 @@
         <div>
 
             <div class="text-primary small fw-semibold text-uppercase mb-1">
+
                 Rodando · Empresas
+
             </div>
 
             <h1 class="h3 fw-bold mb-1">Resumen de la empresa</h1>
@@ -29,6 +31,7 @@
         @if ($canAddReserva)
             <a href="{{ route('empresas.reservas.add') }}" wire:navigate class="btn btn-primary"><i class="bi bi-plus-lg me-1"></i>Nueva Reserva</a>
         @endif
+
     </div>
 
     <div class="card border-0 shadow-sm mb-4">
@@ -49,7 +52,6 @@
             </div>
 
             <div class="row g-2 align-items-end ms-auto">
-
 
                 <div class="col-12 col-sm-auto">
 
@@ -110,6 +112,7 @@
 
         @foreach ([['label' => 'Ventas pagadas', 'value' => number_format($metrics['ventas'], 2, ',', '.'), 'note' => $metrics['reservas_pagadas'] . ' reservas pagadas', 'icon' => 'cash-stack', 'color' => 'primary'], ['label' => 'Pasajes vendidos', 'value' => number_format($metrics['pasajes'], 0, ',', '.'), 'note' => 'Pasajes de reservas pagadas', 'icon' => 'ticket-perforated', 'color' => 'success'], ['label' => 'Tasas de servicio', 'value' => number_format($metrics['tasas'], 2, ',', '.'), 'note' => 'Incluidas en las ventas pagadas', 'icon' => 'receipt', 'color' => 'info'], ['label' => 'Reservas pendientes', 'value' => number_format($metrics['pendientes'], 0, ',', '.'), 'note' => 'Con estado de pago pendiente', 'icon' => 'hourglass-split', 'color' => 'warning']] as $card)
             @if ($card['icon'] !== 'receipt' || $viewTasaServicio)
+
             <div class="col-sm-6 {{ $viewTasaServicio ? 'col-xl-3' : 'col-xl-4' }}">
 
                 <div class="card h-100 border-0 shadow-sm">
@@ -124,11 +127,15 @@
                         </div>
 
                         <div class="h2 fw-bold mb-2">
+
                             {{ $card['value'] }}
+
                         </div>
 
                         <div class="small text-body-secondary">
+
                             {{ $card['note'] }}
+
                         </div>
 
                     </div>
@@ -136,6 +143,7 @@
                 </div>
 
             </div>
+
             @endif
         @endforeach
 
@@ -169,10 +177,13 @@
                             Aún no hay reservas en este período.
 
                         </div>
+
                     @else
+
                         <div class="row g-3">
 
                             @foreach ($estados as $estado => $datos)
+
                                 <div class="col-sm-6" wire:key="estado-{{ $estado }}">
 
                                     <div class="d-flex justify-content-between small mb-2">
@@ -197,6 +208,7 @@
                                     </div>
 
                                 </div>
+
                             @endforeach
 
                         </div>
@@ -214,12 +226,16 @@
     <div class="card border-0 shadow-sm mb-4">
 
         <div class="card-header bg-transparent border-0 px-4 pt-4">
+
             <div class="d-flex flex-wrap align-items-center justify-content-between gap-2">
+
                 <h2 class="h5 fw-bold mb-0">Reservas recientes del período</h2>
                 @if ($canListReservas)
                     <a href="{{ route('empresas.reservas.list') }}" class="small ms-auto" wire:navigate>Ver todas las reservas</a>
                 @endif
+
             </div>
+
         </div>
 
         <div class="card-body px-0">
@@ -234,7 +250,6 @@
                             <th scope="col" class="ps-4">Referencia / fecha</th>
 
                             <th scope="col">Cliente</th>
-
 
                             <th scope="col" class="text-center">Pasajes</th>
 
@@ -253,14 +268,16 @@
                                     <span class="fw-semibold">{{ $reserva->codigo_referencia }}</span>
 
                                     <div class="small text-body-secondary">
+
                                         {{ $reserva->fecha_compra->format('d/m/Y H:i') }}
+
                                     </div>
+
                                 </td>
 
                                 <td>
                                     {{ $reserva->nombre_comprador }}
                                 </td>
-
 
                                 <td class="text-center">
                                     {{ $reserva->pasajes->count() }}
@@ -300,14 +317,19 @@
     <div class="card border-0 shadow-sm mb-4">
 
         <div class="card-header bg-transparent border-0 px-4 pt-4">
+
             <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-1">
+
                 <h2 class="h5 fw-bold mb-0">Próximas salidas</h2>
                 @if ($canListProgramaciones)
                     <a href="{{ route('empresas.programaciones.list') }}" class="small ms-auto" wire:navigate>Ver programaciones</a>
                 @endif
+
             </div>
+
             <p class="small text-body-secondary mb-0">Desde ahora y durante los próximos 7 días. Solo empresas y
                 rutas activas.</p>
+
         </div>
 
         <div class="card-body px-0">
@@ -320,7 +342,6 @@
 
                         <tr>
                             <th scope="col" class="ps-4">Ruta</th>
-
 
                             <th scope="col">Salida</th>
 
@@ -341,14 +362,15 @@
                                     </span>
                                 </td>
 
-
                                 <td class="text-nowrap">
                                     {{ $salida->getSalida()?->format('d/m/Y') }} ·
                                     {{ $salida->getSalida()?->format('H:i') }}
                                 </td>
 
                                 <td class="pe-4 text-end">
+
                                     <x-list.disponibilidad-tramos :tramos="$disponibilidadTramos[$salida->id] ?? []" />
+
                                 </td>
 
                             </tr>

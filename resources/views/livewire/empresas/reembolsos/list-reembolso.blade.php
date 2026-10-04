@@ -44,11 +44,15 @@
         </x-slot:group>
 
         @if (Route::has('empresas.reembolsos.add') && $canAdd)
+
             <x-slot:button>
-                <x-list.add-button :route="route('empresas.reembolsos.add')">
+
+                <x-list.add-button :route="route('empresas.reembolsos.add')" >
                     Nuevo registro
                 </x-list.add-button>
+
             </x-slot:button>
+
         @endif
 
     </x-list.actions>
@@ -79,6 +83,7 @@
                 Desde
             </label>
             <input id="listReembolso-from" type="date" class="form-control" wire:model.live="date_from">
+
         </div>
 
         <div class="col-md-3">
@@ -87,6 +92,7 @@
                 Hasta
             </label>
             <input id="listReembolso-to" type="date" class="form-control" wire:model.live="date_to">
+
         </div>
 
     </div>
@@ -142,7 +148,9 @@
                     </td>
 
                     <td>
+
                         <x-list.status-badge :status="$reembolso->estatus" />
+
                     </td>
 
                     <td>
@@ -154,7 +162,9 @@
                         <x-list.button-group>
 
                             @if ($canDetail)
+
                                 <x-list.view-button :route="route('empresas.reembolsos.detail', ['reembolso_id' => $reembolso->id])" :target="false" />
+
                             @endif
 
                             @if ($canReview)
@@ -210,5 +220,3 @@
         }));
     </script>
 @endscript
-
-

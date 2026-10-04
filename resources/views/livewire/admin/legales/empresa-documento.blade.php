@@ -28,7 +28,7 @@
 
         <x-slot:button>
 
-            <x-form.cancel-button :link="route('admin.legales.documentos.list')">
+            <x-form.cancel-button :link="route('admin.legales.documentos.list')" >
                 Volver a empresas
             </x-form.cancel-button>
 
@@ -59,7 +59,9 @@
         <div class="card mb-4">
 
             <div class="card-header">
+
                 Subir documento
+
             </div>
 
             <div class="card-body">
@@ -70,22 +72,30 @@
 
                         <div class="col-md-6">
 
-                            <x-form.text-input name="titulo" x-model="$wire.titulo">
+                            <x-form.text-input name="titulo" x-model="$wire.titulo" >
                                 Título del
                                 documento
                             </x-form.text-input>
 
                             @error('titulo')
+
                                 <div class="text-danger small">
+
                                     {{ $message }}
+
                                 </div>
+
                             @enderror
 
                         </div>
 
                         <div class="col-md-6">
 
-                            <x-form.dropdown label="Tipo de documento" name="tipo" x-model="$wire.tipo">
+                            <x-form.dropdown
+                                label="Tipo de documento"
+                                name="tipo"
+                                x-model="$wire.tipo"
+                            >
 
                                 @foreach ($tipos as $value => $label)
                                     <option value="{{ $value }}">{{ $label }}</option>
@@ -94,9 +104,13 @@
                             </x-form.dropdown>
 
                             @error('tipo')
+
                                 <div class="text-danger small">
+
                                     {{ $message }}
+
                                 </div>
+
                             @enderror
 
                         </div>
@@ -114,13 +128,19 @@
                                 x-on:livewire-upload-cancel="uploading=false">
 
                             <div class="form-text">
+
                                 PDF, JPG, PNG o WebP. Máximo 10 MB.
+
                             </div>
 
                             @error('archivo')
+
                                 <div class="text-danger small">
+
                                     {{ $message }}
+
                                 </div>
+
                             @enderror
 
                         </div>
@@ -134,9 +154,13 @@
                             <textarea id="legal-observaciones" name="observaciones" class="form-control" rows="3"
                                 x-model="$wire.observaciones"></textarea>
                             @error('observaciones')
+
                                 <div class="text-danger small">
+
                                     {{ $message }}
+
                                 </div>
+
                             @enderror
 
                         </div>
@@ -144,10 +168,12 @@
                     </div>
 
                     <div class="mt-3">
+
                         <button type="submit" class="btn btn-primary" :disabled="saving || uploading"
                             wire:loading.attr="disabled"><i
                                 class="bi bi-upload me-1"></i>Guardar documento</button><span x-show="uploading" x-cloak
                             class="text-body-secondary ms-2">Cargando archivo…</span>
+
                     </div>
 
                 </form>
@@ -161,6 +187,7 @@
     <div class="card">
 
         <div class="card-header d-flex flex-column flex-lg-row align-items-lg-center justify-content-between gap-3">
+
             <span class="fw-semibold text-nowrap">
                 Documentos de la empresa
             </span>
@@ -229,9 +256,13 @@
                                 <strong>{{ $documento->titulo }}</strong>
 
                                 @if ($documento->observaciones)
+
                                     <div class="text-body-secondary small">
+
                                         {{ $documento->observaciones }}
+
                                     </div>
+
                                 @endif
 
                             </td>
@@ -245,8 +276,11 @@
                                     class="bi {{ $documento->mime === 'application/pdf' ? 'bi-file-earmark-pdf' : 'bi-file-earmark-image' }} me-1"></i>{{ $documento->nombre_original }}
 
                                 <div class="small text-body-secondary">
+
                                     {{ number_format($documento->tamano / 1024, 1) }} KB
+
                                 </div>
+
                             </td>
 
                             <td>
@@ -262,7 +296,9 @@
                                 <x-list.button-group>
 
                                     @if ($canFile)
+
                                         <x-list.view-button :route="route('admin.legales.documentos.file', [$empresa_id, $documento->id])" :target="true" />
+
                                         <a class="btn btn-outline-secondary"
                                             href="{{ route('admin.legales.documentos.file', [$empresa_id, $documento->id, 'download' => 1]) }}"
                                             title="Descargar documento" aria-label="Descargar documento"><i
@@ -270,8 +306,9 @@
                                     @endif
 
                                     @if ($canDelete)
-                                        <x-list.delete-button x-data
-                                            @click="$dispatch('confirmDeletion', { id: {{ $documento->id }} })" />
+
+                                        <x-list.delete-button x-data @click="$dispatch('confirmDeletion', { id: {{ $documento->id }} })" />
+
                                     @endif
 
                                 </x-list.button-group>
@@ -298,10 +335,15 @@
     </div>
 
     <div class="mt-3">
+
         {{ $documentos->links() }}
+
     </div>
 
-    <x-layout.loader.fullpage wire:loading.delay.short wire:target="save,deleteDocumento,tipo_filtro" />
+    <x-layout.loader.fullpage
+        wire:loading.delay.short
+        wire:target="save,deleteDocumento,tipo_filtro"
+    />
 
 </div>
 

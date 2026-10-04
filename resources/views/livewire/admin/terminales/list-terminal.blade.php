@@ -65,11 +65,15 @@
         </x-slot:group>
 
         @if ($canAdd)
+
             <x-slot:button>
-                <x-list.add-button :route="route('admin.terminales.add')">
+
+                <x-list.add-button :route="route('admin.terminales.add')" >
                     Nuevo registro
                 </x-list.add-button>
+
             </x-slot:button>
+
         @endif
 
     </x-list.actions>
@@ -123,7 +127,9 @@
                     </td>
 
                     <td>
+
                         <x-list.status-badge :status="$terminal->estatus" />
+
                     </td>
 
                     <td class="text-end">
@@ -131,9 +137,11 @@
                         <x-list.button-group>
 
                             @if ($canEdit)
+
                                 <x-list.edit-button :route="route('admin.terminales.edit', ['terminal_id' => $terminal->id])" />
-                                <x-list.status-button wire:click="changeStatus({{ $terminal->id }})" :status="$terminal->estatus"
-                                    wire:loading.attr="disabled" />
+
+                                <x-list.status-button wire:click="changeStatus({{ $terminal->id }})" :status="$terminal->estatus" wire:loading.attr="disabled" />
+
                             @endif
 
                         </x-list.button-group>
@@ -182,4 +190,3 @@
         }));
     </script>
 @endscript
-

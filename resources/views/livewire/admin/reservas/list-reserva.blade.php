@@ -90,6 +90,7 @@
             </label>
             <input id="listReserva-from" type="date" class="form-control" wire:model.live="date_from"
                 min="{{ $this->getMinFilterDate() }}" max="{{ $this->getMaxFilterDate() }}">
+
         </div>
 
         <div class="col-md-6 col-xl-2">
@@ -99,15 +100,20 @@
             </label>
             <input id="listReserva-to" type="date" class="form-control" wire:model.live="date_to"
                 min="{{ $this->getMinFilterDate() }}" max="{{ $this->getMaxFilterDate() }}">
+
         </div>
 
         @if ($canDownload)
+
             <div class="col-md-12 col-xl-auto ms-xl-auto text-md-end">
+
                 <button type="button" class="btn btn-success" wire:click="exportExcel"
                     wire:loading.attr="disabled" wire:target="exportExcel">
                     <i class="bi bi-file-earmark-excel" aria-hidden="true"></i> Descargar Excel
                 </button>
+
             </div>
+
         @endif
 
     </div>
@@ -155,7 +161,7 @@
         <tbody>
 
             @forelse ($reservas as $reserva)
-            
+
                 <tr wire:key="listReserva-{{ $reserva->id }}">
 
                     <td>
@@ -195,15 +201,14 @@
 
                     <td>
 
-                        <x-money.dual 
-                            :usd="$reserva->getMontoTotalUSD(true)"
-                            :bs="$reserva->getMontoTotalBS(true)"
-                        />
+                        <x-money.dual :usd="$reserva->getMontoTotalUSD(true)" :bs="$reserva->getMontoTotalBS(true)" />
 
                     </td>
 
                     <td>
+
                         <x-list.status-reserva :status="$reserva->estado_pago" />
+
                     </td>
 
                     <td class="text-end">

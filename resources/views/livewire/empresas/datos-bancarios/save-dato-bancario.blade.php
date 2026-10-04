@@ -7,6 +7,7 @@
 @section('title', 'Datos Bancarios')
 
 <div class="py-3" x-data="saveDatoBancario">
+
     <x-list.heading>
 
         <x-slot:title>
@@ -15,7 +16,7 @@
 
         <x-slot:button>
 
-            <x-form.cancel-button :link="route('empresas.datos-bancarios.list')">
+            <x-form.cancel-button :link="route('empresas.datos-bancarios.list')" >
                 Volver al listado
             </x-form.cancel-button>
 

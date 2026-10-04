@@ -31,7 +31,7 @@
 
         <x-slot:button>
 
-            <x-form.cancel-button :link="route('admin.cupones.list')">
+            <x-form.cancel-button :link="route('admin.cupones.list')" >
                 Volver al listado
             </x-form.cancel-button>
 
@@ -73,7 +73,10 @@
 
                 <x-slot:search>
 
-                    <x-list.search-input wire:model.live.debounce.1200ms="search" placeholder="Buscar cupón..." />
+                    <x-list.search-input
+                        wire:model.live.debounce.1200ms="search"
+                        placeholder="Buscar cupón..."
+                    />
 
                 </x-slot:search>
 
@@ -99,7 +102,12 @@
 
             </x-list.actions>
 
-            <x-cupones.cupones-table :cupones="$cupones" :can-view-reservation="$canViewReservation" :sort-column="$sortColumn" :sort-direction="$sortDirection" />
+            <x-cupones.cupones-table
+                :cupones="$cupones"
+                :can-view-reservation="$canViewReservation"
+                :sort-column="$sortColumn"
+                :sort-direction="$sortDirection"
+            />
 
             {{ $cupones->links() }}
 
@@ -130,6 +138,3 @@
         }));
     </script>
 @endscript
-
-
-

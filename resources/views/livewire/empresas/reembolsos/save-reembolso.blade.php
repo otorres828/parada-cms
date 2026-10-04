@@ -30,7 +30,7 @@
 
         <x-slot:button>
 
-            <x-form.cancel-button :link="route('empresas.reembolsos.list')">
+            <x-form.cancel-button :link="route('empresas.reembolsos.list')" >
                 Volver al listado
             </x-form.cancel-button>
 
@@ -39,6 +39,7 @@
     </x-list.heading>
 
     <x-layout.error />
+
     <form id="saveReembolsoForm" x-ref="form" @submit.prevent="preSave" novalidate>
 
         <x-form.container-sm>
@@ -49,7 +50,11 @@
                     aria-label="Buscar Pago recibido"
                     wire:model.live.debounce.500ms="search_pago_reserva_id">
 
-                <x-form.dropdown label="Pago recibido" name="pago_reserva_id" x-model="$wire.pago_reserva_id">
+                <x-form.dropdown
+                    label="Pago recibido"
+                    name="pago_reserva_id"
+                    x-model="$wire.pago_reserva_id"
+                >
 
                     <option value="">Seleccionar...</option>
 
@@ -60,23 +65,35 @@
                 </x-form.dropdown>
 
                 @error('pago_reserva_id')
+
                     <div class="text-danger small">
+
                         {{ $message }}
+
                     </div>
+
                 @enderror
 
             </div>
 
             <div class="mb-3">
 
-                <x-form.textarea name="motivo" x-model="$wire.motivo" rows="3">
+                <x-form.textarea
+                    name="motivo"
+                    x-model="$wire.motivo"
+                    rows="3"
+                >
                     Motivo del reembolso total
                 </x-form.textarea>
 
                 @error('motivo')
+
                     <div class="text-danger small">
+
                         {{ $message }}
+
                     </div>
+
                 @enderror
 
             </div>

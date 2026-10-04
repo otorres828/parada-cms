@@ -29,7 +29,7 @@
 
         <x-slot:button>
 
-            <x-form.cancel-button :link="route('admin.clientes.list')">
+            <x-form.cancel-button :link="route('admin.clientes.list')" >
                 Volver al listado
             </x-form.cancel-button>
 
@@ -64,6 +64,7 @@
     <div class="card mt-4">
 
         <div class="card-header d-flex align-items-center flex-wrap gap-3">
+
             <span>Reservas pagadas y pendientes</span>
 
             <div class="ms-auto" style="width: 320px; max-width: 100%;">
@@ -80,7 +81,10 @@
 
         <div class="table-responsive">
 
-            <x-clientes.reservas-table :reservas="$reservas" :can-reservas-detail="$canReservasDetail" />
+            <x-clientes.reservas-table
+                :reservas="$reservas"
+                :can-reservas-detail="$canReservasDetail"
+            />
 
         </div>
 
@@ -122,7 +126,3 @@
         }));
     </script>
 @endscript
-
-
-
-

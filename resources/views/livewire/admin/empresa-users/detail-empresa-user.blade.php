@@ -26,7 +26,7 @@
 
         <x-slot:button>
 
-            <x-form.cancel-button :link="route('admin.empresas.users.list', ['empresa_id' => $empresa_id])">
+            <x-form.cancel-button :link="route('admin.empresas.users.list', ['empresa_id' => $empresa_id])" >
                 Volver al listado
             </x-form.cancel-button>
 
@@ -76,5 +76,3 @@
         }));
     </script>
 @endscript
-
-

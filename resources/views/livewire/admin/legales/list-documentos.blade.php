@@ -84,6 +84,7 @@
     <div class="row g-3 mb-4">
 
         @forelse($empresas as $empresa)
+
             <div class="col-md-6 col-xl-4" wire:key="legal-empresa-{{ $empresa->id }}">
 
                 <div class="card h-100">
@@ -91,7 +92,9 @@
                     <div class="card-body d-flex flex-column gap-2">
 
                         <div class="d-flex justify-content-between align-items-start">
+
                             <i class="bi bi-building fs-2 text-primary" aria-hidden="true"></i>
+
                             <x-list.status-badge :status="$empresa->estatus" />
 
                         </div>
@@ -99,11 +102,15 @@
                         <h2 class="h5 mb-0 text-break">{{ $empresa->nombre }}</h2>
 
                         <div class="text-body-secondary">
+
                             RIF: {{ $empresa->rif }}
+
                         </div>
 
                         <div class="text-body-secondary">
+
                             {{ $empresa->documentos_legales_count }} documento(s)
+
                         </div>
 
                         @if ($canDetail)
@@ -123,10 +130,13 @@
             <div class="col-12">
 
                 <div class="card card-body text-center py-5">
+
                     No se encontraron empresas.
+
                 </div>
 
             </div>
+
         @endforelse
 
     </div>

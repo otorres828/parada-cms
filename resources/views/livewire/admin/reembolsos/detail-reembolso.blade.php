@@ -27,7 +27,7 @@
 
         <x-slot:button>
 
-            <x-form.cancel-button :link="route('admin.reembolsos.list')">
+            <x-form.cancel-button :link="route('admin.reembolsos.list')" >
                 Volver al listado
             </x-form.cancel-button>
 
@@ -82,6 +82,3 @@
         }));
     </script>
 @endscript
-
-
-

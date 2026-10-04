@@ -30,7 +30,7 @@
 
         <x-slot:button>
 
-            <x-form.cancel-button :link="route('admin.amenidades.list')">
+            <x-form.cancel-button :link="route('admin.amenidades.list')" >
                 Volver al listado
             </x-form.cancel-button>
 
@@ -39,41 +39,54 @@
     </x-list.heading>
 
     <x-layout.error />
+
     <form id="saveAmenidadForm" x-ref="form" @submit.prevent="preSave" novalidate>
 
         <x-form.container-sm>
 
             <div class="mb-3">
 
-                <x-form.text-input type="text" name="nombre" x-model="$wire.nombre">
+                <x-form.text-input type="text" name="nombre" x-model="$wire.nombre" >
                     Nombre
                 </x-form.text-input>
 
                 @error('nombre')
+
                     <div class="text-danger small">
+
                         {{ $message }}
+
                     </div>
+
                 @enderror
 
             </div>
 
             <div class="mb-3">
 
-                <x-form.text-input type="text" name="icono" x-model="$wire.icono">
+                <x-form.text-input type="text" name="icono" x-model="$wire.icono" >
                     Ícono Bootstrap (ej. bi-wifi)
                 </x-form.text-input>
 
                 @error('icono')
+
                     <div class="text-danger small">
+
                         {{ $message }}
+
                     </div>
+
                 @enderror
 
             </div>
 
             <div class="mb-3">
 
-                <x-form.dropdown label="Estado" name="estatus" x-model="$wire.estatus">
+                <x-form.dropdown
+                    label="Estado"
+                    name="estatus"
+                    x-model="$wire.estatus"
+                >
 
                     <option value="">Seleccionar...</option>
                     <option value="0">Inactivo</option>
@@ -82,9 +95,13 @@
                 </x-form.dropdown>
 
                 @error('estatus')
+
                     <div class="text-danger small">
+
                         {{ $message }}
+
                     </div>
+
                 @enderror
 
             </div>

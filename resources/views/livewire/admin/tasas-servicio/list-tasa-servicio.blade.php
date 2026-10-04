@@ -56,11 +56,15 @@
         </x-slot:group>
 
         @if ($canAdd)
+
             <x-slot:button>
-                <x-list.add-button :route="route('admin.tasas-servicio.add')">
+
+                <x-list.add-button :route="route('admin.tasas-servicio.add')" >
                     Nueva tasa
                 </x-list.add-button>
+
             </x-slot:button>
+
         @endif
 
     </x-list.actions>
@@ -108,7 +112,9 @@
                     </td>
 
                     <td>
+
                         <x-list.status-badge :status="$tasa->estatus" />
+
                     </td>
 
                     <td class="text-end">
@@ -116,10 +122,11 @@
                         <x-list.button-group>
 
                             @if ($canEdit)
-                                <x-list.status-button wire:click="changeStatus({{ $tasa->id }})"
-                                    :status="$tasa->estatus" />
+
+                                <x-list.status-button wire:click="changeStatus({{ $tasa->id }})" :status="$tasa->estatus" />
 
                                 <x-list.edit-button :route="route('admin.tasas-servicio.edit', $tasa->id)" />
+
                             @endif
 
                         </x-list.button-group>
@@ -164,5 +171,3 @@
         }));
     </script>
 @endscript
-
-

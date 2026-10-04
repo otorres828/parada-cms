@@ -30,7 +30,7 @@
 
         <x-slot:button>
 
-            <x-form.cancel-button :link="route('empresas.pasajes.list')">
+            <x-form.cancel-button :link="route('empresas.pasajes.list')" >
                 Volver al listado
             </x-form.cancel-button>
 
@@ -46,10 +46,10 @@
 
                 <div class="card">
 
-                    <x-pasajes.description-empresa 
-                        :pasaje="$pasaje" 
-                        :can-view-campaign="$canViewCampaign" 
-                        :can-view-reservation="$canViewReservation" 
+                    <x-pasajes.description-empresa
+                        :pasaje="$pasaje"
+                        :can-view-campaign="$canViewCampaign"
+                        :can-view-reservation="$canViewReservation"
                         :view-tasa-servicio="$viewTasaServicio"
                     />
 
@@ -59,7 +59,10 @@
 
             @if ($qr)
 
-                <x-pasajes.localizador :qr="$qr" :pasaje="$pasaje" />
+                <x-pasajes.localizador
+                    :qr="$qr"
+                    :pasaje="$pasaje"
+                />
 
             @endif
 
@@ -91,6 +94,3 @@
         }));
     </script>
 @endscript
-
-
-

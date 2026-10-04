@@ -22,51 +22,62 @@
     </x-form.title>
 
     <x-layout.error />
+
     <form id="passwordForm" x-ref="form" @submit.prevent="preSave" novalidate>
 
         <x-form.container-sm>
 
             <div class="mb-3">
 
-                <x-form.text-input type="password" name="password" x-model="$wire.password" autocomplete="new-password">
+                <x-form.text-input type="password" name="password" x-model="$wire.password" autocomplete="new-password" >
                     Nueva
                     contraseña
                 </x-form.text-input>
 
                 @error('password')
+
                     <div class="text-danger small">
+
                         {{ $message }}
+
                     </div>
+
                 @enderror
 
             </div>
 
             <div class="mb-3">
 
-                <x-form.text-input type="password" name="password_confirmation" x-model="$wire.password_confirmation"
-                    autocomplete="new-password">
+                <x-form.text-input type="password" name="password_confirmation" x-model="$wire.password_confirmation" autocomplete="new-password" >
                     Confirmar contraseña
                 </x-form.text-input>
 
                 @error('password_confirmation')
+
                     <div class="text-danger small">
+
                         {{ $message }}
+
                     </div>
+
                 @enderror
 
             </div>
 
             <div class="mb-3">
 
-                <x-form.text-input type="password" name="current_password" x-model="$wire.current_password"
-                    autocomplete="new-password">
+                <x-form.text-input type="password" name="current_password" x-model="$wire.current_password" autocomplete="new-password" >
                     Contraseña actual
                 </x-form.text-input>
 
                 @error('current_password')
+
                     <div class="text-danger small">
+
                         {{ $message }}
+
                     </div>
+
                 @enderror
 
             </div>

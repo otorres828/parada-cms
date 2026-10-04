@@ -29,7 +29,7 @@
 
         <x-slot:button>
 
-            <x-form.cancel-button :link="route('admin.empresas.users.list', ['empresa_id' => $empresa_id])">
+            <x-form.cancel-button :link="route('admin.empresas.users.list', ['empresa_id' => $empresa_id])" >
                 Volver al listado
             </x-form.cancel-button>
 
@@ -38,55 +38,72 @@
     </x-list.heading>
 
     <x-layout.error />
+
     <form id="saveEmpresaUserForm" x-ref="form" @submit.prevent="preSave" novalidate>
 
         <x-form.container-sm>
 
             <div class="mb-3">
 
-                <x-form.text-input type="text" name="nombre" x-model="$wire.nombre">
+                <x-form.text-input type="text" name="nombre" x-model="$wire.nombre" >
                     Nombre
                 </x-form.text-input>
 
                 @error('nombre')
+
                     <div class="text-danger small">
+
                         {{ $message }}
+
                     </div>
+
                 @enderror
 
             </div>
 
             <div class="mb-3">
 
-                <x-form.text-input type="email" name="email" x-model="$wire.email">
+                <x-form.text-input type="email" name="email" x-model="$wire.email" >
                     Correo
                 </x-form.text-input>
 
                 @error('email')
+
                     <div class="text-danger small">
+
                         {{ $message }}
+
                     </div>
+
                 @enderror
 
             </div>
 
             <div class="mb-3">
 
-                <x-form.text-input type="password" name="password" x-model="$wire.password" autocomplete="new-password">
+                <x-form.text-input type="password" name="password" x-model="$wire.password" autocomplete="new-password" >
                     Contraseña
                 </x-form.text-input>
 
                 @error('password')
+
                     <div class="text-danger small">
+
                         {{ $message }}
+
                     </div>
+
                 @enderror
 
             </div>
 
             <div class="mb-3">
 
-                <x-form.dropdown label="Administrador de empresa" name="es_admin" x-model="$wire.es_admin">
+                <x-form.dropdown
+                    label="Administrador de empresa"
+                    name="es_admin"
+                    x-model="$wire.es_admin"
+                >
 
                     <option value="">Seleccionar...</option>
                     <option value="0">No</option>
@@ -95,16 +112,24 @@
                 </x-form.dropdown>
 
                 @error('es_admin')
+
                     <div class="text-danger small">
+
                         {{ $message }}
+
                     </div>
+
                 @enderror
 
             </div>
 
             <div class="mb-3">
 
-                <x-form.dropdown label="Estado" name="estatus" x-model="$wire.estatus">
+                <x-form.dropdown
+                    label="Estado"
+                    name="estatus"
+                    x-model="$wire.estatus"
+                >
 
                     <option value="">Seleccionar...</option>
                     <option value="0">Inactivo</option>
@@ -113,9 +138,13 @@
                 </x-form.dropdown>
 
                 @error('estatus')
+
                     <div class="text-danger small">
+
                         {{ $message }}
+
                     </div>
+
                 @enderror
 
             </div>

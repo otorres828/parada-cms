@@ -34,7 +34,9 @@
     <x-list.actions>
 
         <x-slot:search>
+
             <x-list.search-input wire:model.live.debounce.1200ms="search" />
+
         </x-slot:search>
 
         <x-slot:group>
@@ -50,8 +52,9 @@
                 </select>
 
                 @if ($canDelete)
-                    <x-list.delete-all-button x-show="$wire.selectedRecordIds.length > 0" x-data
-                        @click="$dispatch('confirmDeletion', { type: 'batch' })" />
+
+                    <x-list.delete-all-button x-show="$wire.selectedRecordIds.length > 0" x-data @click="$dispatch('confirmDeletion', { type: 'batch' })" />
+
                 @endif
 
             </div>
@@ -105,11 +108,23 @@
                     <td>{{ $solicitud->empresa }}</td>
                     <td>
                         {{ $solicitud->nombre }}
-                        <div class="small text-body-secondary">{{ $solicitud->cargo }}</div>
+
+                        <div class="small text-body-secondary">
+
+                            {{ $solicitud->cargo }}
+
+                        </div>
+
                     </td>
                     <td>
                         {{ $solicitud->telefono }}
-                        <div class="small text-body-secondary">{{ $solicitud->email }}</div>
+
+                        <div class="small text-body-secondary">
+
+                            {{ $solicitud->email }}
+
+                        </div>
+
                     </td>
                     <td>{{ $solicitud->ciudad ?: '—' }}</td>
                     <td>
@@ -128,12 +143,15 @@
                         <x-list.button-group>
 
                             @if ($canDetail)
+
                                 <x-list.view-button :route="route('admin.solicitudes.detail', $solicitud->id)" :target="false" />
+
                             @endif
 
                             @if ($canDelete)
-                                <x-list.delete-button x-data
-                                    @click="$dispatch('confirmDeletion', { id: {{ $solicitud->id }}, type: 'single' })" />
+
+                                <x-list.delete-button x-data @click="$dispatch('confirmDeletion', { id: {{ $solicitud->id }}, type: 'single' })" />
+
                             @endif
 
                         </x-list.button-group>

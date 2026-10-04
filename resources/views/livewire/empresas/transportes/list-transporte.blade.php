@@ -53,9 +53,15 @@
         </x-slot:group>
 
         @if ($canAdd)
+
             <x-slot:button>
-                <x-list.add-button :route="route('empresas.transportes.add')">Nuevo registro</x-list.add-button>
+
+                <x-list.add-button :route="route('empresas.transportes.add')" >
+                    Nuevo registro
+                </x-list.add-button>
+
             </x-slot:button>
+
         @endif
 
     </x-list.actions>
@@ -69,7 +75,6 @@
                 <th>ID
                     <x-list.sortable-button column="id" :$sortColumn :$sortDirection />
                 </th>
-
 
                 <th>Tipo de transporte</th>
                 <th>Placa
@@ -103,7 +108,6 @@
                         {{ $transporte->id }}
                     </td>
 
-
                     <td>{{ $transporte->getTipoTransporte() }}</td>
                     <td>
                         {{ $transporte->placa ?? '—' }}
@@ -118,7 +122,9 @@
                     </td>
 
                     <td>
+
                         <x-list.status-badge :status="$transporte->estatus" />
+
                     </td>
 
                     <td class="text-end">
@@ -126,14 +132,18 @@
                         <x-list.button-group>
 
                             @if ($canDetail)
+
                                 <x-list.view-button :route="route('empresas.transportes.detail', ['transporte_id' => $transporte->id])" :target="false" />
+
                             @endif
 
                             @if ($canEdit && ! $transporte->es_plantilla)
-                                <x-list.edit-button :route="route('empresas.transportes.edit', ['transporte_id' => $transporte->id])" :target="false" />
-                                <x-list.status-button wire:click="changeStatus({{ $transporte->id }})" :status="$transporte->estatus" wire:loading.attr="disabled" />
-                            @endif
 
+                                <x-list.edit-button :route="route('empresas.transportes.edit', ['transporte_id' => $transporte->id])" :target="false" />
+
+                                <x-list.status-button wire:click="changeStatus({{ $transporte->id }})" :status="$transporte->estatus" wire:loading.attr="disabled" />
+
+                            @endif
 
                         </x-list.button-group>
 

@@ -60,11 +60,15 @@
         </x-slot:group>
 
         @if ($canAdd)
+
             <x-slot:button>
-                <x-list.add-button :route="route('admin.empresas.add')">
+
+                <x-list.add-button :route="route('admin.empresas.add')" >
                     Nuevo registro
                 </x-list.add-button>
+
             </x-slot:button>
+
         @endif
 
     </x-list.actions>
@@ -122,7 +126,9 @@
                     </td>
 
                     <td>
+
                         <x-list.status-badge :status="$empresa->estatus" />
+
                     </td>
 
                     <td class="text-end">
@@ -130,16 +136,17 @@
                         <x-list.button-group>
 
                             @if ($canDetail)
+
                                 <x-list.view-button :route="route('admin.empresas.detail', ['empresa_id' => $empresa->id])" :target="false" />
+
                             @endif
 
                             @if ($canEdit)
+
                                 <x-list.edit-button :route="route('admin.empresas.edit', ['empresa_id' => $empresa->id])" />
 
-                                <x-list.status-button
-                                    wire:click="changeStatus({{ $empresa->id }})"
-                                    :status="$empresa->estatus"
-                                    wire:loading.attr="disabled" />
+                                <x-list.status-button wire:click="changeStatus({{ $empresa->id }})" :status="$empresa->estatus" wire:loading.attr="disabled" />
+
                             @endif
 
                         </x-list.button-group>

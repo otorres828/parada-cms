@@ -26,9 +26,11 @@
         </h2>
 
         <div style="">
+
             {!! $empresa->politicas ?: 'La empresa aún no ha registrado sus políticas.' !!}
+
         </div>
-        
+
     </div>
 
 </div>

@@ -36,7 +36,11 @@
 
             <div class="mb-3">
 
-                <x-form.dropdown label="Tipo de servicio" name="tipo_servicio" x-model="$wire.tipo_servicio">
+                <x-form.dropdown
+                    label="Tipo de servicio"
+                    name="tipo_servicio"
+                    x-model="$wire.tipo_servicio"
+                >
 
                     <option value="1">Monto fijo</option>
                     <option value="2">Porcentaje</option>
@@ -44,63 +48,81 @@
                 </x-form.dropdown>
 
                 @error('tipo_servicio')
+
                     <div class="text-danger">
+
                         {{ $message }}
+
                     </div>
+
                 @enderror
 
             </div>
 
             <div class="mb-3">
 
-                <x-form.text-input type="number" name="monto_minimo" x-model="$wire.monto_minimo" min="0"
-                    step="0.01">
+                <x-form.text-input type="number" name="monto_minimo" x-model="$wire.monto_minimo" min="0" step="0.01" >
                     Monto mínimo
                 </x-form.text-input>
 
                 @error('monto_minimo')
+
                     <div class="text-danger">
+
                         {{ $message }}
+
                     </div>
+
                 @enderror
 
             </div>
 
             <div class="mb-3">
 
-                <x-form.text-input type="number" name="monto_maximo" x-model="$wire.monto_maximo" min="0"
-                    step="0.01">
+                <x-form.text-input type="number" name="monto_maximo" x-model="$wire.monto_maximo" min="0" step="0.01" >
                     Monto máximo
                 </x-form.text-input>
+
                 <small class="text-body-secondary">Déjalo vacío para un rango sin
                     límite superior. Ambos límites están incluidos.</small>
                 @error('monto_maximo')
+
                     <div class="text-danger">
+
                         {{ $message }}
+
                     </div>
+
                 @enderror
 
             </div>
 
             <div class="mb-3">
 
-                <x-form.text-input type="number" name="cantidad" x-model="$wire.cantidad" min="0"
-                    step="0.01">
+                <x-form.text-input type="number" name="cantidad" x-model="$wire.cantidad" min="0" step="0.01" >
                     <span
                         x-text="Number($wire.tipo_servicio) === 2 ? 'Porcentaje sobre el precio final (%)' : 'Monto fijo por pasaje'"></span>
                 </x-form.text-input>
 
                 @error('cantidad')
+
                     <div class="text-danger">
+
                         {{ $message }}
+
                     </div>
+
                 @enderror
 
             </div>
 
             <div class="mb-3">
 
-                <x-form.dropdown label="Estado" name="estatus" x-model="$wire.estatus">
+                <x-form.dropdown
+                    label="Estado"
+                    name="estatus"
+                    x-model="$wire.estatus"
+                >
 
                     <option value="1">Activo</option>
                     <option value="0">Inactivo</option>
@@ -108,14 +130,18 @@
                 </x-form.dropdown>
 
                 @error('estatus')
+
                     <div class="text-danger">
+
                         {{ $message }}
+
                     </div>
+
                 @enderror
 
             </div>
 
-            <x-form.cancel-button :link="route('admin.tasas-servicio.list')">
+            <x-form.cancel-button :link="route('admin.tasas-servicio.list')" >
                 Cancelar
             </x-form.cancel-button>
 
@@ -185,4 +211,3 @@
         }));
     </script>
 @endscript
-

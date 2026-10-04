@@ -89,6 +89,7 @@
             </label>
             <input id="listReembolso-from" type="date" class="form-control" wire:model.live="date_from"
                 min="{{ $this->getMinFilterDate() }}" max="{{ $this->getMaxFilterDate() }}">
+
         </div>
 
         <div class="col-md-6 col-xl-2">
@@ -98,15 +99,20 @@
             </label>
             <input id="listReembolso-to" type="date" class="form-control" wire:model.live="date_to"
                 min="{{ $this->getMinFilterDate() }}" max="{{ $this->getMaxFilterDate() }}">
+
         </div>
 
         @if ($canDownload)
+
             <div class="col-md-12 col-xl-auto ms-xl-auto text-md-end">
+
                 <button type="button" class="btn btn-success" wire:click="exportExcel"
                     wire:loading.attr="disabled" wire:target="exportExcel">
                     <i class="bi bi-file-earmark-excel" aria-hidden="true"></i> Descargar Excel
                 </button>
+
             </div>
+
         @endif
 
     </div>
@@ -166,7 +172,7 @@
                         @else
                             —
                         @endif
-                        
+
                     </td>
 
                     <td>
@@ -174,11 +180,15 @@
                     </td>
 
                     <td>
+
                         <x-money.dual :usd="$reembolso->monto" :bs="$reembolso->calcularMontoBs()" />
+
                     </td>
 
                     <td>
+
                         <x-list.status-badge :status="$reembolso->estatus" />
+
                     </td>
 
                     <td>
@@ -190,7 +200,9 @@
                         <x-list.button-group>
 
                             @if ($canDetail)
+
                                 <x-list.view-button :route="route('admin.reembolsos.detail', ['reembolso_id' => $reembolso->id])" :target="false" />
+
                             @endif
 
                         </x-list.button-group>
@@ -239,4 +251,3 @@
         }));
     </script>
 @endscript
-

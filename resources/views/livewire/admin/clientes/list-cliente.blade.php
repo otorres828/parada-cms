@@ -113,7 +113,9 @@
                     </td>
 
                     <td>
+
                         <x-list.status-badge :status="$user->status" />
+
                     </td>
 
                     <td class="text-end">
@@ -121,16 +123,17 @@
                         <x-list.button-group>
 
                             @if ($canDetail)
+
                                 <x-list.view-button :route="route('admin.clientes.detail', ['user_id' => $user->id])" :target="false" />
+
                             @endif
 
                             @if ($canEdit)
+
                                 <x-list.edit-button :route="route('admin.clientes.edit', ['user_id' => $user->id])" :target="false" />
 
-                                <x-list.status-button
-                                    wire:click="changeStatus({{ $user->id }})"
-                                    :status="$user->status"
-                                    wire:loading.attr="disabled" />
+                                <x-list.status-button wire:click="changeStatus({{ $user->id }})" :status="$user->status" wire:loading.attr="disabled" />
+
                             @endif
 
                         </x-list.button-group>
@@ -184,4 +187,3 @@
         }));
     </script>
 @endscript
-

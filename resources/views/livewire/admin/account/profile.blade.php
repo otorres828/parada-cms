@@ -22,63 +22,79 @@
     </x-form.title>
 
     <x-layout.error />
+
     <form id="profileForm" x-ref="form" @submit.prevent="preSave" novalidate>
 
         <x-form.container-sm>
 
             <div class="mb-3">
 
-                <x-form.text-input type="text" name="name" x-model="$wire.name">
+                <x-form.text-input type="text" name="name" x-model="$wire.name" >
                     Nombre
                 </x-form.text-input>
 
                 @error('name')
+
                     <div class="text-danger small">
+
                         {{ $message }}
+
                     </div>
+
                 @enderror
 
             </div>
 
             <div class="mb-3">
 
-                <x-form.text-input type="text" name="username" x-model="$wire.username">
+                <x-form.text-input type="text" name="username" x-model="$wire.username" >
                     Usuario
                 </x-form.text-input>
 
                 @error('username')
+
                     <div class="text-danger small">
+
                         {{ $message }}
+
                     </div>
+
                 @enderror
 
             </div>
 
             <div class="mb-3">
 
-                <x-form.text-input type="email" name="email" x-model="$wire.email">
+                <x-form.text-input type="email" name="email" x-model="$wire.email" >
                     Correo
                 </x-form.text-input>
 
                 @error('email')
+
                     <div class="text-danger small">
+
                         {{ $message }}
+
                     </div>
+
                 @enderror
 
             </div>
 
             <div class="mb-3">
 
-                <x-form.text-input type="password" name="current_password" x-model="$wire.current_password"
-                    autocomplete="new-password">
+                <x-form.text-input type="password" name="current_password" x-model="$wire.current_password" autocomplete="new-password" >
                     Contraseña actual
                 </x-form.text-input>
 
                 @error('current_password')
+
                     <div class="text-danger small">
+
                         {{ $message }}
+
                     </div>
+
                 @enderror
 
             </div>

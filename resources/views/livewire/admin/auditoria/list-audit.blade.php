@@ -27,7 +27,6 @@
             Auditoría
         </x-slot:title>
 
-
     </x-list.heading>
 
     <x-list.actions>
@@ -95,7 +94,7 @@
             @forelse ($auditorias as $auditoria)
 
                 <tr wire:key="listAudit-{{ $auditoria->id }}">
-                    
+
                     <td>
                         {{ $auditoria->id }}
                     </td>
@@ -125,7 +124,9 @@
                         <x-list.button-group>
 
                             @if ($canDetail)
+
                                 <x-list.view-button :route="route('admin.auditoria.detail', ['audit_id' => $auditoria->id])" :target="false" />
+
                             @endif
 
                         </x-list.button-group>
@@ -174,4 +175,3 @@
         }));
     </script>
 @endscript
-

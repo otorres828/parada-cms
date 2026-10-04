@@ -27,7 +27,7 @@
 
         <x-slot:button>
 
-            <x-form.cancel-button :link="route('empresas.reembolsos.list')">
+            <x-form.cancel-button :link="route('empresas.reembolsos.list')" >
                 Volver al listado
             </x-form.cancel-button>
 
@@ -57,11 +57,18 @@
         </dd>
         <dt class="col-sm-4">Monto</dt>
         <dd class="col-sm-8">
-            <x-money.dual :usd="$reembolso->pagoReserva?->reserva?->getMontoSinTasa()" :bs="$reembolso->calcularMontoBs($reembolso->pagoReserva?->reserva?->getMontoSinTasa())" />
+
+            <x-money.dual
+                :usd="$reembolso->pagoReserva?->reserva?->getMontoSinTasa()"
+                :bs="$reembolso->calcularMontoBs($reembolso->pagoReserva?->reserva?->getMontoSinTasa())"
+            />
+
         </dd>
         <dt class="col-sm-4">Estado</dt>
         <dd class="col-sm-8">
+
             <x-list.status-badge :status="$reembolso->estatus" />
+
         </dd>
         <dt class="col-sm-4">Solicitado</dt>
         <dd class="col-sm-8">
@@ -76,8 +83,6 @@
     </dl>
 
 </div>
-
-
 
                 </div>
 
@@ -116,6 +121,3 @@
         }));
     </script>
 @endscript
-
-
-

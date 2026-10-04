@@ -24,9 +24,11 @@
         </x-slot:title>
 
         <x-slot:button>
-            <x-form.cancel-button :link="route('admin.solicitudes.list')">
+
+            <x-form.cancel-button :link="route('admin.solicitudes.list')" >
                 Volver al listado
             </x-form.cancel-button>
+
         </x-slot:button>
 
     </x-list.heading>
@@ -38,7 +40,9 @@
             <div class="col-lg-7">
 
                 <div class="card h-100">
+
                     <x-solicitudes.description :$solicitud />
+
                 </div>
 
             </div>

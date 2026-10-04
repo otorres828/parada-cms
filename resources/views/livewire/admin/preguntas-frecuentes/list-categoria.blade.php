@@ -28,9 +28,11 @@
         </x-slot:title>
 
         <x-slot:button>
-            <x-form.cancel-button :link="route('admin.preguntas-frecuentes.list')">
+
+            <x-form.cancel-button :link="route('admin.preguntas-frecuentes.list')" >
                 Volver a preguntas
             </x-form.cancel-button>
+
         </x-slot:button>
 
     </x-list.heading>
@@ -38,7 +40,9 @@
     <x-list.actions>
 
         <x-slot:search>
+
             <x-list.search-input wire:model.live.debounce.1200ms="search" />
+
         </x-slot:search>
 
         <x-slot:group>
@@ -51,11 +55,15 @@
         </x-slot:group>
 
         @if ($canAdd)
+
             <x-slot:button>
-                <x-list.add-button :route="route('admin.preguntas-frecuentes.categorias.add')">
+
+                <x-list.add-button :route="route('admin.preguntas-frecuentes.categorias.add')" >
                     Nueva categoría
                 </x-list.add-button>
+
             </x-slot:button>
+
         @endif
 
     </x-list.actions>
@@ -113,7 +121,9 @@
                     <td>{{ $categoria->destacada ? 'Sí' : 'No' }}</td>
 
                     <td>
+
                         <x-list.status-badge :status="$categoria->estatus" />
+
                     </td>
 
                     <td class="text-end">
@@ -121,14 +131,17 @@
                         <x-list.button-group>
 
                             @if ($canEdit)
-                                <x-list.status-button wire:click="changeStatus({{ $categoria->id }})"
-                                    :status="$categoria->estatus" />
+
+                                <x-list.status-button wire:click="changeStatus({{ $categoria->id }})" :status="$categoria->estatus" />
+
                                 <x-list.edit-button :route="route('admin.preguntas-frecuentes.categorias.edit', $categoria->id)" />
+
                             @endif
 
                             @if ($canDelete)
-                                <x-list.delete-button x-data
-                                    @click="$dispatch('confirmDeletion', { id: {{ $categoria->id }} })" />
+
+                                <x-list.delete-button x-data @click="$dispatch('confirmDeletion', { id: {{ $categoria->id }} })" />
+
                             @endif
 
                         </x-list.button-group>
@@ -144,7 +157,7 @@
                         No se encontraron categorías.
                     </td>
                 </tr>
-                
+
             @endforelse
 
         </tbody>

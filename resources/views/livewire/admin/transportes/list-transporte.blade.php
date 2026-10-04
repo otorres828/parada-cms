@@ -130,7 +130,9 @@
                     </td>
 
                     <td>
+
                         <x-list.status-badge :status="$transporte->estatus" />
+
                     </td>
 
                     <td class="text-end">
@@ -138,7 +140,9 @@
                         <x-list.button-group>
 
                             @if ($canDetail)
+
                                 <x-list.view-button :route="route('admin.transportes.detail', ['transporte_id' => $transporte->id])" :target="false" />
+
                             @endif
 
                         </x-list.button-group>
@@ -187,4 +191,3 @@
         }));
     </script>
 @endscript
-

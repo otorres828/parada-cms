@@ -31,7 +31,7 @@
 
         <x-slot:button>
 
-            <x-form.cancel-button :link="route('admin.transportes.list')">
+            <x-form.cancel-button :link="route('admin.transportes.list')" >
                 Volver al listado
             </x-form.cancel-button>
 
@@ -47,9 +47,9 @@
 
                 <div class="card">
 
-                    <x-transportes.description 
-                        :transporte="$transporte" 
-                        :show-empresa="true" 
+                    <x-transportes.description
+                        :transporte="$transporte"
+                        :show-empresa="true"
                     />
 
                 </div>
@@ -63,15 +63,17 @@
     <div class="card mt-4">
 
         <div class="card-header">
+
             Historial de programaciones
+
         </div>
 
         <div class="table-responsive">
 
-            <x-transportes.programaciones-table 
-                :programaciones="$programaciones" 
+            <x-transportes.programaciones-table
+                :programaciones="$programaciones"
                 :can-view-passengers="$canViewPassengers"
-                :tipo-cambio="$tipoCambioVigente" 
+                :tipo-cambio="$tipoCambioVigente"
                 route-programacion="admin.programaciones.detail"
             />
 
@@ -105,6 +107,3 @@
         }));
     </script>
 @endscript
-
-
-

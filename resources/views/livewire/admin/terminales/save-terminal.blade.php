@@ -30,7 +30,7 @@
 
         <x-slot:button>
 
-            <x-form.cancel-button :link="route('admin.terminales.list')">
+            <x-form.cancel-button :link="route('admin.terminales.list')" >
                 Volver al listado
             </x-form.cancel-button>
 
@@ -50,7 +50,11 @@
 
                     <div class="mb-3">
 
-                        <x-form.dropdown label="Estado" name="estado_id" x-model="$wire.estado_id">
+                        <x-form.dropdown
+                            label="Estado"
+                            name="estado_id"
+                            x-model="$wire.estado_id"
+                        >
 
                             <option value="">Seleccionar...</option>
 
@@ -61,72 +65,100 @@
                         </x-form.dropdown>
 
                         @error('estado_id')
+
                             <div class="text-danger small">
+
                                 {{ $message }}
+
                             </div>
+
                         @enderror
 
                     </div>
 
                     <div class="mb-3">
 
-                        <x-form.text-input type="text" name="nombre" x-model="$wire.nombre">
+                        <x-form.text-input type="text" name="nombre" x-model="$wire.nombre" >
                             Nombre
                         </x-form.text-input>
 
                         @error('nombre')
+
                             <div class="text-danger small">
+
                                 {{ $message }}
+
                             </div>
+
                         @enderror
 
                     </div>
 
                     <div class="mb-3">
 
-                        <x-form.textarea name="direccion" x-model="$wire.direccion" rows="3">
+                        <x-form.textarea
+                            name="direccion"
+                            x-model="$wire.direccion"
+                            rows="3"
+                        >
                             Dirección
                         </x-form.textarea>
 
                         @error('direccion')
+
                             <div class="text-danger small">
+
                                 {{ $message }}
+
                             </div>
+
                         @enderror
 
                     </div>
 
                     <div class="mb-3">
 
-                        <x-form.text-input type="number" name="latitud" x-model="$wire.latitud" step="0.0000001">
+                        <x-form.text-input type="number" name="latitud" x-model="$wire.latitud" step="0.0000001" >
                             Latitud
                         </x-form.text-input>
 
                         @error('latitud')
+
                             <div class="text-danger small">
+
                                 {{ $message }}
+
                             </div>
+
                         @enderror
 
                     </div>
 
                     <div class="mb-3">
 
-                        <x-form.text-input type="number" name="longitud" x-model="$wire.longitud" step="0.0000001">
+                        <x-form.text-input type="number" name="longitud" x-model="$wire.longitud" step="0.0000001" >
                             Longitud
                         </x-form.text-input>
 
                         @error('longitud')
+
                             <div class="text-danger small">
+
                                 {{ $message }}
+
                             </div>
+
                         @enderror
 
                     </div>
 
                     <div class="mb-3">
 
-                        <x-form.dropdown label="Estado" name="estatus" x-model="$wire.estatus">
+                        <x-form.dropdown
+                            label="Estado"
+                            name="estatus"
+                            x-model="$wire.estatus"
+                        >
 
                             <option value="">Seleccionar...</option>
                             <option value="0">Inactivo</option>
@@ -135,9 +167,13 @@
                         </x-form.dropdown>
 
                         @error('estatus')
+
                             <div class="text-danger small">
+
                                 {{ $message }}
+
                             </div>
+
                         @enderror
 
                     </div>

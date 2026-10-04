@@ -33,11 +33,11 @@
 
             @if ($canAdd)
 
-                <a class="btn btn-primary text-nowrap" 
+                <a class="btn btn-primary text-nowrap"
                     href="{{ route('empresas.datos-bancarios.add') }}"
                     wire:navigate>Nuevo registro
                 </a>
-                
+
              @endif
 
         </x-slot:group>
@@ -127,7 +127,6 @@
 
 </div>
 
-
 @script
     <script>
         Alpine.data('listDatos', () => ({
@@ -148,4 +147,3 @@
         }));
     </script>
 @endscript
-

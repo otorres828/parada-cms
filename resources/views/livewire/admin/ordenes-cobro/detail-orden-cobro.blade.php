@@ -24,7 +24,11 @@
         </x-slot:title>
 
         <x-slot:button>
-            <x-form.cancel-button :link="route('admin.ordenes-cobro.list')">Volver al listado</x-form.cancel-button>
+
+            <x-form.cancel-button :link="route('admin.ordenes-cobro.list')" >
+                Volver al listado
+            </x-form.cancel-button>
+
         </x-slot:button>
 
     </x-list.heading>
@@ -34,8 +38,11 @@
     <div class="row g-3">
 
         <div class="col-lg-6">
+
             <div class="card h-100">
+
                 <div class="card-body">
+
                     <dl class="row mb-0">
                         <dt class="col-sm-5">Empresa</dt>
                         <dd class="col-sm-7">{{ $orden->empresa->nombre }}</dd>
@@ -52,15 +59,28 @@
                         <dt class="col-sm-5">Reservas incluidas</dt>
                         <dd class="col-sm-7">{{ $orden->cantidad_reservas }}</dd>
                         <dt class="col-sm-5">Total</dt>
-                        <dd class="col-sm-7 fw-bold"><x-money.dual :usd="$orden->total" :bs="$conversionBs['total_bs']" /></dd>
+                        <dd class="col-sm-7 fw-bold">
+
+                        <x-money.dual
+                            :usd="$orden->total"
+                            :bs="$conversionBs['total_bs']"
+                        />
+
+                        </dd>
                     </dl>
+
                 </div>
+
             </div>
+
         </div>
 
         <div class="col-lg-6">
+
             <div class="card h-100">
+
                 <div class="card-body">
+
                     <dl class="row mb-0">
                         <dt class="col-sm-5">Referencia</dt>
                         <dd class="col-sm-7">{{ $orden->referencia_pago ?: '—' }}</dd>
@@ -80,10 +100,19 @@
 
                     @if ($orden->comentarios)
                         <hr>
-                        <div class="small" style="white-space: pre-line;">{{ $orden->comentarios }}</div>
+
+                        <div class="small" style="white-space: pre-line;">
+
+                            {{ $orden->comentarios }}
+
+                        </div>
+
                     @endif
+
                 </div>
+
             </div>
+
         </div>
 
     </div>
@@ -99,11 +128,13 @@
                 <div class="d-flex flex-column flex-sm-row align-items-stretch gap-2 ms-lg-auto">
 
                     <div class="input-group" style="width: 280px; max-width: 100%;">
+
                         <span class="input-group-text">
                             <i class="bi bi-search" aria-hidden="true"></i>
                         </span>
                         <input type="search" class="form-control" x-model.debounce.300ms="search"
                             placeholder="Buscar reserva" aria-label="Buscar reserva">
+
                     </div>
 
                     @if ($canDownload)
@@ -120,6 +151,7 @@
         </div>
 
         <div class="table-responsive">
+
             <table class="table table-striped align-middle mb-0">
                 <thead>
                     <tr>
@@ -143,27 +175,39 @@
                             <td>{{ match ($reserva['tipo_transporte'] ?? null) { 'autobus' => 'Autobús', 'carro' => 'Carro', default => 'No registrado' } }}</td>
                             <td>{{ $reserva['fecha_pago'] ? \Carbon\Carbon::parse($reserva['fecha_pago'])->format('d/m/Y H:i') : '—' }}</td>
                             <td class="text-end">
-                                <x-money.dual :usd="$reserva['tasa_servicio']"
-                                    :bs="$conversionBs['reservas_bs'][$reserva['reserva_id']] ?? null" />
+
+                                <x-money.dual :usd="$reserva['tasa_servicio']" :bs="$conversionBs['reservas_bs'][$reserva['reserva_id']] ?? null" />
+
                             </td>
                         </tr>
                     @endforeach
                 </tbody>
             </table>
+
         </div>
+
     </div>
 
     @if ($canReview && $orden->estatus === \App\Models\OrdenCobro::ESTATUS_PENDIENTE)
+
         <div class="card mt-3">
+
             <div class="card-body">
+
                 <label class="form-label" for="motivo">Motivo del rechazo</label>
                 <textarea id="motivo" class="form-control" rows="3" wire:model="motivo"></textarea>
+
                 <div class="d-flex justify-content-end gap-2 mt-3">
+
                     <button class="btn btn-outline-danger" type="button" wire:click="rechazar">Rechazar</button>
                     <button class="btn btn-success" type="button" wire:click="aprobar">Aprobar</button>
+
                 </div>
+
             </div>
+
         </div>
+
     @endif
 
     <x-layout.loader.fullpage wire:loading.delay.short />

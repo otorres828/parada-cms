@@ -27,7 +27,7 @@
 
         <x-slot:button>
 
-            <x-form.cancel-button :link="route('admin.empresas.list')">
+            <x-form.cancel-button :link="route('admin.empresas.list')" >
                 Volver al listado
             </x-form.cancel-button>
 
@@ -46,10 +46,13 @@
                     <x-empresas.description :empresa="$empresa" />
 
                     <div class="px-3 pb-3">
+
                         <a href="{{ route('admin.empresas.politicas', $empresa->id) }}" wire:navigate>Ver políticas de embarque y desembarque</a>
+
                     </div>
 
                     @if ($canListUser)
+
                         <div class="card-footer bg-transparent d-flex justify-content-end py-3">
 
                             <a class="btn btn-outline-primary"
@@ -59,6 +62,7 @@
                             </a>
 
                         </div>
+
                     @endif
 
                 </div>
@@ -103,6 +107,3 @@
         }));
     </script>
 @endscript
-
-
-

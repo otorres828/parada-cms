@@ -26,31 +26,30 @@
     </x-form.title>
 
     <x-layout.error />
+
     <form id="adminForm" x-ref="form" @submit.prevent="preSave" novalidate>
 
         <x-form.container-sm>
 
-            <x-form.text-input icon="person-fill" name="name" x-model="$wire.name" maxlength="255">
+            <x-form.text-input icon="person-fill" name="name" x-model="$wire.name" maxlength="255" >
                 Nombre
             </x-form.text-input>
 
-            <x-form.text-input icon="person-badge" name="username" x-model="$wire.username" maxlength="100">
+            <x-form.text-input icon="person-badge" name="username" x-model="$wire.username" maxlength="100" >
                 Usuario
             </x-form.text-input>
 
-            <x-form.text-input icon="envelope" name="email" type="email" x-model="$wire.email" maxlength="255">
+            <x-form.text-input icon="envelope" name="email" type="email" x-model="$wire.email" maxlength="255" >
                 Correo
             </x-form.text-input>
 
             <div x-data="{ show: false }">
 
-                <x-form.text-input icon="lock-fill" name="password" x-bind:type="show ? 'text' : 'password'"
-                    x-model="$wire.password"
-                    autocomplete="new-password">
+                <x-form.text-input icon="lock-fill" name="password" x-bind:type="show ? 'text' : 'password'" x-model="$wire.password" autocomplete="new-password" >
                     Contraseña
                 </x-form.text-input>
 
-                <x-form.switch x-model="show">
+                <x-form.switch x-model="show" >
                     Mostrar contraseña
                 </x-form.switch>
 
@@ -60,7 +59,11 @@
                 <p class="text-body-secondary mt-2">Deja la contraseña vacía para conservar la actual.</p>
             @endif
 
-            <x-form.dropdown label="Estado" name="status" x-model="$wire.status">
+            <x-form.dropdown
+                label="Estado"
+                name="status"
+                x-model="$wire.status"
+            >
 
                 <option value="1">Activo</option>
                 <option value="2">Inactivo</option>
@@ -79,7 +82,8 @@
 
             <p>Esta cuenta es root y conserva el acceso completo.</p>
         @else
-            <x-form.switch x-model="$wire.is_superadmin">
+
+            <x-form.switch x-model="$wire.is_superadmin" >
                 Superadmin
             </x-form.switch>
 
@@ -89,6 +93,7 @@
 
                 @foreach ($groups as $group)
                     @if ($group->sections->isNotEmpty())
+
                         <div class="col-12">
 
                             <h3 class="h5 mt-3"><i class="bi {{ $group->icon }} me-2"></i>{{ $group->name }}</h3>
@@ -118,6 +123,7 @@
                                     <div class="card-body">
 
                                         @foreach ($section->permissions as $permission)
+
                                             <div class="form-check" wire:key="permission-{{ $permission->id }}">
 
                                                 <input id="permission-{{ $permission->id }}" type="checkbox"
@@ -129,6 +135,7 @@
                                                 </label>
 
                                             </div>
+
                                         @endforeach
 
                                     </div>
@@ -136,6 +143,7 @@
                                 </div>
 
                             </div>
+
                         @endforeach
                     @endif
                 @endforeach
@@ -146,7 +154,7 @@
 
         <hr>
 
-        <x-form.cancel-button :link="route('admin.admins.list')">
+        <x-form.cancel-button :link="route('admin.admins.list')" >
             Cancelar
         </x-form.cancel-button>
 

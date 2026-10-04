@@ -21,52 +21,62 @@
         Mi perfil
     </x-form.title>
 
-    
     <form id="profileForm" x-ref="form" @submit.prevent="preSave" novalidate>
-        
+
         <x-form.container-sm>
 
             <x-layout.error />
 
             <div class="mb-3">
 
-                <x-form.text-input type="text" name="nombre" x-model="$wire.nombre">
+                <x-form.text-input type="text" name="nombre" x-model="$wire.nombre" >
                     Nombre
                 </x-form.text-input>
 
                 @error('nombre')
+
                     <div class="text-danger small">
+
                         {{ $message }}
+
                     </div>
+
                 @enderror
 
             </div>
 
             <div class="mb-3">
 
-                <x-form.text-input type="email" name="email" x-model="$wire.email">
+                <x-form.text-input type="email" name="email" x-model="$wire.email" >
                     Correo
                 </x-form.text-input>
 
                 @error('email')
+
                     <div class="text-danger small">
+
                         {{ $message }}
+
                     </div>
+
                 @enderror
 
             </div>
 
             <div class="mb-3">
 
-                <x-form.text-input type="password" name="current_password" x-model="$wire.current_password"
-                    autocomplete="current-password">
+                <x-form.text-input type="password" name="current_password" x-model="$wire.current_password" autocomplete="current-password" >
                     Contraseña actual
                 </x-form.text-input>
 
                 @error('current_password')
+
                     <div class="text-danger small">
+
                         {{ $message }}
+
                     </div>
+
                 @enderror
 
             </div>
