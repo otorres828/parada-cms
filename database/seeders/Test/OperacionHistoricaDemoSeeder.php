@@ -308,7 +308,7 @@ class OperacionHistoricaDemoSeeder extends Seeder
                 'tasa_servicio' => number_format($tasaUnitaria, 2, '.', ''),
                 'total' => number_format((float) $precio + $tasaUnitaria, 2, '.', ''),
                 'servicio_json' => $servicioJson,
-                'localizador' => strtoupper(str_pad(dechex($pasajeId), 20, '0', STR_PAD_LEFT)),
+                'localizador' => $this->generarLocalizador(7),
                 'abordado' => $abordado,
                 'hora_abordaje' => $abordado ? '05:30:00' : null,
                 'created_at' => $marcaTiempo,
