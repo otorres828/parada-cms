@@ -150,9 +150,8 @@
                             @endif
 
                             @if ($canEdit && in_array($programacion->estatus, [1, 2]))
-                                @if (! $programacion->reservas_exists)
-                                    <x-list.edit-button :route="route('empresas.programaciones.edit', ['programacion_id' => $programacion->id])" :target="false" />
-                                @endif
+                                <x-list.edit-button :route="route('empresas.programaciones.edit', ['programacion_id' => $programacion->id])"
+                                    :disabled="$programacion->reservas_exists" disabled-reason="Esta programación tiene reservas y no puede editarse." />
                                 <x-list.status-button wire:click="changeStatus({{ $programacion->id }})" :status="$programacion->estatus" wire:loading.attr="disabled" />
                             @endif
 

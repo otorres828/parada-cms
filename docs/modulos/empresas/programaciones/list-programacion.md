@@ -2,7 +2,7 @@
 
 Lista exclusivamente las programaciones de la empresa autenticada. Ofrece búsqueda, estatus, rango de fechas, ordenación y paginación. Las fechas se obtienen de los trayectos vendidos: salida más temprana y llegada más tardía. Esto admite programaciones que vendan únicamente combinaciones intermedias.
 
-Agregar requiere permiso add; acceder a pasajeros requiere detail; editar y cambiar estatus requieren edit. Editar se muestra únicamente si la programación no tiene reservas ni está finalizada. Para esta condición se consulta existencia de reservas, sin cargarlas ni contarlas.
+Agregar requiere permiso add; acceder a pasajeros requiere detail; editar y cambiar estatus requieren edit. Editar se muestra para programaciones no finalizadas con permiso edit; si tiene reservas, aparece deshabilitado y explica el motivo. Para esta condición se consulta existencia de reservas, sin cargarlas ni contarlas.
 
 `changeStatus` autoriza edit, busca el ID dentro de la empresa y alterna entre 1 programada y 2 inactiva en una transacción. Los estados finalizado y eliminado no se reactivan. Finalizar no forma parte de esta acción. Emite successEventList después de guardar.
 

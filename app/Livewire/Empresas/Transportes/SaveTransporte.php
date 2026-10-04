@@ -56,6 +56,11 @@ class SaveTransporte extends EmpresaComponent
         }
     }
 
+    public function render()
+    {
+        return view('livewire.empresas.transportes.save-transporte');
+    }
+
     public function save(): void
     {
         Access::authorize('transportes', $this->transporteId === null ? 'add' : 'edit');
@@ -116,8 +121,5 @@ class SaveTransporte extends EmpresaComponent
         }
     }
 
-    public function render()
-    {
-        return view('livewire.empresas.transportes.save-transporte');
-    }
+
 }
