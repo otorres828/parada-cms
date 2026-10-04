@@ -96,6 +96,50 @@ class SaveProgramacion extends EmpresaComponent
         }
     }
 
+    public function render(): View
+    {
+        $fechasProgramacion = [];
+        if ($this->programacionId === null) {
+            try {
+                $fechasProgramacion = ProgramacionService::fechas($this->configuracionFechas());
+            } catch (ValidationException $exception) {
+                // La selección incompleta se valida al guardar; el render no interrumpe el formulario.
+            }
+        }
+
+        return view('livewire.empresas.programaciones.save-programacion', [
+            'fechasProgramacion' => $fechasProgramacion,
+            'viajes' => $this->viajes,
+            'transportes' => $this->transportes,
+            'trayectos' => $this->viajes->firstWhere('id', $this->viajeId)?->tramos ?? collect(),
+        ]);
+    }
+
+    public function save(): void
+    {
+        Access::authorize('programaciones', $this->programacionId === null ? 'add' : 'edit');
+        $datos = [
+            'viaje_id' => $this->viajeId,
+            'transporte_id' => $this->transporteId,
+            'estatus' => $this->estatus,
+            'tramos' => $this->tramos,
+        ];
+        if ($this->programacionId === null) {
+            $ids = ProgramacionService::guardarLote($this->usuarioEmpresa->empresa_id, $datos, $this->configuracionFechas());
+            $mensaje = count($ids).' programación(es) creada(s) correctamente.';
+            $this->reset('tramos', 'viajeId', 'transporteId', 'fechasEspecificas');
+        } else {
+            ProgramacionService::guardar($this->usuarioEmpresa->empresa_id, $datos, $this->programacionId);
+            $mensaje = 'Programación guardada correctamente.';
+        }
+        if ($this->canList) {
+            session()->flash('empresa_success', $mensaje);
+            $this->redirectRoute('empresas.programaciones.list', navigate: true);
+        } else {
+            $this->dispatch('successEventList', message: $mensaje);
+        }
+    }
+
     public function findProgramacion(int $id): Programacion
     {
         return Programacion::searchAdmin('', [
@@ -149,31 +193,6 @@ class SaveProgramacion extends EmpresaComponent
         }
     }
 
-    public function save(): void
-    {
-        Access::authorize('programaciones', $this->programacionId === null ? 'add' : 'edit');
-        $datos = [
-            'viaje_id' => $this->viajeId,
-            'transporte_id' => $this->transporteId,
-            'estatus' => $this->estatus,
-            'tramos' => $this->tramos,
-        ];
-        if ($this->programacionId === null) {
-            $ids = ProgramacionService::guardarLote($this->usuarioEmpresa->empresa_id, $datos, $this->configuracionFechas());
-            $mensaje = count($ids).' programación(es) creada(s) correctamente.';
-            $this->reset('tramos', 'viajeId', 'transporteId', 'fechasEspecificas');
-        } else {
-            ProgramacionService::guardar($this->usuarioEmpresa->empresa_id, $datos, $this->programacionId);
-            $mensaje = 'Programación guardada correctamente.';
-        }
-        if ($this->canList) {
-            session()->flash('empresa_success', $mensaje);
-            $this->redirectRoute('empresas.programaciones.list', navigate: true);
-        } else {
-            $this->dispatch('successEventList', message: $mensaje);
-        }
-    }
-
     public function agregarFecha(): void
     {
         $this->validate([
@@ -208,22 +227,5 @@ class SaveProgramacion extends EmpresaComponent
         ];
     }
 
-    public function render(): View
-    {
-        $fechasProgramacion = [];
-        if ($this->programacionId === null) {
-            try {
-                $fechasProgramacion = ProgramacionService::fechas($this->configuracionFechas());
-            } catch (ValidationException $exception) {
-                // La selección incompleta se valida al guardar; el render no interrumpe el formulario.
-            }
-        }
 
-        return view('livewire.empresas.programaciones.save-programacion', [
-            'fechasProgramacion' => $fechasProgramacion,
-            'viajes' => $this->viajes,
-            'transportes' => $this->transportes,
-            'trayectos' => $this->viajes->firstWhere('id', $this->viajeId)?->tramos ?? collect(),
-        ]);
-    }
 }
