@@ -117,6 +117,19 @@ try {
     $sinHorario->fecha_salida = null;
     $sinHorario->hora_salida = null;
     $check($sinHorario->getSalida() === null);
+    $primerTramoRuta = $ruta->tramos()->orderBy('orden')->first();
+    $ultimoTramoRuta = $ruta->tramos()->orderByDesc('orden')->reorder('orden', 'desc')->first();
+    $primerTramoRuta->update(['precio' => '10.25']);
+    $ultimoTramoRuta->update(['precio' => '5.50']);
+    $ruta->unsetRelation('tramos');
+    $check(ViajeTramo::precioBase($ruta, $terminales[0]->id, $terminales[1]->id) === '15.75');
+    $check(ViajeTramo::precioBase($ruta, $intermedia->id, $terminales[1]->id) === '5.50');
+    $check($tramo->fresh()->precio === '10.00');
+    $ultimoTramoRuta->update(['precio' => null]);
+    $ruta->unsetRelation('tramos');
+    $reject(function () use ($ruta, $terminales) {
+        ViajeTramo::precioBase($ruta, $terminales[0]->id, $terminales[1]->id);
+    }, ValidationException::class);
     $primerTramo->fecha_salida = null;
     $primerTramo->hora_salida = null;
     $check($primerTramo->getSalida() === null);

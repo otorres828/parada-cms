@@ -94,6 +94,9 @@
                                     <small class="text-body-secondary">Duración tramo:
                                         {{ $tramo->duracion_estimada }}</small>
                                 @endif
+                                <div class="small text-body-secondary">
+                                    Precio base: {{ $tramo->precio !== null ? '$'.number_format($tramo->precio, 2) : 'Sin configurar' }}
+                                </div>
                             </div>
                             <span class="badge text-bg-primary rounded-pill">Tramo
                                 #{{ $tramo->orden }}</span>

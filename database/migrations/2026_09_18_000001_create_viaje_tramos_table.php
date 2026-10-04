@@ -15,6 +15,7 @@ return new class extends Migration
             $table->unsignedBigInteger('destino_terminal_id');
             $table->unsignedInteger('orden')->default(1);
             $table->time('duracion_estimada')->nullable();
+            $table->decimal('precio', 12, 2)->nullable();
             $table->timestamps();
 
             $table->foreign('viaje_id')->references('id')->on('viajes')->onUpdate('cascade')->onDelete('cascade');

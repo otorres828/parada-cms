@@ -48,3 +48,11 @@ Los filtros de fechas y próximas programaciones consultan la salida desde el or
 Se modificaron las migraciones originales de programaciones y programacion_tramo_precios. El esquema y los datos existentes necesitan actualizarse antes de utilizar la consulta nueva. El seeder actualizado genera horarios al recrear los datos; no modifica programaciones existentes ni se ejecutó fresh sobre la base local. No hay actualmente formulario de alta/edición de programaciones; estos campos quedan listos para ese módulo.
 
 Prueba: tests/HorariosTramosSmoke.php, con SQLite en memoria; cubre medianoche, origen intermedio, venta en taquilla después de la hora con pago y QR, rechazo de fechas pasadas y programaciones inactivas/finalizadas, corte horario web y aislamiento de empresas.
+
+## Precios base de la ruta
+
+`viaje_tramos.precio` es decimal de dos posiciones y nullable: null significa sin configurar, no un pasaje gratuito. `ViajeTramo::precioBase($viaje, $origenId, $destinoId)` suma con BCMath los segmentos consecutivos del trayecto. Rechaza segmentos sin precio o con precio negativo, así como trayectos inexistentes. Por ejemplo, A → B de 10.25 y B → C de 5.50 producen una base A → C de 15.75.
+
+`programacion_tramo_precios.precio` se conserva como precio propio de la salida. El seeder de rutas configura las bases y el seeder histórico copia su suma en cada tarifa comercial. Cambiar la base no modifica las tarifas ya creadas. El detalle de rutas muestra el precio base por segmento.
+
+No existe todavía un formulario de alta de programaciones: cuando se implemente, utilizará este cálculo para sugerir/copiar el precio y permitirá ajustarlo para esa salida. Se modifica la migración original; no se ejecuta fresh ni se alteran registros locales al implementar esta regla.

@@ -18,13 +18,41 @@ class ViajeTramo extends ModelHelper
         'destino_terminal_id',
         'orden',
         'duracion_estimada',
+        'precio',
     ];
 
     protected function casts(): array
     {
         return [
             'orden' => 'integer',
+            'precio' => 'decimal:2',
         ];
+    }
+
+    public static function precioBase(Viaje $viaje, int $origenId, int $destinoId): string
+    {
+        $terminal = (int) $viaje->origen_terminal_id;
+        $sumando = false;
+        $total = '0.00';
+
+        foreach ($viaje->tramos as $tramo) {
+            self::exigir((int) $tramo->origen_terminal_id === $terminal, 'viaje', 'La secuencia de tramos de la ruta es inválida.');
+            $sumando = $sumando || $terminal === $origenId;
+            $terminal = (int) $tramo->destino_terminal_id;
+
+            if ($sumando) {
+                self::exigir($tramo->precio !== null && bccomp($tramo->precio, '0', 2) >= 0, 'precio', 'Configura un precio base válido para cada tramo del trayecto.');
+                $total = bcadd($total, $tramo->precio, 2);
+
+                if ($terminal === $destinoId) {
+                    return $total;
+                }
+            }
+        }
+
+        self::exigir(false, 'tramo', 'El origen y destino no forman un trayecto válido de la ruta.');
+
+        return $total;
     }
 
     public function viaje(): BelongsTo

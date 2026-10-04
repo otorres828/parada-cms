@@ -153,7 +153,7 @@ class OperacionHistoricaDemoSeeder extends Seeder
         for ($origen = 0; $origen < $terminales->count() - 1; $origen++) {
             for ($destino = $origen + 1; $destino < $terminales->count(); $destino++) {
                 $tarifaId = $this->siguiente('tarifa');
-                $precio = number_format(10 + (($destino - $origen) * 6) + ($empresa->id % 7) + $turno, 2, '.', '');
+                $precio = \App\Models\ViajeTramo::precioBase($viaje, $terminales[$origen], $terminales[$destino]);
                 $buffers['tarifas'][] = [
                     'id' => $tarifaId,
                     'programacion_id' => $programacionId,

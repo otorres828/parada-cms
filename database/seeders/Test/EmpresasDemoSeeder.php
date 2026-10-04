@@ -172,6 +172,7 @@ class EmpresasDemoSeeder extends Seeder
                         'origen_terminal_id' => $terminales[$origenIndice]->id,
                         'destino_terminal_id' => $terminales[$secuencia[$orden + 1]]->id,
                         'duracion_estimada' => '01:30:00',
+                        'precio' => number_format(10 + ($empresa->id % 7) + $orden, 2, '.', ''),
                     ],
                 );
             }
