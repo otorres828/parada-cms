@@ -14,12 +14,16 @@ use App\Services\ReservaService;
 use App\Services\TasasServicioService;
 use Closure;
 use App\Support\PersonalData;
+use App\Traits\TraitGeneral;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 
 class ReservaTaquillaService
 {
+
+    use TraitGeneral;
+
     // Ningún borrador se persiste antes de esta operación completa.
     public static function registrar(UsuarioEmpresa $vendedor, int $tarifaId, array $comprador, array $pasajeros, array $pagos, ?string $codigo = null): Reserva
     {
@@ -61,7 +65,7 @@ class ReservaTaquillaService
             Reserva::exigir($disponibilidad['cupo_tramo'] > 0, 'tarifaId', 'No quedan puestos disponibles para este tramo.');
             $cambio = TipoCambio::vigente();
             Reserva::exigir($cambio !== null, 'tarifaId', 'No hay una tasa de cambio disponible.');
-
+            
             return Reserva::create([
                 'usuario_id' => null,
                 'usuario_empresa_id' => $vendedor->id,
@@ -72,7 +76,7 @@ class ReservaTaquillaService
                 'origen_terminal_id' => $tarifa->origen_terminal_id,
                 'destino_terminal_id' => $tarifa->destino_terminal_id,
                 'tipos_cambios_id' => $cambio->id,
-                'codigo_referencia' => 'TQ-'.Str::ulid(),
+                'codigo_referencia' => 'TQ-' . $this->generarLocalizador(),
                 'monto_pasajes' => $tarifa->precio,
                 'descuento_aplicado' => '0.00',
                 'tasa_servicio' => '0.00',

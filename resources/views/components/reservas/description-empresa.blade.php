@@ -44,11 +44,6 @@
             {{ $reserva->nombre_comprador }}
         </dd>
 
-        <dt class="col-sm-4">Empresa</dt>
-        <dd class="col-sm-8">
-            {{ $reserva->programacion?->viaje?->empresa?->nombre ?? '—' }}
-        </dd>
-
         <dt class="col-sm-4">Fecha</dt>
         <dd class="col-sm-8">
             {{ $reserva->fecha_compra?->format('d/m/Y H:i') ?? '—' }}
