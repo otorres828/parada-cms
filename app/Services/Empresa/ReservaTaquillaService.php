@@ -38,10 +38,7 @@ class ReservaTaquillaService
                     return $existente->detalle();
                 }
             }
-            $reserva = self::crear($vendedor, $tarifaId);
-            if ($codigo !== null) {
-                $reserva->update(['codigo_referencia' => $codigo]);
-            }
+            $reserva = self::crear($vendedor, $tarifaId, $codigo);
             self::guardarComprador($vendedor, $reserva->id, $comprador);
             foreach ($pasajeros as $datos) {
                 self::agregarPasajero($vendedor, $reserva->id, $datos);
@@ -51,11 +48,11 @@ class ReservaTaquillaService
         }, 3);
     }
 
-    public static function crear(UsuarioEmpresa $vendedor, int $tarifaId): Reserva
+    public static function crear(UsuarioEmpresa $vendedor, int $tarifaId, ?string $codigo = null): Reserva
     {
         self::autorizar($vendedor);
 
-        return DB::transaction(function () use ($vendedor, $tarifaId) {
+        return DB::transaction(function () use ($vendedor, $tarifaId, $codigo) {
             $tarifa = ProgramacionTramoPrecio::findOrFail($tarifaId);
             $programacion = Programacion::paraTaquilla($vendedor->empresa_id, soloFuturas: false)->findOrFail($tarifa->programacion_id);
             self::validarSalida($programacion, $vendedor, $tarifa);
@@ -74,7 +71,7 @@ class ReservaTaquillaService
                 'origen_terminal_id' => $tarifa->origen_terminal_id,
                 'destino_terminal_id' => $tarifa->destino_terminal_id,
                 'tipos_cambios_id' => $cambio->id,
-                'codigo_referencia' => 'TQ-'.Reserva::generarLocalizador(),
+                'codigo_referencia' => $codigo ?? 'TQ-'.Reserva::generarLocalizador(7),
                 'monto_pasajes' => $tarifa->precio,
                 'descuento_aplicado' => '0.00',
                 'tasa_servicio' => '0.00',
