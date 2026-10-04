@@ -25,3 +25,17 @@ Las tarifas guardadas son una copia independiente: conservan origen, destino, pr
 ## Resultado
 
 Guarda todo en una transacción; un error revierte tanto la programación como sus tarifas. Vuelve al listado con alerta cuando el usuario puede listar; de lo contrario permanece en el formulario con confirmación. Alpine administra JustValidate y libera su validador y listeners al navegar.
+
+## Creación por fechas
+
+El alta permite una fecha, un rango inclusivo con días de la semana (lunes=1 a domingo=7), o una lista de fechas específicas. La edición continúa siendo individual. No necesita tablas nuevas.
+
+`ProgramacionService::fechas` valida y ordena las fechas, rechaza duplicados y fechas pasadas, exige al menos una salida y limita el lote a 366 programaciones; el rango también puede abarcar como máximo 366 días. El formulario presenta el número de salidas y todas sus fechas antes de guardar.
+
+`guardarLote` toma la fecha inicial del formulario como referencia de los horarios configurados. Para cada fecha seleccionada desplaza las fechas de salida y llegada de todos los trayectos habilitados por la misma cantidad de días; conserva las horas, precios y días adicionales del recorrido. La fecha inicial sirve como referencia incluso en modalidad de fechas específicas. Si se modifica la fecha inicial después de configurar los trayectos, se pueden actualizar con Recalcular horarios sugeridos.
+
+Crea una programación independiente por fecha dentro de una transacción exterior. La validación y pertenencia empresarial de cada copia se comprueban mediante guardar. Un fallo en cualquiera revierte el lote completo, incluidas las tarifas ya insertadas. No actualiza programaciones anteriores ni interpreta el lote como una regla recurrente: las fechas elegidas se crean ahora. Tras un alta sin permiso de listado se limpian ruta, transporte, trayectos y fechas específicas para evitar volver a guardar accidentalmente el mismo formulario.
+
+## Presentación del formulario
+
+Ruta y transporte se eligen en el primer bloque. La fecha de referencia, hora, modalidad, selección de fechas y actualización de horarios se agrupan en Fechas de programación. En edición este mismo bloque conserva fecha y hora, sin modalidades de lote. Después aparecen los trayectos, el selector de estatus de ancho limitado y el botón Guardar alineado a la izquierda, separado mediante una línea, como en el formulario de Empresas.

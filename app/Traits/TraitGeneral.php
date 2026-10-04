@@ -23,7 +23,7 @@ trait TraitGeneral
 
     public static function getDefaultHasta(): string
     {
-        return now()->toDateString();
+        return now()->addDays(30)->toDateString();
     }
 
     public static function date(string $value, string $attribute = 'date_from'): string

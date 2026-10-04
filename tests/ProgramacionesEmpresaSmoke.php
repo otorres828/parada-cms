@@ -112,3 +112,42 @@ $reject(function () use ($listadoViajes, $rutaPlantilla) {
 }, Symfony\Component\HttpKernel\Exception\HttpException::class);
 $usuarioEmpresa->update(['es_admin' => 1]);
 echo "Programaciones: plantilla, medianoche, selección parcial, aislamiento, rollback, reservas y estatus OK\n";
+
+$config = [
+    'modo' => 'rango',
+    'desde' => today()->addDay()->format('Y-m-d'),
+    'hasta' => today()->addDays(10)->format('Y-m-d'),
+    'dias' => [1, 2, 3, 4, 5, 6, 7],
+    'fechas' => [],
+];
+$check(count(ProgramacionService::fechas($config)) === 10);
+$config['dias'] = [1, 3, 5];
+foreach (ProgramacionService::fechas($config) as $fecha) {
+    $check(in_array(\Carbon\Carbon::parse($fecha)->dayOfWeekIso, [1, 3, 5], true));
+}
+$config['modo'] = 'especificas';
+$config['hasta'] = null;
+$config['fechas'] = [today()->addDays(10)->format('Y-m-d'), today()->addDay()->format('Y-m-d')];
+$ids = ProgramacionService::guardarLote($empresa->id, $datos, $config);
+$check(count($ids) === 2);
+$primera = Programacion::with('tramoPrecios')->findOrFail($ids[0]);
+$ultima = Programacion::with('tramoPrecios')->findOrFail($ids[1]);
+$check($primera->getSalida()->format('Y-m-d H:i') === today()->addDays(2)->format('Y-m-d').' 00:30');
+$check($ultima->getSalida()->format('Y-m-d H:i') === today()->addDays(11)->format('Y-m-d').' 00:30');
+$check($ultima->tramoPrecios->first()->precio === '9.50');
+$configDuplicado = $config;
+$configDuplicado['fechas'][] = $configDuplicado['fechas'][0];
+$reject(function () use ($configDuplicado) {
+    ProgramacionService::fechas($configDuplicado);
+}, Illuminate\Validation\ValidationException::class);
+$configFuera = $config;
+$configFuera['fechas'] = ['2100-12-31'];
+$antes = Programacion::count();
+$configFuera['fechas'] = [today()->addDays(10)->format('Y-m-d'), '2100-12-31'];
+$reject(function () use ($empresa, $datos, $configFuera) {
+    ProgramacionService::guardarLote($empresa->id, $datos, $configFuera);
+}, Illuminate\Validation\ValidationException::class);
+$check(Programacion::count() === $antes);
+$html = Livewire::test(SaveProgramacion::class)->set('modoFechas', 'rango')->set('fechaHasta', today()->addDays(9)->format('Y-m-d'))->html();
+$check(str_contains($html, 'Se crearán 10 programaciones.') && str_contains($html, 'Días de salida'));
+echo "Lotes: rango, días seleccionados, fechas específicas, medianoche, duplicados y rollback completo OK\n";

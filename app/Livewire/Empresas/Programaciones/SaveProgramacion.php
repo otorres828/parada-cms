@@ -10,6 +10,7 @@ use App\Services\Empresa\Access;
 use App\Services\Empresa\ProgramacionService;
 use Carbon\Carbon;
 use Illuminate\Contracts\View\View;
+use Illuminate\Validation\ValidationException;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Locked;
 
@@ -28,6 +29,16 @@ class SaveProgramacion extends EmpresaComponent
     public string $fechaSalida = '';
 
     public string $horaSalida = '06:00';
+
+    public string $modoFechas = 'unica';
+
+    public string $fechaHasta = '';
+
+    public string $fechaEspecifica = '';
+
+    public array $diasSemana = [1, 2, 3, 4, 5, 6, 7];
+
+    public array $fechasEspecificas = [];
 
     public int $estatus = 1;
 
@@ -124,19 +135,60 @@ class SaveProgramacion extends EmpresaComponent
     public function save(): void
     {
         Access::authorize('programaciones', $this->programacionId === null ? 'add' : 'edit');
-        $programacion = ProgramacionService::guardar($this->usuarioEmpresa->empresa_id, [
+        $datos = [
             'viaje_id' => $this->viajeId,
             'transporte_id' => $this->transporteId,
             'estatus' => $this->estatus,
             'tramos' => $this->tramos,
-        ], $this->programacionId);
-        $this->programacionId = $programacion->id;
+        ];
+        if ($this->programacionId === null) {
+            $ids = ProgramacionService::guardarLote($this->usuarioEmpresa->empresa_id, $datos, $this->configuracionFechas());
+            $mensaje = count($ids).' programación(es) creada(s) correctamente.';
+            $this->reset('tramos', 'viajeId', 'transporteId', 'fechasEspecificas');
+        } else {
+            ProgramacionService::guardar($this->usuarioEmpresa->empresa_id, $datos, $this->programacionId);
+            $mensaje = 'Programación guardada correctamente.';
+        }
         if ($this->canList) {
-            session()->flash('empresa_success', 'Programación guardada correctamente.');
+            session()->flash('empresa_success', $mensaje);
             $this->redirectRoute('empresas.programaciones.list', navigate: true);
         } else {
-            $this->dispatch('successEventList', message: 'Programación guardada correctamente.');
+            $this->dispatch('successEventList', message: $mensaje);
         }
+    }
+
+    public function agregarFecha(): void
+    {
+        $this->validate([
+            'fechaEspecifica' => ['required', 'date_format:Y-m-d', 'after_or_equal:today', 'before_or_equal:2100-12-31'],
+        ], [
+            'required' => 'Selecciona una fecha para añadir.',
+            'date_format' => 'La fecha no tiene un formato válido.',
+            'after_or_equal' => 'La fecha no puede ser anterior a hoy.',
+            'before_or_equal' => 'La fecha supera el año permitido.',
+        ]);
+        Programacion::exigir(! in_array($this->fechaEspecifica, $this->fechasEspecificas, true), 'fechaEspecifica', 'Esta fecha ya está seleccionada.');
+        Programacion::exigir(count($this->fechasEspecificas) < 366, 'fechaEspecifica', 'Puedes añadir hasta 366 fechas.');
+        $this->fechasEspecificas[] = $this->fechaEspecifica;
+        sort($this->fechasEspecificas);
+        $this->fechaEspecifica = '';
+    }
+
+    public function removerFecha(int $indice): void
+    {
+        unset($this->fechasEspecificas[$indice]);
+        $this->fechasEspecificas = array_values($this->fechasEspecificas);
+    }
+
+    private function configuracionFechas(): array
+    {
+        return [
+            'modo' => $this->modoFechas,
+            'desde' => $this->fechaSalida,
+            'hasta' => $this->modoFechas === 'rango' ? $this->fechaHasta : null,
+            'dias' => $this->modoFechas === 'rango' ? $this->diasSemana : [],
+            'fechas' => $this->modoFechas === 'especificas' ? $this->fechasEspecificas : [],
+        ];
     }
 
     public function render(): View
@@ -151,7 +203,17 @@ class SaveProgramacion extends EmpresaComponent
             'tipo_transporte' => $this->usuarioEmpresa->empresa->getTipoTransporte(),
         ])->where('es_plantilla', false)->get();
 
+        $fechasProgramacion = [];
+        if ($this->programacionId === null) {
+            try {
+                $fechasProgramacion = ProgramacionService::fechas($this->configuracionFechas());
+            } catch (ValidationException $exception) {
+                // La selección incompleta se valida al guardar; el render no interrumpe el formulario.
+            }
+        }
+
         return view('livewire.empresas.programaciones.save-programacion', [
+            'fechasProgramacion' => $fechasProgramacion,
             'viajes' => $viajes,
             'transportes' => $transportes,
             'trayectos' => $viajes->firstWhere('id', $this->viajeId)?->tramos ?? collect(),

@@ -6,11 +6,95 @@ use App\Models\Empresa;
 use App\Models\Programacion;
 use App\Models\Transporte;
 use App\Models\Viaje;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class ProgramacionService
 {
+    public static function fechas(array $configuracion): array
+    {
+        Validator::make($configuracion, [
+            'modo' => ['required', 'in:unica,rango,especificas'],
+            'desde' => ['required', 'date_format:Y-m-d', 'after_or_equal:today', 'before_or_equal:2100-12-31'],
+            'hasta' => ['required_if:modo,rango', 'nullable', 'date_format:Y-m-d', 'after_or_equal:desde', 'before_or_equal:2100-12-31'],
+            'dias' => ['required_if:modo,rango', 'array'],
+            'dias.*' => ['integer', 'between:1,7', 'distinct'],
+            'fechas' => ['required_if:modo,especificas', 'array', 'max:366'],
+            'fechas.*' => ['required', 'date_format:Y-m-d', 'after_or_equal:today', 'before_or_equal:2100-12-31', 'distinct'],
+        ], [
+            'required' => 'Indica las fechas de programación.',
+            'required_if' => 'Completa las fechas y los días de la modalidad seleccionada.',
+            'in' => 'La modalidad de fechas no es válida.',
+            'date_format' => 'La fecha debe tener formato año-mes-día.',
+            'after_or_equal' => 'La fecha es anterior al inicio permitido.',
+            'before_or_equal' => 'La fecha supera el año permitido.',
+            'array' => 'Las fechas y días deben enviarse como una lista.',
+            'integer' => 'El día de la semana no es válido.',
+            'between' => 'Selecciona días de lunes a domingo.',
+            'distinct' => 'No repitas fechas ni días de la semana.',
+            'max' => 'Puedes crear hasta 366 programaciones por lote.',
+        ])->validate();
+
+        if ($configuracion['modo'] === 'unica') {
+            return [$configuracion['desde']];
+        }
+        if ($configuracion['modo'] === 'especificas') {
+            $fechas = $configuracion['fechas'];
+            sort($fechas);
+        } else {
+            $inicio = Carbon::parse($configuracion['desde']);
+            $fin = Carbon::parse($configuracion['hasta']);
+            Programacion::exigir($inicio->diffInDays($fin) < 366, 'hasta', 'El rango puede abarcar hasta 366 días.');
+            $fechas = [];
+            for ($fecha = $inicio->copy(); $fecha->lte($fin); $fecha->addDay()) {
+                if (in_array($fecha->dayOfWeekIso, array_map('intval', $configuracion['dias']), true)) {
+                    $fechas[] = $fecha->format('Y-m-d');
+                }
+            }
+        }
+        Programacion::exigir(count($fechas) > 0, 'fechas', 'Selecciona al menos una fecha de salida.');
+
+        return $fechas;
+    }
+
+    public static function guardarLote(int $empresaId, array $datos, array $configuracion): array
+    {
+        $fechas = self::fechas($configuracion);
+        foreach ($datos['tramos'] ?? [] as $tramo) {
+            if (! ($tramo['habilitado'] ?? false)) {
+                continue;
+            }
+            Validator::make($tramo, [
+                'fecha_salida' => ['required', 'date_format:Y-m-d'],
+                'fecha_llegada' => ['required', 'date_format:Y-m-d'],
+            ], [
+                'required' => 'Completa las fechas del trayecto.',
+                'date_format' => 'La fecha del trayecto no tiene un formato válido.',
+            ])->validate();
+            Programacion::exigir($tramo['fecha_salida'] >= $configuracion['desde'], 'tramos', 'Los trayectos no pueden salir antes de la fecha inicial de referencia.');
+        }
+
+        return DB::transaction(function () use ($empresaId, $datos, $configuracion, $fechas) {
+            $ids = [];
+            $referencia = Carbon::parse($configuracion['desde']);
+            foreach ($fechas as $fecha) {
+                $copia = $datos;
+                $desplazamiento = (int) $referencia->diffInDays(Carbon::parse($fecha), false);
+                foreach ($copia['tramos'] as &$tramo) {
+                    if ($tramo['habilitado']) {
+                        $tramo['fecha_salida'] = Carbon::parse($tramo['fecha_salida'])->addDays($desplazamiento)->format('Y-m-d');
+                        $tramo['fecha_llegada'] = Carbon::parse($tramo['fecha_llegada'])->addDays($desplazamiento)->format('Y-m-d');
+                    }
+                }
+                unset($tramo);
+                $ids[] = self::guardar($empresaId, $copia)->id;
+            }
+
+            return $ids;
+        });
+    }
+
     public static function guardar(int $empresaId, array $datos, ?int $programacionId = null): Programacion
     {
         Validator::make($datos, [

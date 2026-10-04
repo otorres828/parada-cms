@@ -196,9 +196,10 @@
 
             </div>
 
+            <hr>
+            
         </x-form.container-sm>
 
-        <hr>
         <button class="btn btn-primary" type="submit" :disabled="saving"
             wire:loading.attr="disabled">Guardar</button>
     </form>
