@@ -120,7 +120,7 @@ class SaveViaje extends EmpresaComponent
         $this->minutos = $minutos;
     }
 
-    public function save(): mixed
+    public function save()
     {
         Access::authorize('viajes', $this->viajeId === null ? 'add' : 'edit');
         ViajeService::guardar($this->usuarioEmpresa, $this->viajeId, $this->paradas, $this->precios, $this->minutos, $this->comentario, $this->estatus);
