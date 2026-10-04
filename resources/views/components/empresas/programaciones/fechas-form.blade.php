@@ -6,10 +6,10 @@
 
     <div class="card-body">
 
-        <div class="row g-3">
+        <div class="d-flex flex-wrap align-items-end gap-3">
 
             @if ($programacionId === null)
-                <div class="col-md-4">
+                <div style="width: 240px; max-width: 100%;">
 
                     <label for="programacion-modo" class="form-label">Seleccionar fechas</label>
                     <select id="programacion-modo" class="form-select" wire:model.live="modoFechas">
@@ -21,25 +21,33 @@
                 </div>
             @endif
 
-            <div class="col-md-4">
+            <div style="width: 240px; max-width: 100%;">
 
                 <label class="form-label" for="programacion-fecha">
-                    {{ $this->modoFechas === 'especificas' && $programacionId === null ? 'Fecha de referencia para los horarios' : 'Fecha de salida' }}
+                    {{ $this->modoFechas === 'especificas' && $programacionId === null ? 'Fecha de referencia' : 'Fecha de salida' }}
                 </label>
                 <input id="programacion-fecha" type="date" class="form-control" wire:model.live="fechaSalida"
                     min="{{ today()->format('Y-m-d') }}" max="2100-12-31" required>
 
             </div>
 
-            <div class="col-md-4">
+            <div style="width: 240px; max-width: 100%;">
 
-                <label class="form-label" for="programacion-hora">Hora de salida</label>
+                <label class="form-label" for="programacion-hora">Hora de salida referencial</label>
                 <input id="programacion-hora" type="time" class="form-control" wire:model="horaSalida" required>
 
             </div>
 
+            <div>
+
+                <button type="button" class="btn btn-outline-primary" wire:click="cargarTramos" wire:loading.attr="disabled" @disabled($this->viajeId === '')>
+                    <i class="bi bi-arrow-clockwise me-1" aria-hidden="true"></i> Actualizar horarios
+                </button>
+
+            </div>
+
             @if ($programacionId === null && $this->modoFechas === 'rango')
-                <div class="col-md-4">
+                <div style="width: 240px; max-width: 100%;">
 
                     <label for="programacion-hasta" class="form-label">Fecha final del rango</label>
                     <input id="programacion-hasta" type="date" class="form-control" wire:model.live="fechaHasta"
@@ -47,7 +55,7 @@
 
                 </div>
 
-                <div class="col-12">
+                <div class="w-100">
 
                     <label class="form-label">Días de salida</label>
                     <div class="d-flex flex-wrap gap-3">
@@ -66,7 +74,7 @@
 
                 </div>
             @elseif ($programacionId === null && $this->modoFechas === 'especificas')
-                <div class="col-md-8">
+                <div style="width: 360px; max-width: 100%;">
 
                     <label for="programacion-fecha-especifica" class="form-label">Añadir fecha de salida</label>
                     <div class="d-flex gap-2">
@@ -79,7 +87,7 @@
 
                 </div>
 
-                <div class="col-12 d-flex flex-wrap gap-2">
+                <div class="w-100 d-flex flex-wrap gap-2">
 
                     @foreach ($this->fechasEspecificas as $indice => $fecha)
                         <button type="button" class="btn btn-outline-secondary btn-sm" wire:key="fecha-programacion-{{ $fecha }}"
@@ -93,27 +101,20 @@
 
         </div>
 
-        <div class="d-flex flex-wrap align-items-center gap-3 mt-3">
-
-            <button type="button" class="btn btn-outline-primary" wire:click="cargarTramos" wire:loading.attr="disabled" @disabled($this->viajeId === '')>
-                Actualizar horarios de los trayectos
-            </button>
-            <span class="text-muted small">Se calculan según la hora de salida y las duraciones de la ruta. Puedes ajustarlos en cada trayecto.</span>
-
-        </div>
+        <p class="text-muted small mb-0 mt-3">La hora referencial permite calcular los horarios de los trayectos según la duración de la ruta. Puedes ajustarlos en la tabla inferior.</p>
 
         @if ($programacionId === null)
-            <div class="border-top mt-3 pt-3">
+            <div class="bg-light rounded border p-3 mt-3">
 
                 <strong>{{ count($fechasProgramacion) === 1 ? 'Se creará 1 programación.' : 'Se crearán '.count($fechasProgramacion).' programaciones.' }}</strong>
                 <div class="d-flex flex-wrap gap-2 mt-2" style="max-height: 160px; overflow-y: auto;">
 
                     @foreach ($fechasProgramacion as $fecha)
-                        <span class="badge bg-light text-dark border">{{ \Carbon\Carbon::parse($fecha)->format('d/m/Y') }}</span>
+                        <span class="badge bg-white text-dark border fw-normal px-2 py-2">{{ \Carbon\Carbon::parse($fecha)->format('d/m/Y') }}</span>
                     @endforeach
 
                 </div>
-                <p class="text-muted small mb-0 mt-2">La fecha inicial del formulario es la referencia de los horarios. Cada fecha seleccionada crea una programación independiente con los mismos precios y horarios relativos. Se permite hasta 366 fechas por lote.</p>
+                <p class="text-muted small mb-0 mt-2">Cada fecha tendrá su propia programación. Máximo 366 fechas por lote.</p>
 
             </div>
 

@@ -34,43 +34,48 @@
 
     <form id="save-programacion" x-ref="form" @submit.prevent="preSave" novalidate>
 
-        <div class="card card-body mb-3">
+        <x-form.container-md>
 
-            <div class="row g-3">
+            <div class="card card-body mb-3">
 
-                <div class="col-md-6">
+                <div class="row g-3">
 
-                    <label class="form-label" for="programacion-viaje">Ruta de viaje</label>
+                    <div class="col-md-6">
 
-                    <select id="programacion-viaje" class="form-select" wire:model.live="viajeId" required>
-                        <option value="">Seleccionar ruta</option>
-                        @foreach ($viajes as $viaje)
-                            <option value="{{ $viaje->id }}">{{ $viaje->origenTerminal?->nombre }} → {{ $viaje->destinoTerminal?->nombre }}</option>
-                        @endforeach
-                    </select>
+                        <label class="form-label" for="programacion-viaje">Ruta de viaje</label>
 
-                </div>
+                        <select id="programacion-viaje" class="form-select" wire:model.live="viajeId" required>
+                            <option value="">Seleccionar ruta</option>
+                            @foreach ($viajes as $viaje)
+                                <option value="{{ $viaje->id }}">{{ $viaje->origenTerminal?->nombre }} → {{ $viaje->destinoTerminal?->nombre }}</option>
+                            @endforeach
+                        </select>
 
-                <div class="col-md-6">
+                    </div>
 
-                    <label class="form-label" for="programacion-transporte">Transporte</label>
+                    <div class="col-md-6">
 
-                    <select id="programacion-transporte" class="form-select" wire:model="transporteId" required>
-                        <option value="">Seleccionar transporte</option>
-                        @foreach ($transportes as $transporte)
-                            <option value="{{ $transporte->id }}">{{ $transporte->modelo }} · {{ $transporte->placa }} · {{ $transporte->total_asientos }} puestos</option>
-                        @endforeach
-                    </select>
+                        <label class="form-label" for="programacion-transporte">Transporte</label>
+
+                        <select id="programacion-transporte" class="form-select" wire:model="transporteId" required>
+                            <option value="">Seleccionar transporte</option>
+                            @foreach ($transportes as $transporte)
+                                <option value="{{ $transporte->id }}">{{ $transporte->modelo }} · {{ $transporte->placa }} · {{ $transporte->total_asientos }} puestos</option>
+                            @endforeach
+                        </select>
+
+                    </div>
 
                 </div>
 
             </div>
 
-        </div>
+            <x-empresas.programaciones.fechas-form :fechas-programacion="$fechasProgramacion" :programacion-id="$programacionId" />
 
-        <x-empresas.programaciones.fechas-form :fechas-programacion="$fechasProgramacion" :programacion-id="$programacionId" />
-
+            </x-form.container-md>
+            
         <x-empresas.programaciones.tramos-form :trayectos="$trayectos" :tramos="$tramos" />
+
 
         <div class="mt-4">
 

@@ -39,3 +39,7 @@ Crea una programación independiente por fecha dentro de una transacción exteri
 ## Presentación del formulario
 
 Ruta y transporte se eligen en el primer bloque. La fecha de referencia, hora, modalidad, selección de fechas y actualización de horarios se agrupan en Fechas de programación. En edición este mismo bloque conserva fecha y hora, sin modalidades de lote. Después aparecen los trayectos, el selector de estatus de ancho limitado y el botón Guardar alineado a la izquierda, separado mediante una línea, como en el formulario de Empresas.
+
+## Catálogos del formulario
+
+Las rutas y transportes se cargan en mount en propiedades públicas tipadas como colecciones de Eloquent y protegidas con Locked. Render consume esas propiedades y calcula la vista previa de fechas; no vuelve a ejecutar las búsquedas de catálogos. El servicio mantiene sus comprobaciones de pertenencia y estado actual al guardar.

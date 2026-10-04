@@ -10,6 +10,7 @@ use App\Services\Empresa\Access;
 use App\Services\Empresa\ProgramacionService;
 use Carbon\Carbon;
 use Illuminate\Contracts\View\View;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Validation\ValidationException;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Locked;
@@ -19,6 +20,12 @@ class SaveProgramacion extends EmpresaComponent
 {
     #[Locked]
     public ?int $programacionId = null;
+
+    #[Locked]
+    public Collection $viajes;
+
+    #[Locked]
+    public Collection $transportes;
 
     public bool $canList = false;
 
@@ -48,6 +55,16 @@ class SaveProgramacion extends EmpresaComponent
     {
         $this->canList = $this->usuarioEmpresa->hasPermission('programaciones', 'list');
         $this->fechaSalida = today()->format('Y-m-d');
+
+        $this->viajes = Viaje::searchAdmin('', [
+            'empresa_id' => $this->usuarioEmpresa->empresa_id,
+            'status' => Viaje::ESTADO_ACTIVE,
+        ])->with(['tramos.origenTerminal', 'tramos.destinoTerminal'])->get();
+        $this->transportes = Transporte::searchAdmin('', [
+            'empresa_id' => $this->usuarioEmpresa->empresa_id,
+            'status' => Transporte::ESTADO_ACTIVE,
+            'tipo_transporte' => $this->usuarioEmpresa->empresa->getTipoTransporte(),
+        ])->where('es_plantilla', false)->get();
 
         if ($programacion_id !== null) {
             $programacion = $this->findProgramacion($programacion_id);
@@ -193,16 +210,6 @@ class SaveProgramacion extends EmpresaComponent
 
     public function render(): View
     {
-        $viajes = Viaje::searchAdmin('', [
-            'empresa_id' => $this->usuarioEmpresa->empresa_id,
-            'status' => Viaje::ESTADO_ACTIVE,
-        ])->with(['tramos.origenTerminal', 'tramos.destinoTerminal'])->get();
-        $transportes = Transporte::searchAdmin('', [
-            'empresa_id' => $this->usuarioEmpresa->empresa_id,
-            'status' => Transporte::ESTADO_ACTIVE,
-            'tipo_transporte' => $this->usuarioEmpresa->empresa->getTipoTransporte(),
-        ])->where('es_plantilla', false)->get();
-
         $fechasProgramacion = [];
         if ($this->programacionId === null) {
             try {
@@ -214,9 +221,9 @@ class SaveProgramacion extends EmpresaComponent
 
         return view('livewire.empresas.programaciones.save-programacion', [
             'fechasProgramacion' => $fechasProgramacion,
-            'viajes' => $viajes,
-            'transportes' => $transportes,
-            'trayectos' => $viajes->firstWhere('id', $this->viajeId)?->tramos ?? collect(),
+            'viajes' => $this->viajes,
+            'transportes' => $this->transportes,
+            'trayectos' => $this->viajes->firstWhere('id', $this->viajeId)?->tramos ?? collect(),
         ]);
     }
 }
