@@ -154,7 +154,7 @@ Cada clase tiene su propio documento, agrupado por su módulo. Listados, formula
 ### programaciones
 
 - [ListProgramacion](programaciones/list-programacion.md)
-- [PassengerProgramacion](programaciones/passenger-programacion.md)
+- [DetailProgramacion](programaciones/detail-programacion.md)
 
 ### reembolsos
 

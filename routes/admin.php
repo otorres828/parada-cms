@@ -50,7 +50,7 @@ use App\Livewire\Admin\Viajes\ListViaje;
 use App\Livewire\Admin\Viajes\DetailViaje;
 /* ------------------------------Programaciones----------------------------------- */
 use App\Livewire\Admin\Programaciones\ListProgramacion;
-use App\Livewire\Admin\Programaciones\PassengerProgramacion;
+use App\Livewire\Admin\Programaciones\DetailProgramacion;
 /* ------------------------------Transportes-------------------------------------- */
 use App\Livewire\Admin\Transportes\ListTransporte;
 use App\Livewire\Admin\Transportes\DetailTransporte;
@@ -218,7 +218,7 @@ Route::group(['middleware' => ['auth:admin', 'check.permisos.admin']], function 
         Route::prefix('programaciones')->name('programaciones.')->group(function () {
 
             Route::livewire('/', ListProgramacion::class)->name('list');
-            Route::livewire('pasajeros/{programacion_id}', PassengerProgramacion::class)->whereNumber('programacion_id')->name('passengers');
+            Route::livewire('pasajeros/{programacion_id}', DetailProgramacion::class)->whereNumber('programacion_id')->name('passengers');
 
         });
 

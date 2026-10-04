@@ -14,7 +14,7 @@ use Livewire\Attributes\Locked;
 use Livewire\Component;
 
 #[Layout('layouts.crm')]
-class PassengerProgramacion extends Component
+class DetailProgramacion extends Component
 {
     #[Locked]
     public ?int $programacion_id = null;
@@ -59,7 +59,7 @@ class PassengerProgramacion extends Component
             return $ticket->reserva?->estado_pago === Reserva::ESTADO_PAGO_PENDIENTE;
         });
 
-        return view('livewire.admin.programaciones.passenger-programacion', [
+        return view('livewire.admin.programaciones.detail-programacion', [
             'disponibilidadTramos' => $disponibilidad[$this->programacion_id],
             'capacidad' => max(0, min((int) $this->programacion->asientos_totales, (int) $this->programacion->transporte?->total_asientos)),
             'pasajesPagados' => $this->resumenPasajes($pasajesPagados),

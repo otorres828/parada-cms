@@ -7,7 +7,7 @@
 
 @section('title', 'Programaciones')
 
-<div x-data="passengerProgramacion" class="py-3">
+<div x-data="DetailProgramacion" class="py-3">
     <x-list.heading>
         <x-slot:title>
             Programaciones @if ($programacion_id)
@@ -38,7 +38,7 @@
 
 @script
     <script>
-        Alpine.data('passengerProgramacion', () => ({
+        Alpine.data('DetailProgramacion', () => ({
             search: '',
             normalize(value) {
                 return String(value ?? '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();

@@ -1,8 +1,8 @@
-# PassengerProgramacion
+# DetailProgramacion
 
 Consulta de pasajeros, importes y disponibilidad por tramo de una salida.
 
-- Clase: [Programaciones/PassengerProgramacion.php](../../../../app/Livewire/Admin/Programaciones/PassengerProgramacion.php).
+- Clase: [Programaciones/DetailProgramacion.php](../../../../app/Livewire/Admin/Programaciones/DetailProgramacion.php).
 - Vista: [livewire.admin.programaciones.passenger-programacion](../../../../resources/views/livewire/admin/programaciones/passenger-programacion.blade.php).
 - Registro de rutas: [admin.php](../../../../routes/admin.php).
 

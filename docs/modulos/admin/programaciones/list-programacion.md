@@ -25,7 +25,7 @@ Access::allows('programaciones', 'passengers');
 
 ## Reglas y casos particulares
 
-El detalle operativo se abre mediante PassengerProgramacion. El listado no crea rutas ni asigna asientos.
+El detalle operativo se abre mediante DetailProgramacion. El listado no crea rutas ni asigna asientos.
 
 ## Filtros y estado en URL
 
