@@ -29,7 +29,7 @@
                 <td>
 
                     @if ($canViewPassengers)
-                        <a href="{{ route('admin.programaciones.passengers', $salida->id) }}"
+                        <a href="{{ route('admin.programaciones.detail', $salida->id) }}"
                             wire:navigate>#{{ $salida->id }}</a>
                     @else
                         #{{ $salida->id }}

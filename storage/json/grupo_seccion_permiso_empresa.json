@@ -51,7 +51,7 @@
           {"name": "Agregar", "url": "add", "status": 1},
           {"name": "Editar", "url": "edit", "status": 1},
           {"name": "Eliminar", "url": "delete", "status": 1},
-          {"name": "Ver pasajeros", "url": "passengers", "status": 1}
+          {"name": "Ver pasajeros", "url": "detail", "status": 1}
         ]
       },
       {"name": "Transportes", "url": "transportes", "status": 1,

@@ -53,3 +53,5 @@ Antes de guardar aparece un modal con comprador, tramo, salida, transporte, pasa
 Al agregar o retirar pasajeros o pagos correctamente, el listado afectado y el resumen resaltan su borde durante tres segundos. Cada nuevo cambio reinicia el tiempo; retirar el último pasajero también resalta los pagos que se limpian. Las validaciones fallidas no activan el resaltado.
 
 Los precios de los pasajeros y todos los importes del resumen de compra muestran dólares y su equivalente en bolívares, usando el tipo de cambio de la cotización. Los infantes sin asiento muestran cero en ambas monedas.
+
+El panel Transporte de la salida muestra la disponibilidad del tramo, los puestos de esta venta y los que quedarían. Se recalcula al renderizar, excluye infantes sin asiento y respeta las reservas que ocupan puestos y el límite del tramo. La cotización no bloquea puestos; se verifican al registrar.

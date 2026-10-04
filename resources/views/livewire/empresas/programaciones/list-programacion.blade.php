@@ -147,6 +147,12 @@
 
                         <x-list.button-group>
 
+                            @if ($canViewPassengers)
+                                <a class="btn btn-outline-secondary"
+                                    href="{{ route('empresas.programaciones.detail', ['programacion_id' => $programacion->id]) }}"
+                                    wire:navigate title="Pasajeros" aria-label="Pasajeros"><i
+                                        class="bi bi-people-fill"></i></a>
+                            @endif
 
                         </x-list.button-group>
 

@@ -379,7 +379,7 @@
                         @forelse ($proximasSalidas as $salida)
                             <tr wire:key="salida-{{ $salida->id }}">
                                 <td class="ps-4">
-                                    <a href="{{ route('admin.programaciones.passengers', ['programacion_id' => $salida->id]) }}"
+                                    <a href="{{ route('admin.programaciones.detail', ['programacion_id' => $salida->id]) }}"
                                         class="fw-semibold text-decoration-none" wire:navigate>
                                         {{ $salida->viaje?->origenTerminal?->nombre }} <i
                                             class="bi bi-arrow-right mx-1"

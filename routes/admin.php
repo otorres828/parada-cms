@@ -218,7 +218,7 @@ Route::group(['middleware' => ['auth:admin', 'check.permisos.admin']], function 
         Route::prefix('programaciones')->name('programaciones.')->group(function () {
 
             Route::livewire('/', ListProgramacion::class)->name('list');
-            Route::livewire('pasajeros/{programacion_id}', DetailProgramacion::class)->whereNumber('programacion_id')->name('passengers');
+            Route::livewire('detalle/{programacion_id}', DetailProgramacion::class)->whereNumber('programacion_id')->name('detail');
 
         });
 

@@ -23,8 +23,14 @@ class CheckPermissionEmpresa
         'empresas.datos-bancarios.edit' => ['datos-bancarios', 'edit'],
 
         /* ----------------------------------------Operación de viajes---------------------------------------- */
+        
+        // Rutas de viajes
         'empresas.viajes.list' => ['viajes', 'list'],
+
+        // Programaciones
         'empresas.programaciones.list' => ['programaciones', 'list'],
+        'empresas.programaciones.detail' => ['programaciones', 'detail'],
+
         'empresas.transportes.list' => ['transportes', 'list'],
 
         /* ----------------------------------------Ventas y finanzas------------------------------- */

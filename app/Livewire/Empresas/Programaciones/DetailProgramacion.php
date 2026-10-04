@@ -1,0 +1,103 @@
+<?php
+
+namespace App\Livewire\Empresas\Programaciones;
+
+use App\Livewire\Empresas\EmpresaComponent;
+use App\Models\Pasaje;
+use App\Models\Programacion;
+use App\Models\Reserva;
+use App\Models\TipoCambio;
+use App\Models\ViajeTramo;
+use App\Services\Admin\Access;
+use Illuminate\Database\Eloquent\Collection;
+use Livewire\Attributes\Layout;
+use Livewire\Attributes\Locked;
+
+#[Layout('layouts.crm')]
+class DetailProgramacion extends EmpresaComponent
+{
+    #[Locked]
+    public ?int $programacion_id = null;
+
+    public Programacion $programacion;
+
+    public Collection $tickets;
+
+    public bool $canReservasDetail = false;
+
+    public bool $canViajesDetail = false;
+
+    public bool $canTransportesDetail = false;
+
+    public function mount(?int $programacion_id = null): void
+    {
+        $this->programacion_id = $programacion_id;
+        $programacion = $this->findProgramacion();
+
+        if (! $programacion) {
+            abort(404);
+        }
+
+        $this->programacion = $programacion;
+
+        $this->tickets = Pasaje::getTickets($programacion_id);
+        $this->canReservasDetail = Access::allows('reservas', 'detail');
+        $this->canViajesDetail = Access::allows('viajes', 'detail');
+        $this->canTransportesDetail = Access::allows('transportes', 'detail');
+
+    }
+
+    public function render()
+    {
+        $this->programacion = $this->findProgramacion();
+        $this->tickets = Pasaje::getTickets($this->programacion_id);
+        $disponibilidad = ViajeTramo::disponibilidadPorTramos(new Collection([$this->programacion]));
+        $pasajesPagados = $this->tickets->filter(function ($ticket) {
+            return $ticket->reserva?->estado_pago === Reserva::ESTADO_PAGO_PAGADO;
+        });
+        $pasajesPendientes = $this->tickets->filter(function ($ticket) {
+            return $ticket->reserva?->estado_pago === Reserva::ESTADO_PAGO_PENDIENTE;
+        });
+
+        return view('livewire.empresas.programaciones.detail-programacion', [
+            'disponibilidadTramos' => $disponibilidad[$this->programacion_id],
+            'capacidad' => max(0, min((int) $this->programacion->asientos_totales, (int) $this->programacion->transporte?->total_asientos)),
+            'pasajesPagados' => $this->resumenPasajes($pasajesPagados),
+            'pasajesPendientes' => $this->resumenPasajes($pasajesPendientes),
+            'tipoCambioVigente' => TipoCambio::vigente(),
+        ]);
+    }
+
+    protected function findProgramacion(): Programacion
+    {
+        return Programacion::searchAdmin('',['empresa_id'=>$this->usuarioEmpresa->empresa_id])
+            ->with([
+                'viaje.empresa',
+                'viaje.origenTerminal',
+                'viaje.destinoTerminal',
+                'viaje.tramos.origenTerminal',
+                'viaje.tramos.destinoTerminal',
+                'tramoPrecios.origenTerminal',
+                'tramoPrecios.destinoTerminal',
+                'transporte.amenidades',
+            ])
+            ->findOrFail($this->programacion_id);
+    }
+
+    private function resumenPasajes(Collection $pasajes): array
+    {
+        return [
+            'cantidad' => $pasajes->count(),
+            'monto' => $pasajes->sum('total'),
+            'monto_bs' => $pasajes->reduce(
+                fn (string $total, Pasaje $pasaje) => bcadd($total, $pasaje->calcularMontoBs($pasaje->total) ?? '0', 2),
+                '0.00',
+            ),
+            'tasas' => $pasajes->sum('tasa_servicio'),
+            'tasas_bs' => $pasajes->reduce(
+                fn (string $total, Pasaje $pasaje) => bcadd($total, $pasaje->calcularMontoBs($pasaje->tasa_servicio) ?? '0', 2),
+                '0.00',
+            ),
+        ];
+    }
+}

@@ -63,7 +63,7 @@ class CheckPermissionAdmin
 
         // Programaciones
         'admin.programaciones.list' => ['programaciones', 'list'],
-        'admin.programaciones.passengers' => ['programaciones', 'passengers'],
+        'admin.programaciones.detail' => ['programaciones', 'detail'],
 
         // Transportes
         'admin.transportes.list' => ['transportes', 'list'],

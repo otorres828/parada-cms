@@ -82,7 +82,7 @@
       {"name": "Programaciones", "url": "programaciones", "status": 1,
         "permissions": [
           {"name": "Listar", "url": "list", "status": 1},
-          {"name": "Ver pasajeros", "url": "passengers", "status": 1}
+          {"name": "Ver pasajeros", "url": "detail", "status": 1}
         ]
       },
       {"name": "Transportes", "url": "transportes", "status": 1,
