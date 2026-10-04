@@ -1,8 +1,8 @@
 {{-- Transporte asignado a la salida elegida, con sus amenidades. --}}
 @props(['tarifa'])
 <div class="card mb-3">
+    <div class="card-header">Transporte de la salida</div>
     <div class="card-body">
-        <h2 class="h5">Transporte de la salida</h2>
         @if ($tarifa)
             @php($transporte = $tarifa->programacion->transporte)
             <h3 class="h6 mb-3">{{ $tarifa->origenTerminal->nombre }} → {{ $tarifa->destinoTerminal->nombre }}</h3>
