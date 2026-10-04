@@ -31,13 +31,13 @@
     <p class="text-muted mb-3">Selecciona el viaje, agrega a los pasajeros y registra los pagos para completar la venta.</p>
     <x-layout.error />
 
-    <x-empresas.reservas.tramo-taquilla :origenes="$origenes" :destinos="$destinos" :opciones="$opciones" :salidas="$salidas" />
+    <x-empresas.reservas.tramo-taquilla :origenes="$origenes" :destinos="$destinos" :opciones="$opciones" :salidas="$salidas" :cambio="$cambio" />
 
     <div class="row g-4">
         <div class="col-xl-8">
             <x-empresas.reservas.comprador :habilitado="$puedeAgregarPasajeros" />
             <x-empresas.reservas.pasajero :habilitado="$puedeAgregarPasajeros" />
-            <x-empresas.reservas.pasajeros-cotizacion :pasajeros="$pasajeros" :precio="$precio" />
+            <x-empresas.reservas.pasajeros-cotizacion :pasajeros="$pasajeros" :precio="$precio" :cambio="$cambio" />
             <x-empresas.reservas.pagos-taquilla :cuentas="$cuentas" :pagos="$pagos" :can-confirm="$canConfirm"
                 :cambio="$cambio" :habilitado="$puedeAgregarPagos" />
         </div>
@@ -47,7 +47,7 @@
                 <div style="overflow-y: auto; min-height: 0;">
                 <x-empresas.reservas.transporte-taquilla :tarifa="$tarifa" />
                 <x-empresas.reservas.resumen-taquilla :precio="$precio" :cantidad="$cantidad"
-                    :pasajeros="count($pasajeros)" :total="$total" :abonado="$abonado" />
+                    :pasajeros="count($pasajeros)" :total="$total" :abonado="$abonado" :cambio="$cambio" />
 
                 </div>
 

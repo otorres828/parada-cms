@@ -1,5 +1,5 @@
 {{-- Selección de origen, destino y salida que cubre el tramo. --}}
-@props(['origenes', 'destinos', 'opciones', 'salidas'])
+@props(['origenes', 'destinos', 'opciones', 'salidas', 'cambio'])
 <div class="card mb-3">
     <div class="card-header">1. Selecciona el viaje</div>
     <div class="card-body row g-3">
@@ -32,7 +32,7 @@
                 <option value="">Seleccionar salida</option>
                 @foreach ($opciones as $opcion)
                     <option value="{{ $opcion->id }}">{{ $opcion->getSalida()?->format('d/m H:i') ?? 'Sin horario' }}
-                        · #{{ $opcion->programacion_id }} · ${{ $opcion->precio }}</option>
+                        · #{{ $opcion->programacion_id }} · USD {{ number_format($opcion->precio, 2) }} - BS {{ number_format($opcion->precio * (float) $cambio?->valor_usd, 2, ',', '.') }}</option>
                 @endforeach
             </select>
             @if ($salidas->isEmpty())

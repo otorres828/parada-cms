@@ -51,3 +51,5 @@ En escritorio, el panel derecho queda fijo durante el desplazamiento. El conteni
 Antes de guardar aparece un modal con comprador, tramo, salida, transporte, pasajeros y totales. Volver a revisar no persiste nada. Los pagos cotizados muestran siempre USD y su equivalente en BS.
 
 Al agregar o retirar pasajeros o pagos correctamente, el listado afectado y el resumen resaltan su borde durante tres segundos. Cada nuevo cambio reinicia el tiempo; retirar el último pasajero también resalta los pagos que se limpian. Las validaciones fallidas no activan el resaltado.
+
+Los precios de los pasajeros y todos los importes del resumen de compra muestran dólares y su equivalente en bolívares, usando el tipo de cambio de la cotización. Los infantes sin asiento muestran cero en ambas monedas.
