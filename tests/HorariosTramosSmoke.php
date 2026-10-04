@@ -117,6 +117,15 @@ try {
     $sinHorario->fecha_salida = null;
     $sinHorario->hora_salida = null;
     $check($sinHorario->getSalida() === null);
+    $primerTramo->fecha_salida = null;
+    $primerTramo->hora_salida = null;
+    $check($primerTramo->getSalida() === null);
+    $sinLlegada = $tramo->fresh();
+    $sinLlegada->fecha_llegada = null;
+    $sinLlegada->hora_llegada = null;
+    $reject(function () use ($sinLlegada) {
+        $sinLlegada->validarSalida(validarHora: false);
+    }, ValidationException::class);
     $reject(function () use ($sinHorario) {
         $sinHorario->validarSalida();
     }, ValidationException::class);

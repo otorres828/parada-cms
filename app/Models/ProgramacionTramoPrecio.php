@@ -67,6 +67,7 @@ class ProgramacionTramoPrecio extends ModelHelper
     {
         $salida = $this->getSalida();
         self::exigir($salida !== null, 'tarifa', 'Configura la fecha y hora de salida de este tramo antes de vender.');
+        self::exigir($this->getLlegada() !== null, 'tarifa', 'Configura la fecha y hora de llegada de este tramo antes de vender.');
         if ($validarHora) {
             self::exigir($salida->isFuture(), 'tarifa', 'La fecha y hora de salida de este tramo ya pasaron.');
         } else {

@@ -9,11 +9,27 @@ Cada tramo comercial guarda:
 
 En A → B → C, un boleto B → C muestra la salida desde B y la llegada a C. El último punto siempre se presenta como llegada, sin guardar una llegada en un campo llamado salida. Los campos de fecha permiten llegar o abordar al día siguiente.
 
+## Regla de diseño: terminales propios de cada programación
+
+`viaje_tramos` y `programacion_tramo_precios` conservan ambos `origen_terminal_id` y `destino_terminal_id`. Esta repetición es intencional y no debe eliminarse como una simple normalización:
+
+- `viaje_tramos` define los segmentos consecutivos y ordenados del recorrido reutilizable, por ejemplo A → B y B → C.
+- `programacion_tramo_precios` define los trayectos comerciales de una salida concreta, con sus terminales, precio y horarios propios. Puede incluir A → C, que abarca varios segmentos y no corresponde a un único registro de `viaje_tramos`.
+- Los terminales de la tarifa conservan los extremos definidos para esa programación. No deben resolverse dinámicamente desde un `viaje_tramo_id` mutable: cambiar el origen o destino del tramo referenciado podría alterar la interpretación de ventas existentes.
+
+No sustituir esos campos por `viaje_tramo_id` sin rediseñar y verificar el tratamiento de trayectos compuestos y del historial. Tampoco propagar automáticamente cambios de terminales o precios base de una ruta a tarifas que ya tienen reservas, ni eliminar estas tarifas en cascada al editar el recorrido.
+
+### Alcance de la protección y regla para futuras ediciones
+
+Conservar los terminales en la tarifa no congela todo el recorrido. Actualmente `Terminal::obtenerSecuenciaRuta()` utiliza `viaje_tramos` para calcular los intervalos y la disponibilidad; además, el inicio y fin general de la programación dependen de los extremos de `viajes`. Alterar las paradas, su orden o esos extremos puede afectar programaciones existentes aunque sus tarifas mantengan los terminales.
+
+Al implementar la edición o eliminación de rutas y tramos, debe impedirse modificar el recorrido utilizado por programaciones con reservas o conservarse explícitamente su versión histórica. Para un recorrido diferente, crear una nueva ruta es una alternativa que preserva el anterior. Esta es una regla que deben cumplir esas futuras acciones; esta documentación no afirma que exista ya una validación integral que bloquee todas las modificaciones.
+
 ## Consulta y registro
 
 `ProgramacionTramoPrecio::paraTaquilla` filtra por empresa, programación/ruta/transporte activos y fecha de salida del tramo. No excluye orígenes por la hora. Si el autobús inició ayer pero pasa por B hoy, B aparece al consultar hoy.
 
-`getSalida` y `getLlegada` devuelven los horarios del tramo. Para compatibilidad, sin horario explícito solo se admite la salida de la programación cuando el tramo comienza en el origen general. Nunca se reutiliza esa hora para una Rodando intermedia; debe configurarse su horario.
+`ProgramacionTramoPrecio::getSalida()` y `getLlegada()` devuelven exclusivamente los horarios del tramo. No existe respaldo en la programación: sin horarios completos de salida y llegada, la venta se rechaza. Los campos pueden estar vacíos mientras se configura el tramo.
 
 En taquilla, `validarSalida(validarHora: false)` permite vender durante toda la fecha del tramo, aunque su hora de salida haya pasado. También permite ventas anticipadas; rechaza fechas anteriores al día actual. La programación, ruta y transporte deben seguir activos. El formulario comprueba que el tramo corresponda a la fecha seleccionada. No existe apertura ni cierre manual de embarque.
 
@@ -23,8 +39,12 @@ Las fechas/horas se guardan juntas; la llegada debe ser posterior a la salida. P
 
 ## Presentación y datos de desarrollo
 
-Taquilla, correo, detalle del pasaje, matriz de tarifas y exportaciones de pasajes usan el horario del tramo. No se cambió la hora general que describe el inicio del recorrido.
+Taquilla, correo, detalle del pasaje, matriz de tarifas y exportaciones de reservas y pasajes usan el horario del tramo comprado.
 
-Se modificó la migración original de programacion_tramo_precios. El esquema y los datos existentes necesitan actualizarse antes de utilizar la consulta nueva. El seeder actualizado genera horarios al recrear los datos; no modifica programaciones existentes ni se ejecutó fresh sobre la base local. No hay actualmente formulario de alta/edición de programaciones; estos campos quedan listos para ese módulo.
+La tabla `programaciones` ya no contiene `fecha_salida` ni `hora_salida`. `Programacion::getSalida()` obtiene el primer horario de los tramos que parten del origen de la ruta; `getLlegada()` obtiene el último horario de llegada de los tramos que terminan en su destino final. Los O&D con un mismo origen deben compartir horario. Si falta el horario se presenta vacío, sin inventar una fecha.
+
+Los filtros de fechas y próximas programaciones consultan la salida desde el origen de la ruta mediante subconsultas. `salida_fecha` y `salida_hora` son alias calculados para ordenar los listados; no son columnas persistidas. Una programación que comenzó ayer puede vender hoy un tramo intermedio: taquilla filtra directamente la fecha de ese tramo.
+
+Se modificaron las migraciones originales de programaciones y programacion_tramo_precios. El esquema y los datos existentes necesitan actualizarse antes de utilizar la consulta nueva. El seeder actualizado genera horarios al recrear los datos; no modifica programaciones existentes ni se ejecutó fresh sobre la base local. No hay actualmente formulario de alta/edición de programaciones; estos campos quedan listos para ese módulo.
 
 Prueba: tests/HorariosTramosSmoke.php, con SQLite en memoria; cubre medianoche, origen intermedio, venta en taquilla después de la hora con pago y QR, rechazo de fechas pasadas y programaciones inactivas/finalizadas, corte horario web y aislamiento de empresas.

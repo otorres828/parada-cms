@@ -18,7 +18,7 @@ Access::allows('programaciones', 'detail');
 
 ## Funcionamiento paso a paso
 
-1. Carga transporte con empresa y amenidades y permiso programaciones/passengers.
+1. Carga transporte con empresa y amenidades y permiso programaciones/detail.
 2. render consulta programaciones de ese transporte con historial_ventas.
 3. Ordena por fecha, hora e ID descendente y limita el tamaño de página entre 1 y 100.
 4. Entrega tipo de cambio vigente para la presentación y reinicia página si cambia per_page.
