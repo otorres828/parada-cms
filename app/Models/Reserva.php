@@ -251,7 +251,6 @@ class Reserva extends ModelHelper
         return $this->calcularMontoBs($this->getMontoSinTasa());
     }
 
-
     public static function findAdminDetail(int $reservaId, array $filters = []): self
     {
         return self::searchAdmin('', $filters)

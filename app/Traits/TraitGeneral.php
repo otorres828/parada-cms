@@ -54,9 +54,4 @@ trait TraitGeneral
             ? self::getDefaultHasta()
             : self::getDefaultDesde();
     }
-
-    public function generarLocalizador(int $length = 6): string
-    {
-        return substr(str_shuffle('23456789ABCDEFGHJKLMNPQRSTUVWXYZ'), 0, $length);
-    }
 }

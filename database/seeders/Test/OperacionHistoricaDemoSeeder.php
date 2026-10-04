@@ -8,14 +8,12 @@ use App\Models\Reserva;
 use App\Models\TasaServicio;
 use App\Models\TipoCambio;
 use App\Support\PersonalData;
-use App\Traits\TraitGeneral;
 use Carbon\CarbonImmutable;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 class OperacionHistoricaDemoSeeder extends Seeder
 {
-    use TraitGeneral;
 
     private const PASAJES_POR_AUTOBUS = 4;
 
@@ -217,7 +215,7 @@ class OperacionHistoricaDemoSeeder extends Seeder
         $tasaTotal = round($tasaUnitaria * $cantidadPasajes, 2);
         $total = round($subtotal + $tasaTotal, 2);
         $marcaTiempo = $fechaCompra->toDateTimeString();
-        $codigo = 'WEB-' . $this->generarLocalizador();
+        $codigo = 'WEB-' . Reserva::generarLocalizador();
 
         $telefono = '0414'.str_pad((string) ($usuarioId % 10000000), 7, '0', STR_PAD_LEFT);
         $buffers['users'][] = [
@@ -308,7 +306,7 @@ class OperacionHistoricaDemoSeeder extends Seeder
                 'tasa_servicio' => number_format($tasaUnitaria, 2, '.', ''),
                 'total' => number_format((float) $precio + $tasaUnitaria, 2, '.', ''),
                 'servicio_json' => $servicioJson,
-                'localizador' => $this->generarLocalizador(7),
+                'localizador' => Reserva::generarLocalizador(7),
                 'abordado' => $abordado,
                 'hora_abordaje' => $abordado ? '05:30:00' : null,
                 'created_at' => $marcaTiempo,

@@ -20,6 +20,11 @@ class ModelHelper extends Model
 
     const ESTADO_FINALIZADO = 3;
 
+    public static function generarLocalizador(int $length = 6): string
+    {
+        return substr(str_shuffle('23456789ABCDEFGHJKLMNPQRSTUVWXYZ'), 0, $length);
+    }
+
     public static function exigir(bool $condicion, string $campo, string $mensaje): void
     {
         if (! $condicion) {
