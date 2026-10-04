@@ -13,7 +13,7 @@ La entrada está protegida por autenticación administrativa y el permiso de su 
 Comprobaciones declaradas por la clase. Cuando hay una condición entre alta y edición, el permiso depende de la operación:
 
 ~~~php
-Access::allows('programaciones', 'passengers');
+Access::allows('programaciones', 'detail');
 Access::allows('cupones', 'detail');
 Access::allows('pasajes', 'detail');
 Access::allows('reservas', 'detail');

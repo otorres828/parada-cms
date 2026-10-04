@@ -48,7 +48,7 @@ class DetailViaje extends Component
             abort(404);
         }
         $this->viaje = $viaje;
-        $this->canViewPassengers = Access::allows('programaciones', 'passengers');
+        $this->canViewPassengers = Access::allows('programaciones', 'detail');
     }
 
     public function render()

@@ -31,7 +31,7 @@ class DetailTransporte extends Component
     {
         $this->transporte_id = $transporte_id;
         $this->transporte = $this->findTransporte();
-        $this->canViewPassengers = Access::allows('programaciones', 'passengers');
+        $this->canViewPassengers = Access::allows('programaciones', 'detail');
     }
 
     public function render()

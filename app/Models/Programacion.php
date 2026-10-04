@@ -70,8 +70,9 @@ class Programacion extends ModelHelper
     private static function consultaSalida(string $campo): Builder
     {
         return ProgramacionTramoPrecio::query()
-            ->select('programacion_tramo_precios.'.$campo)
-            ->join('viajes', 'viajes.id', '=', 'programaciones.viaje_id')
+            ->selectRaw($campo === 'fecha_salida' ? 'DATE(programacion_tramo_precios.fecha_salida)' : 'programacion_tramo_precios.hora_salida')
+            ->join('viajes', 'viajes.origen_terminal_id', '=', 'programacion_tramo_precios.origen_terminal_id')
+            ->whereColumn('viajes.id', 'programaciones.viaje_id')
             ->whereColumn('programacion_tramo_precios.programacion_id', 'programaciones.id')
             ->whereColumn('programacion_tramo_precios.origen_terminal_id', 'viajes.origen_terminal_id')
             ->whereNotNull('programacion_tramo_precios.fecha_salida')

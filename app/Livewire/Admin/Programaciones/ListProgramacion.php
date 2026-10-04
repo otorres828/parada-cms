@@ -50,7 +50,7 @@ class ListProgramacion extends Component
         $this->sortDirection = 'desc';
         $this->checkPermissions('programaciones');
         $this->empresas = Empresa::searchAdmin()->orderBy('nombre')->get();
-        $this->canViewPassengers = Access::allows('programaciones', 'passengers');
+        $this->canViewPassengers = Access::allows('programaciones', 'detail');
     }
 
     public function render()
@@ -62,7 +62,11 @@ class ListProgramacion extends Component
             'date_to' => $this->date_to,
         ]);
 
-        $query = $this->applySort($query);
+        if (in_array($this->sortColumn, ['salida_fecha', 'salida_hora'], true)) {
+            $query->orderBy($this->sortColumn, $this->sortDirection === 'asc' ? 'asc' : 'desc');
+        } else {
+            $query = $this->applySort($query);
+        }
 
         $programaciones = $query->paginate($this->per_page);
 

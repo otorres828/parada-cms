@@ -77,7 +77,7 @@ class ProgramacionTramoPrecio extends ModelHelper
     public static function paraTaquilla(int $empresaId, string $fecha): Builder
     {
         return self::query()
-            ->whereIn('programacion_id', Programacion::paraTaquilla($empresaId, soloFuturas: false)->select('programaciones.id'))
+            ->whereIn('programacion_id', Programacion::paraTaquilla($empresaId, soloFuturas: false)->reorder()->select('programaciones.id'))
             ->whereDate('fecha_salida', self::date($fecha))
             ->whereNotNull('hora_salida')
             ->with(['origenTerminal', 'destinoTerminal', 'programacion.viaje', 'programacion.transporte.amenidades'])

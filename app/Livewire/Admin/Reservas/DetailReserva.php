@@ -27,7 +27,7 @@ class DetailReserva extends Component
     public function mount(?int $reserva_id = null): void
     {
         $this->reserva_id = $reserva_id;
-        $this->canViewPassengers = Access::allows('programaciones', 'passengers');
+        $this->canViewPassengers = Access::allows('programaciones', 'detail');
         $this->canViewCampaign = Access::allows('cupones', 'detail');
         $this->canViewTicket = Access::allows('pasajes', 'detail');
         $this->canViewReservation = Access::allows('reservas', 'detail');

@@ -54,12 +54,35 @@ try {
         'hora_llegada' => '02:00:00',
         'precio' => '10.00',
     ]);
+    $primerTramo = ProgramacionTramoPrecio::create([
+        'programacion_id' => $salida->id,
+        'origen_terminal_id' => $terminales[0]->id,
+        'destino_terminal_id' => $intermedia->id,
+        'fecha_salida' => $reloj->copy()->subDay()->toDateString(),
+        'hora_salida' => '23:00:00',
+        'fecha_llegada' => $reloj->toDateString(),
+        'hora_llegada' => '00:45:00',
+        'precio' => '10.00',
+    ]);
+    $check(! Illuminate\Support\Facades\Schema::hasColumn('programaciones', 'fecha_salida'));
+    $check(! Illuminate\Support\Facades\Schema::hasColumn('programaciones', 'hora_salida'));
+    $check($salida->fresh()->getSalida()->equalTo($reloj->copy()->subDay()->setTime(23, 0)));
+    $check($salida->fresh()->getLlegada()->equalTo($reloj->copy()->setTime(2, 0)));
+    $check(Programacion::searchAdmin('', ['date_from' => $reloj->copy()->subDay()->toDateString(), 'date_to' => $reloj->copy()->subDay()->toDateString()])->whereKey($salida->id)->exists());
+    $check(! Programacion::searchAdmin('', ['date_from' => $reloj->toDateString(), 'date_to' => $reloj->toDateString()])->whereKey($salida->id)->exists());
+    $check(! Programacion::searchAdmin('', ['proximas' => true])->whereKey($salida->id)->exists());
+    $ordenadas = Programacion::searchAdmin()->whereIn('id', [$salida->id, $programacion->id])->orderBy('salida_fecha')->orderBy('salida_hora')->pluck('id');
+    $check($ordenadas->last() === $salida->id);
     $check(ProgramacionTramoPrecio::paraTaquilla($usuarioEmpresa->empresa_id, $reloj->toDateString())->whereKey($tramo->id)->exists());
     $check(! ProgramacionTramoPrecio::paraTaquilla($empresaDos->id, $reloj->toDateString())->whereKey($tramo->id)->exists());
     $venta = ReservaTaquillaService::registrar($usuarioEmpresa, $tramo->id, $comprador, [$persona], [['tipo' => 2, 'moneda' => 'USD', 'monto' => '10.00']]);
     $check($venta->estado_pago === Reserva::ESTADO_PAGO_PAGADO);
     $check($venta->tramoPrecio->getSalida()->format('H:i') === '01:00');
     $check($venta->tramoPrecio->getLlegada()->format('H:i') === '02:00');
+    $export = new App\Exports\Admin\ReservasExport(Reserva::query());
+    $fila = array_combine($export->headings(), $export->map($venta));
+    $check($fila['Fecha de salida'] === $reloj->format('d/m/Y'));
+    $check($fila['Hora de salida'] === '01:00:00');
     $nuevo = new App\Livewire\Empresas\Reservas\SaveReserva;
     $nuevo->boot();
     $nuevo->mount();

@@ -14,7 +14,7 @@ Comprobaciones declaradas por la clase. Cuando hay una condición entre alta y e
 
 ~~~php
 $this->checkPermissions('programaciones');
-Access::allows('programaciones', 'passengers');
+Access::allows('programaciones', 'detail');
 ~~~
 
 ## Funcionamiento paso a paso
