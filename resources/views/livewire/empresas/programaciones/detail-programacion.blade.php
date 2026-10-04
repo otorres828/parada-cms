@@ -8,32 +8,58 @@
 @section('title', 'Programaciones')
 
 <div x-data="DetailProgramacion" class="py-3">
+
     <x-list.heading>
+
         <x-slot:title>
+
             Programaciones @if ($programacion_id)
                 <small class="text-body-secondary">#{{ $programacion_id }}</small>
             @endif
+
         </x-slot:title>
+
     </x-list.heading>
 
     <div class="container-fluid px-0 mb-4">
+
         <div class="row g-3">
+
             <div class="col-md-5">
-                <x-programacion.description :programacion="$programacion" :capacidad="$capacidad"
-                    :pasajes-pagados="$pasajesPagados" :pasajes-pendientes="$pasajesPendientes"
-                    :can-viajes-detail="$canViajesDetail" :can-transportes-detail="$canTransportesDetail" />
+
+                <x-programacion.description 
+                    :programacion="$programacion" 
+                    :capacidad="$capacidad"
+                    :pasajes-pagados="$pasajesPagados" 
+                    :pasajes-pendientes="$pasajesPendientes"
+                    :can-viajes-detail="$canViajesDetail" 
+                    :can-transportes-detail="$canTransportesDetail" 
+                    :view-tasa-servicio="$viewTasaServicio"
+                    :show-empresa="false"
+                />
+
             </div>
 
             <div class="col-md-7">
-                <x-programacion.rates-matrix :programacion="$programacion"
-                    :disponibilidad-tramos="$disponibilidadTramos" :tipo-cambio="$tipoCambioVigente" />
+
+                <x-programacion.rates-matrix 
+                    :programacion="$programacion"
+                    :disponibilidad-tramos="$disponibilidadTramos" 
+                    :tipo-cambio="$tipoCambioVigente" 
+                />
+
             </div>
         </div>
     </div>
 
-    <x-programacion.passengers-table :tickets="$tickets" :can-reservas-detail="$canReservasDetail" />
+    <x-programacion.passengers-table 
+        :tickets="$tickets" 
+        :can-reservas-detail="$canReservasDetail" 
+        :view-tasa-servicio="$viewTasaServicio"
+    />
 
     <x-layout.loader.fullpage wire:loading.delay.short />
+
 </div>
 
 @script

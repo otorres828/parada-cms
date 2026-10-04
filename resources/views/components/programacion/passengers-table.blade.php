@@ -1,4 +1,4 @@
-@props(['tickets', 'canReservasDetail'])
+@props(['tickets', 'canReservasDetail','viewTasaServicio'=>true])
 
 <div class="card">
     <div class="card-header">
@@ -41,12 +41,16 @@
                     </th>
 
                     <th>
-                        Subtotal
+                        {{ $viewTasaServicio ? 'Subtotal' : 'Total' }}
                     </th>
 
-                    <th>
-                        Tasa Servicio
-                    </th>
+                    @if ($viewTasaServicio)
+                        
+                        <th>
+                            Tasa Servicio
+                        </th>
+                        
+                    @endif
 
                     <th>
                         Estatus Reserva
@@ -96,9 +100,13 @@
                             <x-money.dual :usd="$ticket->subtotal" :bs="$ticket->calcularMontoBs($ticket->subtotal)" />
                         </td>
 
-                        <td>
-                            <x-money.dual :usd="$ticket->tasa_servicio" :bs="$ticket->calcularMontoBs($ticket->tasa_servicio)" />
-                        </td>
+                        @if ($viewTasaServicio)
+                            
+                            <td>
+                                <x-money.dual :usd="$ticket->tasa_servicio" :bs="$ticket->calcularMontoBs($ticket->tasa_servicio)" />
+                            </td>
+                            
+                        @endif
 
                         <td>{{ $ticket->reserva?->getStatusPago() }}</td>
 

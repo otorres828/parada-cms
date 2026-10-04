@@ -5,13 +5,20 @@
     'pasajesPendientes',
     'canViajesDetail',
     'canTransportesDetail',
+    'viewTasaServicio'=>true,
+    'showEmpresa'=>true,
 ])
 
 <div class="card h-100">
     <div class="card-body">
         <dl class="row mb-0">
-            <dt class="col-sm-4">Empresa</dt>
-            <dd class="col-sm-8">{{ $programacion->viaje?->empresa?->nombre ?? '—' }}</dd>
+
+            @if ($showEmpresa)
+                
+                <dt class="col-sm-4">Empresa</dt>
+                <dd class="col-sm-8">{{ $programacion->viaje?->empresa?->nombre ?? '—' }}</dd>
+
+            @endif
 
             <dt class="col-sm-4">Ruta Principal</dt>
             <dd class="col-sm-8">
@@ -78,15 +85,19 @@
                 <x-money.dual :usd="$pasajesPendientes['monto']" :bs="$pasajesPendientes['monto_bs']" />
             </dd>
 
-            <dt class="col-sm-4">Total tasas de servicio pagadas</dt>
-            <dd class="col-sm-8">
-                <x-money.dual :usd="$pasajesPagados['tasas']" :bs="$pasajesPagados['tasas_bs']" />
-            </dd>
+            @if ($viewTasaServicio)
+                
+                <dt class="col-sm-4">Total tasas de servicio pagadas</dt>
+                <dd class="col-sm-8">
+                    <x-money.dual :usd="$pasajesPagados['tasas']" :bs="$pasajesPagados['tasas_bs']" />
+                </dd>
 
-            <dt class="col-sm-4">Total tasas de servicio pendientes</dt>
-            <dd class="col-sm-8">
-                <x-money.dual :usd="$pasajesPendientes['tasas']" :bs="$pasajesPendientes['tasas_bs']" />
-            </dd>
+                <dt class="col-sm-4">Total tasas de servicio pendientes</dt>
+                <dd class="col-sm-8">
+                    <x-money.dual :usd="$pasajesPendientes['tasas']" :bs="$pasajesPendientes['tasas_bs']" />
+                </dd>
+                
+            @endif
         </dl>
     </div>
 </div>
