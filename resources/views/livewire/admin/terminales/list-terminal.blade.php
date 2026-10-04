@@ -42,6 +42,26 @@
 
         <x-slot:group>
 
+            <select id="listTerminal-estado" class="form-select" style="width: 240px; max-width: 100%;"
+                wire:model.live="estado_id" aria-label="Filtrar por estado">
+
+                <option value="">Todos los estados</option>
+
+                @foreach ($estados as $estado)
+                    <option value="{{ $estado->id }}">{{ $estado->nombre }}</option>
+                @endforeach
+
+            </select>
+
+            <select id="listTerminal-status" class="form-select" style="width: 200px; max-width: 100%;"
+                wire:model.live="status" aria-label="Filtrar por estatus">
+
+                <option value="">Todos los estatus</option>
+                <option value="1">Activo</option>
+                <option value="0">Inactivo</option>
+
+            </select>
+
         </x-slot:group>
 
         @if ($canAdd)
@@ -53,44 +73,6 @@
         @endif
 
     </x-list.actions>
-
-    <div class="row g-3 mb-3">
-
-        <div class="col-md-3">
-
-            <label class="form-label" for="listTerminal-estado">
-                Estado
-            </label>
-
-            <select id="listTerminal-estado" class="form-select" wire:model.live="estado_id">
-
-                <option value="">Todos los estados</option>
-
-                @foreach ($estados as $estado)
-                    <option value="{{ $estado->id }}">{{ $estado->nombre }}</option>
-                @endforeach
-
-            </select>
-
-        </div>
-
-        <div class="col-md-3">
-
-            <label class="form-label" for="listTerminal-status">
-                Estatus
-            </label>
-
-            <select id="listTerminal-status" class="form-select" wire:model.live="status">
-
-                <option value="">Todos</option>
-                <option value="1">Activo</option>
-                <option value="0">Inactivo</option>
-
-            </select>
-
-        </div>
-
-    </div>
 
     <x-list.table>
 

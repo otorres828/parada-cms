@@ -13,6 +13,8 @@
     - <x-list.table />: Tabla propia del panel.
     - <x-list.sortable-button />: Ordenación de columnas.
     - <x-list.status-badge />: Elemento de presentación del listado.
+    - <x-list.edit-button />: Edición de registros permitidos.
+    - <x-list.status-button />: Activación e inactivación con permiso de edición.
     - <x-list.button-group />: Elemento de presentación del listado.
     - <x-layout.loader.fullpage />: Elemento de presentación del listado.
     --------------------------------------------------------------------------
@@ -121,6 +123,7 @@
 
                             @if ($canEdit)
                                 <x-list.edit-button :route="route('empresas.viajes.edit', $viaje->id)" :target="false" />
+                                <x-list.status-button wire:click="changeStatus({{ $viaje->id }})" :status="$viaje->estatus" wire:loading.attr="disabled" />
                             @endif
 
 

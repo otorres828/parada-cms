@@ -33,6 +33,8 @@ class CheckPermissionEmpresa
         // Programaciones
         'empresas.programaciones.list' => ['programaciones', 'list'],
         'empresas.programaciones.detail' => ['programaciones', 'detail'],
+        'empresas.programaciones.add' => ['programaciones', 'add'],
+        'empresas.programaciones.edit' => ['programaciones', 'edit'],
 
         'empresas.transportes.list' => ['transportes', 'list'],
 

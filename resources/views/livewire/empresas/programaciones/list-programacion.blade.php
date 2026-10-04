@@ -1,7 +1,7 @@
 {{--
     PROGRAMACIONES — LISTADO
     --------------------------------------------------------------------------
-    Permite consultar las salidas programadas con búsqueda, filtros por empresa, estado y fechas,
+    Permite consultar las salidas programadas con búsqueda, filtros por estado y fechas,
     ordenación y paginación. Muestra la ruta principal, fecha, hora y estado, con acceso a pasajeros según permisos.
 
     Componentes reutilizables utilizados:
@@ -12,6 +12,8 @@
     - <x-list.table />: Tabla propia del panel.
     - <x-list.sortable-button />: Ordenación de columnas.
     - <x-list.status-programacion />: Elemento de presentación del listado.
+    - <x-list.edit-button />: Edición de registros permitidos.
+    - <x-list.status-button />: Activación e inactivación con permiso de edición.
     - <x-list.button-group />: Elemento de presentación del listado.
     - <x-layout.loader.fullpage />: Elemento de presentación del listado.
     --------------------------------------------------------------------------
@@ -39,48 +41,41 @@
 
         <x-slot:group>
 
-        </x-slot:group>
+            <select id="listProgramacion-status" class="form-select" style="width: 180px; max-width: 100%;"
+                wire:model.live="status" aria-label="Filtrar por estado">
 
-    </x-list.actions>
-
-    <div class="row g-3 mb-3">
-
-        <div class="col-md-3">
-
-            <label class="form-label" for="listProgramacion-status">
-                Estado
-            </label>
-
-            <select id="listProgramacion-status" class="form-select" wire:model.live="status">
-
-                <option value="">Todos</option>
+                <option value="">Todos los estados</option>
                 <option value="1">Activo</option>
                 <option value="2">Inactivo</option>
                 <option value="3">Finalizados</option>
 
             </select>
 
-        </div>
+            <div class="d-flex align-items-center gap-2">
 
-        <div class="col-md-3">
+                <input id="listProgramacion-from" type="date" class="form-control" style="width: 160px;"
+                    wire:model.live="date_from" aria-label="Fecha inicial"
+                    min="{{ $this->getMinFilterDate() }}" max="{{ $this->getMaxFilterDate() }}">
 
-            <label class="form-label" for="listProgramacion-from">
-                Desde
-            </label>
-            <input id="listProgramacion-from" type="date" class="form-control" wire:model.live="date_from"
-                min="{{ $this->getMinFilterDate() }}" max="{{ $this->getMaxFilterDate() }}">
-        </div>
+                <span class="text-body-secondary" aria-hidden="true">a</span>
 
-        <div class="col-md-3">
+                <input id="listProgramacion-to" type="date" class="form-control" style="width: 160px;"
+                    wire:model.live="date_to" aria-label="Fecha final"
+                    min="{{ $this->getMinFilterDate() }}" max="{{ $this->getMaxFilterDate() }}">
 
-            <label class="form-label" for="listProgramacion-to">
-                Hasta
-            </label>
-            <input id="listProgramacion-to" type="date" class="form-control" wire:model.live="date_to"
-                min="{{ $this->getMinFilterDate() }}" max="{{ $this->getMaxFilterDate() }}">
-        </div>
+            </div>
 
-    </div>
+        </x-slot:group>
+
+        @if ($canAdd)
+            <x-slot:button>
+                <a class="btn btn-primary" href="{{ route('empresas.programaciones.add') }}" wire:navigate>
+                    <i class="bi bi-plus-lg me-1"></i> Nuevo registro
+                </a>
+            </x-slot:button>
+        @endif
+
+    </x-list.actions>
 
     <x-list.table>
 
@@ -152,6 +147,13 @@
                                     href="{{ route('empresas.programaciones.detail', ['programacion_id' => $programacion->id]) }}"
                                     wire:navigate title="Pasajeros" aria-label="Pasajeros"><i
                                         class="bi bi-people-fill"></i></a>
+                            @endif
+
+                            @if ($canEdit && in_array($programacion->estatus, [1, 2]))
+                                @if (! $programacion->reservas_exists)
+                                    <x-list.edit-button :route="route('empresas.programaciones.edit', ['programacion_id' => $programacion->id])" :target="false" />
+                                @endif
+                                <x-list.status-button wire:click="changeStatus({{ $programacion->id }})" :status="$programacion->estatus" wire:loading.attr="disabled" />
                             @endif
 
                         </x-list.button-group>

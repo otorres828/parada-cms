@@ -40,31 +40,23 @@
 
         <x-slot:group>
 
+            <div class="d-flex align-items-center gap-2">
+
+                <input id="listAudit-from" type="date" class="form-control" style="width: 160px;"
+                    wire:model.live="date_from" aria-label="Fecha inicial"
+                    min="{{ $this->getMinFilterDate() }}" max="{{ $this->getMaxFilterDate() }}">
+
+                <span class="text-body-secondary" aria-hidden="true">a</span>
+
+                <input id="listAudit-to" type="date" class="form-control" style="width: 160px;"
+                    wire:model.live="date_to" aria-label="Fecha final"
+                    min="{{ $this->getMinFilterDate() }}" max="{{ $this->getMaxFilterDate() }}">
+
+            </div>
+
         </x-slot:group>
 
     </x-list.actions>
-
-    <div class="row g-3 mb-3">
-
-        <div class="col-md-3">
-
-            <label class="form-label" for="listAudit-from">
-                Desde
-            </label>
-            <input id="listAudit-from" type="date" class="form-control" wire:model.live="date_from"
-                min="{{ $this->getMinFilterDate() }}" max="{{ $this->getMaxFilterDate() }}">
-        </div>
-
-        <div class="col-md-3">
-
-            <label class="form-label" for="listAudit-to">
-                Hasta
-            </label>
-            <input id="listAudit-to" type="date" class="form-control" wire:model.live="date_to"
-                min="{{ $this->getMinFilterDate() }}" max="{{ $this->getMaxFilterDate() }}">
-        </div>
-
-    </div>
 
     <x-list.table>
 
