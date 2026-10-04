@@ -11,12 +11,15 @@ use App\Models\Terminal;
 use App\Models\TipoCambio;
 use App\Models\User;
 use App\Models\Viajero;
+use App\Traits\TraitGeneral;
 use Closure;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class ReservaService
 {
+    use TraitGeneral;
+    
     public const MINUTOS_BLOQUEO = 20;
 
     // 1. Crea o reinicia la reserva NUEVA del cliente para esta programación.
@@ -182,7 +185,7 @@ class ReservaService
                 'subtotal' => $precio,
                 'tasa_servicio' => '0.00',
                 'total' => $precio,
-                'localizador' => (string) Str::random(20),
+                'localizador' => $this->generarLocalizador(7),
             ]);
 
             return self::recalcularDespuesDeModificarPasajeros($reserva);
