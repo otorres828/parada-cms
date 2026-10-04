@@ -2,7 +2,13 @@
     TABLA DE PROGRAMACIONES DEL TRANSPORTE | Presenta las salidas y sus resultados comerciales.
 --}}
 
-@props(['programaciones', 'canViewPassengers', 'tipoCambio' => null])
+@props([
+    'programaciones', 
+    'canViewPassengers', 
+    'tipoCambio' => null, 
+    'viewTasaServicio' => true, 
+    'routeProgramacion'
+])
 
 <table class="table align-middle mb-0">
 
@@ -25,7 +31,9 @@
 
             <th>Venta de pasajes</th>
 
-            <th>Tasas cobradas</th>
+            @if ($viewTasaServicio)
+                <th>Tasas cobradas</th>
+            @endif
 
         </tr>
 
@@ -38,7 +46,7 @@
                 <td>
 
                     @if ($canViewPassengers)
-                        <a href="{{ route('admin.programaciones.detail', $salida->id) }}"
+                        <a href="{{ route($routeProgramacion, $salida->id) }}"
                             wire:navigate>#{{ $salida->id }}</a>
                     @else
                         #{{ $salida->id }}
@@ -56,7 +64,7 @@
                 </td>
 
                 <td>
-                    {{ $salida->estatus ? 'Activa' : 'Inactiva' }}
+                    {{ match ($salida->estatus) { 1 => 'Activa', 2 => 'Inactiva', 3 => 'Finalizada', default => 'Eliminada' } }}
                 </td>
 
                 <td>
@@ -76,16 +84,18 @@
                     <x-money.dual :usd="$salida->ventas_total" :bs="$salida->ventas_total_bs" />
                 </td>
 
-                <td>
-                    <x-money.dual :usd="$salida->tasas_servicio_total" :bs="$salida->tasas_servicio_total_bs" />
-                </td>
+                @if ($viewTasaServicio)
+                    <td>
+                        <x-money.dual :usd="$salida->tasas_servicio_total" :bs="$salida->tasas_servicio_total_bs" />
+                    </td>
+                @endif
 
             </tr>
 
         @empty
 
             <tr>
-                <td colspan="9" class="text-center py-4">
+                <td colspan="{{ $viewTasaServicio ? 9 : 8 }}" class="text-center py-4">
                     No hay programaciones registradas.
                 </td>
 

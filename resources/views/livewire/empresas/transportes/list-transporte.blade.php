@@ -125,6 +125,10 @@
 
                         <x-list.button-group>
 
+                            @if ($canDetail)
+                                <x-list.view-button :route="route('empresas.transportes.detail', ['transporte_id' => $transporte->id])" :target="false" />
+                            @endif
+
                             @if ($canEdit && ! $transporte->es_plantilla)
                                 <x-list.edit-button :route="route('empresas.transportes.edit', ['transporte_id' => $transporte->id])" :target="false" />
                                 <x-list.status-button wire:click="changeStatus({{ $transporte->id }})" :status="$transporte->estatus" wire:loading.attr="disabled" />

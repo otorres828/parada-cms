@@ -20,15 +20,13 @@
 
         </x-slot:title>
 
-        @if ($canList)
-            <x-slot:button>
+        <x-slot:button>
 
-                <x-form.cancel-button :link="route('admin.programaciones.list')">
-                    Volver al listado
-                </x-form.cancel-button>
+            <x-form.cancel-button :link="route('admin.programaciones.list')">
+                Volver al listado
+            </x-form.cancel-button>
 
-            </x-slot:button>
-        @endif
+        </x-slot:button>
 
     </x-list.heading>
 

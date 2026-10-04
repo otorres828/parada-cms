@@ -7,7 +7,7 @@
 
     Componentes reutilizables utilizados:
     - <x-transportes.description />: Ficha descriptiva del transporte.
-    - <x-transportes.programaciones-table />: Historial de programaciones del transporte.
+    - <x-empresas.transportes.programaciones-table />: Historial de programaciones del transporte.
     - <x-form.cancel-button />: Enlace para regresar al listado anterior.
     - <x-layout.loader.fullpage />: Indicador global durante operaciones de Livewire.
     - <x-list.heading />: Cabecera del módulo con título y acciones.
@@ -31,7 +31,7 @@
 
         <x-slot:button>
 
-            <x-form.cancel-button :link="route('admin.transportes.list')">
+            <x-form.cancel-button :link="route('empresas.transportes.list')">
                 Volver al listado
             </x-form.cancel-button>
 
@@ -49,7 +49,7 @@
 
                     <x-transportes.description 
                         :transporte="$transporte" 
-                        :show-empresa="true" 
+                        :show-empresa="false" 
                     />
 
                 </div>
@@ -72,7 +72,8 @@
                 :programaciones="$programaciones" 
                 :can-view-passengers="$canViewPassengers"
                 :tipo-cambio="$tipoCambioVigente" 
-                route-programacion="admin.programaciones.detail"
+                :view-tasa-servicio="$viewTasaServicio" 
+                route-programacion="empresas.programaciones.detail"
             />
 
             {{ $programaciones->links() }}
@@ -96,7 +97,7 @@
                     Livewire.on('successEventList', data => this.$store.toast.success(data.message)),
                     Livewire.on('errorEventList', data => this.$store.toast.info(data.message)),
                 ];
-                const savedMessage = @js(session()->pull('admin_success'));
+                const savedMessage = @js(session()->pull('empresa_success'));
                 if (savedMessage) this.$nextTick(() => Livewire.dispatch('successEventList', {
                     message: savedMessage
                 }));

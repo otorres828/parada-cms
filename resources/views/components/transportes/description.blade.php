@@ -2,40 +2,40 @@
     DESCRIPCIÓN DE TRANSPORTE | Presenta empresa, placa, modelo, capacidad y amenidades.
 --}}
 
-@props(['transporte'])
+@props(['transporte', 'showEmpresa' => true])
 
 <div class="card-body">
 
     <dl class="row mb-0">
-        <dt class="col-sm-4">Tipo de transporte</dt>
-        <dd class="col-sm-8">{{ $transporte->getTipoTransporte() }}</dd>
+        
+        @if ($showEmpresa)
 
-        <dt class="col-sm-4">Empresa</dt>
+            <dt class="col-sm-4">Tipo de transporte</dt>
+            <dd class="col-sm-8">{{ $transporte->getTipoTransporte() }}</dd>
 
-        <dd class="col-sm-8">
-            {{ $transporte->empresa?->nombre ?? '—' }}
-        </dd>
+            <dt class="col-sm-4">Empresa</dt>
+            <dd class="col-sm-8">
+                {{ $transporte->empresa?->nombre ?? '—' }}
+            </dd>
+
+        @endif
 
         <dt class="col-sm-4">Placa</dt>
-
         <dd class="col-sm-8">
             {{ $transporte->placa ?? '—' }}
         </dd>
 
         <dt class="col-sm-4">Modelo</dt>
-
         <dd class="col-sm-8">
             {{ $transporte->modelo ?? '—' }}
         </dd>
 
         <dt class="col-sm-4">Asientos</dt>
-
         <dd class="col-sm-8">
             {{ $transporte->total_asientos ?? '—' }}
         </dd>
 
         <dt class="col-sm-4">Estado</dt>
-
         <dd class="col-sm-8">
             <x-list.status-badge :status="$transporte->estatus" />
         </dd>
