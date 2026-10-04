@@ -3,6 +3,7 @@
 namespace Database\Seeders\Test;
 
 use App\Models\Empresa;
+use App\Models\Pasaje;
 use App\Models\Programacion;
 use App\Models\Reserva;
 use App\Models\TasaServicio;
@@ -215,7 +216,7 @@ class OperacionHistoricaDemoSeeder extends Seeder
         $tasaTotal = round($tasaUnitaria * $cantidadPasajes, 2);
         $total = round($subtotal + $tasaTotal, 2);
         $marcaTiempo = $fechaCompra->toDateTimeString();
-        $codigo = 'WEB-' . Reserva::generarLocalizador();
+        $codigo = 'WEB-' . Reserva::generarLocalizador(7);
 
         $telefono = '0414'.str_pad((string) ($usuarioId % 10000000), 7, '0', STR_PAD_LEFT);
         $buffers['users'][] = [
@@ -306,7 +307,7 @@ class OperacionHistoricaDemoSeeder extends Seeder
                 'tasa_servicio' => number_format($tasaUnitaria, 2, '.', ''),
                 'total' => number_format((float) $precio + $tasaUnitaria, 2, '.', ''),
                 'servicio_json' => $servicioJson,
-                'localizador' => Reserva::generarLocalizador(7),
+                'localizador' => Pasaje::generarLocalizador(7),
                 'abordado' => $abordado,
                 'hora_abordaje' => $abordado ? '05:30:00' : null,
                 'created_at' => $marcaTiempo,
