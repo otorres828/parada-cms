@@ -69,7 +69,7 @@ class SaveReserva extends EmpresaComponent
 
     public function mount(): void
     {
-        $this->ventaToken = 'TQ-'.Str::ulid();
+        $this->ventaToken = 'TQ-'.Reserva::generarLocalizador(7);
         $this->fecha = today()->toDateString();
         $this->canConfirm = $this->usuarioEmpresa->hasPermission('reservas', 'confirm');
         $this->canList = $this->usuarioEmpresa->hasPermission('reservas', 'list');
