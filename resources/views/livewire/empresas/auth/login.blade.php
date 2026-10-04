@@ -35,7 +35,7 @@
 
             <x-auth.card-title>
 
-                Ingresar credenciales <br> para iniciar sesión
+                Ingresar credenciales
 
             </x-auth.card-title>
 
