@@ -22,11 +22,15 @@
             {{ $programacionId ? 'Editar programación #'.$programacionId : 'Nueva programación' }}
         </x-slot:title>
 
-        @if ($canList)
-            <x-slot:button>
-                <x-form.cancel-button :link="route('empresas.programaciones.list')">Volver al listado</x-form.cancel-button>
-            </x-slot:button>
-        @endif
+        <x-slot:button>
+
+            <x-form.cancel-button
+                :link="route('empresas.programaciones.list')"
+            >
+                Volver al listado
+            </x-form.cancel-button>
+
+        </x-slot:button>
 
     </x-list.heading>
 
@@ -70,18 +74,28 @@
 
             </div>
 
-            <x-empresas.programaciones.fechas-form :fechas-programacion="$fechasProgramacion" :programacion-id="$programacionId" />
+            <x-empresas.programaciones.fechas-form
+                :fechas-programacion="$fechasProgramacion"
+                :programacion-id="$programacionId"
+            />
 
-            </x-form.container-md>
-            
-        <x-empresas.programaciones.tramos-form :trayectos="$trayectos" :tramos="$tramos" :capacidad="$capacidadTransporte" />
+        </x-form.container-md>
 
+        <x-empresas.programaciones.tramos-form
+            :trayectos="$trayectos"
+            :tramos="$tramos"
+            :capacidad="$capacidadTransporte"
+        />
 
         <div class="mt-4">
 
             <x-form.container-sm>
 
-                <x-form.dropdown label="Estatus" name="estatus" wire:model="estatus">
+                <x-form.dropdown
+                    label="Estatus"
+                    name="estatus"
+                    wire:model="estatus"
+                >
 
                     <option value="1">Programada</option>
                     <option value="2">Inactiva</option>
@@ -100,7 +114,9 @@
 
     </form>
 
-    <x-layout.loader.fullpage wire:loading.delay.short />
+    <x-layout.loader.fullpage
+        wire:loading.delay.short
+    />
 
 </div>
 

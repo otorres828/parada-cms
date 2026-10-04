@@ -29,7 +29,6 @@
 
         </x-slot:title>
 
-        @if ($canList)
         <x-slot:button>
 
             <x-form.cancel-button :link="route('empresas.viajes.list')">
@@ -37,7 +36,6 @@
             </x-form.cancel-button>
 
         </x-slot:button>
-        @endif
 
     </x-list.heading>
 

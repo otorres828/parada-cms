@@ -127,3 +127,7 @@ Para importes reutilizar el componente monetario vigente. No inferir reglas fina
 - Slots y alineación: `resources/views/components/list/actions.blade.php`.
 
 Son ejemplos de estructura, no autorización para copiar sus inconsistencias o modificar sus reglas.
+
+## Convención explícita para vistas Save
+
+Dejar una línea vacía entre componentes y bloques. Escribir cada parámetro de un componente en su propia línea y el cierre en otra línea, alineado con su apertura. En las vistas Save, el botón Volver al listado se muestra sin condicionar por `canList`.

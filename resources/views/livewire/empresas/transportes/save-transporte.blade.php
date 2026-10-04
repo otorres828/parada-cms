@@ -15,13 +15,17 @@
 
     <x-list.heading>
 
-        <x-slot:title>{{ $transporteId ? 'Editar transporte #'.$transporteId : 'Nuevo transporte' }}</x-slot:title>
+        <x-slot:title>
+            {{ $transporteId ? 'Editar transporte #'.$transporteId : 'Nuevo transporte' }}
+        </x-slot:title>
 
-        @if ($canList)
-            <x-slot:button>
-                <x-form.cancel-button :link="route('empresas.transportes.list')">Volver al listado</x-form.cancel-button>
-            </x-slot:button>
-        @endif
+        <x-slot:button>
+
+            <x-form.cancel-button :link="route('empresas.transportes.list')">
+                Volver al listado
+            </x-form.cancel-button>
+
+        </x-slot:button>
 
     </x-list.heading>
 

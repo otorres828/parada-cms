@@ -15,44 +15,96 @@
     - <x-empresas.reservas.confirmacion-taquilla />: Resumen previo a confirmar el cobro.
     - <x-layout.loader.fullpage />: Indicador de carga.
 --}}
+
 @section('title', 'Nueva Reserva')
 
 <div class="py-3" x-data="saveReserva" @cotizacion-actualizada.window="resaltarCambios($event.detail.secciones)">
 
     <x-list.heading>
-        <x-slot:title>Nueva Reserva</x-slot:title>
-        @if ($canList)
-            <x-slot:button>
-                <x-form.cancel-button :link="route('empresas.reservas.list')">Volver al listado</x-form.cancel-button>
-            </x-slot:button>
-        @endif
+
+        <x-slot:title>
+            Nueva Reserva
+        </x-slot:title>
+
+        <x-slot:button>
+
+            <x-form.cancel-button
+                :link="route('empresas.reservas.list')"
+            >
+                Volver al listado
+            </x-form.cancel-button>
+
+        </x-slot:button>
+
     </x-list.heading>
 
     <p class="text-muted mb-3">Selecciona el viaje, agrega a los pasajeros y registra los pagos para completar la venta.</p>
+
     <x-layout.error />
 
-    <x-empresas.reservas.tramo-taquilla :origenes="$origenes" :destinos="$destinos" :opciones="$opciones" :salidas="$salidas" :cambio="$cambio" />
+    <x-empresas.reservas.tramo-taquilla
+        :origenes="$origenes"
+        :destinos="$destinos"
+        :opciones="$opciones"
+        :salidas="$salidas"
+        :cambio="$cambio"
+    />
 
     <div class="row g-4">
+
         <div class="col-xl-8">
-            <x-empresas.reservas.comprador :habilitado="$puedeAgregarPasajeros" />
-            <x-empresas.reservas.pasajero :habilitado="$puedeAgregarPasajeros" />
-            <x-empresas.reservas.pasajeros-cotizacion :pasajeros="$pasajeros" :precio="$precio" :cambio="$cambio" />
-            <x-empresas.reservas.pagos-taquilla :cuentas="$cuentas" :pagos="$pagos" :can-confirm="$canConfirm"
-                :cambio="$cambio" :habilitado="$puedeAgregarPagos" />
+
+            <x-empresas.reservas.comprador
+                :habilitado="$puedeAgregarPasajeros"
+            />
+
+            <x-empresas.reservas.pasajero
+                :habilitado="$puedeAgregarPasajeros"
+            />
+
+            <x-empresas.reservas.pasajeros-cotizacion
+                :pasajeros="$pasajeros"
+                :precio="$precio"
+                :cambio="$cambio"
+            />
+
+            <x-empresas.reservas.pagos-taquilla
+                :cuentas="$cuentas"
+                :pagos="$pagos"
+                :can-confirm="$canConfirm"
+                :cambio="$cambio"
+                :habilitado="$puedeAgregarPagos"
+            />
+
         </div>
 
         <div class="col-xl-4" x-ref="panelColumna">
+
             <div x-ref="panelVenta" :style="panelStyle">
+
                 <div class="panel-venta-scroll" style="overflow-y: auto; min-height: 0;">
-                <x-empresas.reservas.transporte-taquilla :tarifa="$tarifa" :disponibles="$disponibles" :cantidad="$cantidad" />
-                <x-empresas.reservas.resumen-taquilla :precio="$precio" :cantidad="$cantidad"
-                    :pasajeros="count($pasajeros)" :total="$total" :abonado="$abonado" :cambio="$cambio" />
+
+                    <x-empresas.reservas.transporte-taquilla
+                        :tarifa="$tarifa"
+                        :disponibles="$disponibles"
+                        :cantidad="$cantidad"
+                    />
+
+                    <x-empresas.reservas.resumen-taquilla
+                        :precio="$precio"
+                        :cantidad="$cantidad"
+                        :pasajeros="count($pasajeros)"
+                        :total="$total"
+                        :abonado="$abonado"
+                        :cambio="$cambio"
+                    />
 
                 </div>
 
                 <form id="registrar-taquilla" x-ref="registroForm" @submit.prevent="registrar" novalidate class="card flex-shrink-0 mb-0">
+
                     <div class="card-body">
+
                         <p class="small text-muted">La reserva y los asientos se confirman al registrar. Las ventas por taquilla no tienen tasa de servicio.</p>
                         <button type="submit" class="btn btn-success w-100" :disabled="saving || !$el.dataset.ready" wire:loading.attr="disabled"
                             data-ready="{{ $canConfirm && $puedeAgregarPagos && count($pagos) > 0 && round($total - $abonado, 2) === 0.0 ? '1' : '' }}"
@@ -60,15 +112,28 @@
                             Registrar reserva
                         </button>
                     </div>
+
                 </form>
+
             </div>
+
         </div>
+
     </div>
 
-    <x-empresas.reservas.confirmacion-taquilla :tarifa="$tarifa" :pasajeros="$pasajeros"
-        :precio="$precio" :total="$total" :abonado="$abonado" :cambio="$cambio" />
+    <x-empresas.reservas.confirmacion-taquilla
+        :tarifa="$tarifa"
+        :pasajeros="$pasajeros"
+        :precio="$precio"
+        :total="$total"
+        :abonado="$abonado"
+        :cambio="$cambio"
+    />
 
-    <x-layout.loader.fullpage wire:loading.delay.short />
+    <x-layout.loader.fullpage
+        wire:loading.delay.short
+    />
+
 </div>
 
 @script
