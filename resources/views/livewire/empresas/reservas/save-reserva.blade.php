@@ -45,7 +45,7 @@
         <div class="col-xl-4" x-ref="panelColumna">
             <div x-ref="panelVenta" :style="panelStyle">
                 <div class="panel-venta-scroll" style="overflow-y: auto; min-height: 0;">
-                <x-empresas.reservas.transporte-taquilla :tarifa="$tarifa" />
+                <x-empresas.reservas.transporte-taquilla :tarifa="$tarifa" :disponibles="$disponibles" :cantidad="$cantidad" />
                 <x-empresas.reservas.resumen-taquilla :precio="$precio" :cantidad="$cantidad"
                     :pasajeros="count($pasajeros)" :total="$total" :abonado="$abonado" :cambio="$cambio" />
 

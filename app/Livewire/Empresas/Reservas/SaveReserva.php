@@ -5,6 +5,7 @@ namespace App\Livewire\Empresas\Reservas;
 use App\Livewire\Empresas\EmpresaComponent;
 use App\Models\DatoBancario;
 use App\Models\PagoReserva;
+use App\Models\Pasaje;
 use App\Models\ProgramacionTramoPrecio;
 use App\Models\Reserva;
 use App\Models\TipoCambio;
@@ -91,6 +92,7 @@ class SaveReserva extends EmpresaComponent
         })->count();
 
         $precio = (float) ($tarifa?->precio ?? 0);
+        $disponibles = $tarifa !== null ? Pasaje::consultarDisponibilidad($tarifa->id)['disponibles'] : 0;
         $cambio = TipoCambio::vigente();
 
         $abonado = collect($this->pagos)->sum(function ($pago) use ($cambio) {
@@ -103,6 +105,7 @@ class SaveReserva extends EmpresaComponent
             'opciones' => $opciones,
             'precio' => $precio,
             'cantidad' => $cantidad,
+            'disponibles' => $disponibles,
             'total' => round($precio * $cantidad, 2),
             'abonado' => $abonado,
             'cambio' => $cambio,
