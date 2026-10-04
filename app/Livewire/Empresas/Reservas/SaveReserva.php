@@ -116,6 +116,41 @@ class SaveReserva extends EmpresaComponent
         ]);
     }
 
+    public function registrar(): void
+    {
+        Access::authorize('reservas', 'add');
+
+        $this->validate([
+            'tarifaId' => 'required|integer',
+            'origenId' => 'required|integer',
+            'destinoId' => 'required|integer',
+        ], [
+            'required' => 'Selecciona :attribute.',
+            'integer' => 'Selecciona una opción válida.',
+        ], [
+            'tarifaId' => 'la salida',
+            'origenId' => 'el origen',
+            'destinoId' => 'el destino',
+        ]);
+
+        $this->validarTramo();
+
+        ReservaTaquillaService::registrar(
+            $this->usuarioEmpresa,
+            (int) $this->tarifaId,
+            $this->comprador,
+            $this->pasajeros,
+            $this->pagos,
+            $this->ventaToken
+        );
+
+        $this->reset('pasajeros', 'pagos', 'pasajero', 'pago', 'comprador', 'tarifaId');
+        $this->ventaToken = 'TQ-'.Reserva::generarLocalizador(7);
+        $this->resetValidation();
+        $this->dispatch('successEventList', message: 'Reserva y pagos registrados correctamente.');
+
+    }
+
     public function updatedFecha(): void
     {
         $this->reset('tarifaId', 'origenId', 'destinoId', 'pagos', 'pago');
@@ -179,41 +214,6 @@ class SaveReserva extends EmpresaComponent
         unset($this->pagos[$indice]);
         $this->pagos = array_values($this->pagos);
         $this->dispatch('cotizacion-actualizada', secciones: ['pagos', 'resumen']);
-    }
-
-    public function registrar(): void
-    {
-        Access::authorize('reservas', 'add');
-
-        $this->validate([
-            'tarifaId' => 'required|integer',
-            'origenId' => 'required|integer',
-            'destinoId' => 'required|integer',
-        ], [
-            'required' => 'Selecciona :attribute.',
-            'integer' => 'Selecciona una opción válida.',
-        ], [
-            'tarifaId' => 'la salida',
-            'origenId' => 'el origen',
-            'destinoId' => 'el destino',
-        ]);
-
-        $this->validarTramo();
-
-        ReservaTaquillaService::registrar(
-            $this->usuarioEmpresa,
-            (int) $this->tarifaId,
-            $this->comprador,
-            $this->pasajeros,
-            $this->pagos,
-            $this->ventaToken
-        );
-
-        $this->reset('pasajeros', 'pagos', 'pasajero', 'pago', 'comprador', 'tarifaId');
-        $this->ventaToken = 'TQ-'.Str::ulid();
-        $this->resetValidation();
-        $this->dispatch('successEventList', message: 'Reserva y pagos registrados correctamente.');
-
     }
 
     private function validarTramo(): ProgramacionTramoPrecio
