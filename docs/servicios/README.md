@@ -49,3 +49,5 @@ La documentación registra la implementación actual. Las diferencias respecto a
 - [Servicio de rutas de Empresas](servicio-viaje.md)
 
 - [Servicio de programaciones](servicio-programacion.md).
+
+- [Estatus de rutas, transportes y programaciones](logica-estatus-rutas-transportes.md).

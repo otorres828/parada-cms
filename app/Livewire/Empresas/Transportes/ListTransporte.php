@@ -4,6 +4,8 @@ namespace App\Livewire\Empresas\Transportes;
 
 use App\Livewire\Empresas\EmpresaComponent;
 use App\Models\Transporte;
+use App\Services\Empresa\Access;
+use Illuminate\Support\Facades\DB;
 use App\Traits\Listing;
 use App\Traits\PermissionsEmpresa;
 use Livewire\Attributes\Layout;
@@ -46,6 +48,24 @@ class ListTransporte extends EmpresaComponent
         return view('livewire.empresas.transportes.list-transporte', [
             'transportes' => $transportes,
         ]);
+    }
+
+    public function changeStatus(int $id): void
+    {
+        Access::authorize('transportes', 'edit');
+
+        DB::transaction(function () use ($id) {
+            $transporte = Transporte::searchAdmin('', [
+                'empresa_id' => $this->usuarioEmpresa->empresa_id,
+                'tipo_transporte' => $this->usuarioEmpresa->empresa->getTipoTransporte(),
+            ])->where('es_plantilla', false)->whereKey($id)->lockForUpdate()->firstOrFail();
+            $transporte->estatus = $transporte->estatus === Transporte::ESTADO_ACTIVE
+                ? Transporte::ESTADO_INACTIVE
+                : Transporte::ESTADO_ACTIVE;
+            $transporte->save();
+        });
+
+        $this->dispatch('successEventList', message: 'Estado actualizado.');
     }
 
     public function updated(string $property): void

@@ -43,3 +43,7 @@ Ruta y transporte se eligen en el primer bloque. La fecha de referencia, hora, m
 ## Catálogos del formulario
 
 Las rutas y transportes se cargan en mount en propiedades públicas tipadas como colecciones de Eloquent y protegidas con Locked. Render consume esas propiedades y calcula la vista previa de fechas; no vuelve a ejecutar las búsquedas de catálogos. El servicio mantiene sus comprobaciones de pertenencia y estado actual al guardar.
+
+## Puestos a vender por trayecto
+
+La columna Puestos a vender permite fijar un límite independiente para cada combinación. Vacío significa todos los puestos de la programación; un valor debe estar entre 1 y la capacidad actual del transporte. Se guarda en asientos_maximos_permitidos y se conserva en cada copia del lote. La disponibilidad existente utiliza ese límite y la ocupación de los segmentos compartidos. Cambiar después la capacidad del transporte no modifica asientos_totales ni los límites guardados en programaciones anteriores.

@@ -57,7 +57,7 @@
 
                         <label class="form-label" for="programacion-transporte">Transporte</label>
 
-                        <select id="programacion-transporte" class="form-select" wire:model="transporteId" required>
+                        <select id="programacion-transporte" class="form-select" wire:model.live="transporteId" required>
                             <option value="">Seleccionar transporte</option>
                             @foreach ($transportes as $transporte)
                                 <option value="{{ $transporte->id }}">{{ $transporte->modelo }} · {{ $transporte->placa }} · {{ $transporte->total_asientos }} puestos</option>
@@ -74,7 +74,7 @@
 
             </x-form.container-md>
             
-        <x-empresas.programaciones.tramos-form :trayectos="$trayectos" :tramos="$tramos" />
+        <x-empresas.programaciones.tramos-form :trayectos="$trayectos" :tramos="$tramos" :capacidad="$capacidadTransporte" />
 
 
         <div class="mt-4">

@@ -86,6 +86,7 @@ class SaveProgramacion extends EmpresaComponent
                 $clave = $tramo->origen_terminal_id.'-'.$tramo->destino_terminal_id;
                 $this->tramos[$clave] = [
                     'habilitado' => true,
+                    'asientos_maximos_permitidos' => $tramo->asientos_maximos_permitidos ?? '',
                     'precio' => $tramo->precio,
                     'fecha_salida' => $tramo->fecha_salida?->format('Y-m-d') ?? '',
                     'hora_salida' => substr($tramo->hora_salida ?? '', 0, 5),
@@ -108,6 +109,7 @@ class SaveProgramacion extends EmpresaComponent
         }
 
         return view('livewire.empresas.programaciones.save-programacion', [
+            'capacidadTransporte' => $this->transportes->firstWhere('id', $this->transporteId)?->total_asientos,
             'fechasProgramacion' => $fechasProgramacion,
             'viajes' => $this->viajes,
             'transportes' => $this->transportes,
@@ -184,6 +186,7 @@ class SaveProgramacion extends EmpresaComponent
             $llegada = $horarios[$tramo->destino_terminal_id];
             $this->tramos[$clave] = [
                 'habilitado' => $this->tramos[$clave]['habilitado'] ?? true,
+                'asientos_maximos_permitidos' => $this->tramos[$clave]['asientos_maximos_permitidos'] ?? '',
                 'precio' => $this->tramos[$clave]['precio'] ?? $tramo->precio,
                 'fecha_salida' => $salida->format('Y-m-d'),
                 'hora_salida' => $salida->format('H:i'),

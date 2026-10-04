@@ -1,4 +1,4 @@
-@props(['trayectos', 'tramos'])
+@props(['trayectos', 'tramos', 'capacidad' => null])
 
 <div class="card">
 
@@ -15,6 +15,7 @@
                     <th>Salida</th>
                     <th>Llegada</th>
                     <th>Precio base (USD)</th>
+                    <th>Puestos a vender</th>
                 </tr>
             </thead>
 
@@ -50,11 +51,17 @@
                             <input id="precio-{{ $clave }}" type="number" step="0.01" min="0" max="9999999999.99" class="form-control" wire:model="tramos.{{ $clave }}.precio" aria-label="Precio del trayecto" @disabled(! $habilitado) @required($habilitado)>
                         </td>
 
+                        <td style="min-width: 150px;">
+                            <input id="puestos-{{ $clave }}" type="number" min="1" max="{{ $capacidad ?? 100 }}"
+                                class="form-control" wire:model="tramos.{{ $clave }}.asientos_maximos_permitidos"
+                                placeholder="{{ $capacidad ? 'Todos ('.$capacidad.')' : 'Todos' }}" aria-label="Puestos a vender en el trayecto" @disabled(! $habilitado)>
+                        </td>
+
                     </tr>
 
                 @empty
                     <tr>
-                        <td colspan="5" class="text-center py-4">Selecciona una ruta con trayectos y precios base.</td>
+                        <td colspan="6" class="text-center py-4">Selecciona una ruta con trayectos y precios base.</td>
                     </tr>
                 @endforelse
 

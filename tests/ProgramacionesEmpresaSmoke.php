@@ -151,3 +151,23 @@ $check(Programacion::count() === $antes);
 $html = Livewire::test(SaveProgramacion::class)->set('modoFechas', 'rango')->set('fechaHasta', today()->addDays(9)->format('Y-m-d'))->html();
 $check(str_contains($html, 'Se crearán 10 programaciones.') && str_contains($html, 'Días de salida'));
 echo "Lotes: rango, días seleccionados, fechas específicas, medianoche, duplicados y rollback completo OK\n";
+
+$datosCupo = $datos;
+$datosCupo['tramos'][$clave]['asientos_maximos_permitidos'] = 1;
+$conCupo = ProgramacionService::guardar($empresa->id, $datosCupo);
+$check($conCupo->tramoPrecios->first()->asientos_maximos_permitidos === 1);
+$datosCupo['tramos'][$clave]['asientos_maximos_permitidos'] = $bus->total_asientos + 1;
+$reject(function () use ($empresa, $datosCupo) { ProgramacionService::guardar($empresa->id, $datosCupo); }, Illuminate\Validation\ValidationException::class);
+$datosCupo['tramos'][$clave]['asientos_maximos_permitidos'] = 0;
+$reject(function () use ($empresa, $datosCupo) { ProgramacionService::guardar($empresa->id, $datosCupo); }, Illuminate\Validation\ValidationException::class);
+echo "Puestos por trayecto: límite guardado y valores fuera de capacidad rechazados OK\n";
+
+$rutaPlantilla->update(['estatus' => 2]);
+$bus->update(['estatus' => 2]);
+$check(Programacion::paraTaquilla($empresa->id, false)->whereKey($nueva->id)->exists());
+$nueva->refresh()->load(['viaje', 'transporte']);
+App\Services\Empresa\ReservaTaquillaService::validarSalida($nueva, $usuarioEmpresa->fresh(), $nueva->tramoPrecios()->first());
+$reject(function () use ($empresa, $datos) { ProgramacionService::guardar($empresa->id, $datos); }, Illuminate\Database\Eloquent\ModelNotFoundException::class);
+$rutaPlantilla->update(['estatus' => 1]);
+$bus->update(['estatus' => 1]);
+echo "Ruta y transporte inactivos: salidas previas vendibles y nuevas altas rechazadas OK\n";

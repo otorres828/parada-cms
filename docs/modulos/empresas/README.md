@@ -41,3 +41,5 @@ Los grupos siguen el orden del catálogo empresarial. La clase asigna los boolea
 - [Listado de rutas](viajes/list-viaje.md).
 - [Listado de programaciones](programaciones/list-programacion.md).
 - [Alta y edición de programaciones](programaciones/save-programacion.md).
+
+- [Alta de transportes](transportes/save-transporte.md).

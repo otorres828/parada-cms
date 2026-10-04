@@ -235,12 +235,9 @@ class Programacion extends ModelHelper
             'status' => self::ESTADO_PROGRAMADO,
             'proximas' => $soloFuturas,
         ])->whereHas('viaje', function ($query) {
-            $query->where('estatus', self::ESTADO_ACTIVE)
-                ->whereHas('empresa', function ($empresa) {
-                    $empresa->where('estatus', self::ESTADO_ACTIVE);
-                });
-        })->whereHas('transporte', function ($query) {
-            $query->where('estatus', self::ESTADO_ACTIVE);
+            $query->whereHas('empresa', function ($empresa) {
+                $empresa->where('estatus', self::ESTADO_ACTIVE);
+            });
         })->with(['transporte', 'tramoPrecios.origenTerminal', 'tramoPrecios.destinoTerminal'])
             ->orderBy('salida_fecha')->orderBy('salida_hora');
     }

@@ -189,8 +189,6 @@ class ReservaTaquillaService
         Reserva::exigir(
             (int) $programacion->viaje->empresa_id === (int) $vendedor->empresa_id
                 && (int) $programacion->estatus === Programacion::ESTADO_PROGRAMADO
-                && (int) $programacion->viaje->estatus === 1
-                && (int) $programacion->transporte->estatus === 1
                 && $programacion->transporte->tipo_transporte === $vendedor->empresa->getTipoTransporte(),
             'programacion',
             'La salida ya no está disponible para vender.',

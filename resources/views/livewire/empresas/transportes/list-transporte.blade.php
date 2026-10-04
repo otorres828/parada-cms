@@ -13,6 +13,8 @@
     - <x-list.table />: Tabla propia del panel.
     - <x-list.sortable-button />: Ordenación de columnas.
     - <x-list.status-badge />: Elemento de presentación del listado.
+    - <x-list.edit-button />: Acceso a edición.
+    - <x-list.status-button />: Activa e inactiva el transporte.
     - <x-list.button-group />: Elemento de presentación del listado.
     - <x-layout.loader.fullpage />: Elemento de presentación del listado.
     --------------------------------------------------------------------------
@@ -49,6 +51,12 @@
             </select>
 
         </x-slot:group>
+
+        @if ($canAdd)
+            <x-slot:button>
+                <x-list.add-button :route="route('empresas.transportes.add')">Nuevo registro</x-list.add-button>
+            </x-slot:button>
+        @endif
 
     </x-list.actions>
 
@@ -116,6 +124,11 @@
                     <td class="text-end">
 
                         <x-list.button-group>
+
+                            @if ($canEdit && ! $transporte->es_plantilla)
+                                <x-list.edit-button :route="route('empresas.transportes.edit', ['transporte_id' => $transporte->id])" :target="false" />
+                                <x-list.status-button wire:click="changeStatus({{ $transporte->id }})" :status="$transporte->estatus" wire:loading.attr="disabled" />
+                            @endif
 
 
                         </x-list.button-group>

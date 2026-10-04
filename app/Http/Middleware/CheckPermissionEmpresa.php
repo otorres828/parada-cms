@@ -37,6 +37,8 @@ class CheckPermissionEmpresa
         'empresas.programaciones.edit' => ['programaciones', 'edit'],
 
         'empresas.transportes.list' => ['transportes', 'list'],
+        'empresas.transportes.add' => ['transportes', 'add'],
+        'empresas.transportes.edit' => ['transportes', 'edit'],
 
         /* ----------------------------------------Ventas y finanzas------------------------------- */
 

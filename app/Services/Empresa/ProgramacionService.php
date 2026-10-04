@@ -140,6 +140,7 @@ class ProgramacionService
                     continue;
                 }
                 Validator::make($tramo, [
+                    'asientos_maximos_permitidos' => ['nullable', 'integer', 'between:1,'.$transporte->total_asientos],
                     'precio' => ['required', 'numeric', 'decimal:0,2', 'min:0', 'max:9999999999.99'],
                     'fecha_salida' => ['required', 'date_format:Y-m-d', 'after_or_equal:today', 'before_or_equal:2100-12-31'],
                     'hora_salida' => ['required', 'date_format:H:i'],
@@ -147,6 +148,8 @@ class ProgramacionService
                     'hora_llegada' => ['required', 'date_format:H:i'],
                 ], [
                     'required' => 'El campo :attribute es obligatorio en los trayectos seleccionados.',
+                    'integer' => 'La cantidad de puestos debe ser un número entero.',
+                    'between' => 'Los puestos a vender deben estar entre 1 y la capacidad del transporte (:max).',
                     'numeric' => 'El precio debe ser numérico.',
                     'decimal' => 'El precio permite hasta dos decimales.',
                     'min' => 'El precio no puede ser negativo.',
@@ -165,6 +168,7 @@ class ProgramacionService
                 $seleccionados[] = [
                     'origen_terminal_id' => $base->origen_terminal_id,
                     'destino_terminal_id' => $base->destino_terminal_id,
+                    'asientos_maximos_permitidos' => ($tramo['asientos_maximos_permitidos'] ?? '') === '' ? null : $tramo['asientos_maximos_permitidos'],
                     'precio' => $tramo['precio'],
                     'fecha_salida' => $tramo['fecha_salida'],
                     'hora_salida' => $tramo['hora_salida'],
