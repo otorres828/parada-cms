@@ -1,23 +1,17 @@
 # ListProgramacion
 
-Listado del panel de Empresas. Clase `app/Livewire/Empresas/Programaciones/ListProgramacion.php` y vista `livewire.empresas.programaciones.list-programacion`.
+Lista exclusivamente las programaciones de la empresa autenticada. Ofrece búsqueda, estatus, rango de fechas, ordenación y paginación. Las fechas se obtienen de los trayectos vendidos: salida más temprana y llegada más tardía. Esto admite programaciones que vendan únicamente combinaciones intermedias.
 
-## Acceso y alcance
+Agregar requiere permiso add; acceder a pasajeros requiere detail; editar y cambiar estatus requieren edit. Editar se muestra únicamente si la programación no tiene reservas ni está finalizada. Para esta condición se consulta existencia de reservas, sin cargarlas ni contarlas.
 
-El middleware exige el permiso `programaciones/list`. En `mount` se resuelven los permisos de presentación con `PermissionsEmpresa`. Las acciones de descarga o escritura vuelven a autorizarse en el servidor.
+`changeStatus` autoriza edit, busca el ID dentro de la empresa y alterna entre 1 programada y 2 inactiva en una transacción. Los estados finalizado y eliminado no se reactivan. Finalizar no forma parte de esta acción. Emite successEventList después de guardar.
 
-La consulta obtiene `empresa_id` del usuario autenticado en el guard `empresa` en cada ejecución. No existe un selector ni una propiedad pública para elegir otra empresa. Los listados utilizan `searchAdmin`; los reportes utilizan consultas agregadas del modelo Reserva con el mismo alcance obligatorio.
+## Alcance y consultas
 
-## Funcionamiento
+El middleware exige programaciones/list. PermissionsEmpresa resuelve permisos visuales en mount. La empresa se obtiene del usuario autenticado, sin selector ni propiedad pública para sustituirla. Los filtros reinician la página; el rango inicial es la última semana y la paginación limita cada página a 100 registros. La tabla empresarial es independiente de la administrativa.
 
-Búsqueda, rango de salida y estado de programación.
+## Integridad de terminales
 
-Los cambios de filtros reinician la página. La paginación limita cada página a 100 registros. Los módulos con fechas inician con la última semana y utilizan la normalización de fechas del modelo.
+ViajeTramo contiene todas las combinaciones de la plantilla, ordenadas por los bucles de generación, sin campos de posición adicionales. ProgramacionTramoPrecio conserva su propia copia de origen, destino, precio y horarios. Esta duplicidad es intencional y no debe sustituirse por viaje_tramo_id: editar la plantilla no puede cambiar los datos de una salida vendida.
 
-La vista conserva el encabezado, filtros y paginación del panel; la tabla está definida en su propia vista de Empresas, independiente de Admin. Solo se reutilizan elementos básicos de presentación como buscadores, botones, montos y contenedores. En Empresas no se muestra la columna Empresa ni se generan enlaces a rutas de detalle o edición que todavía no existen. Los formularios y detalles se implementarán por separado.
-
-## Regla de integridad de los tramos
-
-`viaje_tramos` describe el recorrido; `programacion_tramo_precios` conserva los terminales, precios y horarios de los trayectos vendibles de cada salida. Que ambas tablas tengan origen y destino es intencional: conserva los extremos propios de la salida frente a modificaciones de la plantilla. `viaje_tramos` ahora incluye todas las combinaciones con sus posiciones; el recorrido se reconstruye usando las consecutivas. No reemplazarlos directamente por `viaje_tramo_id`.
-
-La disponibilidad todavía depende del recorrido de la ruta, por lo que conservar estos campos no protege por sí solo frente a cambios de paradas. Consultar la [regla completa de terminales y protección del recorrido](../../../servicios/logica-horarios-tramos.md#regla-de-diseño-terminales-propios-de-cada-programación) antes de implementar ediciones o eliminaciones.
+La disponibilidad depende también del recorrido; una ruta con programaciones no puede cambiar sus paradas. Consultar [la regla completa](../../../servicios/logica-horarios-tramos.md#regla-de-diseño-terminales-propios-de-cada-programación).

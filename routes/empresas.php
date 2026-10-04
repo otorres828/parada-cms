@@ -26,6 +26,7 @@ use App\Livewire\Empresas\Viajes\DetailViaje;
 /* ------------------------------Programaciones------------------------------------ */
 use App\Livewire\Empresas\Programaciones\ListProgramacion;
 use App\Livewire\Empresas\Programaciones\DetailProgramacion;
+use App\Livewire\Empresas\Programaciones\SaveProgramacion;
 /* ------------------------------Transportes------------------------------------ */
 use App\Livewire\Empresas\Transportes\ListTransporte;
 /* ------------------------------Reservas------------------------------------ */
@@ -128,6 +129,8 @@ Route::group(['middleware' => ['auth:empresa', 'check.permisos.empresa']], funct
 
             Route::livewire('/', ListProgramacion::class)->name('list');
             Route::livewire('detalle/{programacion_id}', DetailProgramacion::class)->whereNumber('programacion_id')->name('detail');
+            Route::livewire('agregar', SaveProgramacion::class)->name('add');
+            Route::livewire('editar/{programacion_id}', SaveProgramacion::class)->whereNumber('programacion_id')->name('edit');
 
         });
 

@@ -2,6 +2,7 @@
     PROGRAMACIONES — PASAJEROS Y TARIFAS POR TRAMO
     --------------------------------------------------------------------------
     Coordina el detalle de la programación mediante componentes de presentación.
+    <x-form.cancel-button /> permite regresar al listado según los permisos del usuario.
     --------------------------------------------------------------------------
 --}}
 
@@ -18,6 +19,16 @@
             @endif
 
         </x-slot:title>
+
+        @if ($canList)
+            <x-slot:button>
+
+                <x-form.cancel-button :link="route('admin.programaciones.list')">
+                    Volver al listado
+                </x-form.cancel-button>
+
+            </x-slot:button>
+        @endif
 
     </x-list.heading>
 

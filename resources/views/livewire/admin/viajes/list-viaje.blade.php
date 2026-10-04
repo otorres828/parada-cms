@@ -40,19 +40,8 @@
 
         <x-slot:group>
 
-        </x-slot:group>
-
-    </x-list.actions>
-
-    <div class="row g-3 mb-3">
-
-        <div class="col-md-3">
-
-            <label class="form-label" for="filtro-empresa">
-                Empresa
-            </label>
-
-            <select id="filtro-empresa" class="form-select" wire:model.live="empresa_id">
+            <select id="filtro-empresa" class="form-select" style="width: 280px; max-width: 100%;"
+                wire:model.live="empresa_id" aria-label="Filtrar por empresa">
 
                 <option value="">Todas las empresas</option>
 
@@ -62,25 +51,18 @@
 
             </select>
 
-        </div>
+            <select id="listViaje-status" class="form-select" style="width: 200px; max-width: 100%;"
+                wire:model.live="status" aria-label="Filtrar por estado">
 
-        <div class="col-md-3">
-
-            <label class="form-label" for="listViaje-status">
-                Estado
-            </label>
-
-            <select id="listViaje-status" class="form-select" wire:model.live="status">
-
-                <option value="">Todos</option>
+                <option value="">Todos los estados</option>
                 <option value="1">Activo</option>
                 <option value="0">Inactivo</option>
 
             </select>
 
-        </div>
+        </x-slot:group>
 
-    </div>
+    </x-list.actions>
 
     <x-list.table>
 

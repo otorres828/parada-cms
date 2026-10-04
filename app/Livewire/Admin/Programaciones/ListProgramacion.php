@@ -51,6 +51,7 @@ class ListProgramacion extends Component
         $this->checkPermissions('programaciones');
         $this->empresas = Empresa::searchAdmin()->orderBy('nombre')->get();
         $this->canViewPassengers = Access::allows('programaciones', 'detail');
+        $this->status = Programacion::ESTADO_ACTIVE;
     }
 
     public function render()

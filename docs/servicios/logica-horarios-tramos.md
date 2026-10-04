@@ -41,9 +41,9 @@ Las fechas/horas se guardan juntas; la llegada debe ser posterior a la salida. P
 
 Taquilla, correo, detalle del pasaje, matriz de tarifas y exportaciones de reservas y pasajes usan el horario del tramo comprado.
 
-La tabla `programaciones` ya no contiene `fecha_salida` ni `hora_salida`. `Programacion::getSalida()` obtiene el primer horario de los tramos que parten del origen de la ruta; `getLlegada()` obtiene el último horario de llegada de los tramos que terminan en su destino final. Los O&D con un mismo origen deben compartir horario. Si falta el horario se presenta vacío, sin inventar una fecha.
+La tabla `programaciones` ya no contiene `fecha_salida` ni `hora_salida`. `Programacion::getSalida()` obtiene el primer horario de los trayectos habilitados para vender; `getLlegada()` obtiene el último horario de llegada de esos trayectos. Los O&D con un mismo origen deben compartir horario. Si falta el horario se presenta vacío, sin inventar una fecha.
 
-Los filtros de fechas y próximas programaciones consultan la salida desde el origen de la ruta mediante subconsultas. `salida_fecha` y `salida_hora` son alias calculados para ordenar los listados; no son columnas persistidas. Una programación que comenzó ayer puede vender hoy un tramo intermedio: taquilla filtra directamente la fecha de ese tramo.
+Los filtros de fechas y próximas programaciones consultan la primera salida comercial habilitada mediante subconsultas. `salida_fecha` y `salida_hora` son alias calculados para ordenar los listados; no son columnas persistidas. Una programación que comenzó ayer puede vender hoy un tramo intermedio: taquilla filtra directamente la fecha de ese tramo.
 
 Se modificaron las migraciones originales de programaciones y programacion_tramo_precios. El esquema y los datos existentes necesitan actualizarse antes de utilizar la consulta nueva. El seeder actualizado genera horarios al recrear los datos; no modifica programaciones existentes ni se ejecutó fresh sobre la base local. No hay actualmente formulario de alta/edición de programaciones; estos campos quedan listos para ese módulo.
 

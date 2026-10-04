@@ -8,6 +8,7 @@ use App\Services\Empresa\Access;
 use App\Traits\Listing;
 use App\Traits\PermissionsEmpresa;
 use App\Traits\TraitGeneral;
+use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\Layout;
 use Livewire\WithPagination;
 
@@ -61,11 +62,31 @@ class ListProgramacion extends EmpresaComponent
             $query = $this->applySort($query);
         }
 
+        $query->withExists('reservas');
+
         $programaciones = $query->paginate(max(1, min(100, (int) $this->per_page)));
 
         return view('livewire.empresas.programaciones.list-programacion', [
             'programaciones' => $programaciones,
         ]);
+    }
+
+    public function changeStatus(int $id): void
+    {
+        Access::authorize('programaciones', 'edit');
+
+        DB::transaction(function () use ($id) {
+            $registro = Programacion::searchAdmin('', [
+                'empresa_id' => $this->usuarioEmpresa->empresa_id,
+            ])->whereKey($id)->lockForUpdate()->firstOrFail();
+            Programacion::exigir(in_array($registro->estatus, [Programacion::ESTADO_PROGRAMADO, Programacion::ESTADO_INACTIVO], true), 'estatus', 'Una programación finalizada no puede cambiar de estatus.');
+            $registro->estatus = $registro->estatus === Programacion::ESTADO_ACTIVE
+                ? Programacion::ESTADO_INACTIVE
+                : Programacion::ESTADO_ACTIVE;
+            $registro->save();
+        });
+
+        $this->dispatch('successEventList', message: 'Estado actualizado.');
     }
 
     public function updated(string $property): void

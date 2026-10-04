@@ -52,7 +52,6 @@ class Programacion extends ModelHelper
     public function getSalida(): ?\Carbon\Carbon
     {
         return $this->tramoPrecios
-            ->where('origen_terminal_id', $this->viaje->origen_terminal_id)
             ->map(function ($tramo) {
                 return $tramo->getSalida();
             })->filter()->sort()->first();
@@ -61,7 +60,6 @@ class Programacion extends ModelHelper
     public function getLlegada(): ?\Carbon\Carbon
     {
         return $this->tramoPrecios
-            ->where('destino_terminal_id', $this->viaje->destino_terminal_id)
             ->map(function ($tramo) {
                 return $tramo->getLlegada();
             })->filter()->sortDesc()->first();
@@ -71,10 +69,7 @@ class Programacion extends ModelHelper
     {
         return ProgramacionTramoPrecio::query()
             ->selectRaw($campo === 'fecha_salida' ? 'DATE(programacion_tramo_precios.fecha_salida)' : 'programacion_tramo_precios.hora_salida')
-            ->join('viajes', 'viajes.origen_terminal_id', '=', 'programacion_tramo_precios.origen_terminal_id')
-            ->whereColumn('viajes.id', 'programaciones.viaje_id')
             ->whereColumn('programacion_tramo_precios.programacion_id', 'programaciones.id')
-            ->whereColumn('programacion_tramo_precios.origen_terminal_id', 'viajes.origen_terminal_id')
             ->whereNotNull('programacion_tramo_precios.fecha_salida')
             ->whereNotNull('programacion_tramo_precios.hora_salida')
             ->orderBy('programacion_tramo_precios.fecha_salida')

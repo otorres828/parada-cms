@@ -23,6 +23,8 @@ class DetailProgramacion extends Component
 
     public Collection $tickets;
 
+    public bool $canList = false;
+
     public bool $canReservasDetail = false;
 
     public bool $canViajesDetail = false;
@@ -41,6 +43,7 @@ class DetailProgramacion extends Component
         $this->programacion = $programacion;
 
         $this->tickets = Pasaje::getTickets($programacion_id);
+        $this->canList = Access::allows('programaciones', 'list');
         $this->canReservasDetail = Access::allows('reservas', 'detail');
         $this->canViajesDetail = Access::allows('viajes', 'detail');
         $this->canTransportesDetail = Access::allows('transportes', 'detail');

@@ -126,16 +126,11 @@
 
 @if ($listCupones)
     @include('components.layout.sidebar-li', [
-        'menu' => 'Promociones',
+        'menu' => 'Cupones',
         'icon' => 'nav-icon bi bi-tags',
-        'list' => [
-            [
-                'existe' => $listCupones ?? false,
-                'route' => route('empresas.cupones.list'),
-                'name' => 'Cupones',
-                'active' => request()->routeIs('empresas.cupones.*') ? 'active' : '',
-            ],
-        ],
+        'existe' => $listCupones ?? false,
+        'route' => route('empresas.cupones.list'),
+        'active' => request()->routeIs('empresas.cupones.*') ? 'active' : '',
     ])
 @endif
 

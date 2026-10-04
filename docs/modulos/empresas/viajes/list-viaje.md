@@ -1,17 +1,7 @@
 # ListViaje
 
-Listado del panel de Empresas. Clase `app/Livewire/Empresas/Viajes/ListViaje.php` y vista `livewire.empresas.viajes.list-viaje`.
+Consulta rutas de la empresa autenticada con búsqueda, estatus, ordenación y paginación. Los permisos determinan agregar, detalle, editar y cambiar estatus.
 
-## Acceso y alcance
+`changeStatus` exige el permiso editar de viajes, busca el registro dentro de la empresa, bloquea la fila durante la transacción y alterna 1 activo / 2 inactivo. No elimina la ruta ni modifica sus programaciones o reservas. Un ID de otra empresa se rechaza. Emite successEventList con la confirmación.
 
-El middleware exige el permiso `viajes/list`. En `mount` se resuelven los permisos de presentación con `PermissionsEmpresa`. Las acciones de descarga o escritura vuelven a autorizarse en el servidor.
-
-La consulta obtiene `empresa_id` del usuario autenticado en el guard `empresa` en cada ejecución. No existe un selector ni una propiedad pública para elegir otra empresa. Los listados utilizan `searchAdmin`; los reportes utilizan consultas agregadas del modelo Reserva con el mismo alcance obligatorio.
-
-## Funcionamiento
-
-Búsqueda y estado; muestra los tramos y tarifas de las rutas.
-
-Los cambios de filtros reinician la página. La paginación limita cada página a 100 registros. Los módulos con fechas inician con la última semana y utilizan la normalización de fechas del modelo.
-
-La vista conserva el encabezado, filtros y paginación del panel; la tabla está definida en su propia vista de Empresas, independiente de Admin. Solo se reutilizan elementos básicos de presentación como buscadores, botones, montos y contenedores. En Empresas no se muestra la columna Empresa ni se generan enlaces a rutas de detalle o edición que todavía no existen. Los formularios y detalles se implementarán por separado.
+El middleware exige viajes/list y PermissionsEmpresa resuelve los permisos visuales en mount. Cada consulta toma empresa_id del usuario autenticado; no hay selector empresarial. Los cambios de filtros reinician la página y cada página limita sus registros a 100. La vista utiliza su propia tabla empresarial y los componentes básicos compartidos; permite navegar al detalle o formulario según permisos.

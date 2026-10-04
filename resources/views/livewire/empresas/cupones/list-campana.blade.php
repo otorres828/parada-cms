@@ -41,47 +41,29 @@
 
         <x-slot:group>
 
-        </x-slot:group>
+            <select id="listCampana-status" class="form-select" style="width: 180px; max-width: 100%;" wire:model.live="status" aria-label="Filtrar por estado">
 
-    </x-list.actions>
-
-    <div class="row g-3 mb-3">
-
-        <div class="col-md-3">
-
-            <label class="form-label" for="listCampana-status">
-                Estado
-            </label>
-
-            <select id="listCampana-status" class="form-select" wire:model.live="status">
-
-                <option value="">Todos</option>
+                <option value="">Todos los estados</option>
                 <option value="1">Activo</option>
                 <option value="2">Inactivo</option>
 
             </select>
 
-        </div>
+            <div class="d-flex align-items-center gap-2">
 
-        <div class="col-md-3">
+                <input id="listCampana-from" type="date" class="form-control" style="width: 160px;" wire:model.live="date_from" aria-label="Fecha inicial"
+                    min="{{ $this->getMinFilterDate() }}" max="{{ $this->getMaxFilterDate() }}">
 
-            <label class="form-label" for="listCampana-from">
-                Desde
-            </label>
-            <input id="listCampana-from" type="date" class="form-control" wire:model.live="date_from"
-                min="{{ $this->getMinFilterDate() }}" max="{{ $this->getMaxFilterDate() }}">
-        </div>
+                <span class="text-body-secondary" aria-hidden="true">a</span>
 
-        <div class="col-md-3">
+                <input id="listCampana-to" type="date" class="form-control" style="width: 160px;" wire:model.live="date_to" aria-label="Fecha final"
+                    min="{{ $this->getMinFilterDate() }}" max="{{ $this->getMaxFilterDate() }}">
 
-            <label class="form-label" for="listCampana-to">
-                Hasta
-            </label>
-            <input id="listCampana-to" type="date" class="form-control" wire:model.live="date_to"
-                min="{{ $this->getMinFilterDate() }}" max="{{ $this->getMaxFilterDate() }}">
-        </div>
+            </div>
 
-    </div>
+        </x-slot:group>
+
+    </x-list.actions>
 
     <x-list.table>
 
