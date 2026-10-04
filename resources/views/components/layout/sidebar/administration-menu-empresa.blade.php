@@ -32,6 +32,7 @@
                 'route' => route('empresas.politicas-embarque.edit'),
                 'name' => 'Políticas de embarque',
                 'active' => request()->routeIs('empresas.politicas-embarque.*') ? 'active' : '',
+                'navigate' => false,
             ],
             [
                 'existe' => $listDatosBancarios,

@@ -48,6 +48,7 @@
                     :view-tasa-servicio="$viewTasaServicio"
                     :show-empresa="false"
                     route-viaje="empresas.viajes.detail"
+                    route-transporte="empresas.transportes.detail"
                 />
 
             </div>

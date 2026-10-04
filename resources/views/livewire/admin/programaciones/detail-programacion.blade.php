@@ -46,6 +46,7 @@
                     :can-viajes-detail="$canViajesDetail" 
                     :can-transportes-detail="$canTransportesDetail" 
                     route-viaje="admin.viajes.detail"
+                    route-transporte="admin.transportes.detail"
                 />
 
             </div>
