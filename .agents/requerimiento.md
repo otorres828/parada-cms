@@ -58,7 +58,7 @@ Define el recorrido físico y la secuencia lógica de las Rodandos mediante una 
 Se **elimina** la columna `precio_pasaje`, ya que el precio deja de ser una propiedad global del viaje y pasa a depender de los terminales seleccionados.
 
 ### 3. Nueva Tabla: `programacion_tramo_precios`
-Es la matriz O&D. Vincula cada programación con todas sus combinaciones posibles de terminales, asignando su precio específico y un tope opcional de asientos (`asientos_maximos_permitidos` para buckets de tramos cortos).
+Es la matriz. Vincula cada programación con todas sus combinaciones posibles de terminales, asignando su precio específico y un tope opcional de asientos (`asientos_maximos_permitidos` para buckets de tramos cortos).
 * **Impacto en Eloquent:** El modelo `Programacion` tiene una relación `hasMany` con `ProgramacionTramoPrecio`.
 
 ### 4. Modificación en la Tabla: `pasajes`

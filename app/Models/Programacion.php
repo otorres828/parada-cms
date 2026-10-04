@@ -185,9 +185,9 @@ class Programacion extends ModelHelper
         return $query;
     }
 
-    public static function searchDetailViajes(int $viaje_id): Builder
+    public static function searchDetailViajes(int $viaje_id, ?int $empresaId = null): Builder
     {
-        $query = self::searchAdmin()
+        $query = self::searchAdmin('', ['empresa_id' => $empresaId])
             ->where('viaje_id', $viaje_id)
             ->withCount(['pasajes as pasajes_vendidos' => fn ($q) => $q->where('reservas.estado_pago', Reserva::ESTADO_PAGO_PAGADO)])
             ->withCount(['pasajes as pasajes_pendientes' => fn ($q) => $q->where('reservas.estado_pago', Reserva::ESTADO_PAGO_PENDIENTE)])

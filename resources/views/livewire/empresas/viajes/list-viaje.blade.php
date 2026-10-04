@@ -114,8 +114,13 @@
                     <td class="text-end">
 
                         <x-list.button-group>
+
+                            @if ($canDetail)
+                                <x-list.view-button :route="route('empresas.viajes.detail', ['viaje_id' => $viaje->id])" :target="false" />
+                            @endif
+
                             @if ($canEdit)
-                                <a class="btn btn-outline-secondary btn-sm" href="{{ route('empresas.viajes.edit', $viaje->id) }}" wire:navigate aria-label="Editar ruta"><i class="bi bi-pencil" aria-hidden="true"></i></a>
+                                <x-list.edit-button :route="route('empresas.viajes.edit', $viaje->id)" :target="false" />
                             @endif
 
 

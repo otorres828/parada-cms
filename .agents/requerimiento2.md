@@ -75,7 +75,7 @@ Para resolver esto, atomizaremos la lógica del recorrido. A continuación se de
 * **Impacto en el Modelo (`Programacion.php`):** Deja de manejar atributos de precios directos.
 
 ### 3. Nueva Tabla: `programacion_tramo_precios`
-* **Qué se hace:** Se crea la matriz O&D vinculando cada programación con todas sus combinaciones de terminales posibles, su precio específico y su tope de asientos (*bucket*).
+* **Qué se hace:** Se crea la matriz vinculando cada programación con todas sus combinaciones de terminales posibles, su precio específico y su tope de asientos (*bucket*).
 * **Por qué se hace:** Permite definir de forma independiente que São Paulo-Registro cuesta R\$ 60 y São Paulo-Curitiba cuesta R\$ 110 en una fecha específica.
 * **Impacto en el Modelo (`Programacion.php`):** Se añade una relación `hasMany` hacia `ProgramacionTramoPrecio`.
 

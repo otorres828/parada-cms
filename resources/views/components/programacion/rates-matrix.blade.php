@@ -3,7 +3,7 @@
 <div class="card h-100">
     <div class="card-header fw-semibold">
         <i class="bi bi-tags me-1" aria-hidden="true"></i>
-        Matriz O&D de Precios Configurados (Salida #{{ $programacion->id }})
+        Matriz de Precios por Trayecto (Salida #{{ $programacion->id }})
     </div>
 
     <div class="card-body">

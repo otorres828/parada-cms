@@ -2,7 +2,7 @@
     TABLA DE PROGRAMACIONES DE RUTA | Presenta el historial de salidas y sus ventas.
 --}}
 
-@props(['programaciones', 'canViewPassengers'])
+@props(['programaciones', 'canViewPassengers','viewTasaServicio'=>true])
 
 <table class="table align-middle mb-0">
 
@@ -17,7 +17,11 @@
 
             <th>Pasajes vendidos</th>
 
-            <th>Tasas de servicio</th>
+            @if ($viewTasaServicio)
+
+                <th>Tasas de servicio</th>
+                
+            @endif
 
         </tr>
     </thead>
@@ -49,9 +53,13 @@
                     {{ $salida->pasajes_vendidos }}
                 </td>
 
-                <td>
-                    <x-money.dual :usd="$salida->tasas_servicio_total" :bs="$salida->tasas_servicio_total_bs" />
-                </td>
+                @if ($viewTasaServicio)
+                    
+                    <td>
+                        <x-money.dual :usd="$salida->tasas_servicio_total" :bs="$salida->tasas_servicio_total_bs" />
+                    </td>
+                    
+                @endif
 
             </tr>
 

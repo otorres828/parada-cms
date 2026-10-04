@@ -130,3 +130,20 @@ foreach ($seedEmpresa->viajes as $rutaSeed) {
     $check($rutaSeed->tramos->every(function ($tramo) { return $tramo->precio !== null; }));
 }
 echo "Seeder de rutas: todas las combinaciones con precio y secuencia válida OK\n";
+
+$detalle = new App\Livewire\Empresas\Viajes\DetailViaje;
+$detalle->boot();
+$detalle->mount($ruta->id);
+$check($detalle->findViaje()->id === $ruta->id);
+$check($detalle->render()->getData()['programaciones']->total() === 1);
+$detalle->viaje_id = $seedEmpresa->viajes->first()->id;
+$reject(function () use ($detalle) { $detalle->findViaje(); }, ModelNotFoundException::class);
+$reject(function () use ($detalle) { $detalle->render(); }, ModelNotFoundException::class);
+$html = Livewire\Livewire::mount(App\Livewire\Empresas\Viajes\DetailViaje::class, ['viaje_id' => $ruta->id]);
+$check(str_contains($html, 'Precios base por trayecto'));
+$check(str_contains($html, '/empresa/operaciones/programaciones/detalle/'));
+$check(! str_contains($html, '/admin/programaciones/'));
+$adminDetalle = new App\Livewire\Admin\Viajes\DetailViaje;
+$adminDetalle->viaje_id = $ruta->id;
+$check($adminDetalle->findViaje()->tramos->count() === 10);
+echo "DetailViaje: findViaje Admin/Empresas, aislamiento, historial paginado y vista empresarial OK\n";

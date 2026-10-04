@@ -34,6 +34,7 @@
                     :pasajes-pendientes="$pasajesPendientes"
                     :can-viajes-detail="$canViajesDetail" 
                     :can-transportes-detail="$canTransportesDetail" 
+                    route-viaje="admin.viajes.detail"
                 />
 
             </div>

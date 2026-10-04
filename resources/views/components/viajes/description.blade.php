@@ -2,31 +2,39 @@
     DESCRIPCIÓN DE RUTA | Presenta datos generales, estado y secuencia de paradas.
 --}}
 
-@props(['viaje'])
+@props(['viaje', 'showEmpresa' => true])
 
 <div class="card-body">
 
     <dl class="row mb-0">
-        <dt class="col-sm-4">Empresa</dt>
-        <dd class="col-sm-8">
-            {{ $viaje->empresa?->nombre ?? '—' }}
-        </dd>
+
+        @if ($showEmpresa)
+            <dt class="col-sm-4">Empresa</dt>
+            <dd class="col-sm-8">
+                {{ $viaje->empresa?->nombre ?? '—' }}
+            </dd>
+        @endif
+
         <dt class="col-sm-4">Origen Principal</dt>
         <dd class="col-sm-8">
             {{ $viaje->origenTerminal?->nombre ?? '—' }}
         </dd>
+
         <dt class="col-sm-4">Destino Principal</dt>
         <dd class="col-sm-8">
             {{ $viaje->destinoTerminal?->nombre ?? '—' }}
         </dd>
+
         <dt class="col-sm-4">Duración Total</dt>
         <dd class="col-sm-8">
             {{ $viaje->duracion_estimada ?? '—' }}
         </dd>
+
         <dt class="col-sm-4">Estado Ruta</dt>
         <dd class="col-sm-8">
             <x-list.status-badge :status="$viaje->estatus" />
         </dd>
+        
     </dl>
 
     <div x-data="{ modoDetallado: false }"

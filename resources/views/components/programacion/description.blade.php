@@ -7,6 +7,7 @@
     'canTransportesDetail',
     'viewTasaServicio'=>true,
     'showEmpresa'=>true,
+    'routeViaje'
 ])
 
 <div class="card h-100">
@@ -23,7 +24,7 @@
             <dt class="col-sm-4">Ruta Principal</dt>
             <dd class="col-sm-8">
                 @if ($canViajesDetail && $programacion->viaje_id)
-                    <a href="{{ route('admin.viajes.detail', $programacion->viaje_id) }}" wire:navigate
+                    <a href="{{ route($routeViaje, $programacion->viaje_id) }}" wire:navigate
                         class="fw-bold text-decoration-none">
                         {{ $programacion->viaje?->origenTerminal?->nombre ?? '—' }} →
                         {{ $programacion->viaje?->destinoTerminal?->nombre ?? '—' }}

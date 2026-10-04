@@ -10,7 +10,7 @@
     - <x-form.cancel-button />: Enlace para regresar al listado anterior.
     - <x-layout.loader.fullpage />: Indicador global durante operaciones de Livewire.
     - <x-list.heading />: Cabecera del módulo con título y acciones.
-    - <x-viajes.description />: Ficha descriptiva de la ruta y sus Rodandos.
+    - <x-empresas.viajes.description />: Ficha descriptiva de la ruta y sus paradas.
     - <x-viajes.programaciones-table />: Historial de programaciones de la ruta.
     - <x-viajes.tramo-precios-table />: Matriz de precios por origen y destino.
     --------------------------------------------------------------------------
@@ -29,13 +29,15 @@
 
         </x-slot:title>
 
+        @if ($canList)
         <x-slot:button>
 
-            <x-form.cancel-button :link="route('admin.viajes.list')">
+            <x-form.cancel-button :link="route('empresas.viajes.list')">
                 Volver al listado
             </x-form.cancel-button>
 
         </x-slot:button>
+        @endif
 
     </x-list.heading>
 
@@ -43,28 +45,28 @@
 
         <div class="row g-3">
 
-            {{-- Columna Izquierda: Información de la Ruta e Itinerario de Rodandos --}}
+            {{-- Columna Izquierda: Información de la Ruta e Itinerario de paradas --}}
             <div class="col-md-6">
 
                 <div class="card h-100">
 
                     <div class="card-header fw-semibold">
-                        <i class="bi bi-info-circle me-1" aria-hidden="true"></i> Información & Secuencia de Rodandos
+                        <i class="bi bi-info-circle me-1" aria-hidden="true"></i> Información & Secuencia de paradas
                     </div>
 
-                    <x-viajes.description :viaje="$viaje" />
+                    <x-viajes.description :viaje="$viaje" :show-empresa="false" />
 
                 </div>
 
             </div>
 
-            {{-- Columna Derecha: Precios base por trayecto --}}
+            {{-- Columna Derecha: Matriz de Precios por Trayecto --}}
             <div class="col-md-6">
 
                 <div class="card h-100">
 
                     <div class="card-header fw-semibold">
-                        <i class="bi bi-tags me-1" aria-hidden="true"></i> Precios base por trayecto
+                        <i class="bi bi-tags me-1" aria-hidden="true"></i> Matriz de Precios por Trayecto
                     </div>
 
                     <div class="card-body">
@@ -83,9 +85,9 @@
                         @else
 
                             <div class="text-body-secondary py-3 text-center">
-                                No s
-                                e han configurado tramos con precios base para esta ruta.
+                                No se han configurado tramos con precios base para esta ruta.
                             </div>
+
                         @endif
 
                     </div>
@@ -109,6 +111,7 @@
             <x-viajes.programaciones-table 
                 :programaciones="$programaciones" 
                 :can-view-passengers="$canViewPassengers" 
+                :view-tasa-servicio="$viewTasaServicio" 
             />
 
         </div>
@@ -132,7 +135,7 @@
                     Livewire.on('successEventList', data => this.$store.toast.success(data.message)),
                     Livewire.on('errorEventList', data => this.$store.toast.info(data.message)),
                 ];
-                const savedMessage = @js(session()->pull('admin_success'));
+                const savedMessage = @js(session()->pull('empresa_success'));
                 if (savedMessage) this.$nextTick(() => Livewire.dispatch('successEventList', {
                     message: savedMessage
                 }));

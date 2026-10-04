@@ -35,18 +35,19 @@ class DetailViaje extends Component
     public function mount(?int $viaje_id = null): void
     {
         $this->viaje_id = $viaje_id;
-        $viaje = Viaje::searchAdmin()->with([
+        $this->viaje = $this->findViaje();
+        $this->canViewPassengers = Access::allows('programaciones', 'detail');
+    }
+
+    public function findViaje(): Viaje
+    {
+        return Viaje::searchAdmin()->with([
             'empresa',
             'origenTerminal',
             'destinoTerminal',
             'tramos.origenTerminal',
             'tramos.destinoTerminal',
-        ])->find($viaje_id);
-        if (! $viaje) {
-            abort(404);
-        }
-        $this->viaje = $viaje;
-        $this->canViewPassengers = Access::allows('programaciones', 'detail');
+        ])->findOrFail($this->viaje_id);
     }
 
     public function render()

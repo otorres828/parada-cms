@@ -29,26 +29,36 @@
             </button>
         </div>
         @error('terminalId') <div class="text-danger small mb-3">{{ $message }}</div> @enderror
+        <p class="small text-muted mb-3">La duración en minutos corresponde al recorrido desde la parada anterior.</p>
         <ol class="list-unstyled mb-0">
             @foreach ($paradas as $indice => $terminalId)
                 <li class="border-start border-primary border-3 ps-3 pb-3" wire:key="viaje-parada-{{ $terminalId }}">
-                    <div class="d-flex justify-content-between align-items-center gap-2">
-                        <div>
+                    <div class="d-flex flex-wrap justify-content-between align-items-center gap-3">
+                        <div class="flex-grow-1" style="min-width: 0;">
                             <span class="badge bg-primary rounded-pill me-1">{{ chr(65 + $indice) }}</span>
                             <strong>{{ $terminales->get($terminalId)?->nombre ?? 'Terminal no disponible' }}</strong>
                             <div class="small text-muted mt-1">{{ $indice === 0 ? 'Origen' : ($loop->last ? 'Destino final' : 'Parada intermedia') }}</div>
                         </div>
-                        @if ($indice > 0 && $viajeId === null)
-                            <button type="button" class="btn btn-sm btn-outline-danger" wire:click="removerParada({{ $indice }})" wire:loading.attr="disabled" aria-label="Retirar parada">
-                                <i class="bi bi-x-lg" aria-hidden="true"></i>
-                            </button>
+                        @if ($indice > 0)
+                            @php($clave = $paradas[$indice - 1].'-'.$terminalId)
+                            <div class="d-flex align-items-center gap-2 ms-auto">
+                                <div style="width: 120px;">
+                                    <label class="visually-hidden" for="duracion-{{ $clave }}">Minutos desde la parada anterior</label>
+                                    <div class="input-group input-group-sm">
+                                        <input id="duracion-{{ $clave }}" class="form-control text-center" type="number" min="1" max="1440" step="1" wire:model="minutos.{{ $clave }}" title="Duración desde la parada anterior" required>
+                                        <span class="input-group-text">min</span>
+                                    </div>
+                                </div>
+                                @if ($viajeId === null)
+                                    <button type="button" class="btn btn-sm btn-outline-danger" wire:click="removerParada({{ $indice }})" wire:loading.attr="disabled" aria-label="Retirar parada">
+                                        <i class="bi bi-x-lg" aria-hidden="true"></i>
+                                    </button>
+                                @endif
+                            </div>
                         @endif
                     </div>
                     @if ($indice > 0)
-                        @php($clave = $paradas[$indice - 1].'-'.$terminalId)
-                        <label class="form-label small mt-2" for="duracion-{{ $clave }}">Minutos desde la parada anterior</label>
-                        <input id="duracion-{{ $clave }}" class="form-control form-control-sm" type="number" min="1" max="1440" step="1" wire:model="minutos.{{ $clave }}" required>
-                        @error('minutos.'.$clave) <div class="text-danger small">{{ $message }}</div> @enderror
+                        @error('minutos.'.$clave) <div class="text-danger small mt-1">{{ $message }}</div> @enderror
                     @endif
                 </li>
             @endforeach

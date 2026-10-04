@@ -36,6 +36,7 @@
                     :can-transportes-detail="$canTransportesDetail" 
                     :view-tasa-servicio="$viewTasaServicio"
                     :show-empresa="false"
+                    route-viaje="empresas.viajes.detail"
                 />
 
             </div>
