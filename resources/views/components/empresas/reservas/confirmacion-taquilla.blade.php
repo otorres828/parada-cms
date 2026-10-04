@@ -67,10 +67,6 @@
                     <span class="text-muted">Tasa de servicio</span>
                     <span class="text-end">USD 0.00 / BS 0,00</span>
                 </div>
-                <div class="d-flex justify-content-between gap-3 mb-3">
-                    <span class="text-muted">Pagos agregados</span>
-                    <span class="text-end">USD {{ number_format($abonado, 2) }} / BS {{ number_format($abonado * (float) $cambio?->valor_usd, 2, ',', '.') }}</span>
-                </div>
                 <div class="d-flex justify-content-between align-items-center gap-3 border-top pt-3">
                     <strong class="text-dark">Total de la reserva</strong>
                     <div class="text-end">
