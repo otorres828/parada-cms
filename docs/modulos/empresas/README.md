@@ -43,3 +43,5 @@ Los grupos siguen el orden del catálogo empresarial. La clase asigna los boolea
 - [Alta y edición de programaciones](programaciones/save-programacion.md).
 
 - [Alta de transportes](transportes/save-transporte.md).
+
+- [Políticas de embarque y desembarque](politicas-embarque/save-politica-embarque.md).
