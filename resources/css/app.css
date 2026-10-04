@@ -12,6 +12,7 @@
 @import './custom/components/buttons.css';
 @import './custom/components/nav-pills.css';
 @import './custom/components/pagination.css';
+@import './custom/components/panel-venta.css';
 @import './custom/utilities/swal.css';
 @import './custom/utilities/toast.css';
 
@@ -27,4 +28,3 @@
 
 
 @variant dark (&:where(.dark, .dark *));
-

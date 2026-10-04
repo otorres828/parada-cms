@@ -1,0 +1,22 @@
+.panel-venta-scroll {
+    scrollbar-width: thin;
+    scrollbar-color: #adb5bd transparent;
+}
+
+.panel-venta-scroll::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+.panel-venta-scroll::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.panel-venta-scroll::-webkit-scrollbar-thumb {
+    background: #adb5bd;
+    border-radius: 6px;
+}
+
+.panel-venta-scroll::-webkit-scrollbar-thumb:hover {
+    background: #868e96;
+}

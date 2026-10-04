@@ -14,7 +14,7 @@
                 </div>
                 <div class="col-md-6">
                     <label class="form-label" for="taquilla-comprador-telefono">Teléfono</label>
-                    <input id="taquilla-comprador-telefono" form="registrar-taquilla" type="tel" class="form-control" wire:model="comprador.telefono" required maxlength="255">
+                    <input id="taquilla-comprador-telefono" form="registrar-taquilla" type="tel" class="form-control" wire:model="comprador.telefono" required maxlength="255" onkeypress="return /^[0-9+\-\s]+$/.test(event.key)">
                 </div>
                 <div class="col-md-6">
                     <label class="form-label" for="taquilla-comprador-email">Correo electrónico (opcional)</label>
