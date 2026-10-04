@@ -21,6 +21,8 @@ Las rutas mencionadas en el texto son relativas a la raíz del repositorio. Las 
 
 - Separar `List*`, `Save*` y `Detail*` cuando existan esas pantallas. No crear un CRUD completo si el módulo solo necesita consulta.
 - Clases en `app/Livewire/{Panel}/{Modulo}`, vistas en `resources/views/livewire/{panel}/{modulo}` y componentes del dominio en `resources/views/components/{modulo}`.
+- Ordenar los métodos en todas las clases con `mount` seguido inmediatamente por `render`; en `Save*`, colocar `save` inmediatamente después de `render`. Hooks y auxiliares van después.
+- En edición, `mount` consulta el modelo y lo pasa a `editar(Modelo $modelo)`; las asignaciones pertenecen a `editar`, siguiendo `SaveAdmin`.
 - Tipar las propiedades propias de las clases y los métodos cuando su contrato esté definido. Respetar los tipos exigidos por Laravel/Livewire en propiedades heredadas.
 - Usar 4 espacios, UTF-8, finales LF y salto final conforme a `.editorconfig`. Mantener bloques espaciados y legibles, sin líneas vacías repetidas ni espacios al final.
 - Validaciones y arrays de datos: un atributo y su valor por línea. Consultas largas: métodos en el modelo correspondiente. En callbacks PHP de consultas usar `function ($query) { ... }`, con llaves, en lugar de `fn`.

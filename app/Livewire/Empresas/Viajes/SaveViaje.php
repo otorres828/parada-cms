@@ -42,21 +42,7 @@ class SaveViaje extends EmpresaComponent
     {
         $this->canList = $this->usuarioEmpresa->hasPermission('viajes', 'list');
         if ($viaje_id !== null) {
-            $viaje = Viaje::where('empresa_id', $this->usuarioEmpresa->empresa_id)->with('tramos')->findOrFail($viaje_id);
-            $this->viajeId = $viaje->id;
-            $this->origenId = (string) $viaje->origen_terminal_id;
-            $this->paradas = $viaje->secuenciaTerminales();
-            $this->comentario = $viaje->comentario ?? '';
-            $this->estatus = (int) $viaje->estatus;
-            foreach ($viaje->tramos as $tramo) {
-                $clave = $tramo->origen_terminal_id.'-'.$tramo->destino_terminal_id;
-                $this->precios[$clave] = $tramo->precio ?? '';
-                if ($viaje->tramosConsecutivos()->contains('id', $tramo->id)) {
-                    [$horas, $minutos] = explode(':', $tramo->duracion_estimada ?? '00:00:00');
-                    $this->minutos[$clave] = (int) $horas * 60 + (int) $minutos;
-                }
-            }
-            $this->sincronizarTramos();
+            $this->editar(Viaje::where('empresa_id', $this->usuarioEmpresa->empresa_id)->with('tramos')->findOrFail($viaje_id));
         }
     }
 
@@ -71,6 +57,24 @@ class SaveViaje extends EmpresaComponent
             'terminalesParada' => $this->estadoParadaId === '' ? $terminales : $terminales->where('estado_id', $this->estadoParadaId),
             'combinaciones' => Viaje::combinaciones($this->paradas),
         ]);
+    }
+
+    public function save()
+    {
+        Access::authorize('viajes', $this->viajeId === null ? 'add' : 'edit');
+        Viaje::exigir($this->origenId !== '' && (int) $this->origenId === (int) ($this->paradas[0] ?? 0), 'origenId', 'Selecciona el terminal de origen antes de guardar.');
+        ViajeService::guardar($this->usuarioEmpresa, $this->viajeId, $this->paradas, $this->precios, $this->minutos, $this->comentario, $this->estatus);
+        session()->flash('empresa_success', 'Ruta de viaje guardada correctamente.');
+
+        if ($this->canList) {
+            return $this->redirect(route('empresas.viajes.list'), navigate: true);
+        }
+        $this->dispatch('successEventList', message: 'Ruta de viaje guardada correctamente.');
+        if ($this->viajeId === null) {
+            $this->reset('origenId', 'terminalId', 'estadoOrigenId', 'estadoParadaId', 'paradas', 'precios', 'minutos', 'comentario', 'estatus');
+        }
+
+        return null;
     }
 
     public function updatedEstadoOrigenId(): void
@@ -150,21 +154,22 @@ class SaveViaje extends EmpresaComponent
         $this->minutos = $minutos;
     }
 
-    public function save()
+    protected function editar(Viaje $viaje): void
     {
-        Access::authorize('viajes', $this->viajeId === null ? 'add' : 'edit');
-        Viaje::exigir($this->origenId !== '' && (int) $this->origenId === (int) ($this->paradas[0] ?? 0), 'origenId', 'Selecciona el terminal de origen antes de guardar.');
-        ViajeService::guardar($this->usuarioEmpresa, $this->viajeId, $this->paradas, $this->precios, $this->minutos, $this->comentario, $this->estatus);
-        session()->flash('empresa_success', 'Ruta de viaje guardada correctamente.');
-
-        if ($this->canList) {
-            return $this->redirect(route('empresas.viajes.list'), navigate: true);
+        $this->viajeId = $viaje->id;
+        $this->origenId = (string) $viaje->origen_terminal_id;
+        $this->paradas = $viaje->secuenciaTerminales();
+        $this->comentario = $viaje->comentario ?? '';
+        $this->estatus = (int) $viaje->estatus;
+        foreach ($viaje->tramos as $tramo) {
+            $clave = $tramo->origen_terminal_id.'-'.$tramo->destino_terminal_id;
+            $this->precios[$clave] = $tramo->precio ?? '';
+            if ($viaje->tramosConsecutivos()->contains('id', $tramo->id)) {
+                [$horas, $minutos] = explode(':', $tramo->duracion_estimada ?? '00:00:00');
+                $this->minutos[$clave] = (int) $horas * 60 + (int) $minutos;
+            }
         }
-        $this->dispatch('successEventList', message: 'Ruta de viaje guardada correctamente.');
-        if ($this->viajeId === null) {
-            $this->reset('origenId', 'terminalId', 'estadoOrigenId', 'estadoParadaId', 'paradas', 'precios', 'minutos', 'comentario', 'estatus');
-        }
-
-        return null;
+        $this->sincronizarTramos();
+    
     }
 }

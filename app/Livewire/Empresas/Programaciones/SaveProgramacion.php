@@ -67,33 +67,7 @@ class SaveProgramacion extends EmpresaComponent
         ])->where('es_plantilla', false)->get();
 
         if ($programacion_id !== null) {
-            $programacion = $this->findProgramacion($programacion_id);
-            Programacion::exigir(in_array($programacion->estatus, [1, 2], true), 'estatus', 'Una programación finalizada no se puede editar.');
-            Programacion::exigir(! $programacion->reservas()->exists(), 'tramos', 'Esta programación tiene reservas y no puede editarse.');
-            $this->programacionId = $programacion->id;
-            $this->viajeId = (string) $programacion->viaje_id;
-            $this->transporteId = (string) $programacion->transporte_id;
-            $this->estatus = $programacion->estatus;
-            $this->fechaSalida = $programacion->getSalida()?->format('Y-m-d') ?? $this->fechaSalida;
-            $this->horaSalida = $programacion->getSalida()?->format('H:i') ?? '06:00';
-            $this->cargarTramos();
-
-            foreach ($this->tramos as &$tramo) {
-                $tramo['habilitado'] = false;
-            }
-            unset($tramo);
-            foreach ($programacion->tramoPrecios as $tramo) {
-                $clave = $tramo->origen_terminal_id.'-'.$tramo->destino_terminal_id;
-                $this->tramos[$clave] = [
-                    'habilitado' => true,
-                    'asientos_maximos_permitidos' => $tramo->asientos_maximos_permitidos ?? '',
-                    'precio' => $tramo->precio,
-                    'fecha_salida' => $tramo->fecha_salida?->format('Y-m-d') ?? '',
-                    'hora_salida' => substr($tramo->hora_salida ?? '', 0, 5),
-                    'fecha_llegada' => $tramo->fecha_llegada?->format('Y-m-d') ?? '',
-                    'hora_llegada' => substr($tramo->hora_llegada ?? '', 0, 5),
-                ];
-            }
+            $this->editar($this->findProgramacion($programacion_id));
         }
     }
 
@@ -230,5 +204,34 @@ class SaveProgramacion extends EmpresaComponent
         ];
     }
 
+    protected function editar(Programacion $programacion): void
+    {
+        Programacion::exigir(in_array($programacion->estatus, [1, 2], true), 'estatus', 'Una programación finalizada no se puede editar.');
+        Programacion::exigir(! $programacion->reservas()->exists(), 'tramos', 'Esta programación tiene reservas y no puede editarse.');
+        $this->programacionId = $programacion->id;
+        $this->viajeId = (string) $programacion->viaje_id;
+        $this->transporteId = (string) $programacion->transporte_id;
+        $this->estatus = $programacion->estatus;
+        $this->fechaSalida = $programacion->getSalida()?->format('Y-m-d') ?? $this->fechaSalida;
+        $this->horaSalida = $programacion->getSalida()?->format('H:i') ?? '06:00';
+        $this->cargarTramos();
 
+        foreach ($this->tramos as &$tramo) {
+            $tramo['habilitado'] = false;
+        }
+        unset($tramo);
+        foreach ($programacion->tramoPrecios as $tramo) {
+            $clave = $tramo->origen_terminal_id.'-'.$tramo->destino_terminal_id;
+            $this->tramos[$clave] = [
+                'habilitado' => true,
+                'asientos_maximos_permitidos' => $tramo->asientos_maximos_permitidos ?? '',
+                'precio' => $tramo->precio,
+                'fecha_salida' => $tramo->fecha_salida?->format('Y-m-d') ?? '',
+                'hora_salida' => substr($tramo->hora_salida ?? '', 0, 5),
+                'fecha_llegada' => $tramo->fecha_llegada?->format('Y-m-d') ?? '',
+                'hora_llegada' => substr($tramo->hora_llegada ?? '', 0, 5),
+            ];
+        }
+    
+    }
 }

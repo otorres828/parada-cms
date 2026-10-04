@@ -10,8 +10,9 @@ Orden habitual de la clase:
 2. Atributos Livewire, como `#[Layout('layouts.crm')]` para Admin.
 3. Traits utilizados.
 4. Propiedades tipadas, IDs protegidos y configuración de query string.
-5. `mount`, `render`, hooks de filtros y acciones públicas.
-6. Métodos auxiliares de carga, edición y validación.
+5. `mount` inmediatamente seguido por `render`: no colocar métodos entre ambos ni antes de `mount`.
+6. En clases `Save*`, `save` inmediatamente después de `render`.
+7. Después: `editar`, hooks y métodos auxiliares de carga y validación.
 
 Los IDs que fijan el registro o contexto de una pantalla usan `#[Locked]`. Eso no sustituye comprobar pertenencia y autorización. Tipar una selección vacía como `string` si el formulario usa `''`; no declarar `int` y asignarle después una cadena vacía. Colecciones y modelos se tipan con su clase real. No redefinir propiedades del framework con tipos incompatibles.
 
@@ -126,3 +127,7 @@ En Empresas, el contexto de empresa debe derivarse de la sesión autorizada y re
 El código heredado tiene propiedades sin tipar, casts booleanos de estados, autorizaciones duplicadas y formularios con `in:0,1`. Seguir el estándar del usuario para código nuevo. Los estados de pagos o programaciones tienen sus propias constantes: no aplicarles automáticamente la semántica de un catálogo.
 
 La eliminación física es una regla específica de documentos y otras entidades que así lo requieran; no generalizarla. En documentos se elimina registro y archivo, considerando que una transacción SQL no revierte el filesystem.
+
+## Asignaciones al editar
+
+Seguir SaveAdmin: mount recibe el identificador de la ruta, consulta el modelo dentro del alcance autorizado y llama a `editar($modelo)`. El método protegido `editar(Modelo $modelo): void` realiza las asignaciones de propiedades, cargas de valores y preparación del formulario. No concentrar estas asignaciones en mount ni cambiar los parámetros de ruta a model binding si el módulo usa IDs. Mantener las validaciones de pertenencia, estado e integridad.
