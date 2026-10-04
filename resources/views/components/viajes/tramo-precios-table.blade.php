@@ -1,5 +1,5 @@
 {{--
-    TABLA DE PRECIOS POR TRAMO | Renderiza la matriz O&D configurada para la salida más reciente.
+    TABLA DE PRECIOS POR TRAMO | Renderiza los precios base de las combinaciones de la ruta.
 --}}
 
 @props(['tramoPrecios', 'tipoCambio' => null])
@@ -8,8 +8,7 @@
     <thead>
         <tr>
             <th>Tramo Comercial</th>
-            <th class="text-end">Precio Configurado</th>
-            <th class="text-center">Tope Asientos</th>
+            <th class="text-end">Precio base</th>
         </tr>
     </thead>
     <tbody>
@@ -22,15 +21,10 @@
                         class="fw-semibold">{{ $tp->destinoTerminal?->nombre }}</span>
                 </td>
                 <td class="text-end text-success fw-bold">
-                    <x-money.dual :usd="$tp->precio" :bs="$tp->calcularMontoBs($tipoCambio)" />
-                </td>
-                <td class="text-center">
-                    @if ($tp->asientos_maximos_permitidos)
-                        <span
-                            class="badge text-bg-warning">{{ $tp->asientos_maximos_permitidos }}
-                            asientos</span>
+                    @if ($tp->precio !== null)
+                        <x-money.dual :usd="$tp->precio" :bs="\App\Support\ConversorMoneda::aBolivares($tp->precio, $tipoCambio)" />
                     @else
-                        <span class="badge text-bg-secondary">Sin tope (Libre)</span>
+                        <span class="text-muted fw-normal">Sin configurar</span>
                     @endif
                 </td>
             </tr>

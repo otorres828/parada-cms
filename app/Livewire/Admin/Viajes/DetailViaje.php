@@ -20,7 +20,7 @@ class DetailViaje extends Component
     #[Locked]
     public ?int $viaje_id = null;
 
-    public $canViewPassengers = false;
+    public bool $canViewPassengers = false;
 
     public Viaje $viaje;
 
@@ -41,8 +41,6 @@ class DetailViaje extends Component
             'destinoTerminal',
             'tramos.origenTerminal',
             'tramos.destinoTerminal',
-            'programaciones.tramoPrecios.origenTerminal',
-            'programaciones.tramoPrecios.destinoTerminal',
         ])->find($viaje_id);
         if (! $viaje) {
             abort(404);

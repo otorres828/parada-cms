@@ -43,3 +43,5 @@ Listing aporta búsqueda, selección y ordenación. applySort valida que la colu
 - `<x-viajes.tramo-precios-table />`
 
 [Volver al índice administrativo](../README.md).
+
+La matriz de precios utiliza exclusivamente `viaje.tramos`, con sus precios base y equivalentes en bolívares. No toma tarifas de la última programación ni presenta topes de asientos, que pertenecen a cada salida. El historial de programaciones se consulta por separado y se pagina.

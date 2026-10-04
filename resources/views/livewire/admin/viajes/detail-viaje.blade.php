@@ -2,8 +2,8 @@
     RUTAS DE VIAJES — DETALLE
     --------------------------------------------------------------------------
     Presenta la empresa, los terminales principales y la secuencia ordenada de tramos físicos.
-    Permite alternar entre el itinerario simple y su desglose con duraciones. Muestra las tarifas
-    de una programación asociada y el historial de salidas con pasajes vendidos y tasas de
+    Permite alternar entre el itinerario simple y su desglose con duraciones. Muestra los precios base
+    de todas las combinaciones de la ruta y el historial de salidas con pasajes vendidos y tasas de
     servicio.
 
     Componentes reutilizables utilizados:
@@ -58,29 +58,25 @@
 
             </div>
 
-            {{-- Columna Derecha: Matriz Comercial de Precios por Tramo (O&D) --}}
+            {{-- Columna Derecha: Precios base por trayecto --}}
             <div class="col-md-6">
 
                 <div class="card h-100">
 
                     <div class="card-header fw-semibold">
-                        <i class="bi bi-tags me-1" aria-hidden="true"></i> Matriz Comercial de Precios por Tramo (O&D)
+                        <i class="bi bi-tags me-1" aria-hidden="true"></i> Precios base por trayecto
                     </div>
 
                     <div class="card-body">
 
-                        @php
-                            $tramoPreciosRecientes = $viaje->programaciones->first()?->tramoPrecios ?? collect();
-                        @endphp
-
-                        @if ($tramoPreciosRecientes->isNotEmpty())
+                        @if ($viaje->tramos->isNotEmpty())
                             <div class="table-responsive">
-                                <x-viajes.tramo-precios-table :tramo-precios="$tramoPreciosRecientes"
+                                <x-viajes.tramo-precios-table :tramo-precios="$viaje->tramos"
                                     :tipo-cambio="$tipoCambioVigente" />
                             </div>
                         @else
                             <div class="text-body-secondary py-3 text-center">
-                                No se han configurado tarifas O&D en las salidas programadas de esta ruta.
+                                No se han configurado tramos con precios base para esta ruta.
                             </div>
                         @endif
 
