@@ -36,7 +36,7 @@ class OperacionHistoricaDemoSeeder extends Seeder
         $desde = CarbonImmutable::parse((string) env('DEMO_FECHA_DESDE', '2026-01-01'))->startOfDay();
         $hasta = CarbonImmutable::parse((string) env('DEMO_FECHA_HASTA', CarbonImmutable::today()->toDateString()))->startOfDay();
 
-        if (Programacion::query()->whereDate('fecha_salida', '>=', $desde)->exists()) {
+        if (Programacion::searchAdmin('', ['date_from' => $desde->toDateString()])->exists()) {
             $this->command?->warn('La operación histórica ya fue generada. Se omite para evitar duplicados.');
 
             return;
@@ -125,8 +125,6 @@ class OperacionHistoricaDemoSeeder extends Seeder
             'id' => $programacionId,
             'viaje_id' => $viaje->id,
             'transporte_id' => $transporte->id,
-            'fecha_salida' => $fecha->toDateString(),
-            'hora_salida' => $hora,
             'asientos_totales' => $transporte->total_asientos,
             'estatus' => $esHistorica ? Programacion::ESTADO_FINALIZADO : Programacion::ESTADO_PROGRAMADO,
             'created_at' => $ahora,

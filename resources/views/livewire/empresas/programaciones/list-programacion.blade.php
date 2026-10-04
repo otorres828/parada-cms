@@ -97,11 +97,11 @@
                 <th>Destino </th>
 
                 <th>Fecha
-                    <x-list.sortable-button column="fecha_salida" :$sortColumn :$sortDirection />
+                    <x-list.sortable-button column="salida_fecha" :$sortColumn :$sortDirection />
                 </th>
 
                 <th>Hora
-                    <x-list.sortable-button column="hora_salida" :$sortColumn :$sortDirection />
+                    <x-list.sortable-button column="salida_hora" :$sortColumn :$sortDirection />
                 </th>
 
                 <th>Estado
@@ -132,11 +132,11 @@
                     </td>
 
                     <td>
-                        {{ $programacion->fecha_salida?->format('d/m/Y') ?? '—' }}
+                        {{ $programacion->getSalida()?->format('d/m/Y') ?? '—' }}
                     </td>
 
                     <td>
-                        {{ $programacion->hora_salida ?? '—' }}
+                        {{ $programacion->getSalida()?->format('H:i') ?? '—' }}
                     </td>
 
                     <td>

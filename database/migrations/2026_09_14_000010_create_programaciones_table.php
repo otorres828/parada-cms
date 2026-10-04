@@ -12,8 +12,6 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('viaje_id');
             $table->unsignedBigInteger('transporte_id');
-            $table->date('fecha_salida');
-            $table->time('hora_salida');
             $table->unsignedInteger('asientos_totales');
             $table->unsignedTinyInteger('estatus')->default(1);
             $table->timestamps();

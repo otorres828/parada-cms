@@ -61,8 +61,8 @@ foreach (['Origen', 'Destino'] as $nombre) {
 }
 $bus = Transporte::create(['empresa_id' => $empresa->id, 'modelo' => 'Bus', 'tipo_asiento' => 'Normal', 'total_asientos' => 2, 'estatus' => 1, 'es_plantilla' => false]);
 $viaje = Viaje::create(['empresa_id' => $empresa->id, 'origen_terminal_id' => $terminales[0]->id, 'destino_terminal_id' => $terminales[1]->id, 'duracion_estimada' => '01:00:00', 'estatus' => 1]);
-$programacion = Programacion::create(['viaje_id' => $viaje->id, 'transporte_id' => $bus->id, 'fecha_salida' => today()->addDay(), 'hora_salida' => '18:00:00', 'asientos_totales' => 2, 'estatus' => 1]);
-$tarifa = ProgramacionTramoPrecio::create(['programacion_id' => $programacion->id, 'origen_terminal_id' => $terminales[0]->id, 'destino_terminal_id' => $terminales[1]->id, 'precio' => '10.00']);
+$programacion = Programacion::create(['viaje_id' => $viaje->id, 'transporte_id' => $bus->id, 'asientos_totales' => 2, 'estatus' => 1]);
+$tarifa = ProgramacionTramoPrecio::create(['programacion_id' => $programacion->id, 'origen_terminal_id' => $terminales[0]->id, 'destino_terminal_id' => $terminales[1]->id, 'precio' => '10.00', 'fecha_salida' => today()->addDay(), 'hora_salida' => '18:00:00', 'fecha_llegada' => today()->addDay(), 'hora_llegada' => '19:00:00']);
 TasaServicio::create(['monto_minimo' => 0, 'monto_maximo' => null, 'cantidad' => 1, 'tipo_servicio' => 1, 'estatus' => 1]);
 $tipoCambio = TipoCambio::create(['valor_usd' => '500.00000000', 'valor_eur' => '590.00000000', 'valor' => 1]);
 $banco = DatoBancario::create(['empresa_id' => $empresa->id, 'tipo' => 1, 'banco' => 'Banco', 'nombre_titular' => 'Empresa', 'tipo_titular' => 'juridico', 'numero_documento' => 'J1', 'numero_cuenta_telefono' => '123', 'estatus' => 1]);

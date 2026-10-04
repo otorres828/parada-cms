@@ -41,8 +41,8 @@ class DetailTransporte extends Component
             'transporte_id' => $this->transporte_id,
             'historial_ventas' => true,
         ])
-            ->orderByDesc('fecha_salida')
-            ->orderByDesc('hora_salida')
+            ->orderByDesc('salida_fecha')
+            ->orderByDesc('salida_hora')
             ->orderByDesc('id')
             ->paginate(max(1, min(100, $this->per_page)));
 

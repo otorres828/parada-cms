@@ -41,8 +41,6 @@ try {
     $salida = Programacion::create([
         'viaje_id' => $ruta->id,
         'transporte_id' => $programacion->transporte_id,
-        'fecha_salida' => $reloj->copy()->subDay()->toDateString(),
-        'hora_salida' => '23:00:00',
         'asientos_totales' => 4,
         'estatus' => 1,
     ]);

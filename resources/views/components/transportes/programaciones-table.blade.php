@@ -47,7 +47,7 @@
                 </td>
 
                 <td>
-                    {{ $salida->fecha_salida->format('d/m/Y') }} {{ substr($salida->hora_salida, 0, 5) }}
+                    {{ $salida->getSalida()?->format('d/m/Y') }} {{ $salida->getSalida()?->format('H:i') }}
                 </td>
 
                 <td>

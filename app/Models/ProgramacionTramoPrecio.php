@@ -53,11 +53,6 @@ class ProgramacionTramoPrecio extends ModelHelper
             return $this->fecha_salida->copy()->setTimeFromTimeString($this->hora_salida);
         }
 
-        // Compatibilidad: la salida general solo corresponde al primer origen.
-        if ((int) $this->origen_terminal_id === (int) $this->programacion?->viaje?->origen_terminal_id) {
-            return $this->programacion->fecha_salida->copy()->setTimeFromTimeString($this->programacion->hora_salida);
-        }
-
         return null;
     }
 
@@ -83,17 +78,8 @@ class ProgramacionTramoPrecio extends ModelHelper
     {
         return self::query()
             ->whereIn('programacion_id', Programacion::paraTaquilla($empresaId, soloFuturas: false)->select('programaciones.id'))
-            ->where(function ($query) use ($fecha) {
-                $query->whereDate('fecha_salida', self::date($fecha))
-                    ->orWhere(function ($legacy) use ($fecha) {
-                        $legacy->whereNull('fecha_salida')->whereHas('programacion', function ($programacion) use ($fecha) {
-                            $programacion->whereDate('fecha_salida', self::date($fecha))
-                                ->whereHas('viaje', function ($viaje) {
-                                    $viaje->whereColumn('viajes.origen_terminal_id', 'programacion_tramo_precios.origen_terminal_id');
-                                });
-                        });
-                    });
-            })
+            ->whereDate('fecha_salida', self::date($fecha))
+            ->whereNotNull('hora_salida')
             ->with(['origenTerminal', 'destinoTerminal', 'programacion.viaje', 'programacion.transporte.amenidades'])
             ->orderBy('hora_salida')->orderBy('id');
     }

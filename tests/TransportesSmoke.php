@@ -26,10 +26,11 @@ $viajeroTransporte = App\Services\ViajeroService::agregarViajero($cliente, array
 foreach ([$bus, $carro] as $vehiculo) {
     $salida = $programacion->replicate();
     $salida->transporte_id = $vehiculo->id;
-    $salida->fecha_salida = today()->addDays(2);
     $salida->save();
     $precio = $tarifa->replicate();
     $precio->programacion_id = $salida->id;
+    $precio->fecha_salida = today()->addDays(2);
+    $precio->fecha_llegada = today()->addDays(2);
     $precio->save();
     $compra = App\Services\ReservaService::aplicarReserva($cliente, $precio->id);
     $prefix = $vehiculo->tipo_transporte === 'carro' ? 'CA' : 'AU';

@@ -37,8 +37,8 @@
 
             <dt class="col-sm-4">Fecha & Hora</dt>
             <dd class="col-sm-8">
-                {{ $programacion->fecha_salida?->format('d/m/Y') ?? '—' }} a las
-                {{ $programacion->hora_salida ? substr($programacion->hora_salida, 0, 5) : '—' }}
+                {{ $programacion->getSalida()?->format('d/m/Y') ?? '—' }} a las
+                {{ $programacion->getSalida()?->format('H:i') ?? '—' }}
             </dd>
 
             <dt class="col-sm-4">Estado</dt>

@@ -148,7 +148,7 @@ $antes = [Reserva::count(), Pasaje::count(), App\Models\PagoReserva::count()];
 $reject(function () use ($draft) {
     $draft->agregarPasajero();
 }, ValidationException::class);
-$draft->fecha = $otraSalida->fecha_salida->toDateString();
+$draft->fecha = $otraTarifa->fecha_salida->toDateString();
 $draft->origenId = (string) $otraTarifa->origen_terminal_id;
 $draft->destinoId = (string) $otraTarifa->destino_terminal_id;
 $draft->tarifaId = (string) $otraTarifa->id;
@@ -259,7 +259,7 @@ $nuevaTarifa->save();
 $formulario = new App\Livewire\Empresas\Reservas\SaveReserva;
 $formulario->boot();
 $formulario->mount();
-$formulario->fecha = $nuevaSalida->fecha_salida->toDateString();
+$formulario->fecha = $nuevaTarifa->fecha_salida->toDateString();
 $formulario->origenId = (string) $nuevaTarifa->origen_terminal_id;
 $formulario->destinoId = (string) $nuevaTarifa->destino_terminal_id;
 $formulario->tarifaId = (string) $nuevaTarifa->id;

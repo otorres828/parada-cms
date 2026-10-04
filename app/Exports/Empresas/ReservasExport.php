@@ -31,7 +31,7 @@ class ReservasExport extends DefaultValueBinder implements FromQuery, WithCustom
 
     public function query(): Builder
     {
-        return $this->consulta;
+        return $this->consulta->with('tramoPrecio');
     }
 
     public function chunkSize(): int
@@ -78,8 +78,8 @@ class ReservasExport extends DefaultValueBinder implements FromQuery, WithCustom
                 'total_bs' => (float) $reserva->calcularMontoBs($reserva->monto_total),
                 'cupon' => $reserva->cupon?->codigo,
                 'estado_pago' => $reserva->getStatusPago(),
-                'fecha_salida' => $reserva->programacion?->fecha_salida?->format('d/m/Y'),
-                'hora_salida' => $reserva->programacion?->hora_salida,
+                'fecha_salida' => $reserva->tramoPrecio?->getSalida()?->format('d/m/Y'),
+                'hora_salida' => $reserva->tramoPrecio?->getSalida()?->format('H:i:s'),
             ]);
         }else{
             $valores = array_merge($valores, 
@@ -88,8 +88,8 @@ class ReservasExport extends DefaultValueBinder implements FromQuery, WithCustom
                 'total_bs' => (float) $reserva->calcularMontoBs($totalSinTasa),
                 'cupon' => $reserva->cupon?->codigo,
                 'estado_pago' => $reserva->getStatusPago(),
-                'fecha_salida' => $reserva->programacion?->fecha_salida?->format('d/m/Y'),
-                'hora_salida' => $reserva->programacion?->hora_salida,
+                'fecha_salida' => $reserva->tramoPrecio?->getSalida()?->format('d/m/Y'),
+                'hora_salida' => $reserva->tramoPrecio?->getSalida()?->format('H:i:s'),
             ]);    
         }
         

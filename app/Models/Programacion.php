@@ -25,15 +25,13 @@ class Programacion extends ModelHelper
     protected $fillable = [
         'viaje_id',
         'transporte_id',
-        'fecha_salida',
-        'hora_salida',
         'asientos_totales',
         'estatus',
     ];
 
     protected function casts(): array
     {
-        return ['fecha_salida' => 'date', 'asientos_totales' => 'integer', 'estatus' => 'integer'];
+        return ['asientos_totales' => 'integer', 'estatus' => 'integer'];
     }
 
     public function viaje(): BelongsTo
@@ -51,6 +49,38 @@ class Programacion extends ModelHelper
         return $this->hasMany(ProgramacionTramoPrecio::class, 'programacion_id');
     }
 
+    public function getSalida(): ?\Carbon\Carbon
+    {
+        return $this->tramoPrecios
+            ->where('origen_terminal_id', $this->viaje->origen_terminal_id)
+            ->map(function ($tramo) {
+                return $tramo->getSalida();
+            })->filter()->sort()->first();
+    }
+
+    public function getLlegada(): ?\Carbon\Carbon
+    {
+        return $this->tramoPrecios
+            ->where('destino_terminal_id', $this->viaje->destino_terminal_id)
+            ->map(function ($tramo) {
+                return $tramo->getLlegada();
+            })->filter()->sortDesc()->first();
+    }
+
+    private static function consultaSalida(string $campo): Builder
+    {
+        return ProgramacionTramoPrecio::query()
+            ->select('programacion_tramo_precios.'.$campo)
+            ->join('viajes', 'viajes.id', '=', 'programaciones.viaje_id')
+            ->whereColumn('programacion_tramo_precios.programacion_id', 'programaciones.id')
+            ->whereColumn('programacion_tramo_precios.origen_terminal_id', 'viajes.origen_terminal_id')
+            ->whereNotNull('programacion_tramo_precios.fecha_salida')
+            ->whereNotNull('programacion_tramo_precios.hora_salida')
+            ->orderBy('programacion_tramo_precios.fecha_salida')
+            ->orderBy('programacion_tramo_precios.hora_salida')
+            ->limit(1);
+    }
+
     public function reservas(): HasMany
     {
         return $this->hasMany(Reserva::class, 'programacion_id');
@@ -63,7 +93,10 @@ class Programacion extends ModelHelper
 
     public static function searchAdmin(string $search = '', array $filters = []): Builder
     {
-        $query = self::query()->with([0 => 'viaje.empresa', 1 => 'viaje.origenTerminal', 2 => 'viaje.destinoTerminal', 3 => 'tramoPrecios']);
+        $query = self::query()->select('programaciones.*')->addSelect([
+            'salida_fecha' => self::consultaSalida('fecha_salida'),
+            'salida_hora' => self::consultaSalida('hora_salida'),
+        ])->with([0 => 'viaje.empresa', 1 => 'viaje.origenTerminal', 2 => 'viaje.destinoTerminal', 3 => 'tramoPrecios']);
 
         if ($search !== '') {
             $query->where(function ($query) use ($search) {
@@ -83,18 +116,18 @@ class Programacion extends ModelHelper
         }
 
         if (! empty($filters['date_from'])) {
-            $query->whereDate('programaciones.fecha_salida', '>=', self::date($filters['date_from']));
+            $query->where(self::consultaSalida('fecha_salida'), '>=', self::date($filters['date_from']));
         }
 
         if (! empty($filters['date_to'])) {
-            $query->whereDate('programaciones.fecha_salida', '<=', self::date($filters['date_to'], 'date_to'));
+            $query->where(self::consultaSalida('fecha_salida'), '<=', self::date($filters['date_to'], 'date_to'));
         }
 
         if (! empty($filters['proximas'])) {
             $from = now();
             $query->where(function ($query) use ($from) {
-                return $query->where('fecha_salida', '>', $from->toDateString())->orWhere(function ($query) use ($from) {
-                    return $query->where('fecha_salida', $from->toDateString())->where('hora_salida', '>=', $from->format('H:i:s'));
+                return $query->where(self::consultaSalida('fecha_salida'), '>', $from->toDateString())->orWhere(function ($query) use ($from) {
+                    return $query->where(self::consultaSalida('fecha_salida'), $from->toDateString())->where(self::consultaSalida('hora_salida'), '>=', $from->format('H:i:s'));
                 });
             });
         }
@@ -179,8 +212,8 @@ class Programacion extends ModelHelper
 
         self::withBolivaresTotals($query);
 
-        return $query->orderByDesc('fecha_salida')
-            ->orderByDesc('hora_salida');
+        return $query->orderByDesc('salida_fecha')
+            ->orderByDesc('salida_hora');
     }
 
     public static function upcomingForDashboard(string $dateFrom, string $dateTo, ?int $empresaId = null, string $tipoTransporte = ''): Builder
@@ -194,8 +227,8 @@ class Programacion extends ModelHelper
             $query->whereHas('transporte', function ($transporte) use ($tipoTransporte) {
                 $transporte->where('tipo_transporte', $tipoTransporte);
             });
-        })->orderBy('fecha_salida')
-            ->orderBy('hora_salida')
+        })->orderBy('salida_fecha')
+            ->orderBy('salida_hora')
             ->orderBy('id');
     }
 
@@ -213,7 +246,7 @@ class Programacion extends ModelHelper
         })->whereHas('transporte', function ($query) {
             $query->where('estatus', self::ESTADO_ACTIVE);
         })->with(['transporte', 'tramoPrecios.origenTerminal', 'tramoPrecios.destinoTerminal'])
-            ->orderBy('fecha_salida')->orderBy('hora_salida');
+            ->orderBy('salida_fecha')->orderBy('salida_hora');
     }
 
     public static function bloquear(int $programacionId): self
