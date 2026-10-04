@@ -50,6 +50,11 @@
 
         </x-slot:group>
 
+        @if ($canAdd)
+            <x-slot:button>
+                <a class="btn btn-primary" href="{{ route('empresas.viajes.add') }}" wire:navigate><i class="bi bi-plus-lg me-1" aria-hidden="true"></i> Nuevo registro</a>
+            </x-slot:button>
+        @endif
     </x-list.actions>
 
     <x-list.table>
@@ -109,6 +114,9 @@
                     <td class="text-end">
 
                         <x-list.button-group>
+                            @if ($canEdit)
+                                <a class="btn btn-outline-secondary btn-sm" href="{{ route('empresas.viajes.edit', $viaje->id) }}" wire:navigate aria-label="Editar ruta"><i class="bi bi-pencil" aria-hidden="true"></i></a>
+                            @endif
 
 
                         </x-list.button-group>

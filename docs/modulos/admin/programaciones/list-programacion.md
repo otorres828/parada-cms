@@ -57,6 +57,6 @@ Listing aporta búsqueda, selección y ordenación. applySort valida que la colu
 
 ## Regla de integridad de los tramos
 
-`viaje_tramos` describe el recorrido; `programacion_tramo_precios` conserva los terminales, precios y horarios de los trayectos vendibles de cada salida. Que ambas tablas tengan origen y destino es intencional: evita depender de los extremos de un tramo mutable y permite vender trayectos que abarcan varios segmentos. No reemplazarlos directamente por `viaje_tramo_id`.
+`viaje_tramos` describe el recorrido; `programacion_tramo_precios` conserva los terminales, precios y horarios de los trayectos vendibles de cada salida. Que ambas tablas tengan origen y destino es intencional: conserva los extremos propios de la salida frente a modificaciones de la plantilla. `viaje_tramos` ahora incluye todas las combinaciones con sus posiciones; el recorrido se reconstruye usando las consecutivas. No reemplazarlos directamente por `viaje_tramo_id`.
 
 La disponibilidad todavía depende del recorrido de la ruta, por lo que conservar estos campos no protege por sí solo frente a cambios de paradas. Consultar la [regla completa de terminales y protección del recorrido](../../../servicios/logica-horarios-tramos.md#regla-de-diseño-terminales-propios-de-cada-programación) antes de implementar ediciones o eliminaciones.

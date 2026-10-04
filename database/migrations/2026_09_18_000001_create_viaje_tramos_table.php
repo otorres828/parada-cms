@@ -14,6 +14,9 @@ return new class extends Migration
             $table->unsignedBigInteger('origen_terminal_id');
             $table->unsignedBigInteger('destino_terminal_id');
             $table->unsignedInteger('orden')->default(1);
+            $table->unsignedInteger('posicion_origen');
+            $table->unsignedInteger('posicion_destino');
+            $table->unique(['viaje_id', 'origen_terminal_id', 'destino_terminal_id'], 'viaje_tramos_trayecto_unique');
             $table->time('duracion_estimada')->nullable();
             $table->decimal('precio', 12, 2)->nullable();
             $table->timestamps();

@@ -17,6 +17,8 @@ class ViajeTramo extends ModelHelper
         'origen_terminal_id',
         'destino_terminal_id',
         'orden',
+        'posicion_origen',
+        'posicion_destino',
         'duracion_estimada',
         'precio',
     ];
@@ -25,34 +27,22 @@ class ViajeTramo extends ModelHelper
     {
         return [
             'orden' => 'integer',
+            'posicion_origen' => 'integer',
+            'posicion_destino' => 'integer',
             'precio' => 'decimal:2',
         ];
     }
 
     public static function precioBase(Viaje $viaje, int $origenId, int $destinoId): string
     {
-        $terminal = (int) $viaje->origen_terminal_id;
-        $sumando = false;
-        $total = '0.00';
+        $tramo = $viaje->tramos->first(function ($tramo) use ($origenId, $destinoId) {
+            return (int) $tramo->origen_terminal_id === $origenId
+                && (int) $tramo->destino_terminal_id === $destinoId;
+        });
+        self::exigir($tramo !== null, 'tramo', 'El trayecto no está configurado en esta ruta.');
+        self::exigir($tramo->precio !== null && bccomp($tramo->precio, '0', 2) >= 0, 'precio', 'Configura un precio base válido para el trayecto.');
 
-        foreach ($viaje->tramos as $tramo) {
-            self::exigir((int) $tramo->origen_terminal_id === $terminal, 'viaje', 'La secuencia de tramos de la ruta es inválida.');
-            $sumando = $sumando || $terminal === $origenId;
-            $terminal = (int) $tramo->destino_terminal_id;
-
-            if ($sumando) {
-                self::exigir($tramo->precio !== null && bccomp($tramo->precio, '0', 2) >= 0, 'precio', 'Configura un precio base válido para cada tramo del trayecto.');
-                $total = bcadd($total, $tramo->precio, 2);
-
-                if ($terminal === $destinoId) {
-                    return $total;
-                }
-            }
-        }
-
-        self::exigir(false, 'tramo', 'El origen y destino no forman un trayecto válido de la ruta.');
-
-        return $total;
+        return $tramo->precio;
     }
 
     public function viaje(): BelongsTo

@@ -21,6 +21,7 @@ use App\Livewire\Empresas\DatosBancarios\ListDatoBancario;
 use App\Livewire\Empresas\DatosBancarios\SaveDatoBancario;
 /* ------------------------------Rutas de viaje------------------------------------ */
 use App\Livewire\Empresas\Viajes\ListViaje;
+use App\Livewire\Empresas\Viajes\SaveViaje;
 /* ------------------------------Programaciones------------------------------------ */
 use App\Livewire\Empresas\Programaciones\ListProgramacion;
 use App\Livewire\Empresas\Programaciones\DetailProgramacion;
@@ -114,6 +115,8 @@ Route::group(['middleware' => ['auth:empresa', 'check.permisos.empresa']], funct
         Route::prefix('viajes')->name('viajes.')->group(function () {
 
             Route::livewire('/', ListViaje::class)->name('list');
+            Route::livewire('agregar', SaveViaje::class)->name('add');
+            Route::livewire('editar/{viaje_id}', SaveViaje::class)->whereNumber('viaje_id')->name('edit');
 
         });
 

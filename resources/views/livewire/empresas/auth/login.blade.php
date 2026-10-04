@@ -29,8 +29,6 @@
 
         {{-- Branding/Logo section of the AdminLTE card --}}
 
-        <x-auth.card-header />
-
         <x-auth.card-body>
 
             {{-- Instructional text with support for HTML line breaks --}}

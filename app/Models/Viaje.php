@@ -48,6 +48,56 @@ class Viaje extends ModelHelper
         return $this->hasMany(ViajeTramo::class, 'viaje_id')->orderBy('orden');
     }
 
+    public function tramosConsecutivos(): \Illuminate\Database\Eloquent\Collection
+    {
+        return $this->tramos->filter(function ($tramo) {
+            return $tramo->posicion_destino === $tramo->posicion_origen + 1;
+        })->sortBy('posicion_origen')->values();
+    }
+
+    public function secuenciaTerminales(): array
+    {
+        $terminales = [(int) $this->origen_terminal_id];
+        foreach ($this->tramosConsecutivos() as $posicion => $tramo) {
+            self::exigir(
+                $tramo->posicion_origen === $posicion
+                    && (int) $tramo->origen_terminal_id === end($terminales),
+                'viaje',
+                'La secuencia de paradas de la ruta es inválida.',
+            );
+            $terminales[] = (int) $tramo->destino_terminal_id;
+        }
+        if ($this->tramos->isEmpty()) {
+            $terminales[] = (int) $this->destino_terminal_id;
+        }
+        self::exigir(
+            end($terminales) === (int) $this->destino_terminal_id
+                && count($terminales) === count(array_unique($terminales)),
+            'viaje',
+            'El recorrido debe tener terminales distintos y un destino final coherente.',
+        );
+
+        return $terminales;
+    }
+
+    public static function combinaciones(array $paradas): array
+    {
+        $combinaciones = [];
+        for ($origen = 0; $origen < count($paradas) - 1; $origen++) {
+            for ($destino = $origen + 1; $destino < count($paradas); $destino++) {
+                $combinaciones[] = [
+                    'clave' => $paradas[$origen].'-'.$paradas[$destino],
+                    'origen_terminal_id' => (int) $paradas[$origen],
+                    'destino_terminal_id' => (int) $paradas[$destino],
+                    'posicion_origen' => $origen,
+                    'posicion_destino' => $destino,
+                ];
+            }
+        }
+
+        return $combinaciones;
+    }
+
     public function programaciones(): HasMany
     {
         return $this->hasMany(Programacion::class, 'viaje_id');

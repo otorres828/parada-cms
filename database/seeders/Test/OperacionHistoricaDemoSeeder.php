@@ -132,13 +132,13 @@ class OperacionHistoricaDemoSeeder extends Seeder
         ];
 
         $terminales = collect([$viaje->origen_terminal_id])
-            ->merge($viaje->tramos->sortBy('orden')->pluck('destino_terminal_id'))
+            ->merge($viaje->tramosConsecutivos()->pluck('destino_terminal_id'))
             ->unique()
             ->values();
         // Un horario por terminal de esta programación; los O&D comparten sus extremos.
         $instante = $fecha->setTimeFromTimeString($hora);
         $horarios = [$viaje->origen_terminal_id => $instante];
-        foreach ($viaje->tramos->sortBy('orden') as $tramo) {
+        foreach ($viaje->tramosConsecutivos() as $tramo) {
             [$horas, $minutos, $segundos] = array_map('intval', explode(':', $tramo->duracion_estimada ?? '01:30:00'));
             $instante = $instante->addSeconds($horas * 3600 + $minutos * 60 + $segundos);
             $horarios[$tramo->destino_terminal_id] = $instante;

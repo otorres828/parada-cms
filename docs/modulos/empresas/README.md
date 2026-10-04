@@ -33,3 +33,5 @@ Los grupos siguen el orden del catálogo empresarial. La clase asigna los boolea
 
 - [Datos Bancarios: listado](datos-bancarios/list-dato-bancario.md)
 - [Datos Bancarios: formulario](datos-bancarios/save-dato-bancario.md)
+
+- [Alta y edición de rutas](viajes/save-viaje.md)

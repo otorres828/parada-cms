@@ -35,6 +35,8 @@ try {
             'origen_terminal_id' => $extremos[0],
             'destino_terminal_id' => $extremos[1],
             'orden' => $orden + 1,
+            'posicion_origen' => $orden,
+            'posicion_destino' => $orden + 1,
             'duracion_estimada' => '01:30:00',
         ]);
     }
@@ -122,10 +124,20 @@ try {
     $primerTramoRuta->update(['precio' => '10.25']);
     $ultimoTramoRuta->update(['precio' => '5.50']);
     $ruta->unsetRelation('tramos');
-    $check(ViajeTramo::precioBase($ruta, $terminales[0]->id, $terminales[1]->id) === '15.75');
+    $completo = ViajeTramo::create([
+        'viaje_id' => $ruta->id,
+        'origen_terminal_id' => $terminales[0]->id,
+        'destino_terminal_id' => $terminales[1]->id,
+        'posicion_origen' => 0,
+        'posicion_destino' => 2,
+        'orden' => 3,
+        'precio' => '12.00',
+    ]);
+    $ruta->unsetRelation('tramos');
+    $check(ViajeTramo::precioBase($ruta, $terminales[0]->id, $terminales[1]->id) === '12.00');
     $check(ViajeTramo::precioBase($ruta, $intermedia->id, $terminales[1]->id) === '5.50');
     $check($tramo->fresh()->precio === '10.00');
-    $ultimoTramoRuta->update(['precio' => null]);
+    $completo->update(['precio' => null]);
     $ruta->unsetRelation('tramos');
     $reject(function () use ($ruta, $terminales) {
         ViajeTramo::precioBase($ruta, $terminales[0]->id, $terminales[1]->id);

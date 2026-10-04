@@ -26,6 +26,8 @@ class CheckPermissionEmpresa
         
         // Rutas de viajes
         'empresas.viajes.list' => ['viajes', 'list'],
+        'empresas.viajes.add' => ['viajes', 'add'],
+        'empresas.viajes.edit' => ['viajes', 'edit'],
 
         // Programaciones
         'empresas.programaciones.list' => ['programaciones', 'list'],

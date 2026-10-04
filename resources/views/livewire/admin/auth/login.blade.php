@@ -7,7 +7,6 @@
     Componentes reutilizables utilizados:
     - <x-layout.spinner />: Indicador general de procesamiento.
     - <x-auth.card />: Tarjeta contenedora del formulario de acceso.
-    - <x-auth.card-header />: Cabecera e identidad visual del acceso.
     - <x-auth.card-body />: Cuerpo de la tarjeta de acceso.
     - <x-auth.card-title />: Título e indicaciones del formulario de acceso.
     - <x-auth.username-input />: Campo del nombre de usuario para iniciar sesión.
@@ -28,8 +27,6 @@
     <x-auth.card>
 
         {{-- Branding/Logo section of the AdminLTE card --}}
-
-        <x-auth.card-header />
 
         <x-auth.card-body>
 

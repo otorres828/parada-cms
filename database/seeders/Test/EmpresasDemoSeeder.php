@@ -157,7 +157,7 @@ class EmpresasDemoSeeder extends Seeder
                     'destino_terminal_id' => $terminales[$secuencia[array_key_last($secuencia)]]->id,
                 ],
                 [
-                    'duracion_estimada' => sprintf('%02d:30:00', max(2, count($secuencia) * 2 - 1)),
+                    'duracion_estimada' => sprintf('%02d:%02d:00', intdiv((count($secuencia) - 1) * 90, 60), (count($secuencia) - 1) * 90 % 60),
                     'comentario' => collect($secuencia)
                         ->map(fn ($terminalIndice, $orden) => ($orden + 1).'. '.$terminales[$terminalIndice]->nombre)
                         ->implode(PHP_EOL),
@@ -165,14 +165,19 @@ class EmpresasDemoSeeder extends Seeder
                 ],
             );
 
-            foreach (array_slice($secuencia, 0, -1) as $orden => $origenIndice) {
+            $paradas = array_map(function ($indice) use ($terminales) {
+                return $terminales[$indice]->id;
+            }, $secuencia);
+            foreach (Viaje::combinaciones($paradas) as $orden => $tramo) {
+                $segmentos = $tramo['posicion_destino'] - $tramo['posicion_origen'];
                 ViajeTramo::updateOrCreate(
-                    ['viaje_id' => $viaje->id, 'orden' => $orden + 1],
+                    ['viaje_id' => $viaje->id, 'origen_terminal_id' => $tramo['origen_terminal_id'], 'destino_terminal_id' => $tramo['destino_terminal_id']],
                     [
-                        'origen_terminal_id' => $terminales[$origenIndice]->id,
-                        'destino_terminal_id' => $terminales[$secuencia[$orden + 1]]->id,
-                        'duracion_estimada' => '01:30:00',
-                        'precio' => number_format(10 + ($empresa->id % 7) + $orden, 2, '.', ''),
+                        'orden' => $orden + 1,
+                        'posicion_origen' => $tramo['posicion_origen'],
+                        'posicion_destino' => $tramo['posicion_destino'],
+                        'duracion_estimada' => sprintf('%02d:%02d:00', intdiv($segmentos * 90, 60), $segmentos * 90 % 60),
+                        'precio' => number_format(10 + ($empresa->id % 7) + $segmentos * 6, 2, '.', ''),
                     ],
                 );
             }

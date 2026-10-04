@@ -1,6 +1,6 @@
 # Horarios por tramo de programación
 
-Los tramos de la ruta (`viaje_tramos`) describen el recorrido reutilizable y su duración. Las fechas concretas pertenecen a `programacion_tramo_precios`, porque cada programación ocurre en un día y horario distinto.
+Los tramos de la ruta (`viaje_tramos`) son todas las combinaciones vendibles de la plantilla, con precio independiente, duración y posiciones de sus extremos. Las fechas concretas pertenecen a `programacion_tramo_precios`, porque cada programación ocurre en un día y horario distinto.
 
 Cada tramo comercial guarda:
 
@@ -13,8 +13,8 @@ En A → B → C, un boleto B → C muestra la salida desde B y la llegada a C. 
 
 `viaje_tramos` y `programacion_tramo_precios` conservan ambos `origen_terminal_id` y `destino_terminal_id`. Esta repetición es intencional y no debe eliminarse como una simple normalización:
 
-- `viaje_tramos` define los segmentos consecutivos y ordenados del recorrido reutilizable, por ejemplo A → B y B → C.
-- `programacion_tramo_precios` define los trayectos comerciales de una salida concreta, con sus terminales, precio y horarios propios. Puede incluir A → C, que abarca varios segmentos y no corresponde a un único registro de `viaje_tramos`.
+- `viaje_tramos` define todas las combinaciones A → B, A → C, B → C. `posicion_origen` y `posicion_destino` comienzan en cero. Las combinaciones con posiciones consecutivas reconstruyen las paradas; `orden` numera las filas comerciales.
+- `programacion_tramo_precios` define los trayectos comerciales de una salida concreta, con sus terminales, precio y horarios propios. Puede incluir A → C, copiando la combinación de la plantilla. Solo deben crearse las tarifas seleccionadas al generar una programación; la plantilla conserva todas las combinaciones.
 - Los terminales de la tarifa conservan los extremos definidos para esa programación. No deben resolverse dinámicamente desde un `viaje_tramo_id` mutable: cambiar el origen o destino del tramo referenciado podría alterar la interpretación de ventas existentes.
 
 No sustituir esos campos por `viaje_tramo_id` sin rediseñar y verificar el tratamiento de trayectos compuestos y del historial. Tampoco propagar automáticamente cambios de terminales o precios base de una ruta a tarifas que ya tienen reservas, ni eliminar estas tarifas en cascada al editar el recorrido.
@@ -23,7 +23,7 @@ No sustituir esos campos por `viaje_tramo_id` sin rediseñar y verificar el trat
 
 Conservar los terminales en la tarifa no congela todo el recorrido. Actualmente `Terminal::obtenerSecuenciaRuta()` utiliza `viaje_tramos` para calcular los intervalos y la disponibilidad; además, el inicio y fin general de la programación dependen de los extremos de `viajes`. Alterar las paradas, su orden o esos extremos puede afectar programaciones existentes aunque sus tarifas mantengan los terminales.
 
-Al implementar la edición o eliminación de rutas y tramos, debe impedirse modificar el recorrido utilizado por programaciones con reservas o conservarse explícitamente su versión histórica. Para un recorrido diferente, crear una nueva ruta es una alternativa que preserva el anterior. Esta es una regla que deben cumplir esas futuras acciones; esta documentación no afirma que exista ya una validación integral que bloquee todas las modificaciones.
+Al implementar la edición o eliminación de rutas y tramos, debe impedirse modificar el recorrido utilizado por programaciones con reservas o conservarse explícitamente su versión histórica. Para un recorrido diferente, crear una nueva ruta es una alternativa que preserva el anterior. `SaveViaje` y `ViajeService` ya impiden cambiar origen/destino en edición y bloquean cambios de paradas cuando existe cualquier programación. Los precios base sí se pueden editar, sin actualizar las tarifas existentes. Escrituras directas fuera de ese flujo deben respetar la misma regla.
 
 ## Consulta y registro
 
@@ -51,8 +51,8 @@ Prueba: tests/HorariosTramosSmoke.php, con SQLite en memoria; cubre medianoche, 
 
 ## Precios base de la ruta
 
-`viaje_tramos.precio` es decimal de dos posiciones y nullable: null significa sin configurar, no un pasaje gratuito. `ViajeTramo::precioBase($viaje, $origenId, $destinoId)` suma con BCMath los segmentos consecutivos del trayecto. Rechaza segmentos sin precio o con precio negativo, así como trayectos inexistentes. Por ejemplo, A → B de 10.25 y B → C de 5.50 producen una base A → C de 15.75.
+`viaje_tramos.precio` es decimal de dos posiciones y nullable: null significa sin configurar, no un pasaje gratuito. `ViajeTramo::precioBase($viaje, $origenId, $destinoId)` busca exactamente esa combinación. No suma precios: A → C puede valer 12 aunque A → B cueste 10 y B → C cueste 5. Rechaza trayectos inexistentes o sin precio válido. El formulario exige completar el precio de todas las combinaciones.
 
-`programacion_tramo_precios.precio` se conserva como precio propio de la salida. El seeder de rutas configura las bases y el seeder histórico copia su suma en cada tarifa comercial. Cambiar la base no modifica las tarifas ya creadas. El detalle de rutas muestra el precio base por segmento.
+`programacion_tramo_precios.precio` se conserva como precio propio de la salida. El seeder de rutas configura las bases y el seeder histórico copia el precio independiente de cada combinación en su tarifa comercial. Cambiar la base no modifica las tarifas ya creadas. El detalle de rutas muestra el precio base por segmento.
 
 No existe todavía un formulario de alta de programaciones: cuando se implemente, utilizará este cálculo para sugerir/copiar el precio y permitirá ajustarlo para esa salida. Se modifica la migración original; no se ejecuta fresh ni se alteran registros locales al implementar esta regla.

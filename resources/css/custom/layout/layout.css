@@ -18,7 +18,7 @@
 .app-sidebar {
     max-height: 100% !important;
     background: #241801;
-    background: linear-gradient(to right, #258dd3 0%, #1e1f1f 100%);
+    background: linear-gradient(to right, #04446e 0%, #1e1f1f 100%);
 }
 
 .app-header {

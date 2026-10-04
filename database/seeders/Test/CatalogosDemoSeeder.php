@@ -60,11 +60,11 @@ class CatalogosDemoSeeder extends Seeder
     private function terminales(): array
     {
         return [
-            ['estado' => 'Distrito Capital', 'nombre' => 'Terminal La Bandera', 'direccion' => 'Avenida Nueva Granada, Caracas', 'latitud' => 10.4806, 'longitud' => -66.9036],
-            ['estado' => 'Aragua', 'nombre' => 'Terminal Central de Maracay', 'direccion' => 'Avenida Constitución, Maracay', 'latitud' => 10.2469, 'longitud' => -67.5958],
-            ['estado' => 'Carabobo', 'nombre' => 'Terminal Big Low Center', 'direccion' => 'Avenida Intercomunal, Valencia', 'latitud' => 10.1621, 'longitud' => -68.0077],
-            ['estado' => 'Lara', 'nombre' => 'Terminal de Barquisimeto', 'direccion' => 'Avenida Florencio Jiménez, Barquisimeto', 'latitud' => 10.0678, 'longitud' => -69.3474],
-            ['estado' => 'Zulia', 'nombre' => 'Terminal de Maracaibo', 'direccion' => 'Avenida Los Haticos, Maracaibo', 'latitud' => 10.6317, 'longitud' => -71.6406],
+            ['estado' => 'Bolívar', 'nombre' => 'San Félix "Monseñor Zabaleta"', 'direccion' => 'Avenida Centurión, San Félix, Ciudad Guayana', 'latitud' => 8.3591, 'longitud' => -62.6642],
+            ['estado' => 'Bolívar', 'nombre' => 'Upata', 'direccion' => 'Calle 10, Upata', 'latitud' => 8.0037, 'longitud' => -62.3882],
+            ['estado' => 'Bolívar', 'nombre' => 'El Callao', 'direccion' => 'Calle Heres, El Callao', 'latitud' => 7.3524, 'longitud' => -61.8155],
+            ['estado' => 'Bolívar', 'nombre' => 'Tumeremo', 'direccion' => 'Troncal 10, Tumeremo', 'latitud' => 7.2990, 'longitud' => -61.5044],
+            ['estado' => 'Bolívar', 'nombre' => 'Santa Elena de Uairén', 'direccion' => 'Troncal 10, Santa Elena de Uairén', 'latitud' => 4.6023, 'longitud' => -61.1103],
         ];
     }
 

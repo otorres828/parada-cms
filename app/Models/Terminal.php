@@ -82,31 +82,7 @@ class Terminal extends ModelHelper
         $viaje = $programacion->viaje;
         self::exigir($viaje !== null, 'viaje', 'La ruta no existe.');
 
-        $terminales = [(int) $viaje->origen_terminal_id];
-        $orden = 0;
-
-        foreach ($viaje->tramos as $tramo) {
-            self::exigir(
-                (int) $tramo->origen_terminal_id === end($terminales) && $tramo->orden > $orden,
-                'viaje',
-                'La secuencia de tramos de la ruta es inválida.',
-            );
-            $terminales[] = (int) $tramo->destino_terminal_id;
-            $orden = $tramo->orden;
-        }
-
-        if ($viaje->tramos->isEmpty()) {
-            $terminales[] = (int) $viaje->destino_terminal_id;
-        }
-
-        self::exigir(
-            end($terminales) === (int) $viaje->destino_terminal_id
-                && count($terminales) === count(array_unique($terminales)),
-            'viaje',
-            'La ruta debe tener terminales distintos y un destino final coherente.',
-        );
-
-        return $terminales;
+        return $viaje->secuenciaTerminales();
     }
 
     public static function obtenerIntervalo(array $terminales, int $origen, int $destino): array
