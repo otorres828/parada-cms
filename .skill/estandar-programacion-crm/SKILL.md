@@ -25,6 +25,7 @@ Las rutas mencionadas en el texto son relativas a la raíz del repositorio. Las 
 - En edición, `mount` consulta el modelo y lo pasa a `editar(Modelo $modelo)`; las asignaciones pertenecen a `editar`, siguiendo `SaveAdmin`.
 - Tipar las propiedades propias de las clases y los métodos cuando su contrato esté definido. Respetar los tipos exigidos por Laravel/Livewire en propiedades heredadas.
 - Usar 4 espacios, UTF-8, finales LF y salto final conforme a `.editorconfig`. Mantener bloques espaciados y legibles, sin líneas vacías repetidas ni espacios al final.
+- En todas las vistas, dejar una línea vacía después de abrir y antes de cerrar cada bloque `div`, y entre bloques hermanos, especialmente filas y columnas. Indentar sus hijos cuatro espacios. Los componentes con parámetros llevan un parámetro por línea y el cierre en su propia línea, alineado con la apertura.
 - Validaciones y arrays de datos: un atributo y su valor por línea. Consultas largas: métodos en el modelo correspondiente. En callbacks PHP de consultas usar `function ($query) { ... }`, con llaves, en lugar de `fn`.
 - El middleware valida el acceso a pantallas. En `mount` calcular los permisos de presentación; no volver a autorizar allí la misma entrada ya protegida. Las acciones de escritura y descarga conservan su autorización en el servidor.
 - Consultar permisos en la clase, no dentro de Blade. Los botones y enlaces reciben booleanos como `canAdd`, `canEdit`, `canDetail` o permisos específicos.

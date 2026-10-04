@@ -131,3 +131,46 @@ Son ejemplos de estructura, no autorización para copiar sus inconsistencias o m
 ## Convención explícita para vistas Save
 
 Dejar una línea vacía entre componentes y bloques. Escribir cada parámetro de un componente en su propia línea y el cierre en otra línea, alineado con su apertura. En las vistas Save, el botón Volver al listado se muestra sin condicionar por `canList`.
+
+## Separación de divs en todas las vistas
+
+Este formato aplica a todas las vistas y componentes Blade, tanto de Admin como de Empresas:
+
+- Dejar una línea vacía después de la apertura de cada `div` y antes de su cierre.
+- Separar con una línea vacía los bloques `div` hermanos, especialmente las columnas de una fila.
+- Indentar cada nivel con cuatro espacios y alinear los cierres con sus aperturas.
+- Mantener una línea vacía entre componentes y bloques de contenido.
+- Escribir cada parámetro de un componente en una línea independiente, cuatro espacios dentro de la apertura; colocar `/>` o `>` en otra línea alineada con la apertura.
+- No compactar columnas, contenedores ni componentes con parámetros en una sola línea. No dejar espacios al final de las líneas.
+
+```blade
+<div class="container-fluid px-0 mb-4">
+
+    <div class="row g-3">
+
+        <div class="col-md-5">
+
+            <x-programacion.description
+                :programacion="$programacion"
+                :capacidad="$capacidad"
+                :show-empresa="false"
+                route-viaje="empresas.viajes.detail"
+                route-transporte="empresas.transportes.detail"
+            />
+
+        </div>
+
+        <div class="col-md-7">
+
+            <x-programacion.rates-matrix
+                :programacion="$programacion"
+                :disponibilidad-tramos="$disponibilidadTramos"
+                :tipo-cambio="$tipoCambioVigente"
+            />
+
+        </div>
+
+    </div>
+
+</div>
+```
