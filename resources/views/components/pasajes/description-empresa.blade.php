@@ -18,8 +18,10 @@
 
         <dd class="col-sm-8">
             @if ($pasaje->reserva && $canViewReservation)
-                <a href="{{ route('empresas.reservas.detail', $pasaje->reserva_id) }}" wire:navigate>
+                <a href="{{ route('empresas.reservas.detail', $pasaje->reserva_id) }}" 
+                    class="fw-bold text-decoration-none" wire:navigate>
                     {{ $pasaje->reserva->codigo_referencia }}
+                    <i class="bi bi-box-arrow-up-right ms-1 text-primary small"></i>
                 </a>
             @else
                 {{ $pasaje->reserva?->codigo_referencia ?? '—' }}

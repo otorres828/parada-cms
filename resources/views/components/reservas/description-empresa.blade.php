@@ -25,9 +25,11 @@
         <dd class="col-sm-8">
 
             @if ($canViewPassengers)
-                <a href="{{ route('admin.programaciones.detail', $reserva->programacion_id) }}"
+                <a href="{{ route('empresas.programaciones.detail', $reserva->programacion_id) }}"
+                    class="fw-bold text-decoration-none"
                     wire:navigate>
                     Ver programación #{{ $reserva->programacion_id }}
+                    <i class="bi bi-box-arrow-up-right ms-1 text-primary small"></i>
                 </a>
             @else
                 #{{ $reserva->programacion_id }}
