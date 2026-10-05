@@ -61,7 +61,7 @@ class SaveCliente extends Component
 
             return $user;
         });
-        session()->flash('admin_success', 'Registro guardado correctamente.');
+        session()->flash('cliente_success', 'Registro guardado correctamente.');
 
         return $this->redirect(route('admin.clientes.list'), navigate: true);
     }

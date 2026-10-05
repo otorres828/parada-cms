@@ -89,7 +89,7 @@ class SaveEmpresa extends Component
             return $empresa;
         });
 
-        session()->flash('admin_success', 'Registro guardado correctamente.');
+        session()->flash('empresa_success', 'Registro guardado correctamente.');
 
         return $this->redirect(route('admin.empresas.list'), navigate: true);
     }

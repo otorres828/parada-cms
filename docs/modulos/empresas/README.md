@@ -47,3 +47,5 @@ Los grupos siguen el orden del catálogo empresarial. La clase asigna los boolea
 - [Políticas de embarque y desembarque](politicas-embarque/save-politica-embarque.md).
 
 - [Detalle de transporte](transportes/detail-transporte.md).
+
+- [Alta y edición de campañas de cupones](cupones/save-campana.md).

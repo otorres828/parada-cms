@@ -1,7 +1,7 @@
 {{--
     CAMPAÑAS — FORMULARIO
     --------------------------------------------------------------------------
-    Permite definir o editar una campaña de cupones, sus condiciones de descuento, alcance,
+    Permite definir o editar una campaña de cupones propia de la empresa, sus condiciones de descuento, alcance,
     códigos y vigencia.
 
     Componentes reutilizables utilizados:
@@ -30,7 +30,7 @@
 
         <x-slot:button>
 
-            <x-form.cancel-button :link="route('admin.cupones.list')" >
+            <x-form.cancel-button :link="route('empresas.cupones.list')" >
                 Volver al listado
             </x-form.cancel-button>
 
@@ -43,34 +43,6 @@
     <form id="saveCampanaForm" x-ref="form" @submit.prevent="preSave" novalidate>
 
         <x-form.container-sm>
-
-            <div class="mb-3">
-
-                <x-form.dropdown
-                    label="Empresa (vacío para campaña general)"
-                    name="empresa_id"
-                    x-model="$wire.empresa_id"
-                >
-
-                    <option value="">Seleccionar...</option>
-
-                    @foreach ($options_empresa_id as $value => $label)
-                        <option value="{{ $value }}">{{ $label }}</option>
-                    @endforeach
-
-                </x-form.dropdown>
-
-                @error('empresa_id')
-
-                    <div class="text-danger small">
-
-                        {{ $message }}
-
-                    </div>
-
-                @enderror
-
-            </div>
 
             <div class="mb-3">
 
@@ -303,7 +275,7 @@
                 >
 
                     <option value="">Seleccionar...</option>
-                    <option value="0">Inactivo</option>
+                    <option value="2">Inactivo</option>
                     <option value="1">Activo</option>
 
                 </x-form.dropdown>
@@ -341,7 +313,7 @@
                     Livewire.on('successEventList', data => this.$store.toast.success(data.message)),
                     Livewire.on('errorEventList', data => this.$store.toast.info(data.message)),
                 ];
-                const savedMessage = @js(session()->pull('campana_success'));
+                const savedMessage = @js(session()->pull('empresa_success'));
                 if (savedMessage) this.$nextTick(() => Livewire.dispatch('successEventList', {
                     message: savedMessage
                 }));
@@ -351,10 +323,6 @@
                         errorFieldCssClass: ['is-invalid'],
                         successFieldCssClass: ['is-valid'],
                     });
-                    this.validator.addField(this.$refs.form.querySelector('[name="empresa_id"]'), [{
-                        validator: () => true,
-                        errorMessage: 'Revisa este campo'
-                    }]);
                     this.validator.addField(this.$refs.form.querySelector('[name="nombre_campana"]'), [{
                         rule: 'required',
                         errorMessage: 'Este campo es requerido'
@@ -415,7 +383,7 @@
                 if (this.saving || !this.validator || !await this.validator.revalidate()) return;
                 this.saving = true;
                 try {
-                    await $wire.call('save');
+                    await this.$wire.save();
                 } finally {
                     this.saving = false;
                 }

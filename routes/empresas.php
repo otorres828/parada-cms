@@ -48,6 +48,7 @@ use App\Livewire\Empresas\Reprogramaciones\ListReprogramacion;
 use App\Livewire\Empresas\OrdenesCobro\ListOrdenCobro;
 /* ------------------------------Cupones------------------------------------ */
 use App\Livewire\Empresas\Cupones\ListCampana;
+use App\Livewire\Empresas\Cupones\SaveCampana;
 /* ------------------------------Ventas------------------------------------ */
 use App\Livewire\Empresas\Reportes\SalesReport;
 /* ------------------------------Rutas------------------------------------ */
@@ -221,6 +222,8 @@ Route::group(['middleware' => ['auth:empresa', 'check.permisos.empresa']], funct
         Route::prefix('cupones')->name('cupones.')->group(function () {
 
             Route::livewire('/', ListCampana::class)->name('list');
+            Route::livewire('agregar', SaveCampana::class)->name('add');
+            Route::livewire('editar/{configuracion_cupon_id}', SaveCampana::class)->whereNumber('configuracion_cupon_id')->name('edit');
 
         });
 

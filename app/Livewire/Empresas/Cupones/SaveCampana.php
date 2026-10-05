@@ -1,30 +1,24 @@
 <?php
 
-namespace App\Livewire\Admin\Cupones;
+namespace App\Livewire\Empresas\Cupones;
 
 use App\Models\ConfiguracionCupon;
-use App\Models\Empresa;
-use App\Services\Admin\Access;
-use App\Services\Admin\Audit;
+use App\Services\Empresa\Access;
 use App\Services\CuponService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Locked;
-use Livewire\Component;
+use App\Livewire\Empresas\EmpresaComponent;
 
 #[Layout('layouts.crm')]
-class SaveCampana extends Component
+class SaveCampana extends EmpresaComponent
 {
     public ?ConfiguracionCupon $configuracionCupon = null;
 
     #[Locked]
     public ?int $configuracion_cupon_id = null;
-
-    public int|string $empresa_id = '';
-
-    public string $search_empresa_id = '';
 
     public string $nombre_campana = '';
 
@@ -58,16 +52,7 @@ class SaveCampana extends Component
 
     public function render()
     {
-        $query = Empresa::searchAdmin($this->search_empresa_id);
-        $options_empresa_id = (clone $query)->orderBy('nombre')->limit(100)->pluck('nombre', 'id')->all();
-        if ($this->empresa_id && ! isset($options_empresa_id[$this->empresa_id])) {
-            $selected = Empresa::searchAdmin()->find($this->empresa_id);
-            if ($selected) {
-                $options_empresa_id[$selected->id] = $selected->nombre;
-            }
-        }
-
-        return view('livewire.admin.cupones.save-campana', ['options_empresa_id' => $options_empresa_id]);
+        return view('livewire.empresas.cupones.save-campana');
     }
 
     public function save()
@@ -125,19 +110,16 @@ class SaveCampana extends Component
                 app(CuponService::class)->crearCuponesAleatorios($configuracionCupon);
             }
 
-            Audit::record($this->configuracion_cupon_id ? 'registro.actualizado' : 'registro.creado', $configuracionCupon, $data);
-
             return $configuracionCupon;
         });
-        session()->flash('campana_success', 'Registro guardado correctamente.');
+        session()->flash('empresa_success', 'Registro guardado correctamente.');
 
-        return $this->redirect(route('admin.cupones.list'), navigate: true);
+        return $this->redirect(route('empresas.cupones.list'), navigate: true);
     }
 
     protected function editar(ConfiguracionCupon $configuracionCupon): void
     {
         $this->configuracionCupon = $configuracionCupon;
-        $this->empresa_id = $configuracionCupon->empresa_id ?? '';
         $this->nombre_campana = $configuracionCupon->nombre_campana ?? '';
         $this->codigo_personalizado = $configuracionCupon->codigo_personalizado ?? '';
         $this->tipo_cupon = $configuracionCupon->tipo_cupon;
@@ -153,8 +135,9 @@ class SaveCampana extends Component
 
     protected function validateForm(): array
     {
+        $this->codigo_personalizado = strtoupper(trim($this->codigo_personalizado));
+
         $validated = $this->validate([
-            'empresa_id' => ['nullable', 'integer', 'exists:empresas,id'],
             'nombre_campana' => ['required', 'string', 'max:255'],
             'tipo_cupon' => ['required', 'integer', 'in:1,2'],
             'modalidad' => ['required', 'in:GENERAL,PRIMERA_COMPRA,USUARIO_NUEVO'],
@@ -172,9 +155,21 @@ class SaveCampana extends Component
             'monto_descuento' => ['required', 'decimal:0,2', 'min:0.01', 'max:999999.99'],
             'fecha_inicio' => ['required', 'date'],
             'fecha_fin' => ['required', 'date', 'after:fecha_inicio'],
-            'estatus' => ['required', 'in:0,1,2'],
-        ], [], [
-            'empresa_id' => 'Empresa',
+            'estatus' => ['required', 'in:1,2'],
+        ], [
+            'required' => 'El campo :attribute es obligatorio.',
+            'required_if' => 'El campo :attribute es obligatorio para el tipo de cupón seleccionado.',
+            'string' => 'El campo :attribute debe ser texto.',
+            'integer' => 'El campo :attribute debe ser un número entero.',
+            'in' => 'Selecciona una opción válida para :attribute.',
+            'max' => 'El campo :attribute no debe superar :max.',
+            'min' => 'El campo :attribute debe ser al menos :min.',
+            'alpha_dash' => 'El código solo admite letras, números, guiones y guiones bajos.',
+            'unique' => 'Este código personalizado ya está registrado.',
+            'decimal' => 'El campo :attribute debe tener como máximo dos decimales.',
+            'date' => 'El campo :attribute debe ser una fecha válida.',
+            'after' => 'La fecha de fin debe ser posterior a la fecha de inicio.',
+        ], [
             'nombre_campana' => 'Nombre',
             'tipo_cupon' => 'Tipo de cupón',
             'modalidad' => 'Modalidad',
@@ -203,11 +198,15 @@ class SaveCampana extends Component
             $validated['codigo_personalizado'] = null;
         }
 
+        $validated['empresa_id'] = $this->usuarioEmpresa->empresa_id;
+
         return $validated;
     }
 
     protected function findConfiguracionCupon(): ConfiguracionCupon
     {
-        return ConfiguracionCupon::searchAdmin()->with([0 => 'empresa', 1 => 'cupones'])->findOrFail($this->configuracion_cupon_id);
+        return ConfiguracionCupon::searchAdmin('', [
+            'empresa_id' => $this->usuarioEmpresa->empresa_id,
+        ])->with(['empresa', 'cupones'])->findOrFail($this->configuracion_cupon_id);
     }
 }

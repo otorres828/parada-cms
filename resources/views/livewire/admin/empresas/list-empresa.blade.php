@@ -179,7 +179,7 @@
     <script>
         Alpine.data('listEmpresa', () => ({
 
-            savedMessage: @js(session()->pull('admin_success')),
+            savedMessage: @js(session()->pull('empresa_success')),
 
             init() {
 

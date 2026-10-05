@@ -13,6 +13,8 @@
     - <x-list.table />: Tabla propia del panel.
     - <x-list.sortable-button />: Ordenación de columnas.
     - <x-list.status-badge />: Elemento de presentación del listado.
+    - <x-list.add-button />: Acceso al alta de campañas según permiso.
+    - <x-list.edit-button />: Edición de campañas propias.
     - <x-list.button-group />: Elemento de presentación del listado.
     - <x-list.status-button />: Elemento de presentación del listado.
     - <x-layout.loader.fullpage />: Elemento de presentación del listado.
@@ -62,6 +64,16 @@
             </div>
 
         </x-slot:group>
+
+        @if ($canAdd)
+            <x-slot:button>
+
+                <x-list.add-button :route="route('empresas.cupones.add')">
+                    Nuevo registro
+                </x-list.add-button>
+
+            </x-slot:button>
+        @endif
 
     </x-list.actions>
 
@@ -155,7 +167,8 @@
 
                             @if ($canEdit)
 
-                                <x-list.status-button wire:click="changeStatus({{ $configuracionCupon->id }})" :status="$configuracionCupon->estatus" wire:loading.attr="disabled" />
+                                <x-list.edit-button :route="route('empresas.cupones.edit', ['configuracion_cupon_id' => $configuracionCupon->id])" :target="false" />
+                            <x-list.status-button wire:click="changeStatus({{ $configuracionCupon->id }})" :status="$configuracionCupon->estatus" wire:loading.attr="disabled" />
 
                             @endif
 

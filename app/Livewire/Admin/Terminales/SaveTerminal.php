@@ -72,7 +72,7 @@ class SaveTerminal extends Component
             return $terminal;
         });
 
-        session()->flash('admin_success', 'Registro guardado correctamente.');
+        session()->flash('terminal_success', 'Registro guardado correctamente.');
 
         return $this->redirect(route('admin.terminales.list'), navigate: true);
     }
