@@ -123,8 +123,8 @@ class ProgramacionTramoPrecio extends ModelHelper
     public static function opcionesTaquilla(int $empresaId, string $fecha, int $origenId, int $destinoId, int $tarifaId): array
     {
         $tramos = self::searchTramos($empresaId, $fecha)->get();
-        $desdeOrigen = $tramos->where('origen_terminal_id', $origenId);
-        $opciones = $desdeOrigen->where('destino_terminal_id', $destinoId);
+        $desdeOrigen = $tramos->where('origen_terminal_id', $origenId);      //Cuando escogemos un origen se buscan sus destinos
+        $opciones = $desdeOrigen->where('destino_terminal_id', $destinoId); //Cuando escogemos un destino se buscan sus tramos
 
         return [
             // Terminales de origen con tramos de la empresa en la fecha seleccionada.
