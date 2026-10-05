@@ -397,6 +397,7 @@ class Reserva extends ModelHelper
     public static function dashboardSummary(array $filters): self
     {
         return self::searchAdmin('', $filters)
+            ->whereNotIn('reservas.estado_pago', [self::ESTADO_PAGO_REEMBOLSADO, self::ESTADO_PAGO_REPROGRAMADO])
             ->selectRaw('COUNT(*) as cantidad, COALESCE(SUM(monto_total), 0) as ventas, COALESCE(SUM(tasa_servicio), 0) as tasas')
             ->first();
     }
