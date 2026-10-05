@@ -88,6 +88,6 @@ class ListCampana extends Component
 
         });
 
-        $this->dispatch('successEventList', message: 'Estado actualizado.');
+        $this->dispatch('admin_campana_success', message: 'Estado actualizado.');
     }
 }

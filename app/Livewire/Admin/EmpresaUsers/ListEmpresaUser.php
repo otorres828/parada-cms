@@ -85,6 +85,6 @@ class ListEmpresaUser extends Component
             Audit::record('registro.estado', $usuarioEmpresa, ['estatus' => $usuarioEmpresa->estatus]);
 
         });
-        $this->dispatch('successEventList', message: 'Estado actualizado.');
+        $this->dispatch('admin_usuario_empresa_success', message: 'Estado actualizado.');
     }
 }

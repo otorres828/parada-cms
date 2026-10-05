@@ -39,6 +39,6 @@ class ContenidoPagina extends Component
 
         ContenidoSitio::guardar($this->pagina, $this->contenido);
 
-        $this->dispatch('successEventList', message: 'Contenido guardado correctamente.');
+        $this->dispatch('admin_legales_success', message: 'Contenido guardado correctamente.');
     }
 }

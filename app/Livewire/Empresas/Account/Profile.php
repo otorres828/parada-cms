@@ -51,6 +51,6 @@ class Profile extends EmpresaComponent
         $this->usuarioEmpresa->save();
 
         $this->reset('current_password');
-        $this->dispatch('successEventList', message: 'Cuenta actualizada.');
+        $this->dispatch('empresas_profile_success', message: 'Cuenta actualizada.');
     }
 }

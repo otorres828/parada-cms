@@ -122,7 +122,7 @@
             saving: false,
             validator: null,
             init() {
-                this.cleanup = Livewire.on('successEventList', data => this.$store.toast.success(data.message));
+                this.cleanup = Livewire.on('empresas_programacion_success', data => this.$store.toast.success(data.message));
             },
             async preSave() {
                 if (this.saving) return;

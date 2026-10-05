@@ -135,7 +135,7 @@
             validator: null,
             saving: false,
             init() {
-                this.cleanup = Livewire.on('successEventList', data => this.$store.toast.success(data.message));
+                this.cleanup = Livewire.on('empresas_dato_bancario_success', data => this.$store.toast.success(data.message));
                 this.$nextTick(() => {
                     this.validator = new JustValidate(this.$refs.form, {
                         errorLabelCssClass: ['invalid-feedback'],

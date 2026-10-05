@@ -79,11 +79,11 @@ class ListTasaServicio extends Component
 
         } catch (ValidationException $e) {
 
-            $this->dispatch('errorEventList', message: collect($e->errors())->flatten()->first());
+            $this->dispatch('admin_tasa_servicio_error', message: collect($e->errors())->flatten()->first());
 
             return;
         }
 
-        $this->dispatch('successEventList', message: 'Estado actualizado.');
+        $this->dispatch('admin_tasa_servicio_success', message: 'Estado actualizado.');
     }
 }

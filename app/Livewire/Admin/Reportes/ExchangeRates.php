@@ -45,12 +45,12 @@ class ExchangeRates extends Component
         $exitCode = Artisan::call('tipos-cambio:actualizar');
 
         if ($exitCode !== 0) {
-            $this->dispatch('errorEventList', message: trim(Artisan::output()) ?: 'No fue posible actualizar las tasas de cambio.');
+            $this->dispatch('admin_exchangerates_error', message: trim(Artisan::output()) ?: 'No fue posible actualizar las tasas de cambio.');
 
             return;
         }
 
         $this->resetPage();
-        $this->dispatch('successEventList', message: 'Las tasas de cambio fueron actualizadas correctamente.');
+        $this->dispatch('admin_exchangerates_success', message: 'Las tasas de cambio fueron actualizadas correctamente.');
     }
 }

@@ -52,7 +52,7 @@ class SaveAmenidad extends Component
 
             return $amenidad;
         });
-        session()->flash('amenidad_success', 'Registro guardado correctamente.');
+        session()->flash('admin_amenidad_success', 'Registro guardado correctamente.');
 
         return $this->redirect(route('admin.amenidades.list'), navigate: true);
     }

@@ -161,9 +161,9 @@
             validator: null,
             saving: false,
             init() {
-                this.toastCleanup = [Livewire.on('successEventList', data => this.$store.toast.success(data
+                this.toastCleanup = [Livewire.on('admin_tasa_servicio_success', data => this.$store.toast.success(data
                     .message)), Livewire.on(
-                    'errorEventList', data => this.$store.toast.info(data.message))];
+                    'admin_tasa_servicio_error', data => this.$store.toast.info(data.message))];
                 this.$nextTick(() => {
                     this.validator = new JustValidate(this.$refs.form, {
                         errorLabelCssClass: ['invalid-feedback'],

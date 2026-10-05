@@ -65,7 +65,7 @@ class ListTransporte extends EmpresaComponent
             $transporte->save();
         });
 
-        $this->dispatch('successEventList', message: 'Estado actualizado.');
+        $this->dispatch('empresas_transporte_success', message: 'Estado actualizado.');
     }
 
     public function updated(string $property): void

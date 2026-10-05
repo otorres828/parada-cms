@@ -178,26 +178,24 @@
 @script
     <script>
         Alpine.data('listEmpresa', () => ({
+            destroy() {
+                this.successCleanup?.();g
+                this.errorCleanup?.();
+            },
 
-            savedMessage: @js(session()->pull('empresa_success')),
 
             init() {
+                const savedMessage = @js(session()->pull('admin_empresa_success'));
+                if (savedMessage) this.$nextTick(() => this.$store.toast.success(savedMessage));
 
-                Livewire.on('successEventList', data => {
+                this.successCleanup = Livewire.on('admin_empresa_success', data => {
                     this.$store.toast.success(data.message);
                 });
 
-                Livewire.on('errorEventList', data => {
+                this.errorCleanup = Livewire.on('admin_empresa_error', data => {
                     this.$store.toast.info(data.message);
                 });
 
-                if (this.savedMessage) {
-
-                    this.$nextTick(() => Livewire.dispatch('successEventList', {
-                        message: this.savedMessage
-                    }));
-
-                }
 
             },
 

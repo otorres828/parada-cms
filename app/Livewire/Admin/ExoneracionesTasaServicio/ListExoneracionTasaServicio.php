@@ -72,12 +72,12 @@ class ListExoneracionTasaServicio extends Component
                 Audit::record('exoneracion_tasa.estado', $exoneracion, ['estatus' => $exoneracion->estatus]);
             });
         } catch (ValidationException $exception) {
-            $this->dispatch('errorEventList', message: collect($exception->errors())->flatten()->first());
+            $this->dispatch('admin_exoneracion_tasa_error', message: collect($exception->errors())->flatten()->first());
 
             return;
         }
 
-        $this->dispatch('successEventList', message: 'Estado actualizado.');
+        $this->dispatch('admin_exoneracion_tasa_success', message: 'Estado actualizado.');
     }
 
     public function deleteExoneracion(int $id): void
@@ -91,6 +91,6 @@ class ListExoneracionTasaServicio extends Component
             Audit::record('exoneracion_tasa.eliminada', $exoneracion, ['estatus' => $exoneracion->estatus]);
         });
 
-        $this->dispatch('successEventList', message: 'Exoneración eliminada.');
+        $this->dispatch('admin_exoneracion_tasa_success', message: 'Exoneración eliminada.');
     }
 }

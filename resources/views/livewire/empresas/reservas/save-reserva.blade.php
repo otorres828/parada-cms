@@ -143,7 +143,7 @@
                 ajustarPanel: null,
 
                 init() {
-                    this.cleanup = Livewire.on('successEventList', data => this.$store.toast.success(data.message));
+                    this.cleanup = Livewire.on('empresas_reserva_success', data => this.$store.toast.success(data.message));
                     this.ajustarPanel = () => this.posicionarPanel();
                     this.$nextTick(() => {
                         this.panelObserver = new ResizeObserver(this.ajustarPanel);

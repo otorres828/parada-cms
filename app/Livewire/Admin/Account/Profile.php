@@ -51,6 +51,6 @@ class Profile extends Component
             Audit::record('cuenta.'.'profile', $admin);
         });
         $this->reset('current_password');
-        $this->dispatch('successEventList', message: 'Cuenta actualizada.');
+        $this->dispatch('admin_profile_success', message: 'Cuenta actualizada.');
     }
 }

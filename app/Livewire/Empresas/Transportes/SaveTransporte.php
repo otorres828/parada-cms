@@ -111,13 +111,13 @@ class SaveTransporte extends EmpresaComponent
         });
 
         if ($this->canList) {
-            session()->flash('empresa_success', 'Transporte guardado correctamente.');
+            session()->flash('empresas_transporte_success', 'Transporte guardado correctamente.');
             $this->redirectRoute('empresas.transportes.list', navigate: true);
         } else {
             if ($this->transporteId === null) {
                 $this->reset('placa', 'modelo', 'tipo_asiento', 'amenidadesSeleccionadas');
             }
-            $this->dispatch('successEventList', message: 'Transporte guardado correctamente.');
+            $this->dispatch('empresas_transporte_success', message: 'Transporte guardado correctamente.');
         }
     }
 

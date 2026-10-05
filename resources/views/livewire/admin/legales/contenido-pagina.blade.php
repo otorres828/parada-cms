@@ -73,7 +73,7 @@
         Alpine.data('contenidoPagina', () => ({
 
             init() {
-                Livewire.on('successEventList', data => {
+                Livewire.on('admin_legales_success', data => {
                     this.$store.toast.success(data.message);
                 });
             },

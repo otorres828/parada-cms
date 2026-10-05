@@ -338,13 +338,9 @@
             saving: false,
             init() {
                 this.toastCleanup = [
-                    Livewire.on('successEventList', data => this.$store.toast.success(data.message)),
-                    Livewire.on('errorEventList', data => this.$store.toast.info(data.message)),
+                    Livewire.on('admin_campana_success', data => this.$store.toast.success(data.message)),
+                    Livewire.on('admin_campana_error', data => this.$store.toast.info(data.message)),
                 ];
-                const savedMessage = @js(session()->pull('campana_success'));
-                if (savedMessage) this.$nextTick(() => Livewire.dispatch('successEventList', {
-                    message: savedMessage
-                }));
                 this.$nextTick(() => {
                     this.validator = new JustValidate(this.$refs.form, {
                         errorLabelCssClass: ['invalid-feedback'],

@@ -39,6 +39,6 @@ class Password extends Component
             Audit::record('cuenta.'.'password', $admin);
         });
         $this->reset('current_password', 'password', 'password_confirmation');
-        $this->dispatch('successEventList', message: 'Cuenta actualizada.');
+        $this->dispatch('admin_password_success', message: 'Cuenta actualizada.');
     }
 }

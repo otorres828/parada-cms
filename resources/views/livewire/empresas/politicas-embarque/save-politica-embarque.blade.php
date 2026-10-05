@@ -60,7 +60,7 @@
             cleanup: null,
 
             init() {
-                this.cleanup = Livewire.on('successEventList', data => this.$store.toast.success(data.message));
+                this.cleanup = Livewire.on('empresas_politica_embarque_success', data => this.$store.toast.success(data.message));
             },
 
             destroy() {

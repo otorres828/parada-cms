@@ -64,12 +64,12 @@ class SaveViaje extends EmpresaComponent
         Access::authorize('viajes', $this->viajeId === null ? 'add' : 'edit');
         Viaje::exigir($this->origenId !== '' && (int) $this->origenId === (int) ($this->paradas[0] ?? 0), 'origenId', 'Selecciona el terminal de origen antes de guardar.');
         ViajeService::guardar($this->usuarioEmpresa, $this->viajeId, $this->paradas, $this->precios, $this->minutos, $this->comentario, $this->estatus);
-        session()->flash('empresa_success', 'Ruta de viaje guardada correctamente.');
-
         if ($this->canList) {
+            session()->flash('empresas_viaje_success', 'Ruta de viaje guardada correctamente.');
+
             return $this->redirect(route('empresas.viajes.list'), navigate: true);
         }
-        $this->dispatch('successEventList', message: 'Ruta de viaje guardada correctamente.');
+        $this->dispatch('empresas_viaje_success', message: 'Ruta de viaje guardada correctamente.');
         if ($this->viajeId === null) {
             $this->reset('origenId', 'terminalId', 'estadoOrigenId', 'estadoParadaId', 'paradas', 'precios', 'minutos', 'comentario', 'estatus');
         }

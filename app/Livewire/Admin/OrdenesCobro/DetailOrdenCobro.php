@@ -50,7 +50,7 @@ class DetailOrdenCobro extends Component
 
         $orden = $service->aprobar($this->orden_cobro_id, (int) Auth::guard('admin')->id());
         Audit::record('orden-cobro.aprobada', $orden);
-        $this->dispatch('successEventList', message: 'Orden de cobro aprobada correctamente.');
+        $this->dispatch('admin_orden_cobro_success', message: 'Orden de cobro aprobada correctamente.');
     }
 
     public function rechazar(OrdenCobroService $service): void
@@ -71,7 +71,7 @@ class DetailOrdenCobro extends Component
 
         Audit::record('orden-cobro.rechazada', $orden, ['motivo' => $data['motivo']]);
         $this->motivo = '';
-        $this->dispatch('successEventList', message: 'Orden de cobro rechazada.');
+        $this->dispatch('admin_orden_cobro_success', message: 'Orden de cobro rechazada.');
     }
 
     public function exportExcel(): BinaryFileResponse

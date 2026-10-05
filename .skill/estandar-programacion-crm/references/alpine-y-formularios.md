@@ -119,3 +119,7 @@ Reutilizar `resources/views/components/form/location-map.blade.php` y `rich-text
 - Si hay varias instancias, usar IDs únicos y referencias locales.
 
 Verificar al menos el recorrido que falló anteriormente: abrir una página legal, navegar a otra desde el menú y volver. El primer render correcto no demuestra que el widget soporte navegación Livewire.
+
+## Alertas por módulo
+
+Usar nombres de eventos y claves flash propios del panel y módulo (`admin_amenidad_success`, `empresas_campana_success` y `_error`). Si permanece en la vista, emitir dispatch; si redirige, guardar flash y consumirlo solo en el listado destino, mostrando el toast directamente. No consumir ese flash en Save ni Detail ni emitir un segundo evento para mostrarlo. Limpiar todos los listeners en destroy.

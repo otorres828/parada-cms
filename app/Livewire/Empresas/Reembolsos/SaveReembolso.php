@@ -50,7 +50,7 @@ class SaveReembolso extends Component
         Access::authorize('reembolsos', $this->reembolso_id ? 'edit' : 'add');
         $data = $this->validateForm();
         $reembolso = ReembolsoService::crear($data);
-        session()->flash('reembolso_success', 'Registro guardado correctamente.');
+        session()->flash('empresas_reembolso_success', 'Registro guardado correctamente.');
 
         return $this->redirect(route('empresas.reembolsos.list'), navigate: true);
     }

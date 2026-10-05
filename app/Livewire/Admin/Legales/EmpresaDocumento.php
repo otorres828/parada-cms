@@ -134,7 +134,7 @@ class EmpresaDocumento extends Component
         $this->resetPage();
 
         $this->dispatch('legalSaved');
-        $this->dispatch('successEventList', message: 'Documento guardado correctamente.');
+        $this->dispatch('admin_legales_success', message: 'Documento guardado correctamente.');
 
     }
 
@@ -169,7 +169,7 @@ class EmpresaDocumento extends Component
         });
 
         $this->resetPage();
-        $this->dispatch('successEventList', message: 'Documento eliminado correctamente.');
+        $this->dispatch('admin_legales_success', message: 'Documento eliminado correctamente.');
     }
 
     public function updated($property): void

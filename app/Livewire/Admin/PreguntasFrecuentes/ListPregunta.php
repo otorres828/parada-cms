@@ -83,7 +83,7 @@ class ListPregunta extends Component
             Audit::record('registro.estado', $pregunta, ['estatus' => $pregunta->estatus]);
         });
 
-        $this->dispatch('successEventList', message: 'Estado actualizado.');
+        $this->dispatch('admin_pregunta_success', message: 'Estado actualizado.');
     }
 
     public function deletePregunta(int $id): void
@@ -100,6 +100,6 @@ class ListPregunta extends Component
             $pregunta->save();
         });
 
-        $this->dispatch('successEventList', message: 'Pregunta eliminada.');
+        $this->dispatch('admin_pregunta_success', message: 'Pregunta eliminada.');
     }
 }

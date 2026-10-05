@@ -66,7 +66,7 @@ class ReviewReembolso extends Component
             }
             throw $e;
         }
-        session()->flash('admin_success', 'Resolución registrada.');
+        session()->flash('empresas_reembolso_success', 'Resolución registrada.');
 
         return $this->redirect(route('empresas.reembolsos.list'), navigate: true);
     }

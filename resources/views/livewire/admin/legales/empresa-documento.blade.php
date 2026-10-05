@@ -354,9 +354,9 @@
             uploading: false,
             validator: null,
             init() {
-                this.cleanups = [Livewire.on('successEventList', data => this.$store.toast.success(data
+                this.cleanups = [Livewire.on('admin_legales_success', data => this.$store.toast.success(data
                     .message)), Livewire.on(
-                    'errorEventList', data => this.$store.toast.info(data.message)), Livewire.on(
+                    'admin_legales_error', data => this.$store.toast.info(data.message)), Livewire.on(
                     'legalSaved', () => {
                         if (this.$refs.archivo) this.$refs.archivo.value = '';
                         this.validator?.refresh();

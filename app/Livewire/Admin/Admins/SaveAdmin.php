@@ -105,7 +105,7 @@ class SaveAdmin extends Component
 
         });
 
-        session()->flash('admin_success', 'Administrador y permisos guardados correctamente.');
+        session()->flash('admin_administrador_success', 'Administrador y permisos guardados correctamente.');
 
         return $this->redirect(route('admin.admins.list'), navigate: true);
 

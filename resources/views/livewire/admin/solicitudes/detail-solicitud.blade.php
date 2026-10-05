@@ -92,7 +92,7 @@
             },
             init() {
                 this.toastCleanup = [
-                    Livewire.on('successEventList', data => this.$store.toast.success(data.message)),
+                    Livewire.on('admin_solicitud_success', data => this.$store.toast.success(data.message)),
                 ];
             },
         }));

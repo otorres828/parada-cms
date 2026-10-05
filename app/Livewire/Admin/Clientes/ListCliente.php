@@ -73,6 +73,6 @@ class ListCliente extends Component
             Audit::record('registro.estado', $user, ['status' => $user->status]);
 
         });
-        $this->dispatch('successEventList', message: 'Estado actualizado.');
+        $this->dispatch('admin_cliente_success', message: 'Estado actualizado.');
     }
 }

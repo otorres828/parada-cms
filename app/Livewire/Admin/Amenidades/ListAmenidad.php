@@ -76,6 +76,6 @@ class ListAmenidad extends Component
 
         });
 
-        $this->dispatch('successEventList', message: 'Estado actualizado.');
+        $this->dispatch('admin_amenidad_success', message: 'Estado actualizado.');
     }
 }

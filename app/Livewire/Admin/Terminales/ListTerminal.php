@@ -84,6 +84,6 @@ class ListTerminal extends Component
             Audit::record('registro.estado', $terminal, ['estatus' => $terminal->estatus]);
 
         });
-        $this->dispatch('successEventList', message: 'Estado actualizado.');
+        $this->dispatch('admin_terminal_success', message: 'Estado actualizado.');
     }
 }

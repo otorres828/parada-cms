@@ -83,7 +83,7 @@ class SaveCategoria extends Component
             Storage::disk('public')->delete($imagenAnterior);
         }
 
-        session()->flash('admin_success', 'Categoría guardada correctamente.');
+        session()->flash('admin_categoria_pregunta_success', 'Categoría guardada correctamente.');
 
         return $this->redirectRoute('admin.preguntas-frecuentes.categorias.list', navigate: true);
     }

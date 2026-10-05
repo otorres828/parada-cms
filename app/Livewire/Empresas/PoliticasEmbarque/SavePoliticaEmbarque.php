@@ -37,6 +37,6 @@ class SavePoliticaEmbarque extends EmpresaComponent
         Empresa::findOrFail($this->usuarioEmpresa->empresa_id)->update([
             'politicas' => $this->contenido,
         ]);
-        $this->dispatch('successEventList', message: 'Políticas de embarque y desembarque guardadas correctamente.');
+        $this->dispatch('empresas_politica_embarque_success', message: 'Políticas de embarque y desembarque guardadas correctamente.');
     }
 }

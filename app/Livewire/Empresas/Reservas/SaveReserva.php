@@ -147,7 +147,7 @@ class SaveReserva extends EmpresaComponent
         $this->reset('pasajeros', 'pagos', 'pasajero', 'pago', 'comprador', 'tarifaId');
         $this->ventaToken = 'TQ-'.Reserva::generarLocalizador(7);
         $this->resetValidation();
-        $this->dispatch('successEventList', message: 'Reserva y pagos registrados correctamente.');
+        $this->dispatch('empresas_reserva_success', message: 'Reserva y pagos registrados correctamente.');
 
     }
 

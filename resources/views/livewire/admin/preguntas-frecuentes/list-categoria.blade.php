@@ -174,15 +174,13 @@
     <script>
         Alpine.data('listCategoriaPregunta', () => ({
             init() {
+                const savedMessage = @js(session()->pull('admin_categoria_pregunta_success'));
+                if (savedMessage) this.$nextTick(() => this.$store.toast.success(savedMessage));
                 this.toastCleanup = [
-                    Livewire.on('successEventList', data => this.$store.toast.success(data.message)),
-                    Livewire.on('errorEventList', data => this.$store.toast.info(data.message)),
+                    Livewire.on('admin_categoria_pregunta_success', data => this.$store.toast.success(data.message)),
+                    Livewire.on('admin_categoria_pregunta_error', data => this.$store.toast.info(data.message)),
                 ];
 
-                const savedMessage = @js(session()->pull('admin_success'));
-                if (savedMessage) this.$nextTick(() => Livewire.dispatch('successEventList', {
-                    message: savedMessage,
-                }));
 
                 this.confirmDeletion = event => {
                     Swal.fire({

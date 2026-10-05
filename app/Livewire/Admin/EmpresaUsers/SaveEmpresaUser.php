@@ -74,7 +74,7 @@ class SaveEmpresaUser extends Component
             $usuario->save();
             Audit::record('usuario_empresa.guardado', $usuario);
         });
-        session()->flash('admin_success', 'Usuario de empresa guardado.');
+        session()->flash('admin_usuario_empresa_success', 'Usuario de empresa guardado.');
 
         return $this->redirect(route('admin.empresas.users.list', ['empresa_id' => $this->empresa_id]), navigate: true);
     }

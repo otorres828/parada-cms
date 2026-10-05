@@ -60,7 +60,7 @@ class SaveTasaServicio extends Component
             $tasa->save();
             Audit::record('tasa_servicio.guardada', $tasa, $data);
         });
-        session()->flash('admin_success', 'Tasa de servicio guardada.');
+        session()->flash('admin_tasa_servicio_success', 'Tasa de servicio guardada.');
 
         return $this->redirect(route('admin.tasas-servicio.list'), navigate: true);
     }

@@ -112,7 +112,7 @@ class SaveCampana extends EmpresaComponent
 
             return $configuracionCupon;
         });
-        session()->flash('empresa_success', 'Registro guardado correctamente.');
+        session()->flash('empresas_campana_success', 'Registro guardado correctamente.');
 
         return $this->redirect(route('empresas.cupones.list'), navigate: true);
     }

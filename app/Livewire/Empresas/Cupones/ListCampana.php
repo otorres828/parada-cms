@@ -88,6 +88,6 @@ class ListCampana extends EmpresaComponent
 
         });
 
-        $this->dispatch('successEventList', message: 'Estado actualizado.');
+        $this->dispatch('empresas_campana_success', message: 'Estado actualizado.');
     }
 }

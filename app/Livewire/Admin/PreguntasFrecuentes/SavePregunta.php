@@ -76,7 +76,7 @@ class SavePregunta extends Component
             Audit::record($this->pregunta_id ? 'registro.actualizado' : 'registro.creado', $pregunta, $data);
         });
 
-        session()->flash('admin_success', 'Pregunta guardada correctamente.');
+        session()->flash('admin_pregunta_success', 'Pregunta guardada correctamente.');
 
         return $this->redirectRoute('admin.preguntas-frecuentes.list', navigate: true);
     }

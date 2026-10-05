@@ -158,14 +158,12 @@
                 this.toastCleanup?.forEach(cleanup => cleanup());
             },
             init() {
+                const savedMessage = @js(session()->pull('admin_amenidad_success'));
+                if (savedMessage) this.$nextTick(() => this.$store.toast.success(savedMessage));
                 this.toastCleanup = [
-                    Livewire.on('successEventList', data => this.$store.toast.success(data.message)),
-                    Livewire.on('errorEventList', data => this.$store.toast.info(data.message)),
+                    Livewire.on('admin_amenidad_success', data => this.$store.toast.success(data.message)),
+                    Livewire.on('admin_amenidad_error', data => this.$store.toast.info(data.message)),
                 ];
-                const savedMessage = @js(session()->pull('admin_success'));
-                if (savedMessage) this.$nextTick(() => Livewire.dispatch('successEventList', {
-                    message: savedMessage
-                }));
             },
 
         }));

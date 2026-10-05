@@ -96,13 +96,9 @@
             },
             init() {
                 this.toastCleanup = [
-                    Livewire.on('successEventList', data => this.$store.toast.success(data.message)),
-                    Livewire.on('errorEventList', data => this.$store.toast.info(data.message)),
+                    Livewire.on('empresas_reserva_success', data => this.$store.toast.success(data.message)),
+                    Livewire.on('empresas_reserva_error', data => this.$store.toast.info(data.message)),
                 ];
-                const savedMessage = @js(session()->pull('admin_success'));
-                if (savedMessage) this.$nextTick(() => Livewire.dispatch('successEventList', {
-                    message: savedMessage
-                }));
             },
 
         }));

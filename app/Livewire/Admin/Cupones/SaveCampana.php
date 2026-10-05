@@ -129,7 +129,7 @@ class SaveCampana extends Component
 
             return $configuracionCupon;
         });
-        session()->flash('campana_success', 'Registro guardado correctamente.');
+        session()->flash('admin_campana_success', 'Registro guardado correctamente.');
 
         return $this->redirect(route('admin.cupones.list'), navigate: true);
     }

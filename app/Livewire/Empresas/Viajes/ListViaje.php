@@ -68,7 +68,7 @@ class ListViaje extends EmpresaComponent
 
         });
 
-        $this->dispatch('successEventList', message: 'Estado actualizado.');
+        $this->dispatch('empresas_viaje_success', message: 'Estado actualizado.');
     }
 
     public function updated(string $property): void

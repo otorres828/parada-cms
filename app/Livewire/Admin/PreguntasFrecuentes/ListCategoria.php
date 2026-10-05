@@ -66,7 +66,7 @@ class ListCategoria extends Component
             Audit::record('registro.estado', $categoria, ['estatus' => $categoria->estatus]);
         });
 
-        $this->dispatch('successEventList', message: 'Estado actualizado.');
+        $this->dispatch('admin_categoria_pregunta_success', message: 'Estado actualizado.');
     }
 
     public function deleteCategoria(int $id): void
@@ -76,7 +76,7 @@ class ListCategoria extends Component
         $categoria = CategoriaPreguntaFrecuente::searchAdmin()->whereKey($id)->firstOrFail();
 
         if ($categoria->preguntas()->where('estatus', '!=', CategoriaPreguntaFrecuente::ESTADO_DELETE)->exists()) {
-            $this->dispatch('errorEventList', message: 'No se puede eliminar una categoría que contiene preguntas.');
+            $this->dispatch('admin_categoria_pregunta_error', message: 'No se puede eliminar una categoría que contiene preguntas.');
 
             return;
         }
@@ -87,6 +87,6 @@ class ListCategoria extends Component
             $categoria->save();
         });
 
-        $this->dispatch('successEventList', message: 'Categoría eliminada.');
+        $this->dispatch('admin_categoria_pregunta_success', message: 'Categoría eliminada.');
     }
 }

@@ -59,6 +59,6 @@ class DetailSolicitud extends Component
             'estatus' => $solicitud->estatus,
         ]);
 
-        $this->dispatch('successEventList', message: 'Estado de la solicitud actualizado.');
+        $this->dispatch('admin_solicitud_success', message: 'Estado de la solicitud actualizado.');
     }
 }

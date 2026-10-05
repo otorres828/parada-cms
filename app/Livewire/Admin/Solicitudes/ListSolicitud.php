@@ -69,7 +69,7 @@ class ListSolicitud extends Component
         });
 
         $this->selectedRecordIds = array_values(array_diff($this->selectedRecordIds, [$id]));
-        $this->dispatch('successEventList', message: 'Solicitud eliminada.');
+        $this->dispatch('admin_solicitud_success', message: 'Solicitud eliminada.');
     }
 
     public function deleteSolicitudes(): void
@@ -79,7 +79,7 @@ class ListSolicitud extends Component
         $ids = array_values(array_unique(array_map('intval', $this->selectedRecordIds)));
 
         if ($ids === []) {
-            $this->dispatch('errorEventList', message: 'Selecciona al menos una solicitud.');
+            $this->dispatch('admin_solicitud_error', message: 'Selecciona al menos una solicitud.');
 
             return;
         }
@@ -97,6 +97,6 @@ class ListSolicitud extends Component
         });
 
         $this->selectedRecordIds = [];
-        $this->dispatch('successEventList', message: 'Solicitudes eliminadas.');
+        $this->dispatch('admin_solicitud_success', message: 'Solicitudes eliminadas.');
     }
 }

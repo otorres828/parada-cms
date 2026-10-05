@@ -118,13 +118,9 @@
             saving: false,
             init() {
                 this.toastCleanup = [
-                    Livewire.on('successEventList', data => this.$store.toast.success(data.message)),
-                    Livewire.on('errorEventList', data => this.$store.toast.info(data.message)),
+                    Livewire.on('empresas_reembolso_success', data => this.$store.toast.success(data.message)),
+                    Livewire.on('empresas_reembolso_error', data => this.$store.toast.info(data.message)),
                 ];
-                const savedMessage = @js(session()->pull('reembolso_success'));
-                if (savedMessage) this.$nextTick(() => Livewire.dispatch('successEventList', {
-                    message: savedMessage
-                }));
                 this.$nextTick(() => {
                     this.validator = new JustValidate(this.$refs.form, {
                         errorLabelCssClass: ['invalid-feedback'],

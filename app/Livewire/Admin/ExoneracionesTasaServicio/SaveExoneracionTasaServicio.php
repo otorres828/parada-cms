@@ -76,7 +76,7 @@ class SaveExoneracionTasaServicio extends Component
             Audit::record('exoneracion_tasa.guardada', $exoneracion, $data);
         });
 
-        session()->flash('admin_success', 'Exoneración de tasa guardada.');
+        session()->flash('admin_exoneracion_tasa_success', 'Exoneración de tasa guardada.');
 
         return $this->redirect(route('admin.exoneraciones-tasa-servicio.list'), navigate: true);
     }

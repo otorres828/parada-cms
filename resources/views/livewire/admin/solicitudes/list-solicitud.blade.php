@@ -184,9 +184,11 @@
                 window.removeEventListener('confirmDeletion', this.confirmDeletion);
             },
             init() {
+                const savedMessage = @js(session()->pull('admin_solicitud_success'));
+                if (savedMessage) this.$nextTick(() => this.$store.toast.success(savedMessage));
                 this.toastCleanup = [
-                    Livewire.on('successEventList', data => this.$store.toast.success(data.message)),
-                    Livewire.on('errorEventList', data => this.$store.toast.info(data.message)),
+                    Livewire.on('admin_solicitud_success', data => this.$store.toast.success(data.message)),
+                    Livewire.on('admin_solicitud_error', data => this.$store.toast.info(data.message)),
                 ];
 
                 this.confirmDeletion = event => {

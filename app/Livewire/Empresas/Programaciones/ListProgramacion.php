@@ -86,7 +86,7 @@ class ListProgramacion extends EmpresaComponent
             $registro->save();
         });
 
-        $this->dispatch('successEventList', message: 'Estado actualizado.');
+        $this->dispatch('empresas_programacion_success', message: 'Estado actualizado.');
     }
 
     public function updated(string $property): void

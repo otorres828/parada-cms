@@ -109,10 +109,10 @@ class SaveProgramacion extends EmpresaComponent
             $mensaje = 'Programación guardada correctamente.';
         }
         if ($this->canList) {
-            session()->flash('empresa_success', $mensaje);
+            session()->flash('empresas_programacion_success', $mensaje);
             $this->redirectRoute('empresas.programaciones.list', navigate: true);
         } else {
-            $this->dispatch('successEventList', message: $mensaje);
+            $this->dispatch('empresas_programacion_success', message: $mensaje);
         }
     }
 

@@ -71,7 +71,7 @@ class ListEmpresa extends Component
             $inactive = Empresa::ESTADO_DELETE;
 
             if ((int) $empresa->estatus !== Empresa::ESTADO_ACTIVE && $empresa->estaBloqueadaPorCobranza()) {
-                $this->dispatch('errorEventList', message: 'La empresa tiene órdenes de cobro vencidas y no puede activarse.');
+                $this->dispatch('admin_empresa_error', message: 'La empresa tiene órdenes de cobro vencidas y no puede activarse.');
 
                 return;
             }
@@ -83,6 +83,6 @@ class ListEmpresa extends Component
             Audit::record('registro.estado', $empresa, ['estatus' => $empresa->estatus]);
 
         });
-        $this->dispatch('successEventList', message: 'Estado actualizado.');
+        $this->dispatch('admin_empresa_success', message: 'Estado actualizado.');
     }
 }
