@@ -140,7 +140,7 @@ class ReservaTaquillaService
                 'subtotal' => $precio,
                 'tasa_servicio' => '0.00',
                 'total' => $precio,
-                'localizador' => Str::random(20),
+                'localizador' => Pasaje::generarLocalizador(7),
             ]);
             TasasServicioService::calcularTasasReserva($reserva);
         });
