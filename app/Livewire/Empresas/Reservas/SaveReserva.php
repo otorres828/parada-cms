@@ -78,14 +78,14 @@ class SaveReserva extends EmpresaComponent
 
     public function render(): View
     {
-        $tramos =  ProgramacionTramoPrecio::paraTaquilla($this->usuarioEmpresa->empresa_id, $this->fecha)->get();
-
-        $salidas = $tramos->pluck('programacion')->unique('id')->values();
-
-        $opciones = $tramos->where('origen_terminal_id', (int) $this->origenId)
-                            ->where('destino_terminal_id', (int) $this->destinoId);
-
-        $tarifa = $opciones->firstWhere('id', (int) $this->tarifaId);
+        $tramos = ProgramacionTramoPrecio::opcionesTaquilla(
+            $this->usuarioEmpresa->empresa_id,
+            $this->fecha,
+            (int) $this->origenId,
+            (int) $this->destinoId,
+            (int) $this->tarifaId
+        );
+        $tarifa = $tramos['tarifa'];
 
         $cantidad = collect($this->pasajeros)->filter(function ($pasajero) {
             return $pasajero['tipo_pasajero'] !== 'infante' || ! empty($pasajero['con_asiento']);
@@ -99,21 +99,16 @@ class SaveReserva extends EmpresaComponent
             return $pago['moneda'] === 'VES' ? round((float) $pago['monto'] / max(0.01, (float) $cambio?->valor_usd), 2) : (float) $pago['monto'];
         });
 
-        return view('livewire.empresas.reservas.save-reserva', [
-            'origenes' => $tramos->pluck('origenTerminal')->unique('id')->values(),
-            'destinos' => $tramos->where('origen_terminal_id', (int) $this->origenId)->pluck('destinoTerminal')->unique('id')->values(),
-            'opciones' => $opciones,
+        return view('livewire.empresas.reservas.save-reserva', array_merge($tramos, [
             'precio' => $precio,
             'cantidad' => $cantidad,
             'disponibles' => $disponibles,
             'total' => round($precio * $cantidad, 2),
             'abonado' => $abonado,
             'cambio' => $cambio,
-            'salidas' => $salidas,
-            'tarifa' => $tarifa,
             'puedeAgregarPasajeros' => $tarifa !== null,
             'puedeAgregarPagos' => $tarifa !== null && $cantidad > 0,
-        ]);
+        ]));
     }
 
     public function registrar(): void
@@ -218,10 +213,10 @@ class SaveReserva extends EmpresaComponent
 
     private function validarTramo(): ProgramacionTramoPrecio
     {
-        $tarifa = ProgramacionTramoPrecio::paraTaquilla($this->usuarioEmpresa->empresa_id, $this->fecha)
-            ->where('origen_terminal_id', $this->origenId)
-            ->where('destino_terminal_id', $this->destinoId)
-            ->find($this->tarifaId);
+        $tarifa = ProgramacionTramoPrecio::searchTramos($this->usuarioEmpresa->empresa_id, $this->fecha, [
+            'origen_terminal_id' => $this->origenId,
+            'destino_terminal_id' => $this->destinoId,
+        ])->find($this->tarifaId);
 
         Reserva::exigir($tarifa !== null, 'tarifaId', 'Selecciona una salida disponible antes de continuar.');
 

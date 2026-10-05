@@ -47,6 +47,21 @@ class ProgramacionTramoPrecio extends ModelHelper
         });
     }
 
+    public function programacion(): BelongsTo
+    {
+        return $this->belongsTo(Programacion::class, 'programacion_id');
+    }
+
+    public function origenTerminal(): BelongsTo
+    {
+        return $this->belongsTo(Terminal::class, 'origen_terminal_id');
+    }
+
+    public function destinoTerminal(): BelongsTo
+    {
+        return $this->belongsTo(Terminal::class, 'destino_terminal_id');
+    }
+
     public function getSalida(): ?Carbon
     {
         if ($this->fecha_salida !== null && $this->hora_salida !== null) {
@@ -75,33 +90,48 @@ class ProgramacionTramoPrecio extends ModelHelper
         }
     }
 
+    public function calcularMontoBs(?TipoCambio $tipoCambio = null): ?string
+    {
+        return ConversorMoneda::aBolivares($this->precio, $tipoCambio ?? TipoCambio::vigente());
+    }
+
     public static function paraTaquilla(int $empresaId, string $fecha): Builder
     {
-        return self::query()
+        return self::searchTramos($empresaId, $fecha);
+    }
+
+    public static function searchTramos(int $empresaId, string $fecha, array $filters = []): Builder
+    {
+        $query = self::query()
             ->whereIn('programacion_id', Programacion::paraTaquilla($empresaId, soloFuturas: false)->reorder()->select('programaciones.id'))
             ->whereDate('fecha_salida', self::date($fecha))
             ->whereNotNull('hora_salida')
             ->with(['origenTerminal', 'destinoTerminal', 'programacion.viaje', 'programacion.transporte.amenidades'])
             ->orderBy('hora_salida')->orderBy('id');
+
+        if (isset($filters['origen_terminal_id'])) {
+            $query->where('origen_terminal_id', (int) $filters['origen_terminal_id']);
+        }
+
+        if (isset($filters['destino_terminal_id'])) {
+            $query->where('destino_terminal_id', (int) $filters['destino_terminal_id']);
+        }
+
+        return $query;
     }
 
-    public function programacion(): BelongsTo
+    public static function opcionesTaquilla(int $empresaId, string $fecha, int $origenId, int $destinoId, int $tarifaId): array
     {
-        return $this->belongsTo(Programacion::class, 'programacion_id');
-    }
+        $tramos = self::searchTramos($empresaId, $fecha)->get();
+        $desdeOrigen = $tramos->where('origen_terminal_id', $origenId);
+        $opciones = $desdeOrigen->where('destino_terminal_id', $destinoId);
 
-    public function origenTerminal(): BelongsTo
-    {
-        return $this->belongsTo(Terminal::class, 'origen_terminal_id');
-    }
-
-    public function destinoTerminal(): BelongsTo
-    {
-        return $this->belongsTo(Terminal::class, 'destino_terminal_id');
-    }
-
-    public function calcularMontoBs(?TipoCambio $tipoCambio = null): ?string
-    {
-        return ConversorMoneda::aBolivares($this->precio, $tipoCambio ?? TipoCambio::vigente());
+        return [
+            'origenes' => $tramos->pluck('origenTerminal')->unique('id')->values(),       //Indica los terminales de origen disponibles para la fecha seleccionada
+            'destinos' => $desdeOrigen->pluck('destinoTerminal')->unique('id')->values(), //Indica los terminales de destino disponibles para la fecha y origen seleccionados
+            'opciones' => $opciones,                                                      //Indica los tramos disponibles (ProgramacionTramoPrecio) para la fecha, origen y destino seleccionados
+            'salidas' => $tramos->pluck('programacion')->unique('id')->values(),          //Indica las salidas (Programacion) disponibles para la fecha seleccionada
+            'tarifa' => $opciones->firstWhere('id', $tarifaId),                           //Es la ProgramacionTramoPrecio seleccionada actualmente, si existe
+        ];
     }
 }

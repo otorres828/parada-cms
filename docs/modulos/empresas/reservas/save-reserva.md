@@ -4,6 +4,8 @@ Ruta: `empresas.reservas.add`, disponible desde el listado y el botón Nueva Res
 
 ## Cotización en una pantalla
 
+La consulta de salidas está centralizada en `ProgramacionTramoPrecio::searchTramos()`: limita por empresa, programación activa y fecha del tramo, sin excluir salidas por su hora. Admite filtros de terminal de origen y destino. `opcionesTaquilla()` obtiene los tramos una vez y prepara los orígenes, destinos, salidas y tarifa seleccionada. `SaveReserva::render()` consume esos datos y calcula la cotización con los pasajeros y pagos del formulario; `validarTramo()` reutiliza la misma búsqueda antes de agregar datos o registrar. Las opciones siguen consultándose al renderizar porque dependen de la fecha y las selecciones; no son un catálogo fijo para `mount`.
+
 1. Seleccionar fecha y origen. Los destinos proceden de las tarifas de los tramos disponibles de la empresa.
 2. Elegir destino y después una salida que cubra ese tramo. No es necesario conocer el recorrido completo del autobús.
 3. Al seleccionar una salida se muestran el transporte y sus amenidades, y se habilitan los campos del comprador y pasajeros. Completar comprador y añadir pasajeros. No se crean usuarios ni viajeros; el contacto y los pasajeros serán snapshots cifrados.
