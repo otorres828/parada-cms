@@ -44,7 +44,6 @@
         :origenes="$origenes"
         :destinos="$destinos"
         :opciones="$opciones"
-        :salidas="$salidas"
         :cambio="$cambio"
     />
 

@@ -127,11 +127,17 @@ class ProgramacionTramoPrecio extends ModelHelper
         $opciones = $desdeOrigen->where('destino_terminal_id', $destinoId);
 
         return [
-            'origenes' => $tramos->pluck('origenTerminal')->unique('id')->values(),       //Indica los terminales de origen disponibles para la fecha seleccionada
-            'destinos' => $desdeOrigen->pluck('destinoTerminal')->unique('id')->values(), //Indica los terminales de destino disponibles para la fecha y origen seleccionados
-            'opciones' => $opciones,                                                      //Indica los tramos disponibles (ProgramacionTramoPrecio) para la fecha, origen y destino seleccionados
-            'salidas' => $tramos->pluck('programacion')->unique('id')->values(),          //Indica las salidas (Programacion) disponibles para la fecha seleccionada
-            'tarifa' => $opciones->firstWhere('id', $tarifaId),                           //Es la ProgramacionTramoPrecio seleccionada actualmente, si existe
+            // Terminales de origen con tramos de la empresa en la fecha seleccionada.
+            'origenes' => $tramos->pluck('origenTerminal')->unique('id')->values(),
+
+            // Terminales de destino de los tramos que parten del origen seleccionado.
+            'destinos' => $desdeOrigen->pluck('destinoTerminal')->unique('id')->values(),
+
+            // Tramos programados que coinciden con la fecha, el origen y el destino seleccionados (ProgramacionTramoPrecio).
+            'opciones' => $opciones,
+
+            // Tramo seleccionado entre las opciones; devuelve null si el ID no coincide. (ProgramacionTramoPrecio).
+            'tarifa' => $opciones->firstWhere('id', $tarifaId),
         ];
     }
 }
