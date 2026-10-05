@@ -104,8 +104,7 @@
         "permissions": [
           {"name": "Listar", "url": "list", "status": 1},
           {"name": "Agregar", "url": "add", "status": 1},
-          {"name": "Ver detalle", "url": "detail", "status": 1},
-          {"name": "Aprobar o rechazar", "url": "review", "status": 1}
+          {"name": "Ver detalle", "url": "detail", "status": 1}
         ]
       }
     ]

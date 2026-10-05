@@ -55,7 +55,10 @@ class CheckPermissionEmpresa
 
         'empresas.validacion-pagos.list' => ['validacion-pagos', 'list'],
         'empresas.reembolsos.list' => ['reembolsos', 'list'],
+
+        // Reprogramaciones
         'empresas.reprogramaciones.list' => ['reprogramaciones', 'list'],
+        'empresas.reprogramaciones.add' => ['reprogramaciones', 'add'],
 
         /* ----------------------------------------Cobranza---------------------------------------- */
         'empresas.ordenes-cobro.list' => ['ordenes-cobro', 'list'],

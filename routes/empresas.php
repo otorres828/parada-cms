@@ -44,6 +44,7 @@ use App\Livewire\Empresas\ValidacionPagos\ListValidacionPago;
 use App\Livewire\Empresas\Reembolsos\ListReembolso;
 /* ------------------------------Reprogramaciones------------------------------------ */
 use App\Livewire\Empresas\Reprogramaciones\ListReprogramacion;
+use App\Livewire\Empresas\Reprogramaciones\SaveReprogramacion;
 /* ------------------------------Órdenes de cobro------------------------------------ */
 use App\Livewire\Empresas\OrdenesCobro\ListOrdenCobro;
 /* ------------------------------Cupones------------------------------------ */
@@ -194,6 +195,7 @@ Route::group(['middleware' => ['auth:empresa', 'check.permisos.empresa']], funct
         Route::prefix('reprogramaciones')->name('reprogramaciones.')->group(function () {
 
             Route::livewire('/', ListReprogramacion::class)->name('list');
+            Route::livewire('agregar', SaveReprogramacion::class)->name('add');
 
         });
 
