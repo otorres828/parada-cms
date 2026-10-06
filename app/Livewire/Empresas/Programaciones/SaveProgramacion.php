@@ -206,8 +206,9 @@ class SaveProgramacion extends EmpresaComponent
 
     protected function editar(Programacion $programacion): void
     {
-        Programacion::exigir(in_array($programacion->estatus, [1, 2], true), 'estatus', 'Una programación finalizada no se puede editar.');
-        Programacion::exigir(! $programacion->reservas()->exists(), 'tramos', 'Esta programación tiene reservas y no puede editarse.');
+        abort_unless(in_array($programacion->estatus, [1, 2], true), 401, 'Una programación finalizada no se puede editar.');
+        abort_if($programacion->reservas()->exists(), 401, 'Esta programación tiene reservas y no puede editarse.');
+        
         $this->programacionId = $programacion->id;
         $this->viajeId = (string) $programacion->viaje_id;
         $this->transporteId = (string) $programacion->transporte_id;
