@@ -38,13 +38,13 @@
                         </td>
 
                         <td style="min-width: 170px;">
-                            <x-form.date-input id="salida-fecha-{{ $clave }}" class= mb-2" wire:model="tramos.{{ $clave }}.fecha_salida" aria-label="Fecha de salida" min="{{ today()->format('Y-m-d') }}" max="2100-12-31" @disabled(! $habilitado) @required($habilitado) />
-                            <input id="salida-hora-{{ $clave }}" type="time" class="form-control" wire:model="tramos.{{ $clave }}.hora_salida" aria-label="Hora de salida" @disabled(! $habilitado) @required($habilitado)>
+                            <input id="salida-hora-{{ $clave }}" type="time" class="form-control" wire:model.live="tramos.{{ $clave }}.hora_salida" aria-label="Hora de salida" @disabled(! $habilitado) @required($habilitado)>
+                            <small class="d-block text-muted mt-1">{{ !empty($tramos[$clave]['fecha_salida']) ? \Carbon\Carbon::parse($tramos[$clave]['fecha_salida'])->format('d/m/Y') : '—' }}</small>
                         </td>
 
                         <td style="min-width: 170px;">
-                            <x-form.date-input id="llegada-fecha-{{ $clave }}" class="mb-2" wire:model="tramos.{{ $clave }}.fecha_llegada" aria-label="Fecha de llegada" min="{{ today()->format('Y-m-d') }}" max="2100-12-31" @disabled(! $habilitado) @required($habilitado) />
-                            <input id="llegada-hora-{{ $clave }}" type="time" class="form-control" wire:model="tramos.{{ $clave }}.hora_llegada" aria-label="Hora de llegada" @disabled(! $habilitado) @required($habilitado)>
+                            <input id="llegada-hora-{{ $clave }}" type="time" class="form-control" wire:model.live="tramos.{{ $clave }}.hora_llegada" aria-label="Hora de llegada" @disabled(! $habilitado) @required($habilitado)>
+                            <small class="d-block text-muted mt-1">{{ !empty($tramos[$clave]['fecha_llegada']) ? \Carbon\Carbon::parse($tramos[$clave]['fecha_llegada'])->format('d/m/Y') : '—' }}</small>
                         </td>
 
                         <td style="min-width: 130px;">

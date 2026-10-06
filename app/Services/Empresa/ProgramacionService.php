@@ -12,6 +12,64 @@ use Illuminate\Support\Facades\Validator;
 
 class ProgramacionService
 {
+    public static function normalizarHorarios(Viaje $viaje, array $tramos, string $fecha): array
+    {
+        Validator::make(['fecha' => $fecha], ['fecha' => ['required', 'date_format:Y-m-d']], [
+            'required' => 'Selecciona la fecha de salida.',
+            'date_format' => 'La fecha de salida no tiene un formato válido.',
+        ])->validate();
+
+        $horas = [];
+        $activos = [];
+        foreach ($viaje->tramos as $base) {
+            $clave = $base->origen_terminal_id.'-'.$base->destino_terminal_id;
+            if (! isset($tramos[$clave])) {
+                continue;
+            }
+            foreach (['salida' => $base->origen_terminal_id, 'llegada' => $base->destino_terminal_id] as $evento => $terminal) {
+                $hora = $tramos[$clave]['hora_'.$evento] ?? '';
+                $habilitado = (bool) ($tramos[$clave]['habilitado'] ?? false);
+                if ($habilitado) {
+                    Validator::make(['hora' => $hora], ['hora' => ['required', 'date_format:H:i']], [
+                        'required' => 'Completa las horas de los trayectos seleccionados.',
+                        'date_format' => 'La hora del trayecto no tiene un formato válido.',
+                    ])->validate();
+                    Programacion::exigir(! isset($activos[$terminal][$evento]) || $activos[$terminal][$evento] === $hora, 'tramos', 'Los trayectos deben compartir la misma hora de '.$evento.' en un mismo terminal.');
+                    $activos[$terminal][$evento] = $hora;
+                }
+                if (preg_match('/^([01]\d|2[0-3]):[0-5]\d$/', $hora) && (! isset($horas[$terminal][$evento]) || $habilitado)) {
+                    $horas[$terminal][$evento] = $hora;
+                }
+            }
+        }
+
+        $anterior = Carbon::parse($fecha)->startOfDay();
+        $fechas = [];
+        foreach ($viaje->secuenciaTerminales() as $terminal) {
+            foreach (['llegada', 'salida'] as $evento) {
+                if (! isset($horas[$terminal][$evento])) {
+                    continue;
+                }
+                $momento = $anterior->copy()->setTimeFromTimeString($horas[$terminal][$evento]);
+                if ($momento->lessThan($anterior) || ($evento === 'llegada' && $momento->equalTo($anterior))) {
+                    $momento->addDay();
+                }
+                $fechas[$terminal][$evento] = $momento->format('Y-m-d');
+                $anterior = $momento;
+            }
+        }
+
+        foreach ($viaje->tramos as $base) {
+            $clave = $base->origen_terminal_id.'-'.$base->destino_terminal_id;
+            if (isset($tramos[$clave])) {
+                $tramos[$clave]['fecha_salida'] = $fechas[$base->origen_terminal_id]['salida'] ?? $fecha;
+                $tramos[$clave]['fecha_llegada'] = $fechas[$base->destino_terminal_id]['llegada'] ?? $fecha;
+            }
+        }
+
+        return $tramos;
+    }
+
     public static function fechas(array $configuracion): array
     {
         Validator::make($configuracion, [
@@ -61,6 +119,8 @@ class ProgramacionService
     public static function guardarLote(int $empresaId, array $datos, array $configuracion): array
     {
         $fechas = self::fechas($configuracion);
+        $viaje = Viaje::searchAdmin('', ['empresa_id' => $empresaId])->with('tramos')->findOrFail($datos['viaje_id']);
+        $datos['tramos'] = self::normalizarHorarios($viaje, $datos['tramos'] ?? [], $configuracion['desde']);
         foreach ($datos['tramos'] ?? [] as $tramo) {
             if (! ($tramo['habilitado'] ?? false)) {
                 continue;
@@ -80,6 +140,7 @@ class ProgramacionService
             $referencia = Carbon::parse($configuracion['desde']);
             foreach ($fechas as $fecha) {
                 $copia = $datos;
+                $copia['fecha_referencia'] = $fecha;
                 $desplazamiento = (int) $referencia->diffInDays(Carbon::parse($fecha), false);
                 foreach ($copia['tramos'] as &$tramo) {
                     if ($tramo['habilitado']) {
@@ -130,6 +191,8 @@ class ProgramacionService
             $plantilla = $viaje->tramos->keyBy(function ($tramo) {
                 return $tramo->origen_terminal_id.'-'.$tramo->destino_terminal_id;
             });
+            $referencia = $datos['fecha_referencia'] ?? collect($datos['tramos'])->pluck('fecha_salida')->filter()->min();
+            $datos['tramos'] = self::normalizarHorarios($viaje, $datos['tramos'], $referencia ?? '');
             $seleccionados = [];
             $salidas = [];
             $llegadas = [];

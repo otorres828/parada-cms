@@ -67,7 +67,7 @@ $datos['tramos'][$clave]['precio'] = '9.50';
 ProgramacionService::guardar($empresa->id, $datos, $nueva->id);
 $check($nueva->tramoPrecios()->first()->precio === '9.50');
 $rechazados = $datos;
-$rechazados['tramos'][$clave]['hora_llegada'] = '00:00';
+$rechazados['tramos'][$clave]['hora_llegada'] = '25:00';
 $reject(function () use ($empresa, $rechazados, $nueva) {
     ProgramacionService::guardar($empresa->id, $rechazados, $nueva->id);
 }, Illuminate\Validation\ValidationException::class);
@@ -171,3 +171,46 @@ $reject(function () use ($empresa, $datos) { ProgramacionService::guardar($empre
 $rutaPlantilla->update(['estatus' => 1]);
 $bus->update(['estatus' => 1]);
 echo "Ruta y transporte inactivos: salidas previas vendibles y nuevas altas rechazadas OK\n";
+
+$a = $terminales[0]->id;
+$b = $terminalIntermedio->id;
+$c = $terminales[1]->id;
+$referencia = today()->addDay()->format('Y-m-d');
+$horarios = $form->tramos;
+foreach ($horarios as &$fila) {
+    $fila['habilitado'] = true;
+    $fila['fecha_salida'] = $referencia;
+    $fila['fecha_llegada'] = $referencia;
+}
+unset($fila);
+$horarios[$a.'-'.$b]['hora_salida'] = '06:00';
+$horarios[$a.'-'.$b]['hora_llegada'] = '09:00';
+$horarios[$a.'-'.$c]['hora_salida'] = '06:00';
+$horarios[$a.'-'.$c]['hora_llegada'] = '05:00';
+$horarios[$b.'-'.$c]['hora_salida'] = '09:30';
+$horarios[$b.'-'.$c]['hora_llegada'] = '05:00';
+$calculados = ProgramacionService::normalizarHorarios($rutaPlantilla->fresh(['tramos']), $horarios, $referencia);
+$check($calculados[$a.'-'.$b]['fecha_llegada'] === $referencia);
+$check($calculados[$b.'-'.$c]['fecha_llegada'] === today()->addDays(2)->format('Y-m-d'));
+$check($calculados[$a.'-'.$c]['fecha_llegada'] === $calculados[$b.'-'.$c]['fecha_llegada']);
+$datosNocturnos = $datos;
+$datosNocturnos['tramos'] = $horarios;
+$datosNocturnos['fecha_referencia'] = $referencia;
+$nocturna = ProgramacionService::guardar($empresa->id, $datosNocturnos);
+$check($nocturna->tramoPrecios->firstWhere('origen_terminal_id', $b)->fecha_llegada->format('Y-m-d') === today()->addDays(2)->format('Y-m-d'));
+
+$form->tramos = $horarios;
+$form->updatedTramos('05:00', $a.'-'.$b.'.hora_llegada');
+$check($form->tramos[$a.'-'.$b]['fecha_llegada'] === today()->addDays(2)->format('Y-m-d'));
+$check($form->tramos[$b.'-'.$c]['fecha_salida'] === today()->addDays(2)->format('Y-m-d'));
+$check($form->tramos[$b.'-'.$c]['fecha_llegada'] === today()->addDays(3)->format('Y-m-d'));
+$form->updatedTramos('10:00', $b.'-'.$c.'.hora_llegada');
+$check($form->tramos[$a.'-'.$c]['hora_llegada'] === '10:00');
+$check($form->tramos[$a.'-'.$c]['fecha_llegada'] === today()->addDays(2)->format('Y-m-d'));
+
+$contradictorios = $horarios;
+$contradictorios[$a.'-'.$c]['hora_llegada'] = '04:00';
+$reject(function () use ($rutaPlantilla, $contradictorios, $referencia) {
+    ProgramacionService::normalizarHorarios($rutaPlantilla->fresh(['tramos']), $contradictorios, $referencia);
+}, Illuminate\Validation\ValidationException::class);
+echo "Horarios manuales: cambio de día, escalas, combinaciones sincronizadas, recálculo y persistencia OK\n";

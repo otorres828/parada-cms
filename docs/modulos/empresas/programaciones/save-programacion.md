@@ -47,3 +47,10 @@ Las rutas y transportes se cargan en mount en propiedades públicas tipadas como
 ## Puestos a vender por trayecto
 
 La columna Puestos a vender permite fijar un límite independiente para cada combinación. Vacío significa todos los puestos de la programación; un valor debe estar entre 1 y la capacidad actual del transporte. Se guarda en asientos_maximos_permitidos y se conserva en cada copia del lote. La disponibilidad existente utiliza ese límite y la ocupación de los segmentos compartidos. Cambiar después la capacidad del transporte no modifica asientos_totales ni los límites guardados en programaciones anteriores.
+# Fechas calculadas por recorrido
+
+La tabla permite introducir horas de salida y llegada; debajo de cada hora muestra la fecha calculada. `ProgramacionService::normalizarHorarios()` recorre los terminales en el orden de la ruta, primero llegada y después salida. Si una hora es anterior al evento previo, avanza un día. Una salida puede coincidir con la llegada a esa parada; la llegada al siguiente terminal debe ser posterior a la salida.
+
+Las combinaciones no se interpretan como filas consecutivas. A→B, A→C y B→C comparten los horarios de A, B y C. Modificar una hora actualiza las combinaciones del mismo terminal y recalcula las fechas desde la fecha de referencia. Por ejemplo, A→B 06:00–09:00 y B→C 09:30–05:00 implican llegada a C al día siguiente también para A→C.
+
+La normalización se ejecuta de nuevo en el servicio antes de guardar. Cada programación del lote conserva los cambios de día relativos a su propia fecha de referencia.

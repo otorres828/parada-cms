@@ -94,10 +94,12 @@ class SaveProgramacion extends EmpresaComponent
     public function save(): void
     {
         Access::authorize('programaciones', $this->programacionId === null ? 'add' : 'edit');
+        $this->actualizarFechasTramos();
         $datos = [
             'viaje_id' => $this->viajeId,
             'transporte_id' => $this->transporteId,
             'estatus' => $this->estatus,
+            'fecha_referencia' => $this->fechaSalida,
             'tramos' => $this->tramos,
         ];
         if ($this->programacionId === null) {
@@ -127,6 +129,40 @@ class SaveProgramacion extends EmpresaComponent
     {
         $this->tramos = [];
         $this->cargarTramos();
+    }
+
+    public function updatedTramos($value, ?string $key = null): void
+    {
+        if ($key === null || ! str_contains($key, '.')) {
+            return;
+        }
+        [$clave, $campo] = explode('.', $key, 2);
+        if (! in_array($campo, ['hora_salida', 'hora_llegada'], true)) {
+            return;
+        }
+        [$origen, $destino] = explode('-', $clave);
+        foreach ($this->tramos as $otraClave => &$tramo) {
+            [$otroOrigen, $otroDestino] = explode('-', $otraClave);
+            if (($campo === 'hora_salida' && $origen === $otroOrigen)
+                || ($campo === 'hora_llegada' && $destino === $otroDestino)) {
+                $tramo[$campo] = $value;
+            }
+        }
+        unset($tramo);
+        $this->actualizarFechasTramos();
+    }
+
+    public function updatedFechaSalida(): void
+    {
+        $this->actualizarFechasTramos();
+    }
+
+    private function actualizarFechasTramos(): void
+    {
+        $viaje = $this->viajes->firstWhere('id', (int) $this->viajeId);
+        if ($viaje !== null && $this->tramos !== []) {
+            $this->tramos = ProgramacionService::normalizarHorarios($viaje, $this->tramos, $this->fechaSalida);
+        }
     }
 
     public function cargarTramos(): void
