@@ -26,8 +26,14 @@
                 <label class="form-label" for="programacion-fecha">
                     {{ $this->modoFechas === 'especificas' && $programacionId === null ? 'Fecha de referencia' : 'Fecha de salida' }}
                 </label>
-                <input id="programacion-fecha" type="date" class="form-control" wire:model.live="fechaSalida"
-                    min="{{ today()->format('Y-m-d') }}" max="2100-12-31" required>
+                <x-form.date-input
+                    id="programacion-fecha"
+                    class="form-control"
+                    wire:model.live="fechaSalida"
+                    min="{{ today()->format('Y-m-d') }}"
+                    max="2100-12-31"
+                    required
+                />
 
             </div>
 
@@ -50,8 +56,14 @@
                 <div style="width: 240px; max-width: 100%;">
 
                     <label for="programacion-hasta" class="form-label">Fecha final del rango</label>
-                    <input id="programacion-hasta" type="date" class="form-control" wire:model.live="fechaHasta"
-                        min="{{ $this->fechaSalida }}" max="2100-12-31" required>
+                    <x-form.date-input
+                        id="programacion-hasta"
+                        class="form-control"
+                        wire:model.live="fechaHasta"
+                        min="{{ $this->fechaSalida }}"
+                        max="2100-12-31"
+                        required
+                    />
 
                 </div>
 
@@ -79,8 +91,13 @@
                     <label for="programacion-fecha-especifica" class="form-label">Añadir fecha de salida</label>
                     <div class="d-flex gap-2">
 
-                        <input id="programacion-fecha-especifica" type="date" class="form-control" wire:model="fechaEspecifica"
-                            min="{{ today()->format('Y-m-d') }}" max="2100-12-31">
+                        <x-form.date-input
+                            id="programacion-fecha-especifica"
+                            class="form-control"
+                            wire:model="fechaEspecifica"
+                            min="{{ today()->format('Y-m-d') }}"
+                            max="2100-12-31"
+                        />
                         <button type="button" class="btn btn-outline-primary text-nowrap" wire:click="agregarFecha" wire:loading.attr="disabled">Añadir fecha</button>
 
                     </div>

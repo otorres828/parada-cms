@@ -20,8 +20,15 @@
 
         @endisset
 
-        <input type="{{ $type ?? 'text' }}" @class(['form-control','is-invalid'=>isset($hasError)]) {{ $attributes }}
-        value="{{ $value ?? '' }}"/>
+        @if (in_array($type ?? 'text', ['date', 'datetime-local'], true))
+
+            <x-form.date-input {{ $attributes }} :with-time="($type ?? 'text') === 'datetime-local'" :class="isset($hasError) ? 'form-control is-invalid' : 'form-control'" />
+
+        @else
+
+            <input type="{{ $type ?? 'text' }}" @class(['form-control','is-invalid'=>isset($hasError)]) {{ $attributes }} value="{{ $value ?? '' }}" />
+
+        @endif
 
         @if (isset($hasError))
 

@@ -74,8 +74,12 @@
                         <div class="col-md-4">
 
                             <label class="form-label" for="reprogramacion-fecha">Nueva fecha</label>
-                            <input id="reprogramacion-fecha" type="date" class="form-control" wire:model.live="fecha"
-                                min="{{ today()->toDateString() }}">
+                            <x-form.date-input
+                                id="reprogramacion-fecha"
+                                class="form-control"
+                                wire:model.live="fecha"
+                                min="{{ today()->toDateString() }}"
+                            />
 
                         </div>
 

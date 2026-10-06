@@ -18,8 +18,14 @@
                 </div>
                 <div class="col-md-6">
                     <label class="form-label" for="taquilla-pasajero-fecha_nacimiento">Fecha de nacimiento</label>
-                    <input id="taquilla-pasajero-fecha_nacimiento" type="date" max="{{ today()->toDateString() }}" class="form-control"
-                        wire:model="pasajero.fecha_nacimiento" required maxlength="255">
+                    <x-form.date-input
+                        id="taquilla-pasajero-fecha_nacimiento"
+                        max="{{ today()->toDateString() }}"
+                        class="form-control"
+                        wire:model="pasajero.fecha_nacimiento"
+                        required
+                        maxlength="255"
+                    />
                 </div>
                 <div class="col-md-6">
                     <label class="form-label" for="taquilla-pasajero-tipo_pasajero">Tipo de pasajero</label>

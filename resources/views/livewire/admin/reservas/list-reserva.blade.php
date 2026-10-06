@@ -88,8 +88,13 @@
             <label class="form-label" for="listReserva-from">
                 Desde
             </label>
-            <input id="listReserva-from" type="date" class="form-control" wire:model.live="date_from"
-                min="{{ $this->getMinFilterDate() }}" max="{{ $this->getMaxFilterDate() }}">
+            <x-form.date-input
+                id="listReserva-from"
+                class="form-control"
+                wire:model.live="date_from"
+                min="{{ $this->getMinFilterDate() }}"
+                max="{{ $this->getMaxFilterDate() }}"
+            />
 
         </div>
 
@@ -98,8 +103,13 @@
             <label class="form-label" for="listReserva-to">
                 Hasta
             </label>
-            <input id="listReserva-to" type="date" class="form-control" wire:model.live="date_to"
-                min="{{ $this->getMinFilterDate() }}" max="{{ $this->getMaxFilterDate() }}">
+            <x-form.date-input
+                id="listReserva-to"
+                class="form-control"
+                wire:model.live="date_to"
+                min="{{ $this->getMinFilterDate() }}"
+                max="{{ $this->getMaxFilterDate() }}"
+            />
 
         </div>
 

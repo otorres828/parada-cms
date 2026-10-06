@@ -82,7 +82,11 @@
             <label class="form-label" for="listReembolso-from">
                 Desde
             </label>
-            <input id="listReembolso-from" type="date" class="form-control" wire:model.live="date_from">
+            <x-form.date-input
+                id="listReembolso-from"
+                class="form-control"
+                wire:model.live="date_from"
+            />
 
         </div>
 
@@ -91,7 +95,11 @@
             <label class="form-label" for="listReembolso-to">
                 Hasta
             </label>
-            <input id="listReembolso-to" type="date" class="form-control" wire:model.live="date_to">
+            <x-form.date-input
+                id="listReembolso-to"
+                class="form-control"
+                wire:model.live="date_to"
+            />
 
         </div>
 

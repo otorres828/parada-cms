@@ -5,8 +5,14 @@
     <div class="card-body row g-3">
         <div class="col-md-3">
             <label class="form-label" for="taquilla-tramo-fecha">Fecha de salida</label>
-            <input id="taquilla-tramo-fecha" form="registrar-taquilla" required type="date" class="form-control" wire:model.live="fecha"
-                min="{{ today()->toDateString() }}">
+            <x-form.date-input
+                id="taquilla-tramo-fecha"
+                form="registrar-taquilla"
+                required
+                class="form-control"
+                wire:model.live="fecha"
+                min="{{ today()->toDateString() }}"
+            />
         </div>
         <div class="col-md-3">
             <label class="form-label" for="taquilla-tramo-origen">Origen</label>

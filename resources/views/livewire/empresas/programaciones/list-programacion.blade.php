@@ -53,15 +53,27 @@
 
             <div class="d-flex align-items-center gap-2">
 
-                <input id="listProgramacion-from" type="date" class="form-control" style="width: 160px;"
-                    wire:model.live="date_from" aria-label="Fecha inicial"
-                    min="{{ $this->getMinFilterDate() }}" max="{{ $this->getMaxFilterDate() }}">
+                <x-form.date-input
+                    id="listProgramacion-from"
+                    class="form-control"
+                    style="width: 160px;"
+                    wire:model.live="date_from"
+                    aria-label="Fecha inicial"
+                    min="{{ $this->getMinFilterDate() }}"
+                    max="{{ $this->getMaxFilterDate() }}"
+                />
 
                 <span class="text-body-secondary" aria-hidden="true">a</span>
 
-                <input id="listProgramacion-to" type="date" class="form-control" style="width: 160px;"
-                    wire:model.live="date_to" aria-label="Fecha final"
-                    min="{{ $this->getMinFilterDate() }}" max="{{ $this->getMaxFilterDate() }}">
+                <x-form.date-input
+                    id="listProgramacion-to"
+                    class="form-control"
+                    style="width: 160px;"
+                    wire:model.live="date_to"
+                    aria-label="Fecha final"
+                    min="{{ $this->getMinFilterDate() }}"
+                    max="{{ $this->getMaxFilterDate() }}"
+                />
 
             </div>
 

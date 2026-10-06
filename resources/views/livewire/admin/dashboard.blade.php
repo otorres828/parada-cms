@@ -85,9 +85,13 @@
                     <label for="dashboard-date-from" class="form-label small text-body-secondary mb-1">
                         Desde
                     </label>
-                    <input id="dashboard-date-from" type="date" class="form-control form-control-sm"
-                        wire:model.live="date_from" min="{{ $this->getMinFilterDate() }}"
-                        max="{{ $this->getMaxFilterDate() }}">
+                    <x-form.date-input
+                        id="dashboard-date-from"
+                        class="form-control form-control-sm"
+                        wire:model.live="date_from"
+                        min="{{ $this->getMinFilterDate() }}"
+                        max="{{ $this->getMaxFilterDate() }}"
+                    />
 
                 </div>
 
@@ -96,9 +100,13 @@
                     <label for="dashboard-date-to" class="form-label small text-body-secondary mb-1">
                         Hasta
                     </label>
-                    <input id="dashboard-date-to" type="date" class="form-control form-control-sm"
-                        wire:model.live="date_to" min="{{ $this->getMinFilterDate() }}"
-                        max="{{ $this->getMaxFilterDate() }}">
+                    <x-form.date-input
+                        id="dashboard-date-to"
+                        class="form-control form-control-sm"
+                        wire:model.live="date_to"
+                        min="{{ $this->getMinFilterDate() }}"
+                        max="{{ $this->getMaxFilterDate() }}"
+                    />
 
                 </div>
 

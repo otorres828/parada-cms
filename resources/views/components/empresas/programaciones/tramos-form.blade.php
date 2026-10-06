@@ -38,12 +38,12 @@
                         </td>
 
                         <td style="min-width: 170px;">
-                            <input id="salida-fecha-{{ $clave }}" type="date" class="form-control mb-2" wire:model="tramos.{{ $clave }}.fecha_salida" aria-label="Fecha de salida" min="{{ today()->format('Y-m-d') }}" max="2100-12-31" @disabled(! $habilitado) @required($habilitado)>
+                            <x-form.date-input id="salida-fecha-{{ $clave }}" class= mb-2" wire:model="tramos.{{ $clave }}.fecha_salida" aria-label="Fecha de salida" min="{{ today()->format('Y-m-d') }}" max="2100-12-31" @disabled(! $habilitado) @required($habilitado) />
                             <input id="salida-hora-{{ $clave }}" type="time" class="form-control" wire:model="tramos.{{ $clave }}.hora_salida" aria-label="Hora de salida" @disabled(! $habilitado) @required($habilitado)>
                         </td>
 
                         <td style="min-width: 170px;">
-                            <input id="llegada-fecha-{{ $clave }}" type="date" class="form-control mb-2" wire:model="tramos.{{ $clave }}.fecha_llegada" aria-label="Fecha de llegada" min="{{ today()->format('Y-m-d') }}" max="2100-12-31" @disabled(! $habilitado) @required($habilitado)>
+                            <x-form.date-input id="llegada-fecha-{{ $clave }}" class="mb-2" wire:model="tramos.{{ $clave }}.fecha_llegada" aria-label="Fecha de llegada" min="{{ today()->format('Y-m-d') }}" max="2100-12-31" @disabled(! $habilitado) @required($habilitado) />
                             <input id="llegada-hora-{{ $clave }}" type="time" class="form-control" wire:model="tramos.{{ $clave }}.hora_llegada" aria-label="Hora de llegada" @disabled(! $habilitado) @required($habilitado)>
                         </td>
 

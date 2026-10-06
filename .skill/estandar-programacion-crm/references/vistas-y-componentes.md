@@ -182,3 +182,6 @@ Regla de cantidad de propiedades (prevalece sobre las indicaciones generales ant
 Excepción para tablas: dentro de `<table>` o `<x-list.table>`, las aperturas de todos los componentes se mantienen en una sola línea, incluso con dos o más propiedades; por ejemplo `<x-list.sortable-button column="id" :$sortColumn :$sortDirection />`. Conservar la indentación por nivel y la separación entre bloques. Esta excepción prevalece sobre la regla de cantidad de propiedades.
 
 Encabezados de tabla: dentro de cada `<th>` no dejar líneas vacías entre el texto, los componentes y el cierre. El componente de ordenación conserva su apertura en una sola línea y la indentación del nivel correspondiente.
+# Campos de fecha
+
+Usar `x-form.date-input` para fechas: muestra `dd/mm/aaaa` con Flatpickr en español y mantiene `Y-m-d` en Livewire y la base de datos. Conservar `wire:model` o `wire:model.live`, los límites `min`/`max` en ISO y los atributos de validación. `x-form.text-input` con `type="date"` delega en ese componente. Los valores de `mount()` y los filtros por URL mantienen el formato ISO; no formatearlos como fechas visuales.
