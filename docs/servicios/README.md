@@ -10,6 +10,7 @@ Esta carpeta documenta las entidades principales y los servicios que coordinan s
 - [Cupones](servicio-cupon.md): generación, aplicación, distribución y liberación.
 - [Tasas de servicio](servicio-tasas-servicio.md): exoneraciones, snapshots y cálculo por pasaje.
 - [Pagos de reservas](servicio-pago-reserva.md): reporte, confirmación y pago fallido.
+- [Correo de reserva pagada](servicio-correo-reserva.md): envío en segundo plano del resumen, pasajes y recibo PDF con QR.
 - [Órdenes de cobro](servicio-orden-cobro.md): emisión, revisión y bloqueo por cobranza.
 - [Reembolsos](servicio-reembolso.md): creación y resolución desde la empresa.
 - [Tipo de cambio](servicio-tipo-cambio.md): actualización desde la fuente configurada.

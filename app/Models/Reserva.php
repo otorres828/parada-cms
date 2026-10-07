@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Support\ConversorMoneda;
+use App\Notifications\ReservaPagadaNotification;
 use App\Traits\TraitGeneral;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -10,6 +11,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Collection as SupportCollection;
+use Illuminate\Support\Facades\Notification;
 
 class Reserva extends ModelHelper
 {
@@ -60,6 +62,15 @@ class Reserva extends ModelHelper
     const ESTADO_PAGO_REEMBOLSADO = 6;
 
     const ESTADO_PAGO_FALLIDO = 7;
+
+    protected static function booted(): void
+    {
+        static::saved(function (Reserva $reserva) {
+            if ($reserva->estado_pago === self::ESTADO_PAGO_PAGADO && $reserva->isDirty('estado_pago')) {
+                $reserva->sendMailReserva();
+            }
+        });
+    }
 
     protected function casts(): array
     {
@@ -180,6 +191,23 @@ class Reserva extends ModelHelper
             'tipoCambio',
             'tramoPrecio.programacion.viaje',
         ]);
+    }
+
+    public function sendMailReserva(): bool
+    {
+        if ($this->estado_pago !== self::ESTADO_PAGO_PAGADO) {
+            return false;
+        }
+
+        $email = $this->usuario_id !== null ? $this->usuario?->email : ($this->comprador_json['email'] ?? null);
+
+        if (! is_string($email) || ! filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            return false;
+        }
+
+        Notification::route('mail', $email)->notify(new ReservaPagadaNotification($this->id));
+
+        return true;
     }
 
     public function validarVigente(): void

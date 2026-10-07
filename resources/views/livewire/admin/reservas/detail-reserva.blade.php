@@ -29,6 +29,10 @@
 
         <x-slot:button>
 
+            @if ($canViewReservation && $reserva->estado_pago === \App\Models\Reserva::ESTADO_PAGO_PAGADO)
+                <x-reservas.reenviar-correo-button />
+            @endif
+
             <x-form.cancel-button :link="route('admin.reservas.list')" >
                 Volver al listado
             </x-form.cancel-button>

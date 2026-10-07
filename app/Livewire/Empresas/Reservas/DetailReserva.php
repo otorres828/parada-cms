@@ -39,6 +39,24 @@ class DetailReserva extends EmpresaComponent
         return view('livewire.empresas.reservas.detail-reserva');
     }
 
+    public function reenviarCorreo(): void
+    {
+        Access::authorize('reservas', 'detail');
+        $reserva = $this->findReserva();
+
+        if ($reserva->estado_pago !== Reserva::ESTADO_PAGO_PAGADO) {
+            $this->dispatch('empresas_reserva_error', message: 'Solo se pueden enviar los pasajes de una reserva pagada.');
+            return;
+        }
+
+        if (! $reserva->sendMailReserva()) {
+            $this->dispatch('empresas_reserva_error', message: 'El comprador no tiene un correo válido registrado.');
+            return;
+        }
+
+        $this->dispatch('empresas_reserva_success', message: 'Correo encolado para reenviar el comprobante y los pasajes.');
+    }
+
     protected function findReserva(): Reserva
     {
         return Reserva::findAdminDetail($this->reserva_id,['empresa_id' => $this->usuarioEmpresa->empresa_id]);

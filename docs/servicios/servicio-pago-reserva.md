@@ -35,3 +35,5 @@ Una confirmación repetida sobre una reserva ya pagada devuelve el detalle si su
 6. Un error revierte todos los cambios de la transacción.
 
 El reporte del cliente no equivale a una comprobación bancaria automática.
+
+Cuando la reserva pasa a pagada, el evento `saved` del modelo llama a `Reserva::sendMailReserva()` para encolar el resumen y los pasajes con QR y PDF después del commit. Una confirmación repetida no vuelve a encolar el correo. Ver [Correo de reserva pagada](servicio-correo-reserva.md).
