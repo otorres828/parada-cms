@@ -74,7 +74,7 @@
 
             <div class="mb-3">
 
-                <x-form.text-input type="text" name="nombre_campana" x-model="$wire.nombre_campana" >
+                <x-form.text-input type="text" name="nombre_campana" x-model="$wire.nombre_campana" @input.capture="$event.target.value = $event.target.value.toUpperCase().replace(/\s/g, '')" >
                     Nombre
                 </x-form.text-input>
 

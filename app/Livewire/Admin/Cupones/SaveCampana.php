@@ -153,6 +153,8 @@ class SaveCampana extends Component
 
     protected function validateForm(): array
     {
+        $this->nombre_campana = mb_strtoupper(preg_replace('/\s+/u', '', $this->nombre_campana), 'UTF-8');
+
         $validated = $this->validate([
             'empresa_id' => ['nullable', 'integer', 'exists:empresas,id'],
             'nombre_campana' => ['required', 'string', 'max:255'],

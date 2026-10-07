@@ -135,6 +135,8 @@ class SaveCampana extends EmpresaComponent
 
     protected function validateForm(): array
     {
+        $this->nombre_campana = mb_strtoupper(preg_replace('/\s+/u', '', $this->nombre_campana), 'UTF-8');
+
         $this->codigo_personalizado = strtoupper(trim($this->codigo_personalizado));
 
         $validated = $this->validate([
