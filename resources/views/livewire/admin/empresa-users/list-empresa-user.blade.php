@@ -16,7 +16,7 @@
     - <x-list.status-badge />: Etiqueta visual del estado del registro.
     - <x-list.status-button />: Acción para cambiar el estado del registro.
     - <x-list.table />: Contenedor reutilizable para tablas.
-    - <x-list.view-button />: Enlace para consultar el detalle del registro.
+    - <x-list.add-button />: Registro de usuarios de la empresa.
     --------------------------------------------------------------------------
 --}}
 
@@ -46,10 +46,20 @@
                 aria-label="Filtrar por estado">
                 <option value="">Todos los estados</option>
                 <option value="1">Activo</option>
-                <option value="0">Inactivo</option>
+                <option value="2">Inactivo</option>
             </select>
 
         </x-slot:group>
+
+        @if ($canAdd)
+            <x-slot:button>
+
+                <x-list.add-button :route="route('admin.empresas.users.add', ['empresa_id' => $empresa_id])" >
+                    Nuevo registro
+                </x-list.add-button>
+
+            </x-slot:button>
+        @endif
 
     </x-list.actions>
 
@@ -113,29 +123,10 @@
 
                         <x-list.button-group>
 
-                            @if ($canDetail)
-
-                                <x-list.view-button :route="route('admin.empresas.users.detail', [
-                                    'empresa_id' => $empresa_id,
-                                    'usuario_empresa_id' => $usuarioEmpresa->id,
-                                ])" :target="false" />
-
-                            @endif
-
                             @if ($canEdit)
 
-                                <x-list.edit-button :route="route('admin.empresas.users.edit', [
-                                    'empresa_id' => $empresa_id,
-                                    'usuario_empresa_id' => $usuarioEmpresa->id,
-                                ])" />
+                                <x-list.edit-button :route="route('admin.empresas.users.edit', ['empresa_id' => $empresa_id, 'usuario_empresa_id' => $usuarioEmpresa->id])" :target="false" />
 
-                            @endif
-
-                            @if ($canPermissions)
-                                <a class="btn btn-outline-secondary"
-                                    href="{{ route('admin.empresas.users.permissions', ['empresa_id' => $empresa_id, 'usuario_empresa_id' => $usuarioEmpresa->id]) }}"
-                                    wire:navigate title="Permisos" aria-label="Permisos"><i
-                                        class="bi bi-shield-lock-fill"></i></a>
                             @endif
 
                             @if ($canEdit)

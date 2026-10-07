@@ -1,56 +1,13 @@
 # SaveEmpresaUser
 
-Edición de un usuario empresarial.
+Crea o edita usuarios de una empresa desde Admin. Las rutas `admin.empresas.users.add` y `admin.empresas.users.edit` reciben empresa_id, y la edición también usuario_empresa_id. Se exigen los permisos `empresas.users.add` o `empresas.users.edit` al guardar y en el middleware de entrada.
 
-- Clase: [EmpresaUsers/SaveEmpresaUser.php](../../../../app/Livewire/Admin/EmpresaUsers/SaveEmpresaUser.php).
-- Vista: [livewire.admin.empresa-users.save-empresa-user](../../../../resources/views/livewire/admin/empresa-users/save-empresa-user.blade.php).
-- Registro de rutas: [admin.php](../../../../routes/admin.php).
+`mount` valida la empresa, carga una sola vez los grupos activos y delega las asignaciones de edición a `editar`. El usuario se consulta siempre dentro de esa empresa y excluyendo eliminados; los IDs de contexto están bloqueados.
 
-## Acceso y permisos
+Reutiliza `x-empresa-users.form`, el mismo formulario del panel Empresas: nombre, correo único, contraseña (mínimo ocho caracteres, opcional al editar), switch para mostrarla, estado activo/inactivo y permisos agrupados por sección. Volver al listado se encuentra en el encabezado.
 
-La entrada está protegida por autenticación administrativa y el permiso de su ruta en [CheckPermission](../../../../app/Http/Middleware/CheckPermissionAdmin.php). Los permisos visuales y las autorizaciones de acciones declaradas en esta clase se enumeran a continuación.
+La diferencia de Admin es el switch Administrador de empresa. Activado oculta los permisos y concede es_admin = 1; apagado muestra la selección y guarda es_admin = 0. Al guardar como administrador se retiran las asignaciones individuales. Al guardar un usuario normal valida permisos existentes y activos, incluidos grupo y sección. Usuarios es una sección reservada al administrador empresarial y no se puede asignar individualmente.
 
-Comprobaciones declaradas por la clase. Cuando hay una condición entre alta y edición, el permiso depende de la operación:
+Guarda datos y permisos en una transacción y registra auditoría con los IDs asignados y la bandera es_admin. El cast hashed guarda la contraseña; una contraseña vacía conserva el hash anterior. Al cambiarla renueva remember_token. Redirige al listado con `admin_usuario_empresa_success`, consumido solo allí.
 
-~~~php
-Access::authorize('empresas.users', $this->usuario_empresa_id ? 'edit' : 'add');
-~~~
-
-## Funcionamiento paso a paso
-
-1. mount comprueba empresa y obtiene al usuario con findAdminByCompany.
-2. save exige edit para un usuario existente; valida correo único, nombre, contraseña opcional y banderas.
-3. Actualiza dentro de una transacción, preserva la contraseña si está vacía y audita.
-4. Regresa al listado de usuarios de la empresa.
-
-## Reglas y casos particulares
-
-El código conserva una rama de creación, pero routes/admin.php solo expone edición. La validación actual trata estatus como booleano.
-
-## Validación del formulario
-
-Reglas declaradas en línea. Las condiciones adicionales y las reglas multilínea se consultan en la clase enlazada.
-
-~~~php
-'nombre' => 'required|string|max:255',
-'email' => ['required', 'email', Rule::unique('usuarios_empresa', 'email')->ignore($this->usuario_empresa_id)],
-'password' => [$this->usuario_empresa_id ? 'nullable' : 'required', 'string', 'min:10', 'max:255'],
-'es_admin' => 'required|boolean',
-'estatus' => 'required|boolean',
-~~~
-
-## Métodos de referencia
-
-`mount()`, `render()`, `save()`, `editar()`.
-
-## Componentes de la vista
-
-- `<x-list.heading />`
-- `<x-form.cancel-button />`
-- `<x-layout.error />`
-- `<x-form.container-sm />`
-- `<x-form.text-input />`
-- `<x-form.dropdown />`
-- `<x-layout.loader.fullpage />`
-
-[Volver al índice administrativo](../README.md).
+La gestión de permisos forma parte del alta y edición; ya no existen pantallas separadas de detalle o permisos.

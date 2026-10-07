@@ -35,8 +35,6 @@ use App\Livewire\Admin\Empresas\DetailEmpresa;
 use App\Livewire\Admin\Empresas\PoliticasEmpresa;
 /* ------------------------------Usuarios Empresas-------------------------------- */
 use App\Livewire\Admin\EmpresaUsers\ListEmpresaUser;
-use App\Livewire\Admin\EmpresaUsers\DetailEmpresaUser;
-use App\Livewire\Admin\EmpresaUsers\PermissionEmpresaUser;
 use App\Livewire\Admin\EmpresaUsers\SaveEmpresaUser;
 /* ------------------------------Clientes----------------------------------------- */
 use App\Livewire\Admin\Clientes\ListCliente;
@@ -182,9 +180,8 @@ Route::group(['middleware' => ['auth:admin', 'check.permisos.admin']], function 
         Route::prefix('empresas/{empresa_id}/usuarios')->name('empresas.users.')->group(function () {
 
             Route::livewire('/', ListEmpresaUser::class)->whereNumber('empresa_id')->name('list');
+            Route::livewire('agregar', SaveEmpresaUser::class)->whereNumber('empresa_id')->name('add');
             Route::livewire('editar/{usuario_empresa_id}', SaveEmpresaUser::class)->whereNumber(['empresa_id', 'usuario_empresa_id'])->name('edit');
-            Route::livewire('detalle/{usuario_empresa_id}', DetailEmpresaUser::class)->whereNumber(['empresa_id', 'usuario_empresa_id'])->name('detail');
-            Route::livewire('permisos/{usuario_empresa_id}', PermissionEmpresaUser::class)->whereNumber(['empresa_id', 'usuario_empresa_id'])->name('permissions');
 
         });
 

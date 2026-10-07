@@ -111,9 +111,7 @@ Cada clase tiene su propio documento, agrupado por su módulo. Listados, formula
 
 ### empresa-users
 
-- [DetailEmpresaUser](empresa-users/detail-empresa-user.md)
 - [ListEmpresaUser](empresa-users/list-empresa-user.md)
-- [PermissionEmpresaUser](empresa-users/permission-empresa-user.md)
 - [SaveEmpresaUser](empresa-users/save-empresa-user.md)
 
 ### empresas

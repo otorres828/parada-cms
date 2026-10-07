@@ -38,7 +38,7 @@ class ListEmpresaUser extends Component
         Empresa::findOrFail($empresa_id);
         $this->sortColumn = 'id';
         $this->sortDirection = 'desc';
-        $this->checkPermissions('empresas.users', ['detail', 'permissions']);
+        $this->checkPermissions('empresas.users');
     }
 
     public function render()

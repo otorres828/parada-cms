@@ -6,7 +6,7 @@ Rutas: `empresas.usuarios.add` y `empresas.usuarios.edit`, esta última con `usu
 
 `mount` carga una vez los grupos, secciones y permisos activos. Al editar consulta el usuario y delega las asignaciones a `editar`. Los métodos siguen el orden mount, render, save y auxiliares.
 
-Campos: nombre obligatorio, correo único entre usuarios de empresa, contraseña de 10 a 255 caracteres (opcional al editar) y estado activo/inactivo. La contraseña se guarda mediante el cast hashed y se renueva remember_token al cambiarla. No se puede desactivar la propia cuenta.
+Campos: nombre obligatorio, correo único entre usuarios de empresa, contraseña de 8 a 255 caracteres (opcional al editar) y estado activo/inactivo. La contraseña se guarda mediante el cast hashed y se renueva remember_token al cambiarla. No se puede desactivar la propia cuenta.
 
 Las altas fuerzan `es_admin = 0` y la empresa se obtiene de la sesión. El formulario no tiene un selector de administrador. Al editar conserva el valor es_admin existente; las cuentas ya administradoras mantienen el acceso completo y no muestran selección de permisos.
 
@@ -15,3 +15,5 @@ Los usuarios normales reciben permisos activos mediante la relación permisos, d
 El guardado usa session flash `empresas_usuario_success` y redirige al listado; el formulario no consume esa sesión, evitando alertas duplicadas. Incluye Volver al listado sin condicional de permiso.
 
 Las pruebas de `tests/UsuariosEmpresaSmoke.php` cubren altas, edición y conservación de contraseña, permisos, estados, aislamiento y rechazo de usuarios sin es_admin.
+
+El formulario y su lógica Alpine se comparten con Admin mediante `x-empresa-users.form`. En Empresas no aparece el switch de administrador y el servidor sigue forzando es_admin = 0 en las altas.
