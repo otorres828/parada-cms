@@ -129,7 +129,7 @@ class SaveReserva extends EmpresaComponent
 
         $this->validarTramo();
 
-        ReservaTaquillaService::registrar(
+        $reserva = ReservaTaquillaService::registrar(
             $this->usuarioEmpresa,
             (int) $this->tarifaId,
             $this->comprador,
@@ -138,10 +138,8 @@ class SaveReserva extends EmpresaComponent
             $this->ventaToken
         );
 
-        $this->reset('pasajeros', 'pagos', 'pasajero', 'pago', 'comprador', 'tarifaId');
-        $this->ventaToken = 'TQ-'.Reserva::generarLocalizador(7);
-        $this->resetValidation();
-        $this->dispatch('empresas_reserva_success', message: 'Reserva y pagos registrados correctamente.');
+        session()->flash('empresas_reserva_success', 'Reserva y pagos registrados correctamente.');
+        $this->redirect(route('empresas.reservas.detail', ['reserva_id' => $reserva->id]), navigate: true);
 
     }
 

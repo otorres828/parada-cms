@@ -250,35 +250,34 @@ $reject(function () use ($bank, $empresaDos) {
 }, ModelNotFoundException::class);
 echo "Pago móvil y tarjeta, suma confirmada, reintentos y bancos aislados: OK\n";
 
-// El formulario nuevo solo registra; una venta terminada deja listo otro borrador.
+// Una venta terminada redirige al detalle de la reserva creada.
 $nuevaSalida = $programacion->replicate();
 $nuevaSalida->save();
 $nuevaTarifa = $tarifa->replicate();
 $nuevaTarifa->programacion_id = $nuevaSalida->id;
 $nuevaTarifa->save();
-$formulario = new App\Livewire\Empresas\Reservas\SaveReserva;
-$formulario->boot();
-$formulario->mount();
-$formulario->fecha = $nuevaTarifa->fecha_salida->toDateString();
-$formulario->origenId = (string) $nuevaTarifa->origen_terminal_id;
-$formulario->destinoId = (string) $nuevaTarifa->destino_terminal_id;
-$formulario->tarifaId = (string) $nuevaTarifa->id;
-$formulario->comprador = $comprador;
-$formulario->pasajero = $persona;
-$formulario->agregarPasajero();
-$formulario->pago = ['tipo' => 4, 'moneda' => 'USD', 'monto' => '10.00', 'referencia' => 'TARJETA-FORMULARIO'];
-$formulario->agregarPago();
-$token = $formulario->ventaToken;
+$formulario = Livewire\Livewire::test(App\Livewire\Empresas\Reservas\SaveReserva::class);
+$formulario->set('fecha', $nuevaTarifa->fecha_salida->toDateString())
+    ->set('origenId', (string) $nuevaTarifa->origen_terminal_id)
+    ->set('destinoId', (string) $nuevaTarifa->destino_terminal_id)
+    ->set('tarifaId', (string) $nuevaTarifa->id)
+    ->set('comprador', $comprador)->set('pasajero', $persona)->call('agregarPasajero');
 $antes = Reserva::count();
-$formulario->registrar();
+$formulario->call('registrar');
+$check(Reserva::count() === $antes && ! isset($formulario->effects['redirect']));
+$formulario->set('pago', ['tipo' => 4, 'moneda' => 'USD', 'monto' => '10.00', 'referencia' => 'TARJETA-FORMULARIO'])->call('agregarPago');
+$token = $formulario->get('ventaToken');
+$formulario->call('registrar');
 $check(Reserva::count() === $antes + 1);
-$check(Reserva::where('codigo_referencia', $token)->firstOrFail()->estado_pago === Reserva::ESTADO_PAGO_PAGADO);
-$check($formulario->ventaToken !== $token && $formulario->pasajeros === [] && $formulario->pagos === []);
-$check($formulario->tarifaId === '' && $formulario->comprador['nombre'] === '');
-$formulario->pagos = [['tipo' => 2, 'moneda' => 'USD', 'monto' => '10.00']];
-$formulario->updatedDestinoId();
-$check($formulario->pagos === [] && $formulario->tarifaId === '');
-echo "Alta única: registro completo, limpieza de cotización y pagos al cambiar tramo OK\n";
+$creada = Reserva::where('codigo_referencia', $token)->firstOrFail();
+$check($creada->estado_pago === Reserva::ESTADO_PAGO_PAGADO);
+$check($formulario->effects['redirect'] === route('empresas.reservas.detail', ['reserva_id' => $creada->id]));
+$check($formulario->effects['redirectUsingNavigate'] === true);
+$check(session()->get('empresas_reserva_success') === 'Reserva y pagos registrados correctamente.');
+$detalle = Livewire\Livewire::test(App\Livewire\Empresas\Reservas\DetailReserva::class, ['reserva_id' => $creada->id]);
+$check(str_contains($detalle->html(), $token));
+$check(! session()->has('empresas_reserva_success'));
+echo "Alta única: reserva pagada, redirección al detalle, alerta consumida y fallos sin redirección OK\n";
 
 // También el pago móvil requiere autorización de cobro y revierte todo si falta.
 $antes = [Reserva::count(), Pasaje::count(), App\Models\PagoReserva::count()];

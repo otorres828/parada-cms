@@ -57,3 +57,5 @@ Los grupos siguen el orden del catálogo empresarial. La clase asigna los boolea
 
 - [Listado de usuarios de empresa](usuarios/list-usuario-empresa.md).
 - [Alta y edición de usuarios de empresa](usuarios/save-usuario-empresa.md).
+
+El menú muestra Nueva reserva inmediatamente debajo de Dashboard cuando el usuario activo tiene el permiso reservas/add. El acceso directo utiliza empresas.reservas.add y no requiere permiso de listado ni de Dashboard.

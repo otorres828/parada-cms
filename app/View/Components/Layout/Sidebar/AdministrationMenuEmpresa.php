@@ -14,6 +14,8 @@ class AdministrationMenuEmpresa extends Component
 
     public bool $listDashboard = false;
 
+    public bool $addReservas = false;
+
     public bool $listUsuarios = false;
 
     public bool $editPoliticasEmbarque = false;
@@ -61,6 +63,7 @@ class AdministrationMenuEmpresa extends Component
 
         $permissions = $this->usuario->checkPermissionsBatch([
             'listDashboard' => ['dashboard', 'list'],
+            'addReservas' => ['reservas', 'add'],
             'listUsuarios' => ['usuarios', 'list'],
             'editPoliticasEmbarque' => ['politicas-embarque', 'edit'],
             'listDatosBancarios' => ['datos-bancarios', 'list'],

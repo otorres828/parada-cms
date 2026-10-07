@@ -87,6 +87,27 @@ class PermisosEmpresaSmoke
         $this->assertFalse($usuario->hasPermission('account', 'edit'));
     }
 
+    public function test_menu_nueva_reserva_requiere_permiso_de_alta(): void
+    {
+        $usuario = $this->usuario();
+        Auth::guard('empresa')->setUser($usuario);
+        $usuario->permisos()->attach($this->permiso('reservas', 'list')->id);
+        $menu = new \App\View\Components\Layout\Sidebar\AdministrationMenuEmpresa;
+        $this->assertFalse($menu->addReservas);
+        $html = view('components.layout.sidebar.administration-menu-empresa', $menu->data())->render();
+        $this->assertFalse(str_contains($html, 'Nueva reserva'));
+
+        $usuario->permisos()->attach($this->permiso('reservas', 'add')->id);
+        $menu = new \App\View\Components\Layout\Sidebar\AdministrationMenuEmpresa;
+        $this->assertTrue($menu->addReservas);
+        $html = view('components.layout.sidebar.administration-menu-empresa', $menu->data())->render();
+        $this->assertTrue(str_contains($html, 'Nueva reserva'));
+        $this->assertTrue(str_contains($html, route('empresas.reservas.add')));
+
+        $usuario->estatus = UsuarioEmpresa::ESTADO_INACTIVE;
+        $this->assertFalse((new \App\View\Components\Layout\Sidebar\AdministrationMenuEmpresa)->addReservas);
+    }
+
     public function test_permiso_es_por_usuario_y_requiere_toda_la_jerarquia_activa(): void
     {
         $usuario = $this->usuario();

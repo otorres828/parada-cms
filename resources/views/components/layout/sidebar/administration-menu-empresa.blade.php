@@ -16,6 +16,15 @@
     ])
 @endif
 
+@if ($addReservas)
+    @include('components.layout.sidebar-li', [
+        'menu' => 'Nueva reserva',
+        'icon' => 'nav-icon bi bi-plus-circle',
+        'route' => route('empresas.reservas.add'),
+        'active' => request()->routeIs('empresas.reservas.add') ? 'active' : '',
+    ])
+@endif
+
 @if ($listUsuarios or $editPoliticasEmbarque or $listDatosBancarios)
     @include('components.layout.sidebar-li', [
         'menu' => 'Administración',

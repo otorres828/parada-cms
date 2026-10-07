@@ -95,6 +95,8 @@
                 this.toastCleanup?.forEach(cleanup => cleanup());
             },
             init() {
+                const savedMessage = @js(session()->pull('empresas_reserva_success'));
+                if (savedMessage) this.$nextTick(() => this.$store.toast.success(savedMessage));
                 this.toastCleanup = [
                     Livewire.on('empresas_reserva_success', data => this.$store.toast.success(data.message)),
                     Livewire.on('empresas_reserva_error', data => this.$store.toast.info(data.message)),

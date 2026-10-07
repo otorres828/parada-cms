@@ -14,7 +14,7 @@ La consulta de salidas está centralizada en `ProgramacionTramoPrecio::searchTra
 6. Al agregar pasajeros con asiento se habilitan los pagos. Los inputs de bolívares y dólares se convierten entre sí al cambio vigente; se conserva la moneda del último input editado. Pago móvil exige cuenta receptora y referencia. Tarjeta exige referencia, sin cuenta receptora; efectivo no exige ninguno de esos datos. Se pueden retirar pasajeros o pagos antes del registro.
 7. Tras recibir el dinero, pulsar Registrar. Se verifica nuevamente tarifa, disponibilidad por tramo, datos y suma de pagos. Se guarda la reserva completa o se revierte todo.
 
-Antes de Registrar no existe reserva, pasaje ni pago en la base; tampoco hay puestos bloqueados. Abandonar la pantalla descarta la cotización. No es necesario un job de eliminación para este flujo. Esta pantalla solo crea reservas: no recibe un identificador para editar ni ofrece acciones de detalle. Después del registro limpia la cotización y renueva el token de la siguiente venta.
+Antes de Registrar no existe reserva, pasaje ni pago en la base; tampoco hay puestos bloqueados. Abandonar la pantalla descarta la cotización. No es necesario un job de eliminación para este flujo. Esta pantalla solo crea reservas: no recibe un identificador para editar ni ofrece acciones de detalle. Después del registro redirige al detalle de la reserva creada.
 
 ## Cobros y permisos
 
@@ -57,3 +57,5 @@ Al agregar o retirar pasajeros o pagos correctamente, el listado afectado y el r
 Los precios de los pasajeros y todos los importes del resumen de compra muestran dólares y su equivalente en bolívares, usando el tipo de cambio de la cotización. Los infantes sin asiento muestran cero en ambas monedas.
 
 El panel Transporte de la salida muestra la disponibilidad del tramo, los puestos de esta venta y los que quedarían. Se recalcula al renderizar, excluye infantes sin asiento y respeta las reservas que ocupan puestos y el límite del tramo. La cotización no bloquea puestos; se verifican al registrar.
+
+Al registrar correctamente, SaveReserva utiliza la reserva devuelta por ReservaTaquillaService para redirigir a empresas.reservas.detail. El mensaje de éxito se transmite mediante flash empresas_reserva_success y lo consume una sola vez el detalle. Si falla la validación o el registro no se redirige. Se conserva el token de la operación para que los reintentos no creen otra venta.
