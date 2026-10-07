@@ -52,3 +52,5 @@ Los grupos siguen el orden del catálogo empresarial. La clase asigna los boolea
 
 - [Alta de reprogramaciones](reprogramaciones/save-reprogramacion.md).
 - [Listado de reprogramaciones](reprogramaciones/list-reprogramacion.md).
+
+- [Detalle de campañas de cupones](cupones/detail-campana.md).

@@ -2,7 +2,7 @@
     TABLA DE CUPONES DE CAMPAÑA | Presenta códigos, clientes, reservas y redenciones.
 --}}
 
-@props(['cupones', 'canViewReservation', 'sortColumn', 'sortDirection'])
+@props(['cupones', 'canViewReservation', 'sortColumn', 'sortDirection', 'routeReservation' => 'admin.reservas.detail'])
 
 <x-list.table>
 
@@ -43,7 +43,7 @@
                 <td class="text-nowrap">
                     @if ($cupon->reserva)
                         @if ($canViewReservation)
-                            <a href="{{ route('admin.reservas.detail', $cupon->reserva->id) }}"
+                            <a href="{{ route($routeReservation, $cupon->reserva->id) }}"
                                 wire:navigate>
                                 {{ $cupon->reserva->codigo_referencia }}
                             </a>

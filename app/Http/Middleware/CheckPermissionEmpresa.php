@@ -67,6 +67,7 @@ class CheckPermissionEmpresa
         'empresas.cupones.list' => ['cupones', 'list'],
         'empresas.cupones.add' => ['cupones', 'add'],
         'empresas.cupones.edit' => ['cupones', 'edit'],
+        'empresas.cupones.detail' => ['cupones', 'detail'],
 
         /* ----------------------------------------Reportes---------------------------------------- */
         'empresas.reportes.ventas' => ['reporte-ventas', 'list'],

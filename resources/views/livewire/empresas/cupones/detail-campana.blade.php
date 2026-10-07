@@ -1,0 +1,140 @@
+{{--
+    CAMPAÑAS — DETALLE
+    --------------------------------------------------------------------------
+    Muestra las condiciones de la campaña y sus cupones, con búsqueda, ordenación y paginación.
+    Limita la consulta a la empresa autenticada y enlaza sus reservas según permiso.
+
+    Componentes reutilizables utilizados:
+    - <x-cupones.cupones-table />: Tabla de códigos pertenecientes a la campaña.
+    - <x-cupones.description />: Ficha descriptiva de la campaña.
+    - <x-form.cancel-button />: Enlace para regresar al listado anterior.
+    - <x-layout.error />: Resumen de errores de validación.
+    - <x-layout.loader.fullpage />: Indicador global durante operaciones de Livewire.
+    - <x-list.actions />: Contenedor del buscador y filtros del listado.
+    - <x-list.heading />: Cabecera del módulo con título y acciones.
+    - <x-list.search-input />: Buscador reactivo del listado.
+    --------------------------------------------------------------------------
+--}}
+
+@section('title', 'Campañas')
+
+<div x-data="detailCampana" class="py-3">
+
+    <x-list.heading>
+
+        <x-slot:title>
+            Campañas @if ($configuracion_cupon_id)
+                <small class="text-body-secondary">#{{ $configuracion_cupon_id }}</small>
+            @endif
+
+        </x-slot:title>
+
+        <x-slot:button>
+
+            <x-form.cancel-button :link="route('empresas.cupones.list')" >
+                Volver al listado
+            </x-form.cancel-button>
+
+        </x-slot:button>
+
+    </x-list.heading>
+
+    <x-layout.error />
+
+    <div class="container-fluid px-0 mb-4">
+
+        <div class="row">
+
+            <div class="col-md-6">
+
+                <div class="card">
+
+                    <x-cupones.description 
+                        :configuracion-cupon="$configuracionCupon" 
+                        :show-empresa="false"
+                    />
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="card">
+
+        <div class="card-body">
+
+            <h4 class="h6">Cupones generados: {{ $configuracionCupon->cupones_count }}</h4>
+
+            @if ($configuracionCupon->tipo_cupon === \App\Models\ConfiguracionCupon::TIPO_PERSONALIZADO)
+                <p class="text-muted small">Las instancias de este código se crean cuando un cliente lo aplica.</p>
+            @endif
+
+            <x-list.actions>
+
+                <x-slot:search>
+
+                    <x-list.search-input
+                        wire:model.live.debounce.1200ms="search"
+                        placeholder="Buscar cupón..."
+                    />
+
+                </x-slot:search>
+
+                <x-slot:group>
+
+                    <div class="row justify-content-end">
+
+                        <div class="col-12 col-md-5 col-lg-4">
+
+                            <select class="form-select" wire:model.live="status" aria-label="Estado del cupón">
+
+                                <option value="">Todos</option>
+                                <option value="0">Disponible</option>
+                                <option value="1">Redimido</option>
+
+                            </select>
+
+                        </div>
+
+                    </div>
+
+                </x-slot:group>
+
+            </x-list.actions>
+
+            <x-cupones.cupones-table
+                :cupones="$cupones"
+                :can-view-reservation="$canViewReservation"
+                route-reservation="empresas.reservas.detail"
+                :sort-column="$sortColumn"
+                :sort-direction="$sortDirection"
+            />
+
+            {{ $cupones->links() }}
+
+        </div>
+
+    </div>
+
+    <x-layout.loader.fullpage wire:loading.delay.short />
+
+</div>
+
+@script
+    <script>
+        Alpine.data('detailCampana', () => ({
+            destroy() {
+                this.toastCleanup?.forEach(cleanup => cleanup());
+            },
+            init() {
+                this.toastCleanup = [
+                    Livewire.on('empresas_campana_success', data => this.$store.toast.success(data.message)),
+                    Livewire.on('empresas_campana_error', data => this.$store.toast.info(data.message)),
+                ];
+            },
+        }));
+    </script>
+@endscript

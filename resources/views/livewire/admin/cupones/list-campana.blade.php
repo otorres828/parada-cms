@@ -194,7 +194,7 @@
 
                             @endif
 
-                            @if ($canEdit)
+                            @if ($canEdit and $configuracionCupon->empresa_id === null)
 
                                 <x-list.edit-button :route="route('admin.cupones.edit', [
                                     'configuracion_cupon_id' => $configuracionCupon->id
@@ -202,7 +202,7 @@
 
                             @endif
 
-                            @if ($canEdit)
+                            @if ($canEdit and $configuracionCupon->empresa_id === null)
 
                                 <x-list.status-button wire:click="changeStatus({{ $configuracionCupon->id }})" :status="$configuracionCupon->estatus" wire:loading.attr="disabled" />
 

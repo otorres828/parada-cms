@@ -44,6 +44,24 @@ $form->monto_descuento = '101';
 $form->fecha_inicio = now()->format('Y-m-d\TH:i');
 $form->fecha_fin = now()->addDay()->format('Y-m-d\TH:i');
 $reject(function () use ($form) { $form->save(); }, ValidationException::class);
+$detalle = Livewire::test(\App\Livewire\Empresas\Cupones\DetailCampana::class, ['configuracion_cupon_id' => $campana->id]);
+$check(str_contains($detalle->html(), 'CAMPAÑADEPRUEBAEMPRESA') && str_contains($detalle->html(), 'Cupones generados: 3'));
+$codigo = $campana->cupones()->firstOrFail()->codigo;
+$detalle->set('search', $codigo);
+$check(str_contains($detalle->html(), $codigo));
+$detalle->set('search', 'CODIGO-INEXISTENTE');
+$check(str_contains($detalle->html(), 'No se encontraron cupones.'));
+$detalle->set('search', '')->set('status', '1');
+$check(str_contains($detalle->html(), 'No se encontraron cupones.'));
+$detalle->set('status', '0');
+$check(str_contains($detalle->html(), $codigo));
+$reject(function () use ($ajena) {
+    $detalle = new \App\Livewire\Empresas\Cupones\DetailCampana;
+    $detalle->boot();
+    $detalle->mount($ajena->id);
+}, ModelNotFoundException::class);
+$check(\Illuminate\Support\Facades\Route::has('empresas.cupones.detail'));
+
 $usuarioSinPermisos = UsuarioEmpresa::create([
     'empresa_id' => $empresa->id,
     'nombre' => 'Sin permisos',

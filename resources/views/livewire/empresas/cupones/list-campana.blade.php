@@ -14,6 +14,7 @@
     - <x-list.sortable-button />: Ordenación de columnas.
     - <x-list.status-badge />: Elemento de presentación del listado.
     - <x-list.add-button />: Acceso al alta de campañas según permiso.
+    - <x-list.view-button />: Acceso al detalle de campañas propias.
     - <x-list.edit-button />: Edición de campañas propias.
     - <x-list.button-group />: Elemento de presentación del listado.
     - <x-list.status-button />: Elemento de presentación del listado.
@@ -177,6 +178,10 @@
                     <td class="text-end">
 
                         <x-list.button-group>
+
+                            @if ($canDetail)
+                                <x-list.view-button :route="route('empresas.cupones.detail', ['configuracion_cupon_id' => $configuracionCupon->id])" :target="false" />
+                            @endif
 
                             @if ($canEdit)
 
