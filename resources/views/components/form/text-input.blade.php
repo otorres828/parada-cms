@@ -20,9 +20,9 @@
 
         @endisset
 
-        @if (in_array($type ?? 'text', ['date', 'datetime-local'], true))
+        @if (($type ?? 'text') === 'date')
 
-            <x-form.date-input {{ $attributes }} :with-time="($type ?? 'text') === 'datetime-local'" :class="isset($hasError) ? 'form-control is-invalid' : 'form-control'" />
+            <x-form.date-input {{ $attributes }} :class="isset($hasError) ? 'form-control is-invalid' : 'form-control'" />
 
         @else
 
