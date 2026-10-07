@@ -9,6 +9,7 @@
     - <x-layout.error />: Resumen de los errores de validación de Livewire.
     - <x-form.container-sm />: Contenedor de ancho limitado para los campos.
     - <x-form.text-input />: Campo de entrada con etiqueta.
+    - <x-form.switch />: Permite mostrar u ocultar la contraseña ingresada.
     - <x-form.dropdown />: Selector con etiqueta para las opciones del formulario.
     - <x-layout.loader.fullpage />: Indicador de carga durante las operaciones de Livewire.
     --------------------------------------------------------------------------
@@ -79,11 +80,15 @@
 
             </div>
 
-            <div class="mb-3">
+            <div class="mb-3" x-data="{ show: false }">
 
-                <x-form.text-input type="password" name="password" x-model="$wire.password" autocomplete="new-password" >
+                <x-form.text-input x-bind:type="show ? 'text' : 'password'" name="password" x-model="$wire.password" autocomplete="new-password" >
                     Contraseña
                 </x-form.text-input>
+
+                <x-form.switch x-model="show" >
+                    Mostrar contraseña
+                </x-form.switch>
 
                 @error('password')
 
@@ -209,8 +214,8 @@
                         errorMessage: 'Máximo 255 caracteres'
                     }, {
                         rule: 'minLength',
-                        value: 10,
-                        errorMessage: 'Mínimo 10 caracteres'
+                        value: 8,
+                        errorMessage: 'Mínimo 8 caracteres'
                     }]);
                     this.validator.addField(this.$refs.form.querySelector('[name="es_admin"]'), [{
                         rule: 'required',

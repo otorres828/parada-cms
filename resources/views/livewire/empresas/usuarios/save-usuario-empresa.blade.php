@@ -194,8 +194,8 @@
                         }])
                         .addField('[name="password"]', [{
                             validator: value => ($wire.usuario_empresa_id && !value) || value.length >=
-                                10,
-                            errorMessage: 'La contraseña debe tener al menos 10 caracteres'
+                                8,
+                            errorMessage: 'La contraseña debe tener al menos 8 caracteres'
                         }]);
                 });
             },

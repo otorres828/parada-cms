@@ -50,30 +50,40 @@ class SaveEmpresaUser extends Component
 
     public function save()
     {
+
         Access::authorize('empresas.users', $this->usuario_empresa_id ? 'edit' : 'add');
+
         $this->validate([
             'nombre' => 'required|string|max:255',
             'email' => ['required', 'email', Rule::unique('usuarios_empresa', 'email')->ignore($this->usuario_empresa_id)],
-            'password' => [$this->usuario_empresa_id ? 'nullable' : 'required', 'string', 'min:10', 'max:255'],
+            'password' => [$this->usuario_empresa_id ? 'nullable' : 'required', 'string', 'min:8', 'max:255'],
             'es_admin' => 'required|boolean',
             'estatus' => 'required|boolean',
         ]);
+
         DB::transaction(function () {
+
             Empresa::findOrFail($this->empresa_id);
+
             $usuario = $this->usuario_empresa_id
                 ? UsuarioEmpresa::findAdminByCompany($this->usuario_empresa_id, $this->empresa_id, true)
                 : new UsuarioEmpresa;
+
             $usuario->empresa_id = $this->empresa_id;
             $usuario->nombre = $this->nombre;
             $usuario->email = $this->email;
             $usuario->es_admin = $this->es_admin;
             $usuario->estatus = $this->estatus;
+
             if ($this->password !== '') {
                 $usuario->password = $this->password;
             }
+
             $usuario->save();
+            
             Audit::record('usuario_empresa.guardado', $usuario);
         });
+
         session()->flash('admin_usuario_empresa_success', 'Usuario de empresa guardado.');
 
         return $this->redirect(route('admin.empresas.users.list', ['empresa_id' => $this->empresa_id]), navigate: true);

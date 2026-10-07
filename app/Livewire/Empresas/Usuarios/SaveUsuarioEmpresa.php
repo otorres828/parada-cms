@@ -56,7 +56,7 @@ class SaveUsuarioEmpresa extends EmpresaComponent
         $this->validate([
             'nombre' => 'required|string|max:255',
             'email' => ['required', 'email', 'max:255', Rule::unique('usuarios_empresa', 'email')->ignore($this->usuario_empresa_id)],
-            'password' => [$this->usuario_empresa_id ? 'nullable' : 'required', 'string', 'min:10', 'max:255'],
+            'password' => [$this->usuario_empresa_id ? 'nullable' : 'required', 'string', 'min:8', 'max:255'],
             'estatus' => 'required|integer|in:1,2',
             'selectedPermissions' => 'array',
             'selectedPermissions.*' => 'integer|distinct|exists:permissions_empresa,id',
