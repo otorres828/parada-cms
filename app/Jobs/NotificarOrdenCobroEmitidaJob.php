@@ -21,7 +21,6 @@ class NotificarOrdenCobroEmitidaJob implements ShouldQueue
         if (! $orden || $orden->notificacion_emitida_at) {
             return;
         }
-        info('intento de envio');
         Notification::route('mail', $orden->empresa->email)
             ->notify(new OrdenCobroNotification($orden->id, 'emitida'));
 
