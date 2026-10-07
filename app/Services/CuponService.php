@@ -206,6 +206,23 @@ class CuponService
                     Reserva::ESTADO_PAGO_REEMBOLSADO,
                 ])->exists();
             ConfiguracionCupon::exigir(! $tieneCompra, 'cupon', 'Este cupón solo aplica a la primera compra.');
+
+            //Obtenemos todos los documentos de los viajeros de la reserva actual que tengan documento cargado
+            $documentos = Pasaje::where('reserva_id', $reserva->id)
+                ->whereNotNull('viajero_documento_hash')
+                ->where('viajero_documento_hash', '!=', '')
+                ->select('viajero_documento_hash');
+
+            // Verificamos si alguno de los viajeros de la reserva actual ya utilizó un cupón de esta campaña en otra reserva
+            $viajeroUsoCupon = Pasaje::where('reserva_id', '!=', $reserva->id)
+                ->whereIn('viajero_documento_hash', $documentos)
+                ->whereHas('reserva.cupon', function ($query) use ($campana) {
+                    $query->where('configuracion_cupon_id', $campana->id)
+                        ->where('redimido', true)
+                        ->whereNotNull('usuario_id');
+                })->exists();
+
+            ConfiguracionCupon::exigir(! $viajeroUsoCupon, 'cupon', 'Uno de los viajeros de esta reserva ya utilizó un cupón de esta campaña.');
         }
 
     }

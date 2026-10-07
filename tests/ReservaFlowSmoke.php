@@ -116,8 +116,19 @@ $check($conversionOrden['total_bs'] === $r->calcularMontoBs($r->tasa_servicio));
 $reject(fn () => ReservaService::cancelarReserva($cliente, $r->id), ValidationException::class);
 $vac = ReservaService::aplicarReserva($otro, $tarifa->id);
 $vac = ReservaService::agregarPasajero($otro, $vac->id, $viajeroOtro->id);
+try {
+    app(CuponService::class)->aplicarCupon($vac, 'TEST');
+    throw new RuntimeException('Un viajero no debe repetir el cupón de la campaña mediante otro usuario');
+} catch (ValidationException $e) {
+    $check($e->errors()['cupon'][0] === 'Uno de los viajeros de esta reserva ya utilizó un cupón de esta campaña.');
+}
 $vac = ReservaService::removerPasajero($otro, $vac->id, $vac->pasajes->first()->id);
 $check($vac->pasajes->isEmpty() && $vac->monto_total === '11.00');
+$vac = ReservaService::agregarPasajero($otro, $vac->id, $viajeroOtroDos->id);
+$vac = app(CuponService::class)->aplicarCupon($vac, 'TEST');
+$check($vac->cupon_id !== null && $vac->descuento_aplicado === '1.00');
+$vac = app(CuponService::class)->removerCupon($vac);
+$vac = ReservaService::removerPasajero($otro, $vac->id, $vac->pasajes->first()->id);
 $vac = ReservaService::agregarPasajero($otro, $vac->id, $viajeroOtro->id);
 $vac->update(['fecha_expiracion' => now()->subSecond()]);
 $reject(fn () => PagoReservaService::pasarAPendiente($otro, $vac->id, $banco->id, 'REF2', now()->toDateTimeString()), ValidationException::class);
@@ -132,19 +143,21 @@ $check($r->fresh()->estado_pago === Reserva::ESTADO_PAGO_REEMBOLSADO);
 $check($r->fresh()->only(array_keys($antes)) === $antes);
 echo "OK: reembolso conserva cupón, tasas e importes históricos.\n";
 
+ConfiguracionCupon::create(['nombre_campana' => 'General', 'tipo_cupon' => ConfiguracionCupon::TIPO_PERSONALIZADO, 'codigo_personalizado' => 'GENERALTEST', 'modalidad' => ConfiguracionCupon::MODALIDAD_GENERAL, 'aplica_en' => ConfiguracionCupon::APLICA_EN_PASAJES, 'cantidad_generar' => 10, 'tipo_descuento' => 'monto_fijo', 'monto_descuento' => 1, 'fecha_inicio' => now()->subDay(), 'fecha_fin' => now()->addDay(), 'estatus' => 1]);
+
 // Rutas de cupón que reciben una reserva ya bloqueada por conReserva.
 $nueva = ReservaService::aplicarReserva($otro, $tarifa->id);
 $nueva = ReservaService::agregarPasajero($otro, $nueva->id, $viajeroOtro->id);
-$nueva = app(CuponService::class)->aplicarCupon($nueva, 'TEST');
+$nueva = app(CuponService::class)->aplicarCupon($nueva, 'GENERALTEST');
 $nueva = ReservaService::removerPasajero($otro, $nueva->id, $nueva->pasajes->first()->id);
 $check($nueva->cupon_id === null && $nueva->monto_total === '11.00');
 $nueva = ReservaService::agregarPasajero($otro, $nueva->id, $viajeroOtro->id);
-app(CuponService::class)->aplicarCupon($nueva, 'TEST');
+app(CuponService::class)->aplicarCupon($nueva, 'GENERALTEST');
 $nueva = ReservaService::cancelarReserva($otro, $nueva->id);
 $check($nueva->cupon_id === null && $nueva->estado_pago === Reserva::ESTADO_PAGO_CANCELADO);
 $nueva = ReservaService::aplicarReserva($otro, $tarifa->id);
 $nueva = ReservaService::agregarPasajero($otro, $nueva->id, $viajeroOtro->id);
-app(CuponService::class)->aplicarCupon($nueva, 'TEST');
+app(CuponService::class)->aplicarCupon($nueva, 'GENERALTEST');
 PagoReservaService::pasarAPendiente($otro, $nueva->id, $banco->id, 'REF-FALLIDA', now()->toDateTimeString());
 $nueva = PagoReservaService::marcarPagoFallido($nueva->id);
 $check($nueva->cupon_id === null && $nueva->estado_pago === Reserva::ESTADO_PAGO_FALLIDO);
@@ -154,7 +167,7 @@ echo "OK: liberación de cupón al retirar último pasajero, cancelar y rechazar
 $reinicio = ReservaService::aplicarReserva($otro, $tarifa->id);
 $reinicio = ReservaService::agregarPasajero($otro, $reinicio->id, $viajeroOtro->id);
 $reinicio = ReservaService::agregarPasajero($otro, $reinicio->id, $viajeroOtroDos->id);
-$reinicio = app(CuponService::class)->aplicarCupon($reinicio, 'TEST');
+$reinicio = app(CuponService::class)->aplicarCupon($reinicio, 'GENERALTEST');
 $codigoAnterior = $reinicio->codigo_referencia;
 $pasajeSnapshot = $reinicio->pasajes->first();
 $viajeroId = $viajeroOtroDos->id;
