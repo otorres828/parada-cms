@@ -60,3 +60,5 @@ Reglas declaradas en línea. Las condiciones adicionales y las reglas multilíne
 - `<x-layout.loader.fullpage />`
 
 [Volver al índice administrativo](../README.md).
+
+El admin solo puede editar campañas globales (`empresa_id === null`). El formulario responde 401 al intentar abrir la edición de una campaña de empresa y vuelve a comprobar esta restricción al guardar.

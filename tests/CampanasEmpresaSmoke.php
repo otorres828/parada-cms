@@ -62,6 +62,19 @@ $reject(function () use ($ajena) {
 }, ModelNotFoundException::class);
 $check(\Illuminate\Support\Facades\Route::has('empresas.cupones.detail'));
 
+try {
+    (new \App\Livewire\Admin\Cupones\SaveCampana)->mount($campana->id);
+    throw new RuntimeException('Admin no debe editar campañas de una empresa');
+} catch (HttpException $e) {
+    $check($e->getStatusCode() === 401);
+}
+$global = $campana->replicate();
+$global->empresa_id = null;
+$global->save();
+$adminForm = new \App\Livewire\Admin\Cupones\SaveCampana;
+$adminForm->mount($global->id);
+$check($adminForm->configuracionCupon->id === $global->id);
+
 $usuarioSinPermisos = UsuarioEmpresa::create([
     'empresa_id' => $empresa->id,
     'nombre' => 'Sin permisos',

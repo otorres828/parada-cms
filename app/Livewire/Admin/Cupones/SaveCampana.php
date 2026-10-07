@@ -52,7 +52,10 @@ class SaveCampana extends Component
     {
         $this->configuracion_cupon_id = $configuracion_cupon_id;
         if ($this->configuracion_cupon_id) {
-            $this->editar($this->findConfiguracionCupon());
+            $configuracionCupon = $this->findConfiguracionCupon();
+            abort_if($configuracionCupon->empresa_id !== null, 401);
+
+            $this->editar($configuracionCupon);
         }
     }
 
@@ -79,6 +82,8 @@ class SaveCampana extends Component
             $esNuevo = $this->configuracion_cupon_id === null;
             $configuracionCupon = $this->configuracion_cupon_id ? $this->findConfiguracionCupon() : new ConfiguracionCupon;
             if (! $esNuevo) {
+                abort_if($configuracionCupon->empresa_id !== null, 401);
+
                 $data = array_intersect_key($data, array_flip(['fecha_inicio', 'fecha_fin', 'estatus']));
             }
             if (array_key_exists('empresa_id', $data)) {
