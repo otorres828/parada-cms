@@ -14,6 +14,8 @@
             <tr>
                 <th>Pasajero</th>
 
+                <th>Documento</th>
+
                 <th>Tipo</th>
 
                 <th>Asiento</th>
@@ -35,6 +37,10 @@
 
                     <td>
                         {{ $persona['nombre'] }} {{ $persona['apellido'] }}
+                    </td>
+
+                    <td class="text-nowrap">
+                        {{ $persona['documento_identidad'] ?: 'Sin documento' }}
                     </td>
 
                     <td>
@@ -59,7 +65,7 @@
             @empty
 
                 <tr>
-                    <td colspan="5">
+                    <td colspan="6">
                         Agrega los pasajeros para calcular el total.
                     </td>
 

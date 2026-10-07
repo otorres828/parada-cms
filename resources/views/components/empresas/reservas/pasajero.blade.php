@@ -10,11 +10,11 @@
             <div class="row g-3">
                 <div class="col-md-6">
                     <label class="form-label" for="taquilla-pasajero-nombre">Nombre</label>
-                    <input id="taquilla-pasajero-nombre" type="text" class="form-control" wire:model="pasajero.nombre" required maxlength="255">
+                    <input id="taquilla-pasajero-nombre" type="text" class="form-control" wire:model="pasajero.nombre" @input.capture="$event.target.value = $event.target.value.toUpperCase()" required maxlength="255">
                 </div>
                 <div class="col-md-6">
                     <label class="form-label" for="taquilla-pasajero-apellido">Apellido</label>
-                    <input id="taquilla-pasajero-apellido" type="text" class="form-control" wire:model="pasajero.apellido" required maxlength="255">
+                    <input id="taquilla-pasajero-apellido" type="text" class="form-control" wire:model="pasajero.apellido" @input.capture="$event.target.value = $event.target.value.toUpperCase()" required maxlength="255">
                 </div>
                 <div class="col-md-6">
                     <label class="form-label" for="taquilla-pasajero-fecha_nacimiento">Fecha de nacimiento</label>
@@ -73,6 +73,23 @@
                 async enviar() {
                     if (this.saving) return;
                     const form = this.$refs.pasajeroForm;
+                    const normalizar = documento => String(documento ?? '').toUpperCase().replace(/[^A-Z0-9]/g, '');
+                    const documento = normalizar(this.$wire.pasajero.documento_identidad);
+                    const tipoDocumento = String(this.$wire.pasajero.tipo_documento ?? '');
+                    if (documento && this.$wire.pasajeros.some(persona =>
+                        normalizar(persona.documento_identidad) === documento
+                        && String(persona.tipo_documento ?? '') === tipoDocumento
+                    )) {
+                        await Swal.fire({
+                            icon: 'warning',
+                            title: 'Pasajero duplicado',
+                            text: 'Ya agregaste un pasajero con este tipo y número de documento.',
+                            confirmButtonText: 'Entendido',
+                            buttonsStyling: false,
+                            customClass: { confirmButton: 'btn btn-primary' },
+                        });
+                        return;
+                    }
                     validator?.destroy();
                     validator = new JustValidate(form, {
                         errorLabelCssClass: ['invalid-feedback'],

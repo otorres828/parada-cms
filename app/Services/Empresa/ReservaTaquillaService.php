@@ -102,6 +102,12 @@ class ReservaTaquillaService
 
     public static function validarPasajero(array $datos): array
     {
+        foreach (['nombre', 'apellido'] as $campo) {
+            if (isset($datos[$campo]) && is_string($datos[$campo])) {
+                $datos[$campo] = mb_strtoupper($datos[$campo], 'UTF-8');
+            }
+        }
+
         return Validator::make($datos, [
             'con_asiento' => 'sometimes|boolean',
             'nombre' => 'required|string|max:255',
@@ -130,7 +136,7 @@ class ReservaTaquillaService
             Pasaje::exigir(! $ocupaAsiento || ($disponibilidad['cupo_tramo'] > 0 && $disponibilidad['asientos'] !== []), 'pasajero', 'No quedan puestos disponibles para este tramo.');
             // Modelo sin guardar: reutiliza el formato histórico sin crear un viajero del vendedor.
             $hash = PersonalData::hashDocumento($datos['documento_identidad'] ?? null);
-            Pasaje::exigir($hash === null || ! $reserva->pasajes()->where('viajero_documento_hash', $hash)->exists(), 'documento_identidad', 'Este documento ya está incluido en la reserva.');
+            Pasaje::exigir($hash === null || ! $reserva->pasajes()->where('viajero_documento_hash', $hash)->get()->contains(fn ($pasaje) => (int) ($pasaje->viajero['tipo_documento'] ?? 0) === (int) ($datos['tipo_documento'] ?? 0)), 'documento_identidad', 'Ya existe un pasajero con este documento en la reserva.');
             $viajero = new Viajero($datos);
             $reserva->pasajes()->create([
                 'viajero' => $viajero->datosParaPasaje(),

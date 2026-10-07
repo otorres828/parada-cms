@@ -9,6 +9,7 @@ use App\Models\Pasaje;
 use App\Models\ProgramacionTramoPrecio;
 use App\Models\Reserva;
 use App\Models\TipoCambio;
+use App\Support\PersonalData;
 use App\Services\Empresa\Access;
 use App\Services\Empresa\PagoTaquillaService;
 use App\Services\Empresa\ReservaTaquillaService;
@@ -167,7 +168,13 @@ class SaveReserva extends EmpresaComponent
     {
         Access::authorize('reservas', 'add');
         $this->validarTramo();
-        $this->pasajeros[] = ReservaTaquillaService::validarPasajero($this->pasajero);
+        $pasajero = ReservaTaquillaService::validarPasajero($this->pasajero);
+        $documento = PersonalData::normalizarDocumento($pasajero['documento_identidad'] ?? null);
+        Reserva::exigir($documento === null || ! collect($this->pasajeros)->contains(fn ($persona) =>
+            PersonalData::normalizarDocumento($persona['documento_identidad'] ?? null) === $documento
+            && (int) ($persona['tipo_documento'] ?? 0) === (int) ($pasajero['tipo_documento'] ?? 0)
+        ), 'pasajero.documento_identidad', 'Ya agregaste un pasajero con este tipo y número de documento.');
+        $this->pasajeros[] = $pasajero;
         $this->reset('pasajero');
         $this->resetValidation();
         $this->dispatch('cotizacion-actualizada', secciones: ['pasajeros', 'resumen']);

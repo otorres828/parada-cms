@@ -9,3 +9,7 @@ Los campos del CRM muestran `dd/mm/aaaa`, independientemente del idioma del nave
 La lógica compartida vive en `public/js/crm-fechas.js`, cargada después de Flatpickr en los scripts del layout. Conserva los atributos del campo, incluidos identificador, formulario, obligatoriedad y límites. Al actualizar Livewire sincroniza la fecha y los límites; al restablecer la propiedad limpia el campo y al retirar el componente destruye el calendario.
 
 El calendario muestra el formato español también en móviles. La entrada manual exige una fecha válida en ese formato; por ejemplo `12/11/2026` corresponde al 12 de noviembre y se envía como `2026-11-12`. Las validaciones del servidor continúan siendo obligatorias.
+
+## Escritura manual
+
+`crmFecha` filtra la escritura a números y separadores del formato visual, completa `/` después del día y el mes y admite pegar los números completos. En fecha y hora agrega también el espacio y `:`. Al completar una fecha válida, actualiza inmediatamente el valor Alpine/Livewire en formato ISO y sincroniza el calendario sin requerir blur. Una entrada parcial, imposible o fuera de los límites no conserva la fecha válida anterior; el modelo queda vacío hasta completar una fecha aceptada. Se respeta el borrado y se retiran los listeners al destruir el componente.

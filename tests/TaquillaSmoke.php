@@ -288,3 +288,33 @@ $reject(function () use ($cajero, $nuevaTarifa, $comprador, $persona, $cuentaMov
 }, Symfony\Component\HttpKernel\Exception\HttpException::class);
 $check($antes === [Reserva::count(), Pasaje::count(), App\Models\PagoReserva::count()]);
 echo "Pago móvil de taquilla pagado con QR y confirmación autorizada: OK\n";
+
+// Validación inmediata del borrador y normalización de nombres.
+$datosMayuscula = $persona + ['con_asiento' => false];
+$datosMayuscula['nombre'] = 'José María';
+$datosMayuscula['apellido'] = 'Pérez de León';
+$datosMayuscula['tipo_documento'] = '1';
+$datosMayuscula['documento_identidad'] = 'V-12345';
+$normalizado = ReservaTaquillaService::validarPasajero($datosMayuscula);
+$check($normalizado['nombre'] === 'JOSÉ MARÍA' && $normalizado['apellido'] === 'PÉREZ DE LEÓN');
+$salidaDocumento = $programacion->replicate();
+$salidaDocumento->asientos_totales = 10;
+$salidaDocumento->save();
+$tarifaDocumento = $tarifa->replicate();
+$tarifaDocumento->programacion_id = $salidaDocumento->id;
+$tarifaDocumento->save();
+$documentos = Livewire\Livewire::test(App\Livewire\Empresas\Reservas\SaveReserva::class);
+$documentos->set('fecha', $tarifaDocumento->fecha_salida->toDateString())
+    ->set('origenId', (string) $tarifaDocumento->origen_terminal_id)
+    ->set('destinoId', (string) $tarifaDocumento->destino_terminal_id)
+    ->set('tarifaId', (string) $tarifaDocumento->id)
+    ->set('pasajero', $datosMayuscula)->call('agregarPasajero');
+$check(count($documentos->get('pasajeros')) === 1);
+$datosMayuscula['documento_identidad'] = 'v 12345';
+$documentos->set('pasajero', $datosMayuscula)->call('agregarPasajero');
+$check(count($documentos->get('pasajeros')) === 1);
+$check(isset($documentos->instance()->getErrorBag()->messages()['pasajero.documento_identidad']));
+$datosMayuscula['tipo_documento'] = '3';
+$documentos->set('pasajero', $datosMayuscula)->call('agregarPasajero');
+$check(count($documentos->get('pasajeros')) === 2);
+echo "Pasajeros: mayúsculas con acentos, duplicados detectados al agregar y tipos distintos OK\n";
