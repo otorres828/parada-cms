@@ -6,6 +6,7 @@ use App\Livewire\Empresas\EmpresaComponent;
 use App\Models\UsuarioEmpresa;
 use App\Services\Empresa\Access;
 use App\Traits\Listing;
+use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\Layout;
 use Livewire\WithPagination;
 
@@ -35,7 +36,6 @@ class ListUsuarioEmpresa extends EmpresaComponent
             'empresa_id' => $this->usuarioEmpresa->empresa_id,
             'status' => $this->status,
             'es_admin' => 1,
-            'es_admin'   => 1
         ]);
 
         return view('livewire.empresas.usuarios.list-usuario-empresa', [
@@ -72,5 +72,23 @@ class ListUsuarioEmpresa extends EmpresaComponent
         $usuario->save();
 
         $this->dispatch('empresas_usuario_success', message: 'Estado actualizado.');
+    }
+
+    public function deleteUsuario(int $id): void
+    {
+        Access::authorize('usuarios', 'delete');
+
+        DB::transaction(function () use ($id) {
+            $usuario = UsuarioEmpresa::searchAdmin('', [
+                'empresa_id' => $this->usuarioEmpresa->empresa_id,
+                'es_admin' => 1,
+            ])->where('es_admin', 0)->whereKey($id)->lockForUpdate()->firstOrFail();
+
+            $usuario->estatus = UsuarioEmpresa::ESTADO_DELETE;
+            $usuario->save();
+        });
+
+        $this->resetPage();
+        $this->dispatch('empresas_usuario_success', message: 'Usuario eliminado correctamente.');
     }
 }

@@ -10,6 +10,7 @@
     - <x-list.actions />: Contenedor del buscador y filtros del listado.
     - <x-list.add-button />: Botón para registrar un nuevo elemento.
     - <x-list.button-group />: Agrupa las acciones disponibles por registro.
+    - <x-list.delete-button />: Eliminación lógica con confirmación.
     - <x-list.edit-button />: Enlace para editar el registro.
     - <x-list.heading />: Cabecera del módulo con título y acciones.
     - <x-list.search-input />: Buscador reactivo del listado.
@@ -127,6 +128,7 @@
 
                             @if (! $usuario->isAdmin() && $usuario->id !== $usuarioActualId)
                                 <x-list.status-button wire:click="changeStatus({{ $usuario->id }})" :status="$usuario->estatus" wire:loading.attr="disabled" />
+                                <x-list.delete-button x-data @click="$dispatch('confirmDeletion', { id: {{ $usuario->id }} })" wire:loading.attr="disabled" />
                             @endif
 
                         </x-list.button-group>
@@ -160,6 +162,7 @@
         Alpine.data('listUsuarioEmpresa', () => ({
             destroy() {
                 this.toastCleanup?.forEach(cleanup => cleanup());
+                window.removeEventListener('confirmDeletion', this.confirmDeletion);
             },
             init() {
                 const savedMessage = @js(session()->pull('empresas_usuario_success'));
@@ -168,6 +171,20 @@
                     Livewire.on('empresas_usuario_success', data => this.$store.toast.success(data.message)),
                     Livewire.on('empresas_usuario_error', data => this.$store.toast.info(data.message)),
                 ];
+
+                this.confirmDeletion = event => {
+                    Swal.fire({
+                        title: '¿Estás seguro de eliminar este usuario?',
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonText: 'Sí, eliminar',
+                        cancelButtonText: 'Cancelar',
+                    }).then(result => {
+                        if (result.isConfirmed) this.$wire.deleteUsuario(event.detail.id);
+                    });
+                };
+
+                window.addEventListener('confirmDeletion', this.confirmDeletion);
             },
 
         }));

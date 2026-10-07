@@ -92,6 +92,29 @@ $propio->estatus = 2;
 $reject(function () use ($propio) { $propio->save(); }, ValidationException::class);
 $check($usuarioEmpresa->fresh()->isAdmin() && $usuarioEmpresa->fresh()->estatus === 1);
 
+$eliminable = UsuarioEmpresa::create([
+    'empresa_id' => $empresa->id,
+    'nombre' => 'Usuario eliminable',
+    'email' => 'eliminable@empresa.test',
+    'password' => 'ClaveSegura123',
+    'es_admin' => 0,
+    'estatus' => 1,
+]);
+$list->set('status', '')->set('search', 'Usuario eliminable');
+$check(str_contains($list->html(), 'confirmDeletion'));
+$list->call('deleteUsuario', $eliminable->id);
+$check($eliminable->fresh()->estatus === UsuarioEmpresa::ESTADO_DELETE);
+$check(! UsuarioEmpresa::searchAdmin()->whereKey($eliminable->id)->exists());
+$check(UsuarioEmpresa::searchUserName($eliminable->email) === null);
+$check(str_contains($list->html(), 'No se encontraron registros.'));
+foreach ([$ajeno->id, $usuarioEmpresa->id] as $idProtegido) {
+    $reject(function () use ($idProtegido) {
+        $list = new ListUsuarioEmpresa;
+        $list->boot();
+        $list->deleteUsuario($idProtegido);
+    }, ModelNotFoundException::class);
+}
+
 // Ni un permiso explícito de usuarios habilita este módulo sin es_admin.
 $operador->update(['estatus' => 1]);
 $operador->permisos()->attach($reservado->id);
@@ -105,6 +128,9 @@ foreach ([ListUsuarioEmpresa::class, SaveUsuarioEmpresa::class] as $class) {
     }, HttpException::class);
 }
 $reject(function () use ($invalid) { $invalid->save(); }, HttpException::class);
+$reject(function () use ($list, $operador) {
+    $list->instance()->deleteUsuario($operador->id);
+}, HttpException::class);
 foreach (['list', 'add', 'edit'] as $action) {
     $request = \Illuminate\Http\Request::create('/empresa/administracion/usuarios');
     $route = new \Illuminate\Routing\Route('GET', '/empresa/administracion/usuarios', function () {});

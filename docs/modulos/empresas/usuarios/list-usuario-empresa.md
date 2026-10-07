@@ -9,3 +9,5 @@ Incluye búsqueda por ID, nombre o correo, filtro de estado, ordenación y pagin
 Los cambios de estado emiten `empresas_usuario_success` permaneciendo en pantalla. Después de guardar un usuario, el listado consume una sola vez la sesión flash del mismo nombre.
 
 Se comprueba en `tests/UsuariosEmpresaSmoke.php`, con SQLite en memoria.
+
+Eliminar utiliza el componente delete-button y una confirmación SweetAlert. La acción deleteUsuario exige acceso de administrador, verifica empresa y excluye administradores, bloquea el registro y coloca estatus = 0. Conserva el registro para mantener referencias históricas, impide su acceso y deja de mostrarlo en el listado. Reinicia la paginación y emite empresas_usuario_success.
