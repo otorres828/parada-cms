@@ -10,6 +10,8 @@ El mensaje incluye comprador, empresa, ruta, fechas y horas del tramo, transport
 
 Debe estar configurado el correo de Laravel y ejecutarse un trabajador de la cola, por ejemplo `php artisan queue:work`. La generación del PDF y los QR requiere las extensiones PHP GD y DOM. Los trabajos tienen tres intentos y sus fallos se reportan al registro de errores. El método no impide un reenvío solicitado explícitamente; la deduplicación automática corresponde al cambio de estado detectado por el modelo. Las actualizaciones masivas mediante Builder no disparan eventos Eloquent; para confirmar pagos debe guardarse la instancia de Reserva.
 
-El correo usa `emails.reserva-pagada` con la plantilla Markdown nativa de Laravel (`mail::message`, `mail::panel` y `mail::table`), estilos en línea y ancho adaptable. El recibo PDF utiliza una vista independiente, `emails.reserva-pagada-pdf`, para conservar su formato de impresión.
+El correo usa `emails.reserva-pagada` con la plantilla Markdown nativa de Laravel (`mail::message` y el componente propio `mail::reserva-comprobante`, con versiones HTML y texto), estilos en línea y ancho adaptable. El recibo PDF utiliza una vista independiente, `emails.reserva-pagada-pdf`, para conservar su formato de impresión.
 
 En el detalle de reservas de Admin y Empresas, el botón Reenviar correo solicita confirmación mediante SweetAlert. La acción exige permiso de detalle, vuelve a consultar la reserva (limitada a la empresa autenticada en el panel empresarial) y admite únicamente reservas pagadas con correo válido. La alerta de éxito confirma que el envío quedó encolado, no su entrega.
+
+El comprobante HTML destaca el código de reserva en azul, separa embarque y desembarque con sus direcciones, resalta el total pagado y presenta tarjetas de pasajes con QR y acento naranja. Los estilos se incrustan en el mensaje y el PDF conserva su plantilla independiente.

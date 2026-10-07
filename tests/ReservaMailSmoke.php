@@ -128,4 +128,19 @@ DB::transaction(function () use ($efectivo) {
 });
 $check(DB::table('jobs')->count() === $jobsAntes + 1);
 
+// Ejecuta el trabajo y el canal reales, sin SMTP ni PHPUnit.
+config(['mail.default' => 'array', 'mail.mailers.array' => ['transport' => 'array']]);
+$mailManager = new Illuminate\Mail\MailManager($app);
+$channelManager = new Illuminate\Notifications\ChannelManager($app);
+$channelManager->extend('mail', fn () => new Illuminate\Notifications\Channels\MailChannel($mailManager, app(Illuminate\Mail\Markdown::class)));
+$destinatario = (new Illuminate\Notifications\AnonymousNotifiable)->route('mail', 'comprador@example.test');
+$trabajo = new Illuminate\Notifications\SendQueuedNotifications($destinatario, new ReservaPagadaNotification($efectivo->id), ['mail']);
+$trabajo->handle($channelManager);
+$enviados = $mailManager->mailer('array')->getSymfonyTransport()->messages();
+$check($enviados->count() === 1);
+$correoEnviado = $enviados->first()->getOriginalMessage();
+$check(str_contains($correoEnviado->getHtmlBody(), 'Tu próximo viaje está listo'));
+$check(str_contains($correoEnviado->getTextBody(), $efectivo->codigo_referencia));
+$check(count($correoEnviado->getAttachments()) === $efectivo->pasajes()->count() + 1);
+
 echo "Reserva mail OK: destinatarios, estado, idempotencia, PDF, QR y cola después del commit.\n";
