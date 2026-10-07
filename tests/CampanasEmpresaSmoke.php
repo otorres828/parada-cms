@@ -21,8 +21,12 @@ $campana = ConfiguracionCupon::where('nombre_campana', 'CAMPAÑADEPRUEBAEMPRESA'
 $check($campana->empresa_id === $empresa->id);
 $check($campana->cupones()->count() === 3);
 $edit = Livewire::test(SaveCampana::class, ['configuracion_cupon_id' => $campana->id]);
-$edit->set('nombre_campana', 'Campaña actualizada')->set('monto_descuento', '50.00')->call('save');
-$check($campana->fresh()->nombre_campana === 'CAMPAÑAACTUALIZADA');
+$nuevaFecha = now()->addDays(10)->format('Y-m-d\TH:i');
+$edit->set('nombre_campana', 'Campaña actualizada')->set('monto_descuento', '50.00')
+    ->set('fecha_fin', $nuevaFecha)->set('estatus', '2')->call('save');
+$check($campana->fresh()->nombre_campana === 'CAMPAÑADEPRUEBAEMPRESA');
+$check($campana->fresh()->fecha_fin->format('Y-m-d\TH:i') === $nuevaFecha);
+$check((int) $campana->fresh()->estatus === 2);
 $check((float) $campana->fresh()->monto_descuento === 10.0);
 $ajena = $campana->replicate();
 $ajena->empresa_id = $empresaDos->id;

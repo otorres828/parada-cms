@@ -50,6 +50,7 @@
                     label="Empresa (vacío para campaña general)"
                     name="empresa_id"
                     x-model="$wire.empresa_id"
+                    :disabled="$configuracion_cupon_id !== null"
                 >
 
                     <option value="">Seleccionar...</option>
@@ -74,7 +75,13 @@
 
             <div class="mb-3">
 
-                <x-form.text-input type="text" name="nombre_campana" x-model="$wire.nombre_campana" @input.capture="$event.target.value = $event.target.value.toUpperCase().replace(/\s/g, '')" >
+                <x-form.text-input 
+                    type="text" 
+                    name="nombre_campana" 
+                    x-model="$wire.nombre_campana" 
+                    @input.capture="$event.target.value = $event.target.value.toUpperCase().replace(/\s/g, '')" 
+                    :disabled="$configuracion_cupon_id !== null" 
+                >
                     Nombre
                 </x-form.text-input>
 
@@ -96,6 +103,7 @@
                     label="Tipo de cupón"
                     name="tipo_cupon"
                     x-model="$wire.tipo_cupon"
+                    :disabled="$configuracion_cupon_id !== null"
                 >
 
                     <option value="">Seleccionar...</option>
@@ -118,7 +126,12 @@
 
             <div class="mb-3" x-show="Number($wire.tipo_cupon) === 2" x-cloak>
 
-                <x-form.text-input type="text" name="codigo_personalizado" x-model="$wire.codigo_personalizado" >
+                <x-form.text-input 
+                    type="text" 
+                    name="codigo_personalizado" 
+                    x-model="$wire.codigo_personalizado" 
+                    :disabled="$configuracion_cupon_id !== null" 
+                >
                     Código personalizado
                 </x-form.text-input>
 
@@ -140,6 +153,7 @@
                     label="Modalidad"
                     name="modalidad"
                     x-model="$wire.modalidad"
+                    :disabled="$configuracion_cupon_id !== null"
                 >
 
                     <option value="">Seleccionar...</option>
@@ -167,6 +181,7 @@
                     label="Aplicar descuento en"
                     name="aplica_en"
                     x-model="$wire.aplica_en"
+                    :disabled="$configuracion_cupon_id !== null"
                 >
 
                     <option value="">Seleccionar...</option>
@@ -196,7 +211,12 @@
 
             <div class="mb-3">
 
-                <x-form.text-input type="number" name="cantidad_generar" x-model="$wire.cantidad_generar" >
+                <x-form.text-input 
+                    type="number" 
+                    name="cantidad_generar" 
+                    x-model="$wire.cantidad_generar" 
+                    :disabled="$configuracion_cupon_id !== null" 
+                >
                     Cantidad de
                     cupones
                 </x-form.text-input>
@@ -219,6 +239,7 @@
                     label="Descuento"
                     name="tipo_descuento"
                     x-model="$wire.tipo_descuento"
+                    :disabled="$configuracion_cupon_id !== null"
                 >
 
                     <option value="">Seleccionar...</option>
@@ -241,7 +262,13 @@
 
             <div class="mb-3">
 
-                <x-form.text-input type="number" name="monto_descuento" x-model="$wire.monto_descuento" step="0.01" >
+                <x-form.text-input 
+                    type="number" 
+                    name="monto_descuento" 
+                    x-model="$wire.monto_descuento" 
+                    step="0.01" 
+                    :disabled="$configuracion_cupon_id !== null" 
+                >
                     Valor del
                     descuento
                 </x-form.text-input>

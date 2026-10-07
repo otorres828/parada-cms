@@ -78,10 +78,8 @@ class SaveCampana extends Component
             Access::authorize('cupones', $this->configuracion_cupon_id ? 'edit' : 'add');
             $esNuevo = $this->configuracion_cupon_id === null;
             $configuracionCupon = $this->configuracion_cupon_id ? $this->findConfiguracionCupon() : new ConfiguracionCupon;
-            if ($this->configuracion_cupon_id && $configuracionCupon->cupones()->exists()) {
-                foreach (['empresa_id', 'codigo_personalizado', 'cantidad_generar', 'tipo_cupon', 'tipo_descuento', 'aplica_en', 'monto_descuento', 'fecha_inicio'] as $immutable) {
-                    unset($data[$immutable]);
-                }
+            if (! $esNuevo) {
+                $data = array_intersect_key($data, array_flip(['fecha_inicio', 'fecha_fin', 'estatus']));
             }
             if (array_key_exists('empresa_id', $data)) {
                 $configuracionCupon->empresa_id = $data['empresa_id'];
@@ -153,6 +151,23 @@ class SaveCampana extends Component
 
     protected function validateForm(): array
     {
+        if ($this->configuracion_cupon_id !== null) {
+            return $this->validate([
+                'fecha_inicio' => ['required', 'date'],
+                'fecha_fin' => ['required', 'date', 'after:fecha_inicio'],
+                'estatus' => ['required', 'in:0,1,2'],
+            ], [
+                'required' => 'El campo :attribute es obligatorio.',
+                'date' => 'El campo :attribute debe ser una fecha válida.',
+                'after' => 'La fecha de fin debe ser posterior a la fecha de inicio.',
+                'in' => 'Selecciona una opción válida para :attribute.',
+            ], [
+                'fecha_inicio' => 'Inicio',
+                'fecha_fin' => 'Fin',
+                'estatus' => 'Estado',
+            ]);
+        }
+
         $this->nombre_campana = mb_strtoupper(preg_replace('/\s+/u', '', $this->nombre_campana), 'UTF-8');
 
         $validated = $this->validate([
