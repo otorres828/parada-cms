@@ -1,16 +1,22 @@
 document.addEventListener('alpine:init', () => {
     Alpine.data('crmFecha', ({ value, withTime = false }) => {
         let picker;
+        let input;
         const internalFormat = withTime ? 'Y-m-d\\TH:i' : 'Y-m-d';
         const normalize = value => value ? (withTime ? value.slice(0, 16).replace(' ', 'T') : value) : '';
 
         return {
             value,
             init() {
-                const input = this.$el;
+                this.$nextTick(() => this.inicializar());
+            },
+            inicializar() {
+                input = this.$refs?.input || this.$el;
                 picker = flatpickr(input, {
                     locale: 'es',
-                    dateFormat: withTime ? 'd/m/Y H:i' : 'd/m/Y',
+                    dateFormat: withTime ? internalFormat : 'd/m/Y',
+                    altInput: withTime,
+                    altFormat: 'd/m/Y H:i',
                     enableTime: withTime,
                     time_24hr: true,
                     defaultDate: this.value ? flatpickr.parseDate(normalize(this.value), internalFormat) : null,
@@ -18,6 +24,12 @@ document.addEventListener('alpine:init', () => {
                     maxDate: input.max ? flatpickr.parseDate(input.max, 'Y-m-d') : null,
                     disableMobile: true,
                     allowInput: true,
+                    onReady: (dates, text, instance) => {
+                        if (!instance.altInput) return;
+                        for (const attribute of ['form', 'aria-label', 'aria-describedby']) {
+                            if (input.hasAttribute(attribute)) instance.altInput.setAttribute(attribute, input.getAttribute(attribute));
+                        }
+                    },
                     parseDate(text, format) {
                         if (typeof text !== 'string') return flatpickr.parseDate(text, format);
                         const date = flatpickr.parseDate(text, format);
@@ -35,7 +47,7 @@ document.addEventListener('alpine:init', () => {
                 this.$watch('value', () => picker.setDate(normalize(this.value), false, internalFormat));
             },
             destroy() {
-                delete this.$el._crmRefreshFecha;
+                if (input) delete input._crmRefreshFecha;
                 picker?.destroy();
             },
         };

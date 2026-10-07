@@ -20,7 +20,11 @@
 
         @endisset
 
-        @if (($type ?? 'text') === 'date')
+        @if (($type ?? 'text') === 'datetime-local')
+
+            <x-form.datetime-input {{ $attributes }} :class="isset($hasError) ? 'form-control is-invalid' : 'form-control'" />
+
+        @elseif (($type ?? 'text') === 'date')
 
             <x-form.date-input {{ $attributes }} :class="isset($hasError) ? 'form-control is-invalid' : 'form-control'" />
 
