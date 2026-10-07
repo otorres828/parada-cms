@@ -86,6 +86,10 @@ class UsuarioEmpresa extends ModelHelper implements Authenticatable, Authorizabl
             $query->whereDate('usuarios_empresa.created_at', '<=', self::date($filters['date_to'], 'date_to'));
         }
 
+        if(! empty($filters['es_admin'])) {
+            $query->where('usuarios_empresa.es_admin', '!=',self::ESTADO_ACTIVE);
+        }
+
         return $query;
     }
 
@@ -138,9 +142,9 @@ class UsuarioEmpresa extends ModelHelper implements Authenticatable, Authorizabl
         $results = [];
 
         foreach ($checks as $key => [$section, $action]) {
-            $results[$key] = $section === 'account' || $permissions->contains(function ($permission) use ($section, $action) {
+            $results[$key] = $section !== 'usuarios' && ($section === 'account' || $permissions->contains(function ($permission) use ($section, $action) {
                 return $permission->section_url === $section && $permission->permission_url === $action;
-            });
+            }));
         }
 
         return $results;

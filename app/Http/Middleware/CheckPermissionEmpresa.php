@@ -15,9 +15,16 @@ class CheckPermissionEmpresa
         'empresas.dashboard' => ['dashboard', 'list'],
 
         /* ----------------------------------------Administración---------------------------------------- */
+
+        // Usuarios Empresa
         'empresas.usuarios.list' => ['usuarios', 'list'],
+        'empresas.usuarios.add' => ['usuarios', 'add'],
+        'empresas.usuarios.edit' => ['usuarios', 'edit'],
+
+        // Políticas de embarque y desembarque
         'empresas.politicas-embarque.edit' => ['politicas-embarque', 'edit'],
 
+        // Datos Bancarios
         'empresas.datos-bancarios.list' => ['datos-bancarios', 'list'],
         'empresas.datos-bancarios.add' => ['datos-bancarios', 'add'],
         'empresas.datos-bancarios.edit' => ['datos-bancarios', 'edit'],
@@ -101,6 +108,7 @@ class CheckPermissionEmpresa
 
         abort_unless(isset(self::ROUTE_PERMISSIONS[$route]), 403);
         [$section, $action] = self::ROUTE_PERMISSIONS[$route];
+        abort_if($section === 'usuarios' && ! $usuario->isAdmin(), 403);
 
         if (! $usuario->hasPermission($section, $action)) {
             // Evitar ciclos si el usuario tampoco tiene permiso para Dashboard.

@@ -13,7 +13,8 @@ use App\Livewire\Empresas\Auth\Login;
 /* ------------------------------Dashboard---------------------------------------- */
 use App\Livewire\Empresas\Dashboard;
 /* ------------------------------Usuarios------------------------------------ */
-use App\Livewire\Empresas\Usuarios\ListUsuario;
+use App\Livewire\Empresas\Usuarios\ListUsuarioEmpresa;
+use App\Livewire\Empresas\Usuarios\SaveUsuarioEmpresa;
 /* ------------------------------Políticas de embarque------------------------------------ */
 use App\Livewire\Empresas\PoliticasEmbarque\SavePoliticaEmbarque;
 /* ------------------------------Datos Bancarios------------------------------------ */
@@ -91,7 +92,9 @@ Route::group(['middleware' => ['auth:empresa', 'check.permisos.empresa']], funct
 
         Route::prefix('usuarios')->name('usuarios.')->group(function () {
 
-            Route::livewire('/', ListUsuario::class)->name('list');
+            Route::livewire('/', ListUsuarioEmpresa::class)->name('list');
+            Route::livewire('agregar', SaveUsuarioEmpresa::class)->name('add');
+            Route::livewire('editar/{usuario_empresa_id}', SaveUsuarioEmpresa::class)->whereNumber('usuario_empresa_id')->name('edit');
 
         });
 

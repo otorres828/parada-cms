@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class GroupEmpresa extends ModelHelper
@@ -49,5 +50,17 @@ class GroupEmpresa extends ModelHelper
         }
 
         return $query;
+    }
+
+    public static function activeForUserAssignment(): Collection
+    {
+        return self::query()->where('status', 1)->with([
+            'sections' => function ($query) {
+                $query->where('status', 1)->where('url', '!=', 'usuarios');
+            },
+            'sections.permissions' => function ($query) {
+                $query->where('status', 1);
+            },
+        ])->orderBy('id')->get();
     }
 }

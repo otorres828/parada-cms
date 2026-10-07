@@ -72,13 +72,13 @@ class PermissionEmpresa extends ModelHelper
             ->groupBy('section.name');
     }
 
-    public static function validAssignableIds(array $permissionIds): array
+    public static function validAssignableIds(array $permissionIds, array $excludedSections = []): array
     {
         return self::query()
             ->whereIn('id', $permissionIds)
             ->where('status', 1)
-            ->whereHas('section', function ($query) {
-                $query->where('status', 1)
+            ->whereHas('section', function ($query) use ($excludedSections) {
+                $query->whereNotIn('url', $excludedSections)->where('status', 1)
                     ->whereHas('group', function ($query) {
                         $query->where('status', 1);
                     });

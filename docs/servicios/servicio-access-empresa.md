@@ -41,3 +41,5 @@ El catálogo inicial tiene 7 grupos y 15 secciones. No incorpora permisos para M
 ## Verificación
 
 `tests/PermisosEmpresaSmoke.php` ejecuta pruebas con SQLite en memoria: repetición del seeder, conservación de asignaciones, administrador e inactividad, jerarquía de permisos, aislamiento de asignaciones entre usuarios, redirecciones y rechazo de rutas sin mapa. No ejecuta `DatabaseSeeder` ni altera los datos locales.
+
+El módulo Usuarios es exclusivo de usuarios activos con `es_admin = 1`. Los permisos explícitos de la sección `usuarios` no habilitan a los usuarios normales. Esta regla se aplica al menú, middleware y acciones de los componentes ListUsuarioEmpresa y SaveUsuarioEmpresa. Las altas desde Empresas siempre crean usuarios sin es_admin.

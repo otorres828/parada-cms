@@ -46,7 +46,7 @@ class SaveCliente extends Component
     {
         $data = $this->validateForm();
 
-        $user = DB::transaction(function () use ($data) {
+        DB::transaction(function () use ($data) {
 
             Access::authorize('clientes', $this->user_id ? 'edit' : 'add');
             $user = $this->user_id ? $this->findUser() : new User;
