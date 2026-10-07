@@ -23,7 +23,7 @@ Aplicar o retirar un cupón deja las tasas en cero y borra sus snapshots para re
 2. Exige una reserva editable con pasajes y normaliza el código a mayúsculas.
 3. Si ya tiene ese código aplicado devuelve la reserva; si cambia de código libera primero el anterior.
 4. Bloquea cupón y campaña y comprueba vigencia, empresa y límite de usos.
-5. Para primera compra busca reservas anteriores pagadas, reprogramadas o reembolsadas; para usuario nuevo compara la creación del cliente con el inicio de campaña.
+5. Las modalidades son GENERAL y PRIMERA_COMPRA. Para primera compra busca reservas anteriores pagadas, reprogramadas o reembolsadas, independientemente de la fecha de creación del cliente.
 6. Registra el uso personalizado o asigna el código aleatorio al cliente.
 7. Calcula y distribuye descuentos, limita cada descuento al precio y asigna el residuo de redondeo al último pasaje.
 8. Limpia tasas y snapshots para su cálculo posterior, guarda auditoría y devuelve relaciones actualizadas.

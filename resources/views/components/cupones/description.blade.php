@@ -23,7 +23,6 @@
         <dd class="col-sm-8">
             {{ match ($configuracionCupon->modalidad) {
                 'PRIMERA_COMPRA' => 'Primera compra',
-                'USUARIO_NUEVO' => 'Usuario nuevo',
                 default => 'General',
             } }}
         </dd>

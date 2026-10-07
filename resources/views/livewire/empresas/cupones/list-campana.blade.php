@@ -152,7 +152,6 @@
                     <td>
                         {{ match ($configuracionCupon->modalidad) {
                             'PRIMERA_COMPRA' => 'Primera compra',
-                            'USUARIO_NUEVO' => 'Usuario nuevo',
                             default => 'General',
                         } }}
                     </td>

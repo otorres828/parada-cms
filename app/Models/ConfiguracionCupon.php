@@ -19,8 +19,6 @@ class ConfiguracionCupon extends ModelHelper
 
     const MODALIDAD_PRIMERA_COMPRA = 'PRIMERA_COMPRA';
 
-    const MODALIDAD_USUARIO_NUEVO = 'USUARIO_NUEVO';
-
     const APLICA_EN_RESERVA = 'reserva';
 
     const APLICA_EN_PASAJES = 'pasajes';

@@ -35,7 +35,7 @@ Reglas declaradas en línea. Las condiciones adicionales y las reglas multilíne
 'empresa_id' => ['nullable', 'integer', 'exists:empresas,id'],
 'nombre_campana' => ['required', 'string', 'max:255'],
 'tipo_cupon' => ['required', 'integer', 'in:1,2'],
-'modalidad' => ['required', 'in:GENERAL,PRIMERA_COMPRA,USUARIO_NUEVO'],
+'modalidad' => ['required', 'in:GENERAL,PRIMERA_COMPRA'],
 'aplica_en' => ['required', 'in:reserva,pasajes'],
 'cantidad_generar' => ['required', 'integer', 'min:1', 'max:1000'],
 'tipo_descuento' => ['required', 'in:porcentaje,monto_fijo'],

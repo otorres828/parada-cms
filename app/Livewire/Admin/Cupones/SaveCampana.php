@@ -174,7 +174,7 @@ class SaveCampana extends Component
             'empresa_id' => ['nullable', 'integer', 'exists:empresas,id'],
             'nombre_campana' => ['required', 'string', 'max:255'],
             'tipo_cupon' => ['required', 'integer', 'in:1,2'],
-            'modalidad' => ['required', 'in:GENERAL,PRIMERA_COMPRA,USUARIO_NUEVO'],
+            'modalidad' => ['required', 'in:GENERAL,PRIMERA_COMPRA'],
             'aplica_en' => ['required', 'in:reserva,pasajes'],
             'codigo_personalizado' => [
                 'required_if:tipo_cupon,2',

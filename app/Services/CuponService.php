@@ -6,7 +6,6 @@ use App\Models\ConfiguracionCupon;
 use App\Models\Cupon;
 use App\Models\Pasaje;
 use App\Models\Reserva;
-use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
 class CuponService
@@ -209,9 +208,6 @@ class CuponService
             ConfiguracionCupon::exigir(! $tieneCompra, 'cupon', 'Este cupón solo aplica a la primera compra.');
         }
 
-        if ($campana->modalidad === ConfiguracionCupon::MODALIDAD_USUARIO_NUEVO) {
-            ConfiguracionCupon::exigir($reserva->usuario && Carbon::parse($reserva->usuario->created_at)->gte($campana->fecha_inicio), 'cupon', 'Este cupón solo aplica a usuarios nuevos de la campaña.');
-        }
     }
 
     private function liberar(Reserva $reserva): void

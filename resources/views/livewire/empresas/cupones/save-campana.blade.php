@@ -130,7 +130,6 @@
                     <option value="">Seleccionar...</option>
                     <option value="GENERAL">General</option>
                     <option value="PRIMERA_COMPRA">Primera compra</option>
-                    <option value="USUARIO_NUEVO">Usuario nuevo</option>
 
                 </x-form.dropdown>
 
