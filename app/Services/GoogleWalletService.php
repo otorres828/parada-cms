@@ -43,14 +43,12 @@ class GoogleWalletService
                     'value' => 'Pasaje Rodando',
                 ],
             ],
-            // Un título principal corto y elegante arriba
             'header' => [
                 'defaultValue' => [
                     'language' => 'es',
                     'value' => 'Boleto de Pasaje',
                 ],
             ],
-            // El pasajero como subtítulo principal
             'subheader' => [
                 'defaultValue' => [
                     'language' => 'es',
