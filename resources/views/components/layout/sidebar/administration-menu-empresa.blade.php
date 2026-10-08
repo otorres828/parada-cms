@@ -103,12 +103,12 @@
                 'name' => 'Validación de pagos',
                 'active' => request()->routeIs('empresas.validacion-pagos.*') ? 'active' : '',
             ],
-            [
-                'existe' => $listReembolsos ?? false,
-                'route' => route('empresas.reembolsos.list'),
-                'name' => 'Reembolsos',
-                'active' => request()->routeIs('empresas.reembolsos.*') ? 'active' : '',
-            ],
+            // [
+            //     'existe' => $listReembolsos ?? false,
+            //     'route' => route('empresas.reembolsos.list'),
+            //     'name' => 'Reembolsos',
+            //     'active' => request()->routeIs('empresas.reembolsos.*') ? 'active' : '',
+            // ],
             [
                 'existe' => $listReprogramaciones ?? false,
                 'route' => route('empresas.reprogramaciones.list'),

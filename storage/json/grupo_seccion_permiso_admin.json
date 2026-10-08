@@ -107,7 +107,7 @@
           {"name": "Ver detalle", "url": "detail", "status": 1}
         ]
       },
-      {"name": "Reembolsos", "url": "reembolsos", "status": 1,
+      {"name": "Reembolsos", "url": "reembolsos", "status": 0,
         "permissions": [
           {"name":"Listar","url":"list","status":1},
           {"name":"Ver detalle","url":"detail","status":1},

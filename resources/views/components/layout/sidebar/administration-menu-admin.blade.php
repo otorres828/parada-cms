@@ -105,12 +105,12 @@
                 'name' => 'Pasajes',
                 'active' => request()->routeIs('admin.pasajes.*') ? 'active' : '',
             ],
-            [
-                'existe' => $listReembolsos ?? false,
-                'route' => route('admin.reembolsos.list'),
-                'name' => 'Reembolsos',
-                'active' => request()->routeIs('admin.reembolsos.*') ? 'active' : '',
-            ],
+            // [
+            //     'existe' => $listReembolsos ?? false,
+            //     'route' => route('admin.reembolsos.list'),
+            //     'name' => 'Reembolsos',
+            //     'active' => request()->routeIs('admin.reembolsos.*') ? 'active' : '',
+            // ],
             [
                 'existe' => $listOrdenesCobro ?? false,
                 'route' => route('admin.ordenes-cobro.list'),
