@@ -68,8 +68,8 @@ class GoogleWalletService
                 ],
                 [
                     'id' => 'horarios',
-                    'header' => 'Horarios de Viaje',
-                    'body' => 'Salida: '.self::formatearFecha($salida)."\n".'Llegada: '.self::formatearFecha($llegada),
+                    'header' => 'Itinerario',
+                    'body' => '🛫 Salida: '.self::formatearFecha($salida)."\n".'🛬 Llegada: '.self::formatearFecha($llegada),
                 ],
                 [
                     'id' => 'asiento',
