@@ -137,7 +137,8 @@ class GoogleWalletService
             }
         }
 
-        if (! file_exists(storage_path(config('services.google_wallet.service_account_path', '')))) {
+        $rutaRelativa = config('services.google_wallet.service_account_path', '');
+        if (! file_exists(storage_path('app/'.$rutaRelativa))) {
             $errores[] = 'No se encontró el archivo JSON de la cuenta de servicio.';
         }
 
@@ -155,7 +156,7 @@ class GoogleWalletService
 
     protected static function credenciales(): array
     {
-        $ruta = storage_path(config('services.google_wallet.service_account_path'));
+        $ruta = storage_path('app/'.config('services.google_wallet.service_account_path'));
         $credenciales = json_decode(file_get_contents($ruta), true);
 
         if (
