@@ -35,12 +35,12 @@ class GoogleWalletService
 
         $objeto = [
             'id' => config('services.google_wallet.issuer_id').'.pasaje_'.$pasaje->id,
-            'classId' => config('services.google_wallet.class_id'),
+            'classId' => config('services.google_wallet.issuer_id').'.'.config('services.google_wallet.class_id'),
             'state' => 'ACTIVE',
             'cardTitle' => [
                 'defaultValue' => [
                     'language' => 'es',
-                    'value' => 'Pasaje Rodando',
+                    'value' => 'Rodando',
                 ],
             ],
             'header' => [
@@ -69,7 +69,7 @@ class GoogleWalletService
                 [
                     'id' => 'horarios',
                     'header' => 'Itinerario',
-                    'body' => '🛫 Salida: '.self::formatearFecha($salida)."\n".'🛬 Llegada: '.self::formatearFecha($llegada),
+                    'body' => 'Salida: '.self::formatearFecha($salida)."\n".'Llegada: '.self::formatearFecha($llegada),
                 ],
                 [
                     'id' => 'asiento',
