@@ -40,21 +40,20 @@ class GoogleWalletService
             'classId' => config('services.google_wallet.class_id'),            
             'state' => 'ACTIVE',
             
-            // Color de fondo profesional (ej: un tono vino/morado oscuro corporativo tipo #6B1D4F o el color de Rodando)
-            'hexBackgroundColor' => '#d87300',
+            // Color de fondo profesional (ej: un tono vino/morado oscuro corporativo tipo #f38b15 o el color de Rodando)
+            'hexBackgroundColor' => '#f38b15',
 
             // Logotipo superior izquierdo
-            'logo' => [
-                'sourceUri' => [
-                    'uri' => asset('assets/img/logo/icon-header.png'), // O asegúrate de que sea una URL absoluta https://tu-dominio.com/...
-                ],
-                'contentDescription' => [
-                    'defaultValue' => [
-                        'language' => 'es',
-                        'value' => 'Logo Rodando',
-                    ],
-                ],
-            ],
+            // 'logo' => [
+            //     'sourceUri' => [
+            //         'uri' => env('APP_URL') . '/assets/img/logo/icon-header.png',                ],
+            //     'contentDescription' => [
+            //         'defaultValue' => [
+            //             'language' => 'es',
+            //             'value' => 'Logo Rodando',
+            //         ],
+            //     ],
+            // ],
 
             // Banner inferior (Hero Image) idéntico al estilo de Cines Unidos
             'heroImage' => [
@@ -84,7 +83,7 @@ class GoogleWalletService
             'subheader' => [
                 'defaultValue' => [
                     'language' => 'es',
-                    'value' => $pasaje->viajero_nombre_completo,
+                    'value' => $pasaje->viajero_nombre_completo . ' — Reserva #' . ($reserva->codigo_referencia ?? $reserva->id),
                 ],
             ],
             'barcode' => [
