@@ -37,7 +37,7 @@ class GoogleWalletService
 
         $objeto = [
             'id' => config('services.google_wallet.issuer_id').'.pasaje_'.$pasaje->id.'_'.$versionUnica,            
-            'classId' => config('services.google_wallet.issuer_id').'.'.config('services.google_wallet.class_id'),
+            'classId' => config('services.google_wallet.class_id'),
             'state' => 'ACTIVE',
             'cardTitle' => [
                 'defaultValue' => [
