@@ -92,10 +92,10 @@ class GoogleWalletService
         if ($salida instanceof Carbon && $llegada instanceof Carbon) {
             $objeto['validTimeInterval'] = [
                 'start' => [
-                    'date' => $salida->toAtomString(),
+                    'date' => $salida->copy()->utc()->format('Y-m-d\TH:i:s\Z'),
                 ],
                 'end' => [
-                    'date' => $llegada->toAtomString(),
+                    'date' => $llegada->copy()->utc()->format('Y-m-d\TH:i:s\Z'),
                 ],
             ];
         }
