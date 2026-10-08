@@ -36,19 +36,49 @@ class GoogleWalletService
         $versionUnica = $pasaje->updated_at?->timestamp ?? now()->timestamp;
 
         $objeto = [
-            'id' => config('services.google_wallet.issuer_id').'.pasaje_'.$pasaje->id.'_'.$versionUnica,            
-            'classId' => config('services.google_wallet.class_id'),
+            'id' => config('services.google_wallet.issuer_id').'.pasaje_'.$pasaje->id.'_'.$versionUnica,
+            'classId' => config('services.google_wallet.issuer_id').'.'.config('services.google_wallet.class_id'),
             'state' => 'ACTIVE',
+            
+            // Color de fondo profesional (ej: un tono vino/morado oscuro corporativo tipo #6B1D4F o el color de Rodando)
+            'hexBackgroundColor' => '#6B1D4F',
+
+            // Logotipo superior izquierdo
+            'logo' => [
+                'sourceUri' => [
+                    'uri' => asset('assets/img/logo/icon-header.png'), // O asegúrate de que sea una URL absoluta https://tu-dominio.com/...
+                ],
+                'contentDescription' => [
+                    'defaultValue' => [
+                        'language' => 'es',
+                        'value' => 'Logo Rodando',
+                    ],
+                ],
+            ],
+
+            // Banner inferior (Hero Image) idéntico al estilo de Cines Unidos
+            'heroImage' => [
+                'sourceUri' => [
+                    'uri' => 'https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?w=800&auto=format&fit=crop&q=60', // Reemplaza esto por la URL de tu banner/bus de Rodando
+                ],
+                'contentDescription' => [
+                    'defaultValue' => [
+                        'language' => 'es',
+                        'value' => 'Banner Rodando',
+                    ],
+                ],
+            ],
+
             'cardTitle' => [
                 'defaultValue' => [
                     'language' => 'es',
-                    'value' => 'Rodando',
+                    'value' => 'RODANDO',
                 ],
             ],
             'header' => [
                 'defaultValue' => [
                     'language' => 'es',
-                    'value' => 'Boleto de Pasaje',
+                    'value' => $reserva->origenTerminal->nombre.' → '.$reserva->destinoTerminal->nombre,
                 ],
             ],
             'subheader' => [
@@ -63,11 +93,6 @@ class GoogleWalletService
                 'alternateText' => $pasaje->localizador,
             ],
             'textModulesData' => [
-                [
-                    'id' => 'ruta',
-                    'header' => 'Ruta',
-                    'body' => $reserva->origenTerminal->nombre.' → '.$reserva->destinoTerminal->nombre,
-                ],
                 [
                     'id' => 'horarios',
                     'header' => 'Itinerario',
