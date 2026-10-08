@@ -129,19 +129,14 @@ class GoogleWalletService
     {
         $errores = [];
 
-        foreach (['issuer_id', 'class_id', 'service_account_path'] as $campo) {
+        foreach (['issuer_id', 'class_id'] as $campo) {
             if (blank(config('services.google_wallet.'.$campo))) {
                 $errores[] = 'Falta GOOGLE_WALLET_'.strtoupper($campo).'.';
-
-                continue;
             }
         }
 
-        $rutaRelativa = config('services.google_wallet.service_account_path', '');
-        $path = storage_path('app/'.$rutaRelativa);
-        // Uso directo de storage_path apuntando a app/
-        if (! file_exists($path)) {
-            $errores[] = 'No se encontró el archivo JSON de la cuenta de servicio en el path: '.$path;
+        if (blank(env('GOOGLE_WALLET_CREDENTIALS_BASE64'))) {
+            $errores[] = 'Falta la variable de entorno GOOGLE_WALLET_CREDENTIALS_BASE64.';
         }
 
         return $errores;
@@ -158,23 +153,21 @@ class GoogleWalletService
 
     protected static function credenciales(): array
     {
-        $rutaRelativa = config('services.google_wallet.service_account_path');
-        
-        // Uso directo de storage_path apuntando a app/
-        $ruta = storage_path('app/'.$rutaRelativa);
+        $base64 = env('GOOGLE_WALLET_CREDENTIALS_BASE64');
 
-        if (! file_exists($ruta)) {
-            throw new RuntimeException('No se encontró el archivo JSON de la cuenta de servicio.');
+        if (blank($base64)) {
+            throw new RuntimeException('No se encontró la variable de entorno GOOGLE_WALLET_CREDENTIALS_BASE64.');
         }
 
-        $credenciales = json_decode(file_get_contents($ruta), true);
+        $jsonString = base64_decode($base64);
+        $credenciales = json_decode($jsonString, true);
 
         if (
             ! is_array($credenciales)
             || blank($credenciales['client_email'] ?? null)
             || blank($credenciales['private_key'] ?? null)
         ) {
-            throw new RuntimeException('El archivo JSON de Google Wallet no contiene credenciales válidas.');
+            throw new RuntimeException('Las credenciales de Google Wallet en Base64 no son válidas.');
         }
 
         return $credenciales;
