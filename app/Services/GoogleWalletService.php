@@ -64,14 +64,14 @@ class GoogleWalletService
             ],
             'textModulesData' => [
                 [
-                    'id' => 'salida',
-                    'header' => 'Salida',
-                    'body' => self::formatearFecha($salida),
+                    'id' => 'ruta',
+                    'header' => 'Ruta',
+                    'body' => $reserva->origenTerminal->nombre.' → '.$reserva->destinoTerminal->nombre,
                 ],
                 [
-                    'id' => 'llegada',
-                    'header' => 'Llegada',
-                    'body' => self::formatearFecha($llegada),
+                    'id' => 'horarios',
+                    'header' => 'Horarios de Viaje',
+                    'body' => 'Salida: '.self::formatearFecha($salida)."\n".'Llegada: '.self::formatearFecha($llegada),
                 ],
                 [
                     'id' => 'asiento',
