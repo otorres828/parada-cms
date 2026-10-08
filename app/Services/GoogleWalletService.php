@@ -37,11 +37,11 @@ class GoogleWalletService
 
         $objeto = [
             'id' => config('services.google_wallet.issuer_id').'.pasaje_'.$pasaje->id.'_'.$versionUnica,
-            'classId' => config('services.google_wallet.issuer_id').'.'.config('services.google_wallet.class_id'),
+            'classId' => config('services.google_wallet.class_id'),            
             'state' => 'ACTIVE',
             
             // Color de fondo profesional (ej: un tono vino/morado oscuro corporativo tipo #6B1D4F o el color de Rodando)
-            'hexBackgroundColor' => '#6B1D4F',
+            'hexBackgroundColor' => '#d87300',
 
             // Logotipo superior izquierdo
             'logo' => [
