@@ -235,6 +235,7 @@
 
                             @if ($canDetail)
 
+                                <x-list.view-button :route="route('empresas.pasajes.wallet', ['pasaje_id' => $pasaje->id])" :target="false" />
                                 <x-list.view-button :route="route('empresas.pasajes.detail', ['pasaje_id' => $pasaje->id])" :target="false" />
 
                             @endif
