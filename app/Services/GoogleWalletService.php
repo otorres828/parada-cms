@@ -40,13 +40,14 @@ class GoogleWalletService
             'classId' => config('services.google_wallet.class_id'),            
             'state' => 'ACTIVE',
             
-            // Color de fondo profesional (ej: un tono vino/morado oscuro corporativo tipo #f38b15 o el color de Rodando)
-            'hexBackgroundColor' => '#f38b15',
+            // Color de fondo profesional (ej: un tono vino/morado oscuro corporativo tipo #0e3d69 o el color de Rodando)
+            'hexBackgroundColor' => '#0e3d69',
 
             // Logotipo superior izquierdo
             // 'logo' => [
             //     'sourceUri' => [
-            //         'uri' => env('APP_URL') . '/assets/img/logo/icon-header.png',                ],
+            //         'uri' => env('APP_URL') . '/assets/img/logo/icon-header.png',                
+            //     ],
             //     'contentDescription' => [
             //         'defaultValue' => [
             //             'language' => 'es',
@@ -106,12 +107,7 @@ class GoogleWalletService
                     'id' => 'empresa',
                     'header' => 'Empresa',
                     'body' => $empresa->nombre,
-                ],
-                [
-                    'id' => 'transporte',
-                    'header' => 'Transporte',
-                    'body' => 'Autobus: '.trim($transporte->modelo.' '.$transporte->placa)."\n".'Asiento: '.$pasaje->numero_asiento ?? 'Sin asiento',
-                ],
+                ]
             ],
         ];
 
