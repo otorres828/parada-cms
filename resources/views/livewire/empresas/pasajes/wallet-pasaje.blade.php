@@ -70,7 +70,7 @@
 
                                     <span class="d-block text-muted small">Asiento</span>
 
-                                    <strong>{{ $pasaje->asiento ?? 'Por asignar' }}</strong>
+                                    <strong>{{ $pasaje->numero_asiento ?? 'Por asignar' }}</strong>
 
                                 </div>
 
