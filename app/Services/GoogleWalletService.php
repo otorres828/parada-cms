@@ -138,10 +138,10 @@ class GoogleWalletService
         }
 
         $rutaRelativa = config('services.google_wallet.service_account_path', '');
-        
+        $path = storage_path('app/'.$rutaRelativa);
         // Uso directo de storage_path apuntando a app/
-        if (! file_exists(storage_path('app/'.$rutaRelativa))) {
-            $errores[] = 'No se encontró el archivo JSON de la cuenta de servicio.';
+        if (! file_exists($path)) {
+            $errores[] = 'No se encontró el archivo JSON de la cuenta de servicio en el path: '.$path;
         }
 
         return $errores;
