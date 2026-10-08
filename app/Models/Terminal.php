@@ -42,6 +42,11 @@ class Terminal extends ModelHelper
         return $this->hasMany(Viaje::class, 'destino_terminal_id');
     }
 
+    public function getNombreSinTerminal(): string
+    {
+        return str_ireplace('Terminal de Pasajeros de', '', $this->nombre);
+    }
+
     public static function searchAdmin(string $search = '', array $filters = []): Builder
     {
         $query = self::query()->with([0 => 'estado']);

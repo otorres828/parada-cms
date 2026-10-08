@@ -77,7 +77,7 @@ class GoogleWalletService
             'header' => [
                 'defaultValue' => [
                     'language' => 'es',
-                    'value' => $reserva->origenTerminal->nombre.' → '.$reserva->destinoTerminal->nombre,
+                    'value' => 'Viaje a '.$reserva->destinoTerminal->getNombreSinTerminal(),
                 ],
             ],
             'subheader' => [
@@ -93,14 +93,14 @@ class GoogleWalletService
             ],
             'textModulesData' => [
                 [
+                    'id' => 'ruta',
+                    'header' => 'Ruta',
+                    'body' => 'Origen: '.$reserva->origenTerminal->getNombreSinTerminal()."\n".'Destino: '.$reserva->destinoTerminal->getNombreSinTerminal(),
+                ],
+                [
                     'id' => 'horarios',
                     'header' => 'Itinerario',
                     'body' => 'Salida: '.self::formatearFecha($salida)."\n".'Llegada: '.self::formatearFecha($llegada),
-                ],
-                [
-                    'id' => 'asiento',
-                    'header' => 'Asiento',
-                    'body' => $pasaje->numero_asiento ?? 'Sin asiento',
                 ],
                 [
                     'id' => 'empresa',
@@ -110,7 +110,7 @@ class GoogleWalletService
                 [
                     'id' => 'transporte',
                     'header' => 'Transporte',
-                    'body' => trim($transporte->modelo.' '.$transporte->placa),
+                    'body' => 'Autobus: '.trim($transporte->modelo.' '.$transporte->placa)."\n".'Asiento: '.$pasaje->numero_asiento ?? 'Sin asiento',
                 ],
             ],
         ];
