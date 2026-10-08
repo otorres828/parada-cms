@@ -39,6 +39,7 @@ use App\Livewire\Empresas\Reservas\SaveReserva;
 /* ------------------------------Pasajes------------------------------------ */
 use App\Livewire\Empresas\Pasajes\ListPasaje;
 use App\Livewire\Empresas\Pasajes\DetailPasaje;
+use App\Livewire\Empresas\Pasajes\WalletPasaje;
 /* ------------------------------Validación de pagos------------------------------------ */
 use App\Livewire\Empresas\ValidacionPagos\ListValidacionPago;
 /* ------------------------------Reembolsos------------------------------------ */
@@ -175,6 +176,7 @@ Route::group(['middleware' => ['auth:empresa', 'check.permisos.empresa']], funct
 
             Route::livewire('/', ListPasaje::class)->name('list');
             Route::livewire('detalle/{pasaje_id}', DetailPasaje::class)->whereNumber('pasaje_id')->name('detail');
+            Route::livewire('wallet/{pasaje_id}', WalletPasaje::class)->whereNumber('pasaje_id')->name('wallet');
 
         });
 

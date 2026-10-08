@@ -43,5 +43,12 @@ return [
         ],
     ],
 
+    'google_wallet' => [
+        'issuer_id' => env('GOOGLE_WALLET_ISSUER_ID'),
+        'class_id' => env('GOOGLE_WALLET_CLASS_ID'),
+        'service_account_path' => env('GOOGLE_WALLET_SERVICE_ACCOUNT_PATH'),
+        'origin' => env('GOOGLE_WALLET_ORIGIN'),
+    ],
+
 
 ];

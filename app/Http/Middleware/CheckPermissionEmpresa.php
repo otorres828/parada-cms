@@ -59,6 +59,7 @@ class CheckPermissionEmpresa
         // Pasajes
         'empresas.pasajes.list' => ['pasajes', 'list'],
         'empresas.pasajes.detail' => ['pasajes', 'detail'],
+        'empresas.pasajes.wallet' => ['pasajes', 'detail'],
 
         'empresas.validacion-pagos.list' => ['validacion-pagos', 'list'],
         'empresas.reembolsos.list' => ['reembolsos', 'list'],
