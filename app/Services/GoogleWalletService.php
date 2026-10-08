@@ -31,7 +31,6 @@ class GoogleWalletService
         $salida = $reserva->tramoPrecio->getSalida();
         $llegada = $reserva->tramoPrecio->getLlegada();
         $empresa = $reserva->programacion->viaje->empresa;
-        $transporte = $reserva->programacion->transporte;
 
         $versionUnica = $pasaje->updated_at?->timestamp ?? now()->timestamp;
 
@@ -84,7 +83,7 @@ class GoogleWalletService
             'subheader' => [
                 'defaultValue' => [
                     'language' => 'es',
-                    'value' => $pasaje->viajero_nombre_completo . ' — Reserva #' . ($reserva->codigo_referencia ?? $reserva->id),
+                    'value' => $pasaje->viajero_nombre_completo ."\n". 'Reserva #' . ($reserva->codigo_referencia ?? $reserva->id),
                 ],
             ],
             'barcode' => [
@@ -96,7 +95,7 @@ class GoogleWalletService
                 [
                     'id' => 'ruta',
                     'header' => 'Ruta',
-                    'body' => 'Origen: '.$reserva->origenTerminal->getNombreSinTerminal()."\n".'Destino: '.$reserva->destinoTerminal->getNombreSinTerminal(),
+                    'body' => 'Origen: '.$reserva->origenTerminal->nombre."\n".'Destino: '.$reserva->destinoTerminal->nombre,
                 ],
                 [
                     'id' => 'horarios',
