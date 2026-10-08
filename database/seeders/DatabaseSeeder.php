@@ -29,7 +29,7 @@ class DatabaseSeeder extends Seeder
 
             AdminRolesSeeder::class,
 
-            AdminDemoSeeder::class,
+            // AdminDemoSeeder::class,
         ]);
     }
 }

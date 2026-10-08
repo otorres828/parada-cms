@@ -33,8 +33,10 @@ class GoogleWalletService
         $empresa = $reserva->programacion->viaje->empresa;
         $transporte = $reserva->programacion->transporte;
 
+        $versionUnica = $pasaje->updated_at?->timestamp ?? now()->timestamp;
+
         $objeto = [
-            'id' => config('services.google_wallet.issuer_id').'.pasaje_'.$pasaje->id,
+            'id' => config('services.google_wallet.issuer_id').'.pasaje_'.$pasaje->id.'_'.$versionUnica,            
             'classId' => config('services.google_wallet.issuer_id').'.'.config('services.google_wallet.class_id'),
             'state' => 'ACTIVE',
             'cardTitle' => [
